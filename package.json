@@ -1,0 +1,14 @@
+{
+  "name": "rech-editor-vscode",
+  "version": "0.0.1",
+  "description": "Common functions and classes for simplifying the VSCode and Node API usage",
+  "keywords": [
+    "commons",
+    "VSCode"
+  ],
+  "repository": "https://github.com/RechInformatica/rech-editor-vscode.git",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.1.6"
+  }
+}
