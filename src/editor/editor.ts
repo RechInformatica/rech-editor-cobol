@@ -98,8 +98,7 @@ export default class Editor {
    */
   getCurrentWord() {
     let editor = this.getActiveEditor();
-    let pattern = /([\w\-]|\(@\)|\(#\))+/g;
-    let range = editor.document.getWordRangeAtPosition(editor.selection.start, pattern);
+    let range = editor.document.getWordRangeAtPosition(editor.selection.start);
     if(range === undefined){
       return '';
     }
@@ -111,8 +110,7 @@ export default class Editor {
    */
   selectCurrentWord() {
     let editor = this.getActiveEditor();
-    let pattern = /([\w\-]|\(@\)|\(#\))+/g;
-    let range = editor.document.getWordRangeAtPosition(editor.selection.start, pattern);
+    let range = editor.document.getWordRangeAtPosition(editor.selection.start);
     if(range === undefined){
       return;
     }
