@@ -1,6 +1,7 @@
 {
   "name": "rech-editor-vscode",
   "version": "0.0.3",
+  "publisher": "Gustavo",  
   "description": "Common functions and classes for simplifying the VSCode and Node API usage",
   "main": "src/editor/editor.ts",
   "keywords": [
