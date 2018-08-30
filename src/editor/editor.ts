@@ -6,7 +6,7 @@ import {window, Range, Selection, Position} from 'vscode';
 /**
  * Class to manipulate vscode editor
  */
-export default class Editor {
+class Editor {
 
   /**
    * Return file path
@@ -282,3 +282,5 @@ export default class Editor {
   }
 
 }
+
+module.exports = Editor

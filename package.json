@@ -1,9 +1,9 @@
 {
   "name": "rech-editor-vscode",
-  "version": "0.0.4",
-  "publisher": "Gustavo",
+  "version": "0.0.1",
+  "publisher": "Rech Informática",
   "description": "Common functions and classes for simplifying the VSCode and Node API usage",
-  "main": "src/editor/editor.ts",
+  "main": "index.ts",
   "keywords": [
     "commons",
     "VSCode"
@@ -24,11 +24,12 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "dependencies": {
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.6",
-    "tslint": "^5.8.0",
+    "@types/mocha": "^2.2.42",
     "@types/node": "^7.0.43",
-    "@types/mocha": "^2.2.42"
+    "npm": "^6.4.1",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.6"
   },
   "bugs": {
     "url": "https://github.com/RechInformatica/rech-editor-vscode/issues"
@@ -37,5 +38,5 @@
   "directories": {
     "doc": "doc"
   },
-  "author": "Gustavo"
+  "author": "Rech Informática"
 }

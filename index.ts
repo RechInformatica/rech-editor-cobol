@@ -1,0 +1,1 @@
+const Editor = require('./src/editor/editor')
