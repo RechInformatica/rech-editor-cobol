@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "publisher": "Rech Informática",
   "description": "Common functions and classes for simplifying the VSCode and Node API usage",
-  "main": "index.ts",
+  "main": "src/editor/editor.ts",
   "keywords": [
     "commons",
     "VSCode"
