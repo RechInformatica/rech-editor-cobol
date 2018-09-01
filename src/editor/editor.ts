@@ -1,7 +1,7 @@
 'use babel';
 import Path from '../commons/path';
 
-import {window, Range, Selection, Position} from 'vscode';
+import {window, Range, Selection, Position, OpenDialogOptions, Uri} from 'vscode';
 
 /**
  * Class to manipulate vscode editor
@@ -256,6 +256,19 @@ export default class Editor {
       newselection.push(new Selection(new Position(element.start.line + num, element.start.character),new Position(element.end.line + num, element.end.character)));
     });
     editor.selections = newselection;
+  }
+
+  /**
+   * Opens dialog for file selection
+   */
+  showOpenDialog(defaultDir?: string) {
+    let options: OpenDialogOptions = {
+      openLabel: 'Abrir arquivo'
+    };
+    if (defaultDir) {
+      options.defaultUri = Uri.file(defaultDir);
+    }
+    return window.showOpenDialog(options);
   }
 
   /**
