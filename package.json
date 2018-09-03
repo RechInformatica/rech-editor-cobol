@@ -1,42 +1,130 @@
 {
-  "name": "rech-editor-vscode",
-  "version": "0.0.1",
-  "publisher": "Rech Informática",
-  "description": "Common functions and classes for simplifying the VSCode and Node API usage",
-  "main": "src/editor/editor.ts",
-  "keywords": [
-    "commons",
-    "VSCode"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/RechInformatica/rech-editor-vscode.git"
-  },
-  "license": "MIT",
-  "engines": {
-    "vscode": "^1.1.6"
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
-  },
-  "dependencies": {
-    "@types/mocha": "^2.2.42",
-    "@types/node": "^7.0.43",
-    "npm": "^6.4.1",
-    "tslint": "^5.8.0",
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.6"
-  },
-  "bugs": {
-    "url": "https://github.com/RechInformatica/rech-editor-vscode/issues"
-  },
-  "homepage": "https://github.com/RechInformatica/rech-editor-vscode#readme",
-  "directories": {
-    "doc": "doc"
-  },
-  "author": "Rech Informática"
+    "name": "rech-editor-cobol",
+    "displayName": "rech-editor-cobol",
+    "description": "Package for using Rech's Cobol extensions with Visual Studio Code.",
+    "version": "0.0.1",
+    "publisher": "rechinformatica",
+    "engines": {
+        "vscode": "^1.26.0"
+    },
+    "icon": "images/cobol.png",
+    "categories": [
+        "Programming Languages",
+        "Snippets",
+        "Other"
+    ],
+    "activationEvents": [
+        "onLanguage:COBOL",
+        "onCommand:extension.cobolMove"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "COBOL configuration",
+            "properties": {
+                "coboleditor.tabstops": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "title": "tabstops",
+                        "properties": {
+                            "tabstop": {
+                                "type": "number",
+                                "description": "tabstop"
+                            }
+                        }
+                    },
+                    "default": [
+                        0,
+                        7,
+                        11,
+                        19,
+                        29,
+                        34
+                    ],
+                    "description": "COBOL tabstops"
+                }
+            }
+        },
+        "configurationDefaults": {
+            "[COBOL]": {
+                "files.autoGuessEncoding": false,
+                "files.encoding": "windows1252",
+                "editor.formatOnType": true,
+                "editor.rulers": [
+                    120
+                ],
+                "editor.detectIndentation": false,
+                "editor.tabSize": 3,
+                "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?"
+            }
+        },
+        "languages": [
+            {
+                "id": "COBOL",
+                "aliases": [
+                    "COBOL",
+                    "Cobol",
+                    "cobol"
+                ],
+                "firstLine": ".*(\\$[sS][eE][tT]|[pP][rR][oO][gG][rR][aA][mM]\\-[iI][dD]|[iI][dD][eE][nN][tT][iI][fF][iI][cC][aA][tT][iI][oO][nN]).*",
+                "extensions": [
+                    ".cbl",
+                    ".cob",
+                    ".cpy",
+                    ".cpb",
+                    ".lsr"
+                ],
+                "configuration": "./cobol.configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "COBOL",
+                "scopeName": "source.cobol",
+                "path": "./syntaxes/COBOL.tmLanguage.json"
+            }
+        ],
+        "commands": [
+            {
+                "command": "extension.cobolMove",
+                "title": "MOVE"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "extension.cobolMove",
+                    "group": "cobolplugin",
+                    "when": "editorTextFocus && editorLangId == COBOL"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+                "command": "extension.cobolMove",
+                "key": "ctrl+shift+m"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "COBOL",
+                "path": "./snippets/cobol.json"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.21",
+        "@types/node": "^8.10.25",
+        "@types/mocha": "^2.2.42"
+    }
 }

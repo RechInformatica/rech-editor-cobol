@@ -1,25 +1,26 @@
-'use babel';
-import Path from '../commons/path';
+import { Path } from './../commons/path';
 
 import {window, Range, Selection, Position, OpenDialogOptions, Uri} from 'vscode';
 
 /**
  * Class to manipulate vscode editor
  */
-export default class Editor {
+class Editor {
 
   /**
    * Return file path
    */
   getPath() {
-    return new Path(this.getActiveEditor().document.fileName).toString();
+    let editor = this.getActiveEditor();
+    return new Path(editor.document.fileName).toString();
   }
 
    /**
    * Return the document text
    */
   getEditorBuffer() {
-    return this.getActiveEditor().document.getText();
+    let editor = this.getActiveEditor();
+    return editor.document.getText();
   }
 
   /**
@@ -50,7 +51,8 @@ export default class Editor {
    * Define a editor selection
    */
   setSelectionRange(range: Range) {
-    this.getActiveEditor().selection = new Selection(range.start, range.end);
+    let editor = this.getActiveEditor();
+    editor.selection = new Selection(range.start, range.end);
   }
 
    /**
@@ -69,7 +71,8 @@ export default class Editor {
    * Return the text of a range
    */
   getRangeBuffer(range: Range) {
-    return this.getActiveEditor().document.getText(range);
+    let editor = this.getActiveEditor();
+    return editor.document.getText(range);
   }
 
   /**
@@ -121,7 +124,8 @@ export default class Editor {
    * Return current line
    */
   getCurrentRow() {
-    return this.getActiveEditor().selection.start.line;
+    let editor = this.getActiveEditor();
+    return editor.selection.start.line;
   }
 
   /**
@@ -195,7 +199,7 @@ export default class Editor {
     let editor = this.getActiveEditor();
     editor.edit(editBuilder => {
       editBuilder.insert(Position, text);
-    });    
+    });
   }
 
    /**
@@ -225,6 +229,8 @@ export default class Editor {
    */
   insertText(text: string) {
     let editor = this.getActiveEditor();
+    let selections: Selection[] = [];
+    /* Insert the text into the selections from user */
     editor.edit(editBuilder => {
       editor.selections.forEach(element => {
         editBuilder.insert(element.start, text);
@@ -269,6 +275,12 @@ export default class Editor {
       options.defaultUri = Uri.file(defaultDir);
     }
     return window.showOpenDialog(options);
+  } 
+  /**
+   * Show a information message
+   */
+  showInformationMessage(message: string){
+    window.showInformationMessage(message);
   }
 
   /**
@@ -295,3 +307,5 @@ export default class Editor {
   }
 
 }
+
+export {Editor};

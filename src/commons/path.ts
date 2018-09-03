@@ -1,6 +1,6 @@
 'use babel';
 
-export default class Path {
+class Path {
   path: string;
   
   constructor(path: any) {
@@ -53,3 +53,5 @@ export default class Path {
   }
 
 }
+
+export {Path};

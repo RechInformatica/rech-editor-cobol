@@ -1,0 +1,219 @@
+{
+	"LESS THAN": {
+		"prefix": "LE",
+		"body": "IS LESS THAN ${0:<var>}"
+	},
+	"EQUAL TO": {
+		"prefix": "EQ",
+		"body": "IS EQUAL TO ${0:<var>}"
+	},
+	"GREATER THAN": {
+		"prefix": "GT",
+		"body": "IS GREATER THAN ${0:<var>}"
+	},
+	"IS GREATER THAN": {
+		"prefix": "GR",
+		"body": "IS GREATER THAN ${0:<var>}"
+	},
+	"NOT LESS THAN": {
+		"prefix": "NLE",
+		"body": "IS NOT LESS THAN ${0:<var>}"
+	},
+	"NOT EQUAL TO": {
+		"prefix": "NQ",
+		"body": "IS NOT EQUAL TO ${0:<var>}"
+	},
+	"NOT GREATER THAN": {
+		"prefix": "NGT",
+		"body": "IS NOT GREATER THAN ${0:<var>}"
+	},
+	"IS NOT GREATER THAN": {
+		"prefix": "NGR",
+		"body": "IS NOT GREATER THAN ${0:<var>}"
+	},
+	"IF LESS THAN": {
+		"prefix": "IFL",
+		"body": [
+			"IF ${1:<var1>} IS LESS THAN ${2:<var2>}",
+			"   ${0:<body>}",
+			"END-IF."
+		]
+	},
+	"IF GREATER THAN": {
+		"prefix": "IFG",
+		"body": [
+			"IF ${1:<var1>} IS GREATER THAN ${2:<var2>}",
+			"   ${0:<body>}",
+			"END-IF."
+		]
+	},
+	"IF EQUAL TO": {
+		"prefix": "IFE",
+		"body": [
+			"IF ${1:<var1>} IS EQUAL TO ${2:<var2>}",
+			"   ${0:<body>}",
+			"END-IF."
+		]
+	},
+	"IF NOT EQUAL TO": {
+		"prefix": "IFN",
+		"body": [
+			"IF ${1:<var1>} IS NOT EQUAL TO ${2:<var2>}",
+			"   ${0:<body>}",
+			"END-IF."
+		]
+	},
+	"IF EQUAL TO LOW-VALUES": {
+		"prefix": "IFW",
+		"body": [
+			"IF ${1:<var>} IS EQUAL TO LOW-VALUES",
+			"   ${0:<body>}",
+			"END-IF."
+		]
+	},
+	"IF EQUAL TO SPACES": {
+		"prefix": "IFS",
+		"body": [
+			"IF ${1:<var>} IS EQUAL TO SPACES",
+			"   ${0:<body>}",
+			"END-IF."
+		]
+	},
+	"IF EQUAL TO ZEROS": {
+		"prefix": "IFZ",
+		"body": [
+			"IF ${1:<var>} IS EQUAL TO ZEROS",
+			"   ${0:<body>}",
+			"END-IF."
+		]
+	},
+	"SET TO": {
+		"prefix": "SE",
+		"body": "SET ${0:<var1>} TO TRUE,"
+	},
+	"MOVE TO": {
+		"prefix": "MV",
+		"body": "MOVE ${1:<var1>} TO ${0:<var2>},"
+	},
+	"MOVE LOW-VALUES TO": {
+		"prefix": "ML",
+		"body": "MOVE LOW-VALUES TO ${0:<var1>},"
+	},
+	"MOVE SPAVES TO": {
+		"prefix": "ML",
+		"body": "MOVE SPACES TO ${0:<var1>},"
+	},
+	"MOVE ZEROS TO": {
+		"prefix": "MZ",
+		"body": "MOVE ZEROS TO ${0:<var1>},"
+	},
+	"PERFORM": {
+		"prefix": "PE",
+		"body": "PERFORM ${0:<paragraph>},"
+	},
+	"GO TO": {
+		"prefix": "GO",
+		"body": "GO TO ${0:<paragraph>},"
+	},
+	"ADD TO": {
+		"prefix": "AD",
+		"body": "ADD ${1:<var1>} TO ${0:<var2>},"
+	},
+	"ADD 1 TO": {
+		"prefix": "AD1",
+		"body": "ADD 1 TO ${0:<var>},"
+	},
+	"SUBTRACT TO": {
+		"prefix": "SU",
+		"body": "SUBTRACT ${1:<var>} FROM ${0:<var2>},"
+	},
+	"SUBTRACT 1 TO": {
+		"prefix": "SU1",
+		"body": "SUBTRACT 1 FROM ${0:<var>},"
+	},
+	"COMPUTE": {
+		"prefix": "CP",
+		"body": "COMPUTE ${1:<var>} = ${0:<formula>},"
+	},
+	"COMPUTE ROUNDED =": {
+		"prefix": "CR",
+		"body": "COMPUTE ROUNDED ${1:<var>} = ${0:<formula>},"
+	},
+	"ELSE,": {
+		"prefix": "EL",
+		"body": [
+			"ELSE,",
+			"   "
+		]
+	},
+	"EXIT PERFORM CYCLE": {
+		"prefix": "XC",
+		"body": [
+			"EXIT PERFORM CYCLE,",
+			""
+		]
+	},
+	"EXIT PERFORM": {
+		"prefix": "XP",
+		"body": [
+			"EXIT PERFORM,",
+			""
+		]
+	},
+	"EXIT PARAGRAPH": {
+		"prefix": "XH",
+		"body": [
+			"EXIT PARAGRAPH,",
+			""
+		]
+	},
+	"VALUE IS": {
+		"prefix": "VL",
+		"body": "VALUE IS ${0:<value>}."
+	},
+	"INITIALIZE": {
+		"prefix": "IN",
+		"body": "INITIALIZE ${0:<var>},"
+	},
+	"ZEROS": {
+		"prefix": "ZE",
+		"body": "ZEROS"
+	},
+	"SPACES": {
+		"prefix": "SP",
+		"body": "SPACES"
+	},
+	"LOW-VALUES": {
+		"prefix": "LV",
+		"body": "LOW-VALUES"
+	},
+	"PERFORM UNTIL": {
+		"prefix": "PU",
+		"body": [
+			"PERFORM                UNTIL EXIT",
+			"   ${0:<body>}",
+			"END-PERFORM."
+		]
+	},
+	"PERFORM VARYING": {
+		"prefix": "PB",
+		"body": [
+			"PERFORM                WITH TEST BEFORE",
+			"   VARYING             ${1:<index>} FROM ${2:<start>} BY ${3:increment}",
+			"      UNTIL            ${1:<index>} ${4:<stop_condition>}",
+			"   ${0:<body>}",
+			"END-PERFORM."
+		]
+	},
+	"EVALUATE": {
+		"prefix": "EV",
+		"body": [
+			"EVALUATE               ${1:TRUE},",
+			"   WHEN ${2:<condition>}",
+			"      ${3:<body>}",
+			"   WHEN OTHER",
+			"      ${0:<body>}",
+		 	"END-EVALUATE."
+		]
+	}
+}
