@@ -1,6 +1,6 @@
 {
-    "name": "rech-editor-cobol",
-    "displayName": "rech-editor-cobol",
+    "name": "rech-editor-vscode",
+    "displayName": "rech-editor-vscode",
     "description": "Package for using Rech's Cobol extensions with Visual Studio Code.",
     "version": "0.0.1",
     "publisher": "rechinformatica",
@@ -8,6 +8,11 @@
         "vscode": "^1.26.0"
     },
     "icon": "images/cobol.png",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/RechInformatica/rech-editor-vscode.git"
+    },
     "categories": [
         "Programming Languages",
         "Snippets",
@@ -112,7 +117,7 @@
             {
                 "command": "extension.cobolTO",
                 "key": "ctrl+t"
-            }            
+            }
         ],
         "snippets": [
             {
