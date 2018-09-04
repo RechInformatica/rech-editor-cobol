@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
         var gerador = new GeradorCobol();
         gerador.move();
     }));
-    context.subscriptions.push(vscode.commands.registerCommand('extension.cobolTO', () => {
+    context.subscriptions.push(vscode.commands.registerCommand('extension.cobolTo', () => {
         // The code you place here will be executed every time your command is executed
         var gerador = new GeradorCobol();
         gerador.to();
@@ -30,3 +30,5 @@ export function activate(context: vscode.ExtensionContext) {
 // this method is called when your extension is deactivated
 export function deactivate() {
 }
+
+export * from "./editor/editor";

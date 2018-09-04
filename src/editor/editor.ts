@@ -5,7 +5,7 @@ import {TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri} 
 /**
  * Class to manipulate vscode editor
  */
-class Editor {
+export default class Editor {
   editor: TextEditor;
 
   constructor() {
@@ -319,7 +319,5 @@ class Editor {
   getActiveEditor() {
     return window.activeTextEditor;
   }
-
 }
-
 export {Editor};

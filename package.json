@@ -2,7 +2,7 @@
     "name": "rech-editor-vscode",
     "displayName": "rech-editor-vscode",
     "description": "Package for using Rech's Cobol extensions with Visual Studio Code.",
-    "version": "0.0.1",
+    "version": "0.0.10",
     "publisher": "rechinformatica",
     "engines": {
         "vscode": "^1.26.0"
@@ -22,6 +22,7 @@
         "onLanguage:COBOL"
     ],
     "main": "./out/extension",
+    "types": "./out/extension.d.ts",
     "contributes": {
         "configuration": {
             "type": "object",
@@ -90,13 +91,19 @@
                 "path": "./syntaxes/COBOL.tmLanguage.json"
             }
         ],
+        "snippets": [
+            {
+                "language": "COBOL",
+                "path": "./snippets/cobol.json"
+            }
+        ],
         "commands": [
             {
                 "command": "extension.cobolMove",
                 "title": "MOVE"
             },
             {
-                "command": "extension.cobolTO",
+                "command": "extension.cobolTo",
                 "title": "TO"
             }
         ],
@@ -104,6 +111,11 @@
             "editor/context": [
                 {
                     "command": "extension.cobolMove",
+                    "group": "cobolplugin",
+                    "when": "editorTextFocus && editorLangId == COBOL"
+                },
+                {
+                    "command": "extension.cobolTo",
                     "group": "cobolplugin",
                     "when": "editorTextFocus && editorLangId == COBOL"
                 }
@@ -115,16 +127,10 @@
                 "key": "ctrl+shift+m"
             },
             {
-                "command": "extension.cobolTO",
+                "command": "extension.cobolTo",
                 "key": "ctrl+t"
             }
-        ],
-        "snippets": [
-            {
-                "language": "COBOL",
-                "path": "./snippets/cobol.json"
-            }
-        ]
+        ]    
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
