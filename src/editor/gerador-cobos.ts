@@ -13,54 +13,37 @@ export default class GeradorCobol {
    * Insert a command "MOVE"
    */
   move() {
-    this.typewithcolumn("MOVE", Colunas.COLUNA_A);
+    this.editor.type("MOVE", Colunas.COLUNA_A);
   }
 
   /**
    * Digita Spaces
    */
   spaces() {
-    this.type("SPACES");
+    this.editor.type("SPACES");
   }
 
   /**
    * Digita Zeros
    */
   zeros() {
-    this.type("ZEROS");
+    this.editor.type("ZEROS");
   }
 
   /**
    * Digita LowValues
    */
   lowvalues() {
-    this.type("LOWVALUES");
+    this.editor.type("LOWVALUES");
   }
 
   /**
    * Digita To
    */
   to() {
-    this.gotoColTo();
-    this.type("TO");
-    this.gotoCol(Colunas.COLUNA_C);
+    this.editor.type("TO", Colunas.COLUNA_C, this.gotoColTo());
   }
 
-
-  /**
-   * Insert a text and move the cursor to coumn
-   */
-  typewithcolumn(text: string, column: number){
-    this.type(text + " ".repeat(this.gotoCol(column - text.length)));
-  }
-
-  /**
-   * Insert a text
-   */
-  type(text: string) {
-    this.editor.type(text);
-  }
-  
 
   /**
    * Adiciona um comentário
@@ -71,31 +54,20 @@ export default class GeradorCobol {
   // }
 
   /**
-   * Go to a defined column
+   * Adjust the position of command "TO"
    */
   gotoColTo() {
     let position = this.editor.getCursor().character;
     if (position < Colunas.COLUNA_B) {
-      return Colunas.COLUNA_B - position - 1;
+      return Colunas.COLUNA_B;
     } else {
       if (position >= 31) {
-        return Colunas.COLUNA_C - position - 1;
+        return Colunas.COLUNA_C;
       } else {
         return 1;
       }
     }
   }
 
-  /**
-   * Vai para uma coluna
-   */
-  gotoCol(coluna: number) {
-    let position = this.editor.getCursor().character;
-    if (position < coluna) {
-      return coluna - position - 1;
-    } else {
-      return 1;
-    }
-  }
 
 };

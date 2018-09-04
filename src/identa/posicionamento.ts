@@ -53,7 +53,7 @@ export default class Posicionamento {
    */
   posicionaColuna(coluna: number) {
     let editor = new Editor();
-    editor.gotoColumn(coluna - 1);
+    editor.setColumn(coluna - 1);
   }
 
 };

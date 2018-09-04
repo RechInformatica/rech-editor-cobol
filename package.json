@@ -14,8 +14,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:COBOL",
-        "onCommand:extension.cobolMove"
+        "onLanguage:COBOL"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -90,6 +89,10 @@
             {
                 "command": "extension.cobolMove",
                 "title": "MOVE"
+            },
+            {
+                "command": "extension.cobolTO",
+                "title": "TO"
             }
         ],
         "menus": {
@@ -105,7 +108,11 @@
             {
                 "command": "extension.cobolMove",
                 "key": "ctrl+shift+m"
-            }
+            },
+            {
+                "command": "extension.cobolTO",
+                "key": "ctrl+t"
+            }            
         ],
         "snippets": [
             {

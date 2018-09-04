@@ -1,35 +1,38 @@
 import { Path } from './../commons/path';
 
-import {window, Range, Selection, Position, OpenDialogOptions, Uri} from 'vscode';
+import {TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri} from 'vscode';
 
 /**
  * Class to manipulate vscode editor
  */
 class Editor {
+  editor: TextEditor;
+
+  constructor() {
+    this.editor = this.getActiveEditor();
+  }
+
 
   /**
    * Return file path
    */
   getPath() {
-    let editor = this.getActiveEditor();
-    return new Path(editor.document.fileName).toString();
+    return new Path(this.editor.document.fileName).toString();
   }
 
    /**
    * Return the document text
    */
   getEditorBuffer() {
-    let editor = this.getActiveEditor();
-    return editor.document.getText();
+    return this.editor.document.getText();
   }
 
   /**
    * Return the text selected
    */
   getSelectionBuffer() {
-    let editor = this.getActiveEditor();
     let buffer: string[] = new Array();
-    editor.selections.forEach(element => { 
+    this.editor.selections.forEach(element => { 
       buffer.push(this.getRangeBuffer(new Range(element.start, element.end)));
     });
     return buffer;
@@ -39,9 +42,8 @@ class Editor {
    * Return range of selection
    */
   getSelectionRange() {
-    let editor = this.getActiveEditor();
     let range: Range[] = new Array();
-    editor.selections.forEach(element => {
+    this.editor.selections.forEach(element => {
       range.push(new Range(element.start, element.end));
     });
     return range;
@@ -51,37 +53,33 @@ class Editor {
    * Define a editor selection
    */
   setSelectionRange(range: Range) {
-    let editor = this.getActiveEditor();
-    editor.selection = new Selection(range.start, range.end);
+    this.editor.selection = new Selection(range.start, range.end);
   }
 
    /**
    * Define multiple editor selections
    */
   setSelectionRanges(range: Range[]) {
-    let editor = this.getActiveEditor();
     let selections: Selection[] = [];
     range.forEach(element => {
       selections.push(new Selection(element.start, element.end));
     });
-    editor.selections = selections;
+    this.editor.selections = selections;
   }
 
    /**
    * Return the text of a range
    */
   getRangeBuffer(range: Range) {
-    let editor = this.getActiveEditor();
-    return editor.document.getText(range);
+    return this.editor.document.getText(range);
   }
 
   /**
    * Change text of selection
    */
   replaceSelection(buffer: string) {
-    let editor = this.getActiveEditor();
-    editor.edit(editBuilder => {
-      editor.selections.forEach(element => {
+    this.editor.edit(editBuilder => {
+      this.editor.selections.forEach(element => {
         editBuilder.replace(element, buffer);
       });
     });
@@ -91,8 +89,7 @@ class Editor {
    * Adjust selection to select the whole line
    */
   selectWholeLines() {
-    let editor = this.getActiveEditor();
-    let range = new Range (new Position(editor.selection.start.line, 0), new Position(editor.selection.end.line + 1, 0));
+    let range = new Range (new Position(this.editor.selection.start.line, 0), new Position(this.editor.selection.end.line + 1, 0));
     this.setSelectionRange(range);
   }
 
@@ -100,8 +97,7 @@ class Editor {
    * Return current word
    */
   getCurrentWord() {
-    let editor = this.getActiveEditor();
-    let range = editor.document.getWordRangeAtPosition(editor.selection.start);
+    let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start);
     if(range === undefined){
       return '';
     }
@@ -112,8 +108,7 @@ class Editor {
    * Select the current word
    */
   selectCurrentWord() {
-    let editor = this.getActiveEditor();
-    let range = editor.document.getWordRangeAtPosition(editor.selection.start);
+    let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start);
     if(range === undefined){
       return;
     }
@@ -124,17 +119,15 @@ class Editor {
    * Return current line
    */
   getCurrentRow() {
-    let editor = this.getActiveEditor();
-    return editor.selection.start.line;
+    return this.editor.selection.start.line;
   }
 
   /**
    * Replace current line with a string
    */
   setCurrentLine(text: String) {
-    let editor = this.getActiveEditor();
-    editor.edit(editBuilder => {
-      editBuilder.replace(new Range(new Position(editor.selection.start.line, 0), new Position(editor.selection.end.line + 1, 0)), text + "\n");
+    this.editor.edit(editBuilder => {
+      editBuilder.replace(new Range(new Position(this.editor.selection.start.line, 0), new Position(this.editor.selection.end.line + 1, 0)), text + "\n");
     });    
   }
   
@@ -149,15 +142,14 @@ class Editor {
    * Return current line text
    */
   getCurrentLine() {
-    return this.getLine(this.getActiveEditor().selection.start.line);
+    return this.getLine(this.editor.selection.start.line);
   }
 
   /**
    * Return the text of current line
    */
   getLine(lineIndex: number) {
-    let editor = this.getActiveEditor();
-    return editor.document.lineAt(lineIndex).text;
+    return this.editor.document.lineAt(lineIndex).text;
   }
 
   /**
@@ -171,17 +163,16 @@ class Editor {
    * Return the cursor position
    */
   getCursor() {
-    return new Position(this.getActiveEditor().selection.start.line, this.getActiveEditor().selection.start.character);
+    return new Position(this.editor.selection.start.line, this.editor.selection.start.character);
   }  
 
   /**
    * Set the cursor to a column
    * OBS: works with multiple cursors
    */
-  gotoColumn(column: number) {
-    let editor = this.getActiveEditor();
+  setColumn(column: number) {
     let range: Range[] = [];
-    editor.selections.forEach(element => {
+    this.editor.selections.forEach(element => {
       let size = this.getLine(element.start.line).length;
       let diff = column - size;
       if (diff > 0) {
@@ -196,8 +187,7 @@ class Editor {
    * Insert text in a position
    */
   setTextPosition(Position: Position, text: string) {
-    let editor = this.getActiveEditor();
-    editor.edit(editBuilder => {
+    this.editor.edit(editBuilder => {
       editBuilder.insert(Position, text);
     });
   }
@@ -215,24 +205,49 @@ class Editor {
   isRuby() {
     return this.getPath().toLowerCase().endsWith(".rb");
   } 
-  
+
   /**
-   * Type a text in editor
+   * Position the cursor on column, type a text in editor and go to specified column 
+   * 
+   * @param text Text to insert in editor
+   * @param endcolumn Cursor position after the text insertion 
+   * @param startcolumn Cursor position before the text insertion
    */
-  type(text: string) {
-    this.insertText(text);
+  type(text: string, endcolumn?: number, startcolumn?: number) {
+    // Coluna inicial
+    let stacol = 0;
+    // Coluna final
+    let endcol = 0;
+    if (startcolumn != undefined){
+      stacol = this.gotoCol(startcolumn);
+    }
+    if (endcolumn != undefined){
+      endcol = this.gotoCol(endcolumn - stacol - text.length);
+    }
+    this.insertText(" ".repeat(stacol) + text + " ".repeat(endcol));
   }
+
+  /**
+   * Calculate the position to column after a text insertion
+   */
+  gotoCol(coluna: number) {
+    let position = this.getCursor().character;
+    if (position < coluna) {
+      return coluna - position - 1;
+    } else {
+      return 1;
+    }
+  }
+
 
   /**
    * Insert a text in current selection
    * OBS: works with multiple cursors
    */
   insertText(text: string) {
-    let editor = this.getActiveEditor();
-    let selections: Selection[] = [];
     /* Insert the text into the selections from user */
-    editor.edit(editBuilder => {
-      editor.selections.forEach(element => {
+    this.editor.edit(editBuilder => {
+      this.editor.selections.forEach(element => {
         editBuilder.insert(element.start, text);
       });
     });
@@ -256,12 +271,11 @@ class Editor {
    * Move the cursor up/down n times
    */
   move(num: number){
-    let editor = this.getActiveEditor();
     let newselection: Selection[] = [];
-    editor.selections.forEach(element => {
+    this.editor.selections.forEach(element => {
       newselection.push(new Selection(new Position(element.start.line + num, element.start.character),new Position(element.end.line + num, element.end.character)));
     });
-    editor.selections = newselection;
+    this.editor.selections = newselection;
   }
 
   /**

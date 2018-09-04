@@ -14,13 +14,17 @@ export function activate(context: vscode.ExtensionContext) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.cobolMove', () => {
+    context.subscriptions.push(vscode.commands.registerCommand('extension.cobolMove', () => {
         // The code you place here will be executed every time your command is executed
         var gerador = new GeradorCobol();
         gerador.move();
-    });
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('extension.cobolTO', () => {
+        // The code you place here will be executed every time your command is executed
+        var gerador = new GeradorCobol();
+        gerador.to();
+    }));
 
-    context.subscriptions.push(disposable);
 }
 
 // this method is called when your extension is deactivated
