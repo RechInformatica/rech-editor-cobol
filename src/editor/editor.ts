@@ -1,6 +1,6 @@
 import { Path } from './../commons/path';
 
-import {TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri} from 'vscode';
+import {TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands} from 'vscode';
 
 /**
  * Class to manipulate vscode editor
@@ -9,7 +9,7 @@ export default class Editor {
   editor: TextEditor;
 
   constructor() {
-    this.editor = this.getActiveEditor();
+    this.editor = <TextEditor> this.getActiveEditor();
   }
 
 
@@ -257,25 +257,14 @@ export default class Editor {
    * Move down the cursor
    */
   moveDown() {
-    this.move(1);
+    commands.executeCommand('cursorDown');
   } 
   
   /**
    * Move up the cursor
    */
   moveUp() {
-    this.move(-1);
-  }
-
-  /**
-   * Move the cursor up/down n times
-   */
-  move(num: number){
-    let newselection: Selection[] = [];
-    this.editor.selections.forEach(element => {
-      newselection.push(new Selection(new Position(element.start.line + num, element.start.character),new Position(element.end.line + num, element.end.character)));
-    });
-    this.editor.selections = newselection;
+    commands.executeCommand('cursorUp');
   }
 
   /**

@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import  GeradorCobol  from './Editor/gerador-cobos';
+import Editor from './Editor/editor';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
