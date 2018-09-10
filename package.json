@@ -134,7 +134,7 @@
             {
                 "command": "editor.action.nextMatchFindAction",
                 "key": "F3"
-            },            
+            },
             {
                 "command": "editor.action.previousMatchFindAction",
                 "key": "F4"
@@ -142,7 +142,7 @@
             {
                 "command": "editor.action.previousMatchFindAction",
                 "key": "shift+F3"
-            },            
+            },
             {
                 "command": "deleteAllRight",
                 "key": "ctrl+-"
@@ -166,6 +166,14 @@
             {
                 "command": "extension.fonGrep",
                 "key": "ctrl+l"
+            },
+            {
+                "command": "extension.copyLine",
+                "key": "F10"
+            },
+            {
+                "command": "extension.pasteLine",
+                "key": "F11"
             }
         ]
     },

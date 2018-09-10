@@ -276,11 +276,34 @@ export default class Editor {
     }
     return window.showOpenDialog(options);
   } 
+  
   /**
    * Show a information message
    */
   showInformationMessage(message: string){
     window.showInformationMessage(message);
+  }
+
+  /**
+   * Copy current selecion to clipboard
+   */
+  clipboardCopy() {
+    commands.executeCommand('editor.action.clipboardCopyAction');
+  }
+
+  /**
+   * Paste clipboard 
+   */
+  clipboardPaste() {
+    commands.executeCommand('editor.action.clipboardPasteAction');
+  }
+
+  /**
+   * Insert a blank line above
+   */
+  insertLineAbove() {
+    commands.executeCommand('editor.action.insertLineBefore');
+    commands.executeCommand('deleteAllLeft');
   }
 
   /**
