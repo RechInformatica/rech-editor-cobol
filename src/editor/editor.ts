@@ -1,6 +1,6 @@
 import { Path } from './../commons/path';
 
-import {TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri} from 'vscode';
+import {TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands} from 'vscode';
 
 /**
  * Class to manipulate vscode editor
@@ -89,8 +89,8 @@ export default class Editor {
    * Adjust selection to select the whole line
    */
   selectWholeLines() {
-    let range = new Range (new Position(this.editor.selection.start.line, 0), new Position(this.editor.selection.end.line + 1, 0));
-    this.setSelectionRange(range);
+    commands.executeCommand('cursorLineStart',);
+    commands.executeCommand('cursorEndSelect',);
   }
 
   /**
@@ -108,11 +108,8 @@ export default class Editor {
    * Select the current word
    */
   selectCurrentWord() {
-    let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start);
-    if(range === undefined){
-      return;
-    }
-    this.setSelectionRange(range);
+    commands.executeCommand('cursorWordStartLeft');
+    commands.executeCommand('cursorWordEndRightSelect');
   }
 
   /**
@@ -257,25 +254,14 @@ export default class Editor {
    * Move down the cursor
    */
   moveDown() {
-    this.move(1);
+    commands.executeCommand('cursorDown');
   } 
   
   /**
    * Move up the cursor
    */
   moveUp() {
-    this.move(-1);
-  }
-
-  /**
-   * Move the cursor up/down n times
-   */
-  move(num: number){
-    let newselection: Selection[] = [];
-    this.editor.selections.forEach(element => {
-      newselection.push(new Selection(new Position(element.start.line + num, element.start.character),new Position(element.end.line + num, element.end.character)));
-    });
-    this.editor.selections = newselection;
+    commands.executeCommand('cursorUp');
   }
 
   /**
