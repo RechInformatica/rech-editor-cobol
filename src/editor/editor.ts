@@ -89,8 +89,8 @@ export default class Editor {
    * Adjust selection to select the whole line
    */
   selectWholeLines() {
-    let range = new Range (new Position(this.editor.selection.start.line, 0), new Position(this.editor.selection.end.line + 1, 0));
-    this.setSelectionRange(range);
+    commands.executeCommand('cursorLineStart',);
+    commands.executeCommand('cursorEndSelect',);
   }
 
   /**
@@ -108,11 +108,8 @@ export default class Editor {
    * Select the current word
    */
   selectCurrentWord() {
-    let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start);
-    if(range === undefined){
-      return;
-    }
-    this.setSelectionRange(range);
+    commands.executeCommand('cursorWordStartLeft');
+    commands.executeCommand('cursorWordEndRightSelect');
   }
 
   /**
