@@ -105,6 +105,10 @@
             {
                 "command": "extension.cobolTo",
                 "title": "TO"
+            },
+            {
+                "command": "extension.fonGrep",
+                "title": "fonGrep"
             }
         ],
         "menus": {
@@ -129,8 +133,12 @@
             {
                 "command": "extension.cobolTo",
                 "key": "ctrl+t"
+            },
+            {
+                "command": "extension.fonGrep",
+                "key": "ctrl+l"
             }
-        ]    
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

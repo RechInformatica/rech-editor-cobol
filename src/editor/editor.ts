@@ -9,7 +9,7 @@ export default class Editor {
   editor: TextEditor;
 
   constructor() {
-    this.editor = this.getActiveEditor();
+    this.editor = <TextEditor> this.getActiveEditor();
   }
 
 
