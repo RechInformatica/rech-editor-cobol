@@ -11,23 +11,22 @@ export default class Editor {
     this.editor = <TextEditor>this.getActiveEditor();
   }
 
-
   /**
-   * Return file path
+   * Returns the file path
    */
   getPath() {
     return new Path(this.editor.document.fileName).toString();
   }
 
   /**
-  * Return the document text
+  * Returns the document's text
   */
   getEditorBuffer() {
     return this.editor.document.getText();
   }
 
   /**
-   * Return the text selected
+   * Returns the selected text
    */
   getSelectionBuffer() {
     let buffer: string[] = new Array();
@@ -38,7 +37,7 @@ export default class Editor {
   }
 
   /**
-   * Return range of selection
+   * Returns the range of the current selection
    */
   getSelectionRange() {
     let range: Range[] = new Array();
@@ -49,14 +48,14 @@ export default class Editor {
   }
 
   /**
-  * Define a editor selection
+  * Defines an editor selection
   */
   setSelectionRange(range: Range) {
     this.editor.selection = new Selection(range.start, range.end);
   }
 
   /**
-  * Define multiple editor selections
+  * Defines multiple editor selections
   */
   setSelectionRanges(range: Range[]) {
     let selections: Selection[] = [];
@@ -67,14 +66,14 @@ export default class Editor {
   }
 
   /**
-  * Return the text of a range
+  * Returns the text of the specified range
   */
   getRangeBuffer(range: Range) {
     return this.editor.document.getText(range);
   }
 
   /**
-   * Change text of selection
+   * Changes the text found in the specified selection
    */
   replaceSelection(buffer: string) {
     this.editor.edit(editBuilder => {
@@ -85,7 +84,7 @@ export default class Editor {
   }
 
   /**
-   * Adjust selection to select the whole line
+   * Adjusts selection to select the whole line
    */
   selectWholeLines() {
     commands.executeCommand('cursorLineStart');
@@ -93,7 +92,7 @@ export default class Editor {
   }
 
   /**
-   * Return current word
+   * Returns the current word
    */
   getCurrentWord() {
     let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start);
@@ -104,7 +103,7 @@ export default class Editor {
   }
 
   /**
-   * Select the current word
+   * Selects the current word
    */
   selectCurrentWord() {
     commands.executeCommand('cursorWordStartLeft');
@@ -119,7 +118,7 @@ export default class Editor {
   }
 
   /**
-   * Replace current line with a string
+   * Replaces current line with a string
    */
   setCurrentLine(text: String) {
     this.editor.edit(editBuilder => {
@@ -128,43 +127,43 @@ export default class Editor {
   }
 
   /**
-  * Return length of current line
+  * Returns the length of current line
   */
   getCurrentLineSize() {
     return this.getCurrentLine().replace(/ +$/, '').length;
   }
 
   /**
-   * Return current line text
+   * Returns the current line text
    */
   getCurrentLine() {
     return this.getLine(this.editor.selection.start.line);
   }
 
   /**
-   * Return the text of current line
+   * Returns the text of current line
    */
   getLine(lineIndex: number) {
     return this.editor.document.lineAt(lineIndex).text;
   }
 
   /**
-   * Define the cursor position
+   * Defines the cursor position
    */
   setCursor(cursor: Position) {
     return this.setSelectionRange(new Range(cursor, cursor));
   }
 
   /**
-   * Return the cursor position
+   * Returns the cursor position
    */
   getCursor() {
     return new Position(this.editor.selection.start.line, this.editor.selection.start.character);
   }
 
   /**
-   * Set the cursor to a column
-   * OBS: works with multiple cursors
+   * Sets the cursor to a column
+   * PS: works with multiple cursors
    */
   setColumn(column: number) {
     let range: Range[] = [];
@@ -180,7 +179,7 @@ export default class Editor {
   }
 
   /**
-   * Insert text in a position
+   * Inserts text in a position
    */
   setTextPosition(Position: Position, text: string) {
     this.editor.edit(editBuilder => {
@@ -189,21 +188,21 @@ export default class Editor {
   }
 
   /**
-  * Return if this file is a bat file
+  * Returns true if this file is a bat file
   */
   isBat() {
     return this.getPath().toLowerCase().endsWith(".bat");
   }
 
   /**
-   * Return if this file is a ruby file
+   * Returns true if this file is a ruby file
    */
   isRuby() {
     return this.getPath().toLowerCase().endsWith(".rb");
   }
 
   /**
-   * Position the cursor on column, type a text in editor and go to specified column 
+   * Sets the cursor on the specified column, types a text in editor and returns to the specified column 
    * 
    * @param text Text to insert in editor
    * @param endcolumn Cursor position after the text insertion 
@@ -224,7 +223,7 @@ export default class Editor {
   }
 
   /**
-   * Calculate the position to column after a text insertion
+   * Calculates the position to column after a text insertion
    */
   gotoCol(coluna: number) {
     let position = this.getCursor().character;
@@ -237,8 +236,8 @@ export default class Editor {
 
 
   /**
-   * Insert a text in current selection
-   * OBS: works with multiple cursors
+   * Inserts a text in the current selection
+   * PS: works with multiple cursors
    */
   insertText(text: string) {
     /* Insert the text into the selections from user */
@@ -250,19 +249,25 @@ export default class Editor {
   }
 
   /**
-   * Move down the cursor
+   * Moves the cursor down
    */
   moveDown() {
     commands.executeCommand('cursorDown');
   }
 
   /**
-   * Move up the cursor
+   * Moves the cursor up
    */
   moveUp() {
     commands.executeCommand('cursorUp');
   }
 
+  /**
+   * Shows open dialog for file selection
+   * 
+   * @param defaultDir default directory
+   * @param callback callback function called for each selected file
+   */
   showOpenDialog(defaultDir: string, callback: (file: string) => any) {
     let options: OpenDialogOptions = {
       openLabel: 'Abrir arquivo'
@@ -281,6 +286,8 @@ export default class Editor {
 
   /**
    * Opens the specified file
+   * 
+   * @param file file to be opened
    */
   openFile(file: string) {
     let options: TextDocumentShowOptions = {
@@ -291,28 +298,28 @@ export default class Editor {
   }
 
   /**
-   * Show a information message
+   * Shows an information message
    */
   showInformationMessage(message: string) {
     window.showInformationMessage(message);
   }
 
   /**
-   * Copy current selecion to clipboard
+   * Copies the current selection to clipboard
    */
   clipboardCopy() {
     commands.executeCommand('editor.action.clipboardCopyAction');
   }
 
   /**
-   * Paste clipboard 
+   * Pastes clipboard 
    */
   clipboardPaste() {
     commands.executeCommand('editor.action.clipboardPasteAction');
   }
 
   /**
-   * Insert a blank line above
+   * Inserts a blank line above
    */
   insertLineAbove() {
     commands.executeCommand('editor.action.insertLineBefore');
@@ -336,7 +343,7 @@ export default class Editor {
    */
 
   /**
-  * Return active editor
+  * Returns the active editor
   */
   getActiveEditor() {
     return window.activeTextEditor;
