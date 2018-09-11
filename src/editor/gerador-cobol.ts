@@ -1,6 +1,7 @@
 'use babel';
 import { Editor } from './editor';
 import * as Colunas from '../identa/colunas';
+import { commands } from 'vscode';
 
 export default class GeradorCobol {
   editor: Editor;
@@ -44,6 +45,25 @@ export default class GeradorCobol {
     this.editor.type("TO", Colunas.COLUNA_C, this.gotoColTo());
   }
 
+  /**
+   * Copy entire line to clipboard wherever the cursor is
+   */
+  copyLine() {
+    let cursor = this.editor.getCursor();
+    this.editor.selectWholeLines();
+    this.editor.clipboardCopy();
+    this.editor.setCursor(cursor);
+  }
+
+  /**
+   * Paste clipboard in a new line wherever the cursor is
+   */
+  pasteLine() {
+    let cursor = this.editor.getCursor();
+    this.editor.insertLineAbove();
+    this.editor.clipboardPaste();
+    this.editor.setCursor(cursor);
+  }
 
   /**
    * Adiciona um comentário

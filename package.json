@@ -138,6 +138,35 @@
         },
         "keybindings": [
             {
+                "comment": "Ainda não é a rotina ideal... Mas por enquanto quebra um galho",
+                "command": "editor.action.commentLine",
+                "key": "ctrl+="
+            },
+            {
+                "command": "editor.action.nextMatchFindAction",
+                "key": "F3"
+            },
+            {
+                "command": "editor.action.previousMatchFindAction",
+                "key": "F4"
+            },
+            {
+                "command": "editor.action.previousMatchFindAction",
+                "key": "shift+F3"
+            },
+            {
+                "command": "deleteAllRight",
+                "key": "ctrl+-"
+            },
+            {
+                "command": "editor.action.deleteLines",
+                "key": "ctrl+F12"
+            },
+            {
+                "command": "editor.action.insertLineBefore",
+                "key": "ctrl+n"
+            },
+            {
                 "command": "extension.cobolMove",
                 "key": "ctrl+shift+m"
             },
@@ -153,6 +182,13 @@
                 "key": "ctrl+f9",
                 "command": "workbench.action.tasks.runTask",
                 "args": "co"
+            },{
+                "command": "extension.copyLine",
+                "key": "F10"
+            },
+            {
+                "command": "extension.pasteLine",
+                "key": "F11"
             }
         ]
     },

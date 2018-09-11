@@ -26,6 +26,18 @@ export function activate(context: vscode.ExtensionContext) {
         var gerador = new GeradorCobol();
         gerador.to();
     }));
+    context.subscriptions.push(vscode.commands.registerCommand('extension.copyLine', () => {
+        // The code you place here will be executed every time your command is executed
+        var gerador = new GeradorCobol();
+        gerador.copyLine();
+        
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('extension.pasteLine', () => {
+        // The code you place here will be executed every time your command is executed
+        var gerador = new GeradorCobol();
+        gerador.pasteLine();
+        
+    }));
     context.subscriptions.push(vscode.commands.registerCommand('extension.fonGrep', () => {
         // The code you place here will be executed every time your command is executed
         var fongrep = new FonGrep();
