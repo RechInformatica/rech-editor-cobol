@@ -22,7 +22,7 @@
         "onLanguage:COBOL"
     ],
     "main": "./out/extension",
-    "types": "./out/extension.d.ts",
+    "types": "rech-editor-vscode.d.ts",
     "contributes": {
         "taskDefinitions": [
             {
