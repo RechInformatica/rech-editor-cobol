@@ -121,14 +121,6 @@
             {
                 "command": "extension.fonGrep",
                 "title": "fonGrep"
-            },
-            {
-                "command": "extension.openFontesTrunk",
-                "title": "openFontesTrunk"
-            },
-            {
-                "command": "extension.openScripts",
-                "title": "openScripts"
             }
         ],
         "menus": {
@@ -186,14 +178,6 @@
             {
                 "command": "extension.fonGrep",
                 "key": "ctrl+l"
-            },
-            {
-                "command": "extension.openFontesTrunk",
-                "key": "ctrl+shift+o"
-            },
-            {
-                "command": "extension.openScripts",
-                "key": "ctrl+shift+y"
             },
             {
                 "key": "ctrl+f9",

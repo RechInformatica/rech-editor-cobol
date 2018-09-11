@@ -136,10 +136,19 @@ declare module 'rech-editor-vscode' {
 	     * Move the cursor up/down n times
 	     */
 	    move(num: number): void;
-	    /**
-	     * Opens dialog for file selection
-	     */
-	    //showOpenDialog(defaultDir?: string): Thenable<Uri[] | undefined>;
+        /**
+         * Shows open dialog for file selection
+         *         
+         * @param defaultDir default directory
+         * @param callback callback function called for each selected file
+         */
+    	showOpenDialog(defaultDir: string, callback: (file: string) => any): void;
+		/**
+		 * Opens the specified file
+		 * 
+         * @param file file to be opened
+         */
+		 openFile(file: string): void;
 	    /**
 	     * Show a information message
 	     */

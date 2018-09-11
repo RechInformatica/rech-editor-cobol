@@ -4,7 +4,6 @@ import { ExtensionContext, commands } from 'vscode';
 import GeradorCobol from './editor/gerador-cobol';
 import FonGrep from './fongrep/fongrep';
 import * as TasksProvider from './tasks/tasks-provider';
-import Editor from './editor/editor'
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -42,24 +41,6 @@ export function activate(context: ExtensionContext) {
         // The code you place here will be executed every time your command is executed
         var fongrep = new FonGrep();
         fongrep.fonGrep();
-    }));
-    context.subscriptions.push(commands.registerCommand('extension.openFontesTrunk', () => {
-        // TODO: this command must be transferred to rech-editor-internal
-        // The code you place here will be executed every time your command is executed
-        var editor = new Editor();
-        editor.showOpenDialog(
-            'F:\\FONTES\\',
-            (currentFile) => { editor.openFile(currentFile) },
-        );
-    }));
-    context.subscriptions.push(commands.registerCommand('extension.openScripts', () => {
-        // TODO: this command must be transferred to rech-editor-internal
-        // The code you place here will be executed every time your command is executed
-        var editor = new Editor();
-        editor.showOpenDialog(
-            'F:\\BAT\\',
-            (currentFile) => { editor.openFile(currentFile) },
-        );
     }));
 
 }
