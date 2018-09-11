@@ -1,7 +1,6 @@
 'use babel';
 import { Editor } from './editor';
 import * as Colunas from '../identa/colunas';
-import { commands } from 'vscode';
 
 export default class GeradorCobol {
   editor: Editor;

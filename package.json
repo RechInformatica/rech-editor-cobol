@@ -24,14 +24,15 @@
     "main": "./out/extension",
     "types": "./out/extension.d.ts",
     "contributes": {
-        "taskDefinitions": [{
+        "taskDefinitions": [
+            {
                 "type": "co",
-				"properties": {
-					"source": {
-						"type": "string",
-						"description": "Fonte a ser compilado"
-					}
-				},
+                "properties": {
+                    "source": {
+                        "type": "string",
+                        "description": "Fonte a ser compilado"
+                    }
+                },
                 "required": []
             }
         ],
@@ -120,7 +121,15 @@
             {
                 "command": "extension.fonGrep",
                 "title": "fonGrep"
-            }            
+            },
+            {
+                "command": "extension.openFontesTrunk",
+                "title": "openFontesTrunk"
+            },
+            {
+                "command": "extension.openScripts",
+                "title": "openScripts"
+            }
         ],
         "menus": {
             "editor/context": [
@@ -179,10 +188,19 @@
                 "key": "ctrl+l"
             },
             {
+                "command": "extension.openFontesTrunk",
+                "key": "ctrl+shift+o"
+            },
+            {
+                "command": "extension.openScripts",
+                "key": "ctrl+shift+y"
+            },
+            {
                 "key": "ctrl+f9",
                 "command": "workbench.action.tasks.runTask",
                 "args": "co"
-            },{
+            },
+            {
                 "command": "extension.copyLine",
                 "key": "F10"
             },

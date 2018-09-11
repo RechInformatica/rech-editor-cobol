@@ -1,6 +1,5 @@
 import { Path } from './../commons/path';
-
-import {TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands} from 'vscode';
+import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
 
 /**
  * Class to manipulate vscode editor
@@ -9,7 +8,7 @@ export default class Editor {
   editor: TextEditor;
 
   constructor() {
-    this.editor = <TextEditor> this.getActiveEditor();
+    this.editor = <TextEditor>this.getActiveEditor();
   }
 
 
@@ -20,9 +19,9 @@ export default class Editor {
     return new Path(this.editor.document.fileName).toString();
   }
 
-   /**
-   * Return the document text
-   */
+  /**
+  * Return the document text
+  */
   getEditorBuffer() {
     return this.editor.document.getText();
   }
@@ -32,7 +31,7 @@ export default class Editor {
    */
   getSelectionBuffer() {
     let buffer: string[] = new Array();
-    this.editor.selections.forEach(element => { 
+    this.editor.selections.forEach(element => {
       buffer.push(this.getRangeBuffer(new Range(element.start, element.end)));
     });
     return buffer;
@@ -49,16 +48,16 @@ export default class Editor {
     return range;
   }
 
-   /**
-   * Define a editor selection
-   */
+  /**
+  * Define a editor selection
+  */
   setSelectionRange(range: Range) {
     this.editor.selection = new Selection(range.start, range.end);
   }
 
-   /**
-   * Define multiple editor selections
-   */
+  /**
+  * Define multiple editor selections
+  */
   setSelectionRanges(range: Range[]) {
     let selections: Selection[] = [];
     range.forEach(element => {
@@ -67,9 +66,9 @@ export default class Editor {
     this.editor.selections = selections;
   }
 
-   /**
-   * Return the text of a range
-   */
+  /**
+  * Return the text of a range
+  */
   getRangeBuffer(range: Range) {
     return this.editor.document.getText(range);
   }
@@ -84,13 +83,13 @@ export default class Editor {
       });
     });
   }
-  
+
   /**
    * Adjust selection to select the whole line
    */
   selectWholeLines() {
-    commands.executeCommand('cursorLineStart',);
-    commands.executeCommand('cursorEndSelect',);
+    commands.executeCommand('cursorLineStart');
+    commands.executeCommand('cursorEndSelect');
   }
 
   /**
@@ -98,7 +97,7 @@ export default class Editor {
    */
   getCurrentWord() {
     let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start);
-    if(range === undefined){
+    if (range === undefined) {
       return '';
     }
     return this.getRangeBuffer(range);
@@ -125,12 +124,12 @@ export default class Editor {
   setCurrentLine(text: String) {
     this.editor.edit(editBuilder => {
       editBuilder.replace(new Range(new Position(this.editor.selection.start.line, 0), new Position(this.editor.selection.end.line + 1, 0)), text + "\n");
-    });    
+    });
   }
-  
-   /**
-   * Return length of current line
-   */
+
+  /**
+  * Return length of current line
+  */
   getCurrentLineSize() {
     return this.getCurrentLine().replace(/ +$/, '').length;
   }
@@ -161,7 +160,7 @@ export default class Editor {
    */
   getCursor() {
     return new Position(this.editor.selection.start.line, this.editor.selection.start.character);
-  }  
+  }
 
   /**
    * Set the cursor to a column
@@ -189,19 +188,19 @@ export default class Editor {
     });
   }
 
-   /**
-   * Return if this file is a bat file
-   */
+  /**
+  * Return if this file is a bat file
+  */
   isBat() {
     return this.getPath().toLowerCase().endsWith(".bat");
   }
-  
+
   /**
    * Return if this file is a ruby file
    */
   isRuby() {
     return this.getPath().toLowerCase().endsWith(".rb");
-  } 
+  }
 
   /**
    * Position the cursor on column, type a text in editor and go to specified column 
@@ -215,10 +214,10 @@ export default class Editor {
     let stacol = 0;
     // Coluna final
     let endcol = 0;
-    if (startcolumn != undefined){
+    if (startcolumn != undefined) {
       stacol = this.gotoCol(startcolumn);
     }
-    if (endcolumn != undefined){
+    if (endcolumn != undefined) {
       endcol = this.gotoCol(endcolumn - stacol - text.length);
     }
     this.insertText(" ".repeat(stacol) + text + " ".repeat(endcol));
@@ -248,15 +247,15 @@ export default class Editor {
         editBuilder.insert(element.start, text);
       });
     });
-  }  
-  
+  }
+
   /**
    * Move down the cursor
    */
   moveDown() {
     commands.executeCommand('cursorDown');
-  } 
-  
+  }
+
   /**
    * Move up the cursor
    */
@@ -264,23 +263,37 @@ export default class Editor {
     commands.executeCommand('cursorUp');
   }
 
-  /**
-   * Opens dialog for file selection
-   */
-  showOpenDialog(defaultDir?: string) {
+  showOpenDialog(defaultDir: string, callback: (file: string) => any) {
     let options: OpenDialogOptions = {
       openLabel: 'Abrir arquivo'
     };
     if (defaultDir) {
       options.defaultUri = Uri.file(defaultDir);
     }
-    return window.showOpenDialog(options);
-  } 
-  
+    window.showOpenDialog(options).then(selectedFiles => {
+      if (selectedFiles) {
+        selectedFiles.forEach(currentFile => {
+          callback(currentFile.fsPath);
+        });
+      }
+    });
+  }
+
+  /**
+   * Opens the specified file
+   */
+  openFile(file: string) {
+    let options: TextDocumentShowOptions = {
+      viewColumn: ViewColumn.Active,
+      preview: false
+    }
+    window.showTextDocument(Uri.file(file), options);
+  }
+
   /**
    * Show a information message
    */
-  showInformationMessage(message: string){
+  showInformationMessage(message: string) {
     window.showInformationMessage(message);
   }
 
@@ -322,11 +335,11 @@ export default class Editor {
    * currentLineReplace
    */
 
-   /**
-   * Return active editor
-   */
+  /**
+  * Return active editor
+  */
   getActiveEditor() {
     return window.activeTextEditor;
   }
 }
-export {Editor};
+export { Editor };
