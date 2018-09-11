@@ -24,6 +24,17 @@
     "main": "./out/extension",
     "types": "./out/extension.d.ts",
     "contributes": {
+        "taskDefinitions": [{
+                "type": "co",
+				"properties": {
+					"source": {
+						"type": "string",
+						"description": "Fonte a ser compilado"
+					}
+				},
+                "required": []
+            }
+        ],
         "configuration": {
             "type": "object",
             "title": "COBOL configuration",
@@ -109,7 +120,7 @@
             {
                 "command": "extension.fonGrep",
                 "title": "fonGrep"
-            }
+            }            
         ],
         "menus": {
             "editor/context": [
@@ -137,6 +148,11 @@
             {
                 "command": "extension.fonGrep",
                 "key": "ctrl+l"
+            },
+            {
+                "key": "ctrl+f9",
+                "command": "workbench.action.tasks.runTask",
+                "args": "co"
             }
         ]
     },
