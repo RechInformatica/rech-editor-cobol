@@ -13,32 +13,36 @@ export function activate(context: ExtensionContext) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "rech-test-vscode" is now active!');
+    //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
+    //
     context.subscriptions.push(commands.registerCommand('extension.cobolMove', () => {
-        // The code you place here will be executed every time your command is executed
         var gerador = new GeradorCobol();
         gerador.move();
     }));
     context.subscriptions.push(commands.registerCommand('extension.cobolTo', () => {
-        // The code you place here will be executed every time your command is executed
         var gerador = new GeradorCobol();
         gerador.to();
     }));
     context.subscriptions.push(commands.registerCommand('extension.copyLine', () => {
-        // The code you place here will be executed every time your command is executed
         var gerador = new GeradorCobol();
         gerador.copyLine();
     }));
     context.subscriptions.push(commands.registerCommand('extension.pasteLine', () => {
-        // The code you place here will be executed every time your command is executed
         var gerador = new GeradorCobol();
         gerador.pasteLine();
-        
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.cobolInsertCommentLine', () => {
+        var gerador = new GeradorCobol();
+        gerador.insertCommentLine();
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.newLineAbove', () => {
+        var gerador = new GeradorCobol();
+        gerador.newLineAbove();
     }));
     context.subscriptions.push(commands.registerCommand('extension.fonGrep', () => {
-        // The code you place here will be executed every time your command is executed
         var fongrep = new FonGrep();
         fongrep.fonGrep();
     }));

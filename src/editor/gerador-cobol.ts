@@ -65,6 +65,29 @@ export default class GeradorCobol {
   }
 
   /**
+   * Insert a new line above, keeping the cursor in the same position
+   */
+  newLineAbove() {
+    let position = this.editor.getCursor().character;
+    this.editor.insertLineAbove().then(
+      success => {
+        this.editor.setColumn(position);
+      }
+    );
+  }
+
+  /**
+   * Insert a comment line above 
+   */
+  insertCommentLine() {
+    this.editor.insertLineAbove().then(
+      success => {
+        this.editor.type("      *>-> ");
+      }
+    );
+  }
+
+  /**
    * Adiciona um comentário
    */
   // comment(commentText: string) {

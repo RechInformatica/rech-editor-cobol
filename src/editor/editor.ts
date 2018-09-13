@@ -323,7 +323,7 @@ export default class Editor {
    */
   insertLineAbove() {
     commands.executeCommand('editor.action.insertLineBefore');
-    commands.executeCommand('deleteAllLeft');
+    return commands.executeCommand('deleteAllLeft');
   }
 
   /**
