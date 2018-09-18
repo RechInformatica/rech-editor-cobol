@@ -1,11 +1,12 @@
 import { Path } from './../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
+import { Find } from './Find';
 
 /**
  * Class to manipulate vscode editor
  */
 export default class Editor {
-  editor: TextEditor;
+  private editor: TextEditor;
 
   constructor() {
     this.editor = <TextEditor>this.getActiveEditor();
@@ -148,10 +149,22 @@ export default class Editor {
   }
 
   /**
+   * Returns the current line text
+   */
+  getCurrentLineNumber(add?: number) {
+    if (add == undefined) {
+      add = 0;
+    }
+    return this.editor.document.lineAt(this.editor.selection.start.line + add);
+  }
+
+  /**
    * Defines the cursor position
    */
   setCursor(cursor: Position) {
-    return this.setSelectionRange(new Range(cursor, cursor));
+    let range = new Range(cursor, cursor);
+    this.editor.revealRange(range, 2);
+    return this.setSelectionRange(range);
   }
 
   /**
@@ -324,6 +337,30 @@ export default class Editor {
   insertLineAbove() {
     commands.executeCommand('editor.action.insertLineBefore');
     return commands.executeCommand('deleteAllLeft');
+  }
+
+  /**
+   * Go to the next paragraph
+   */
+  findNextParagraph() {
+    let positionsToReturn = new Find(this.editor).findPositions(/^\s{7}[\w\-]+\./g, Find.FindNext, this.getCurrentLineNumber(1), true);
+    if (positionsToReturn) {
+      this.setCursor(new Position(positionsToReturn[0].line, 7));
+    } else {
+      this.showInformationMessage("Next paragraph not found");
+    }
+  }
+
+  /**
+   * Go to the next paragraph
+   */
+  findPreviousParagraph() {
+    let positionsToReturn = new Find(this.editor).findPositions(/^\s{7}[\w\-]+\./g, Find.FindPrevious, this.getCurrentLineNumber(-1), true);
+    if (positionsToReturn) {
+      this.setCursor(new Position(positionsToReturn[0].line, 7));
+    } else {
+      this.showInformationMessage("Previous paragraph not found");
+    }
   }
 
   /**

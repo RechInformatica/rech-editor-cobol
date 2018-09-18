@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import { ExtensionContext, commands } from 'vscode';
 import GeradorCobol from './editor/gerador-cobol';
+import Editor from './editor/editor';
 import FonGrep from './fongrep/fongrep';
 import * as TasksProvider from './tasks/tasks-provider';
 
@@ -46,7 +47,16 @@ export function activate(context: ExtensionContext) {
         var fongrep = new FonGrep();
         fongrep.fonGrep();
     }));
-
+    context.subscriptions.push(commands.registerCommand('extension.findNextParagraph', () => {
+        // The code you place here will be executed every time your command is executed
+        var findNextParagraph = new Editor();
+        findNextParagraph.findNextParagraph();
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.findPreviousParagraph', () => {
+        // The code you place here will be executed every time your command is executed
+        var findPreviousParagraph = new Editor();
+        findPreviousParagraph.findPreviousParagraph();
+    }));
 }
 
 // this method is called when your extension is deactivated

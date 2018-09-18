@@ -121,6 +121,14 @@
             {
                 "command": "extension.fonGrep",
                 "title": "fonGrep"
+            },
+            {
+                "command": "extension.findNextParagraph",
+                "title": "findNextParagraph"
+            },
+            {
+                "command": "extension.findPreviousParagraph",
+                "title": "findPreviousParagraph"
             }
         ],
         "menus": {
@@ -195,6 +203,14 @@
             {
                 "command": "extension.pasteLine",
                 "key": "F11"
+            },
+            {
+                "command": "extension.findNextParagraph",
+                "key": "ctrl+k"
+            },
+            {
+                "command": "extension.findPreviousParagraph",
+                "key": "ctrl+shift+k"
             }
         ]
     },
