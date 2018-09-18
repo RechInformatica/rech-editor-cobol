@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import { ExtensionContext, commands } from 'vscode';
-import GeradorCobol from './editor/gerador-cobol';
+import GeradorCobol from './cobol/gerador-cobol';
 import Editor from './editor/editor';
 import FonGrep from './fongrep/fongrep';
 import * as TasksProvider from './tasks/tasks-provider';

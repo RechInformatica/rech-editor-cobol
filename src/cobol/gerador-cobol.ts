@@ -1,6 +1,6 @@
 'use babel';
-import { Editor } from './editor';
-import * as Colunas from '../identa/colunas';
+import { Editor } from '../editor/editor';
+import * as Colunas from './colunas';
 
 export default class GeradorCobol {
   editor: Editor;

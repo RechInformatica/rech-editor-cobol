@@ -1,4 +1,4 @@
-import { Path } from './../commons/path';
+import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
 import { Find } from './Find';
 
