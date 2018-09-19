@@ -232,7 +232,7 @@ export default class Editor {
     if (endcolumn != undefined) {
       endcol = this.gotoCol(endcolumn - stacol - text.length);
     }
-    this.insertText(" ".repeat(stacol) + text + " ".repeat(endcol));
+    return this.insertText(" ".repeat(stacol) + text + " ".repeat(endcol));
   }
 
   /**
