@@ -48,14 +48,20 @@ export function activate(context: ExtensionContext) {
         fongrep.fonGrep();
     }));
     context.subscriptions.push(commands.registerCommand('extension.findNextParagraph', () => {
-        // The code you place here will be executed every time your command is executed
         var findNextParagraph = new Editor();
         findNextParagraph.findNextParagraph();
     }));
     context.subscriptions.push(commands.registerCommand('extension.findPreviousParagraph', () => {
-        // The code you place here will be executed every time your command is executed
         var findPreviousParagraph = new Editor();
         findPreviousParagraph.findPreviousParagraph();
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.findWordForward', () => {
+        commands.executeCommand("editor.action.addSelectionToNextFindMatch");
+        commands.executeCommand("editor.action.nextMatchFindAction");
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.findWordBackward', () => {
+        commands.executeCommand("editor.action.addSelectionToNextFindMatch");
+        commands.executeCommand("editor.action.previousMatchFindAction");
     }));
 }
 

@@ -172,6 +172,14 @@
                 "key": "ctrl+F12"
             },
             {
+                "command": "extension.findWordForward",
+                "key": "ctrl+0"
+            },
+            {
+                "command": "extension.findWordBackward",
+                "key": "ctrl+9"
+            },
+            {
                 "command": "extension.newLineAbove",
                 "key": "ctrl+n"
             },
