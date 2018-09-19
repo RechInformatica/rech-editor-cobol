@@ -176,6 +176,14 @@
                 "key": "ctrl+0"
             },
             {
+                "command": "extension.copyWordUnderCursor",
+                "key": "ctrl+abnt_c1"
+            },
+            {
+                "command": "extension.replaceWordUnderCursor",
+                "key": "shift+ctrl+abnt_c1"
+            },
+            {
                 "command": "extension.findWordBackward",
                 "key": "ctrl+9"
             },

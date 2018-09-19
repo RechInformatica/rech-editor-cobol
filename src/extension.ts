@@ -63,6 +63,16 @@ export function activate(context: ExtensionContext) {
         commands.executeCommand("editor.action.addSelectionToNextFindMatch");
         commands.executeCommand("editor.action.previousMatchFindAction");
     }));
+    context.subscriptions.push(commands.registerCommand('extension.copyWordUnderCursor', () => {
+        commands.executeCommand("cursorWordRight");
+        commands.executeCommand("cursorWordLeftSelect");
+        commands.executeCommand("editor.action.clipboardCopyAction");
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.replaceWordUnderCursor', () => {
+        commands.executeCommand("cursorWordRight");
+        commands.executeCommand("cursorWordLeftSelect");
+        commands.executeCommand("editor.action.clipboardPasteAction");
+    }));
 }
 
 // this method is called when your extension is deactivated
