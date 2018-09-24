@@ -51,7 +51,7 @@ export default class GeradorCobol {
     let cursor = this.editor.getCursor();
     this.editor.selectWholeLines();
     this.editor.clipboardCopy();
-    this.editor.setCursor(cursor);
+    this.editor.setCursor(cursor.line, cursor.character);
   }
 
   /**
@@ -61,7 +61,7 @@ export default class GeradorCobol {
     let cursor = this.editor.getCursor();
     this.editor.insertLineAbove();
     this.editor.clipboardPaste();
-    this.editor.setCursor(cursor);
+    this.editor.setCursor(cursor.line, cursor.character);
   }
 
   /**
@@ -75,17 +75,15 @@ export default class GeradorCobol {
       }
     );
   }
-
+  
   /**
    * Insert a comment line above 
    */
-  insertCommentLine() {
-    this.editor.insertLineAbove().then(
-      success => {
-        this.editor.type("      *>-> ");
-      }
-    );
+  async insertCommentLine() {
+    await this.editor.insertLineAbove();
+    await this.editor.type("      *>-> ");
   }
+
 
   /**
    * Adiciona um comentário

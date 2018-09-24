@@ -4,7 +4,7 @@
 
 declare module 'rech-editor-vscode' {
 
-	/**
+    /**
 	 * Class to manipulate vscode editor
 	 */
 	export default class Editor {
@@ -85,7 +85,7 @@ declare module 'rech-editor-vscode' {
 	    /**
 	     * Define the cursor position
 	     */
-	    //setCursor(cursor: Position): void;
+	    setCursor(line: number, column: number): void;
 	    /**
 	     * Return the cursor position
 	     */
@@ -143,12 +143,15 @@ declare module 'rech-editor-vscode' {
          * @param callback callback function called for each selected file
          */
     	showOpenDialog(defaultDir: string, callback: (file: string) => any): void;
+		
 		/**
 		 * Opens the specified file
 		 * 
          * @param file file to be opened
+         * @param callback callback function executed after the file is opened
          */
-		 openFile(file: string): void;
+		openFile(file: string, callback?: () => any): void;
+		 
 	    /**
 	     * Show a information message
 	     */

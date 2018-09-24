@@ -160,8 +160,18 @@ export default class Editor {
 
   /**
    * Defines the cursor position
+   * 
+   * @param line 
+   * @param column 
    */
-  setCursor(cursor: Position) {
+  setCursor(line: number, column: number) {
+    this.setCursorPosition(new Position(line, column));
+  }
+
+  /**
+   * Defines the cursor position for internal usage since it depends on VSCode API
+   */
+  private setCursorPosition(cursor: Position) {
     let range = new Range(cursor, cursor);
     this.editor.revealRange(range, 2);
     return this.setSelectionRange(range);
@@ -301,13 +311,18 @@ export default class Editor {
    * Opens the specified file
    * 
    * @param file file to be opened
+   * @param callback callback function executed after the file is opened
    */
-  openFile(file: string) {
+  openFile(file: string, callback?: () => any) {
     let options: TextDocumentShowOptions = {
       viewColumn: ViewColumn.Active,
       preview: false
     }
-    window.showTextDocument(Uri.file(file), options);
+    window.showTextDocument(Uri.file(file), options).then(() => {
+      if (callback) {
+        callback()
+      }
+    });
   }
 
   /**
@@ -345,7 +360,7 @@ export default class Editor {
   findNextParagraph() {
     let positionsToReturn = new Find(this.editor).findPositions(/^\s{7}[\w\-]+\./g, Find.FindNext, this.getCurrentLineNumber(1), true);
     if (positionsToReturn) {
-      this.setCursor(new Position(positionsToReturn[0].line, 7));
+      this.setCursorPosition(new Position(positionsToReturn[0].line, 7));
     } else {
       this.showInformationMessage("Next paragraph not found");
     }
@@ -357,7 +372,7 @@ export default class Editor {
   findPreviousParagraph() {
     let positionsToReturn = new Find(this.editor).findPositions(/^\s{7}[\w\-]+\./g, Find.FindPrevious, this.getCurrentLineNumber(-1), true);
     if (positionsToReturn) {
-      this.setCursor(new Position(positionsToReturn[0].line, 7));
+      this.setCursorPosition(new Position(positionsToReturn[0].line, 7));
     } else {
       this.showInformationMessage("Previous paragraph not found");
     }
