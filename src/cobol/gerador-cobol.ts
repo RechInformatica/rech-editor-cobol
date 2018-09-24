@@ -67,13 +67,10 @@ export default class GeradorCobol {
   /**
    * Insert a new line above, keeping the cursor in the same position
    */
-  newLineAbove() {
+  async newLineAbove() {
     let position = this.editor.getCursor().character;
-    this.editor.insertLineAbove().then(
-      success => {
-        this.editor.setColumn(position);
-      }
-    );
+    await this.editor.insertLineAbove();
+    await this.editor.setColumn(position);
   }
   
   /**
