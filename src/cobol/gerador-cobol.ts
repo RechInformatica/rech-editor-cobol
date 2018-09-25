@@ -12,36 +12,39 @@ export default class GeradorCobol {
   /**
    * Insert a command "MOVE"
    */
-  move() {
-    this.editor.type("MOVE", Colunas.COLUNA_A);
+  async move() {
+    await this.editor.type("MOVE");
+    await this.gotoCol(Colunas.COLUNA_A);
   }
 
   /**
-   * Digita Spaces
+   * Insert a command "SPACES"
    */
   spaces() {
     this.editor.type("SPACES");
   }
 
   /**
-   * Digita Zeros
+   * Insert a command "ZEROS"
    */
   zeros() {
     this.editor.type("ZEROS");
   }
 
   /**
-   * Digita LowValues
+   * Insert a command "LOW-VALUES"
    */
   lowvalues() {
-    this.editor.type("LOWVALUES");
+    this.editor.type("LOW-VALUES");
   }
 
   /**
-   * Digita To
+   * Insert a command "To"
    */
-  to() {
-    this.editor.type("TO", Colunas.COLUNA_C, this.gotoColTo());
+  async to() {
+    await this.gotoColTo();
+    await this.editor.type("TO");
+    await this.gotoCol(Colunas.COLUNA_C);
   }
 
   /**
@@ -91,20 +94,28 @@ export default class GeradorCobol {
   // }
 
   /**
-   * Adjust the position of command "TO"
+   * Vai para a coluna do TO
    */
   gotoColTo() {
-    let position = this.editor.getCursor().character;
-    if (position < Colunas.COLUNA_B) {
-      return Colunas.COLUNA_B;
+    if (this.editor.getCurrentLineSize() < Colunas.COLUNA_B) {
+      return this.gotoCol(Colunas.COLUNA_B);
     } else {
-      if (position >= 31) {
-        return Colunas.COLUNA_C;
+      if (this.editor.getCurrentLineSize() >= 31) {
+        return this.gotoCol(Colunas.COLUNA_C);
       } else {
-        return 1;
+        return this.editor.type(" ");
       }
     }
   }
 
-
+  /**
+   * Vai para uma coluna
+   */
+  gotoCol(coluna: number) {
+    if (this.editor.getCurrentLineSize() < coluna - 1) {
+      return this.editor.setColumn(coluna - 1);
+    } else {
+      return this.editor.type(" ");
+    }
+  }
 };

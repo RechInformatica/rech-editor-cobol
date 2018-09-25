@@ -56,17 +56,6 @@ export default class Editor {
   }
 
   /**
-  * Defines multiple editor selections
-  */
-  setSelectionRanges(range: Range[]) {
-    let selections: Selection[] = [];
-    range.forEach(element => {
-      selections.push(new Selection(element.start, element.end));
-    });
-    this.editor.selections = selections;
-  }
-
-  /**
   * Returns the text of the specified range
   */
   getRangeBuffer(range: Range) {
@@ -77,7 +66,7 @@ export default class Editor {
    * Changes the text found in the specified selection
    */
   replaceSelection(buffer: string) {
-    this.editor.edit(editBuilder => {
+    return this.editor.edit(editBuilder => {
       this.editor.selections.forEach(element => {
         editBuilder.replace(element, buffer);
       });
@@ -122,7 +111,7 @@ export default class Editor {
    * Replaces current line with a string
    */
   setCurrentLine(text: String) {
-    this.editor.edit(editBuilder => {
+    return this.editor.edit(editBuilder => {
       editBuilder.replace(new Range(new Position(this.editor.selection.start.line, 0), new Position(this.editor.selection.end.line + 1, 0)), text + "\n");
     });
   }
@@ -185,29 +174,22 @@ export default class Editor {
   }
 
   /**
-   * Sets the cursor to a column
+   * Sets the cursor to a column, adding right spaces if necessary
    * PS: works with multiple cursors
    */
-  setColumn(column: number) {
-    let range: Range[] = [];
-    this.editor.selections.forEach(element => {
-      let size = this.getLine(element.start.line).length;
-      let diff = column - size;
-      if (diff > 0) {
-        this.setTextPosition(new Position(element.end.line, size), " ".repeat(diff));
-      }
-      range.push(new Range(new Position(element.start.line, column), new Position(element.start.line, column)));
+  async setColumn(column: number) {
+    /* Insert the text into the selections from user */
+    await this.editor.edit(editBuilder => {
+      this.editor.selections.forEach(element => {
+        let size = this.getLine(element.start.line).length;
+        let diff = column - size;
+        if (diff > 0) {
+          editBuilder.insert(element.start, " ".repeat(diff));
+        }    
+      });
     });
-    this.setSelectionRanges(range);
-  }
-
-  /**
-   * Inserts text in a position
-   */
-  setTextPosition(Position: Position, text: string) {
-    this.editor.edit(editBuilder => {
-      editBuilder.insert(Position, text);
-    });
+    await commands.executeCommand('cursorLineStart');
+    await commands.executeCommand('cursorMove', {to:'right', value: column});
   }
 
   /**
@@ -224,39 +206,15 @@ export default class Editor {
     return this.getPath().toLowerCase().endsWith(".rb");
   }
 
+
   /**
-   * Sets the cursor on the specified column, types a text in editor and returns to the specified column 
+   * Types a text in editor
    * 
    * @param text Text to insert in editor
-   * @param endcolumn Cursor position after the text insertion 
-   * @param startcolumn Cursor position before the text insertion
    */
-  type(text: string, endcolumn?: number, startcolumn?: number) {
-    // Coluna inicial
-    let stacol = 0;
-    // Coluna final
-    let endcol = 0;
-    if (startcolumn != undefined) {
-      stacol = this.gotoCol(startcolumn);
-    }
-    if (endcolumn != undefined) {
-      endcol = this.gotoCol(endcolumn - stacol - text.length);
-    }
-    return this.insertText(" ".repeat(stacol) + text + " ".repeat(endcol));
+  type(text: string) {
+    return this.insertText(text);
   }
-
-  /**
-   * Calculates the position to column after a text insertion
-   */
-  gotoCol(coluna: number) {
-    let position = this.getCursor().character;
-    if (position < coluna) {
-      return coluna - position - 1;
-    } else {
-      return 1;
-    }
-  }
-
 
   /**
    * Inserts a text in the current selection
@@ -264,7 +222,7 @@ export default class Editor {
    */
   insertText(text: string) {
     /* Insert the text into the selections from user */
-    this.editor.edit(editBuilder => {
+    return this.editor.edit(editBuilder => {
       this.editor.selections.forEach(element => {
         editBuilder.insert(element.start, text);
       });
