@@ -152,6 +152,11 @@
                 "key": "ctrl+="
             },
             {
+                "key":"ctrl+right",
+                "command":"cursorWordStartRight",
+                "when":"editorTextFocus"
+            },
+            {
                 "command": "editor.action.nextMatchFindAction",
                 "key": "F3"
             },
