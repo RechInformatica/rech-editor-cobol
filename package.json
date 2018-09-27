@@ -74,7 +74,9 @@
                 ],
                 "editor.detectIndentation": false,
                 "editor.tabSize": 3,
-                "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?"
+                "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
+                "editor.trimAutoWhitespace": false,
+                "editor.useTabStops": false
             }
         },
         "languages": [
@@ -152,9 +154,9 @@
                 "key": "ctrl+="
             },
             {
-                "key":"ctrl+right",
-                "command":"cursorWordStartRight",
-                "when":"editorTextFocus"
+                "key": "ctrl+right",
+                "command": "cursorWordStartRight",
+                "when": "editorTextFocus"
             },
             {
                 "command": "editor.action.nextMatchFindAction",
