@@ -151,7 +151,7 @@
             {
                 "comment": "Ainda não é a rotina ideal... Mas por enquanto quebra um galho",
                 "command": "editor.action.commentLine",
-                "key": "ctrl+="
+                "key": "alt+="
             },
             {
                 "key": "ctrl+right",
