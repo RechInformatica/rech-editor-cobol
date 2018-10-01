@@ -185,11 +185,11 @@ export default class Editor {
         let diff = column - size;
         if (diff > 0) {
           editBuilder.insert(element.start, " ".repeat(diff));
-        }    
+        }
       });
     });
     await commands.executeCommand('cursorLineStart');
-    await commands.executeCommand('cursorMove', {to:'right', value: column});
+    await commands.executeCommand('cursorMove', { to: 'right', value: column });
   }
 
   /**
@@ -284,6 +284,13 @@ export default class Editor {
   }
 
   /**
+   * Shows a warning message
+   */
+  showWarningMessage(message: string) {
+    window.showWarningMessage(message);
+  }
+
+  /**
    * Shows an information message
    */
   showInformationMessage(message: string) {
@@ -334,6 +341,22 @@ export default class Editor {
     } else {
       this.showInformationMessage("Previous paragraph not found");
     }
+  }
+
+  /**
+  /**
+   * Shows input box and executes the specified callback when Enter is pressed
+   * 
+   * @param placeholder text placeholder to be shown when no text is typed
+   * @param prompt prompt message
+   * @param callback callback executed when Enter is pressed
+   */
+  showInputBox(placeholder: string, prompt: string, callback: (info: string | undefined) => any) {
+    window.showInputBox({
+      value: "",
+      placeHolder: placeholder,
+      prompt: prompt
+    }).then((info) => callback(info));
   }
 
   /**

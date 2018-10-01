@@ -1,38 +1,40 @@
-import * as vscode from 'vscode';
 import Executor from '../commons/executor';
 import Editor from '../editor/editor';
 import * as fs from 'fs';
 
 /**
- * Classe para executar o FonGrep por dentro do VSCode
+ * Class to execute FonGrep from within VSCode
  */
 export default class FonGrep {
+
     /**
-     * Executa o FonGrep abrindo o arquivo de resultados no editor caso encontre algum
+     * Executes FonGrep opening the result file on the editor
      */
     public fonGrep() {
-        vscode.window.showInputBox({
-            value: "",
-            placeHolder: "Argumento a ser pesquisado pelo FonGrep",
-            prompt: "Fongrep"
-        }).then((info) => {
-            if (info !== undefined && info.length > 0) {
-                vscode.window.setStatusBarMessage(info);
-                new Editor().showInformationMessage("Iniciando busca por '" + info + "'...");
-                new Executor().exec("cmd.exe /C F:\\BAT\\FonGrep.bat /noOpenEditor /show /delEmptyResult " + info, (process) => {
-                    this.handleResult(info, process.getStdout());
-                });
-            } else {
-                vscode.window.setStatusBarMessage("Nenhum argumento informado!");
-            }
+        new Editor().showInputBox("Argumento a ser pesquisado pelo FonGrep", "FonGrep", (info) => {
+            this.runFonGrep(info);
         });
     }
 
     /**
-     * Manipula o resultado do FonGrep
+     * Executes the FonGrep command itself and handles the result file
+     */
+    runFonGrep(info: string | undefined) {
+        if (info !== undefined && info.length > 0) {
+            new Editor().showInformationMessage("Iniciando busca por '" + info + "'...");
+            new Executor().exec("cmd.exe /C F:\\BAT\\FonGrep.bat /noOpenEditor /show /delEmptyResult " + info, (process) => {
+                this.handleResult(info, process.getStdout());
+            });
+        } else {
+            new Editor().showWarningMessage("Nenhum argumento informado para o FonGrep!");
+        }
+    }
+
+    /**
+     * Handles the result file
      * 
-     * @param inputSearch busca previamente usada no FonGrep
-     * @param output output do FonGrep
+     * @param inputSearch Input search previously used as a FonGrep parameter
+     * @param output FonGrep output
      */
     private handleResult(inputSearch: string, output: string) {
         var lines = output.split("\n");
@@ -41,9 +43,9 @@ export default class FonGrep {
     }
 
     /**
-     * Extrai o nome do arquivo de resultado do FonGrep a partir do output
+     * Extracts FonGrep's result filename from the console output
      * 
-     * @param outputLines linhas de output do FonGrep
+     * @param outputLines FonGrep output lines
      */
     private extractResultFileFromOutput(outputLines: string[]) {
         var ouputFile: string = "";
@@ -61,16 +63,17 @@ export default class FonGrep {
     }
 
     /**
-     * Abre o arquivo de resultado no editor se existente
+     * Opens the result file if any result is found
      * 
-     * @param resultFile nome do arquivo de resultado do FonGrep
+     * @param resultFile FonGrep result filename
+     * @param inputSearch Input search previously used as a FonGrep parameter
      */
     private openResultIfNeeded(resultFile: string, inputSearch: string) {
         if (fs.existsSync(resultFile)) {
             new Editor().showInformationMessage("FonGrep executado com sucesso.");
             new Editor().openFile(resultFile);
         } else {
-            new Editor().showInformationMessage("Nenhum resultado encontrado no FonGrep com a busca '" + inputSearch + "'.");
+            new Editor().showWarningMessage("Nenhum resultado encontrado no FonGrep com a busca '" + inputSearch + "'.");
         }
     }
 }
