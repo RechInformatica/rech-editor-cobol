@@ -1,6 +1,7 @@
 import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
 import { Find } from './find';
+import { Identa } from '../ident/ident';
 
 /**
  * Class to manipulate vscode editor
@@ -360,6 +361,20 @@ export default class Editor {
   }
 
   /**
+   * Indent the selection Buffer
+   */
+  indent() {
+    // Select whole lines of the selection range
+    let start = this.getSelectionRange()[0].start
+    let end = this.getSelectionRange()[0].end
+    this.setSelectionRange(new Range(new Position(start.line, 0), new Position(end.line + 1, 0)));
+    //Ident the selection range
+    new Identa().identa(this.getSelectionBuffer(), this.getPath(), (buffer) => {
+      this.replaceSelection(buffer.toString());
+    }, (bufferErr) => {this.showWarningMessage(bufferErr);});
+  }
+
+  /**
    * TODO:
    * findFilePath
    * insertSnippetAboveCurrentLine
@@ -381,5 +396,6 @@ export default class Editor {
   getActiveEditor() {
     return window.activeTextEditor;
   }
+
 }
 export { Editor };

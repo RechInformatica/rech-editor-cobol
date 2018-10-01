@@ -55,6 +55,10 @@ export function activate(context: ExtensionContext) {
         var findPreviousParagraph = new Editor();
         findPreviousParagraph.findPreviousParagraph();
     }));
+    context.subscriptions.push(commands.registerCommand('extension.indent', () => {
+        var indent = new Editor();
+        indent.indent();
+    }));
     context.subscriptions.push(commands.registerCommand('extension.findWordForward', () => {
         commands.executeCommand("editor.action.addSelectionToNextFindMatch");
         commands.executeCommand("editor.action.nextMatchFindAction");

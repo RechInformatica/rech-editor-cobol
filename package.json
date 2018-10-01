@@ -131,6 +131,10 @@
             {
                 "command": "extension.findPreviousParagraph",
                 "title": "findPreviousParagraph"
+            },
+            {
+                "command": "extension.indent",
+                "key": "indent"
             }
         ],
         "menus": {
@@ -234,6 +238,10 @@
             {
                 "command": "extension.findPreviousParagraph",
                 "key": "ctrl+shift+k"
+            },
+            {
+                "command": "extension.indent",
+                "key": "ctrl+p"
             }
         ]
     },

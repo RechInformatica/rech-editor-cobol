@@ -3,19 +3,23 @@
 import * as fs from 'fs';
 import { denodeify } from 'q';
 
+/** constant function to append file */
 const appendFile = denodeify(fs.appendFile);
+/** constant function to write file */
 const writeFile = denodeify(fs.writeFile);
+/** constant function to read file */
 const readFile = denodeify<string[]>(fs.readFile);
 
 /**
- * Classe de manipulação de arquivos
+ * Class to manipulate files
  */
 export default class File {
 
+  /** File name */
   private _fileName: string;
   
   /**
-   * Cria um novo arquivo
+   * Create a new file
    * 
    */
   constructor(path: string) {
@@ -23,49 +27,53 @@ export default class File {
   }
 
   /**
-   * Retorna um arquivo temporário
+   * Create a new temporary file
    */
   public static tmpFile(): File {
     let timestamp = Date.now().toString();
-    return new File("C:\\teste\\" + timestamp + ".txt");
+    return new File("C:\\tmp\\" + timestamp + ".txt");
   }
 
   /**
-   * Salva um conteúdo no arquivo. Sobreescre o conteúdo original e retorna uma Promise quando o arquivo for
-   * gravado.
+   * Save a buffer in file
+   * 
+   * @param buffer 
    */
   public saveBuffer(buffer: string[]) {
     return writeFile(this.fileName, buffer);
   }
 
   /**
-   * Apenda o conteúdo no arquivo. Cria o arquivo caso não exista e retorna um Promise quando for gravado
+   * Append a buffer in file
    */
   public appendBuffer(buffer: string[]) {
     return appendFile(this.fileName, buffer);
   }
 
   /**
-   * Carrega o conteúdo do arquivo, retornando uma promise
+   * Load the file content
    */
-  public loadBuffer() {
-    return readFile(this.fileName);
+  public loadBuffer(encoding?: string) {
+    return readFile(this.fileName, {encoding: encoding});
+  }
+
+  /**
+   * load the file content synchronously
+   */
+  public loadBufferSync(encoding: string): string {
+    return fs.readFileSync(this.fileName, {encoding: encoding});
   }
 
 
   /**
-   * Testa se um arquivo existe
+   * Tests whether the file exists
    */
-  public exists(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      fs.exists(this.fileName, exists => {
-        resolve(exists);
-      });
-    });
+  public exists(): boolean {
+      return fs.existsSync(this.fileName);
   }
 
   /**
-   * Cria o diretório
+   * Create a new directory
    */
   public mkdir() {
     try {
@@ -75,15 +83,14 @@ export default class File {
   }
 
   /**
-   * Copia um arquivo
+   * Copy file
    */
   public copy(dest: string) {
-    var fs = require('fs');
     fs.createReadStream(this.fileName).pipe(fs.createWriteStream(dest));
   }
 
   /**
-   * Retorna o nome do arquivo
+   * Return the fileName
    */
   public get fileName(): string {
     return this._fileName;
