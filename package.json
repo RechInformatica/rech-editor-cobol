@@ -254,8 +254,7 @@
     },
     "dependencies": {
         "@types/q": "^1.0.0",
-        "q": "^1.4.1",
-        "tsc": "^1.20150623.0"
+        "q": "^1.4.1"
     },
     "devDependencies": {
         "typescript": "^2.6.1",
