@@ -333,7 +333,7 @@ export default class Editor {
   }
 
   /**
-   * Go to the next paragraph
+   * Go to the previous paragraph
    */
   findPreviousParagraph() {
     let positionsToReturn = new Find(this.editor).findPositions(/^\s{7}[\w\-]+\./g, Find.FindPrevious, this.getCurrentLineNumber(-1), true);
@@ -341,6 +341,48 @@ export default class Editor {
       this.setCursorPosition(new Position(positionsToReturn[0].line, 7));
     } else {
       this.showInformationMessage("Previous paragraph not found");
+    }
+  }
+
+  /**
+   * Go to the next blank line
+   */
+  findNextBlankLine() {
+    // Find a next blank line
+    let positionsToReturn = new Find(this.editor).findPositions(/^\s*$/g, Find.FindNext, this.getCurrentLineNumber(1), true);
+    // If not found a blank line or the line found is the last line
+    if (positionsToReturn == undefined || positionsToReturn[0].line >= (this.editor.document.lineCount - 1)){
+      this.showInformationMessage("Next blank line not found");
+      return;
+    }
+    //Find the next line after a blank line with content
+    positionsToReturn = new Find(this.editor).findPositions(/[^\s]/g, Find.FindNext, this.editor.document.lineAt(positionsToReturn[0].line), true);
+    // If returned a position and the line found is not the last line from document
+    if (positionsToReturn && positionsToReturn[0].line < (this.editor.document.lineCount - 1)) {
+      this.setCursorPosition(new Position(positionsToReturn[0].line, 0));
+    } else {
+      this.showInformationMessage("Next blank line not found");
+    }
+  }
+
+  /**
+   * Go to the previous blank line
+   */
+  findPreviousBlankLine() {
+    // Find a previous blank line
+    let positionsToReturn = new Find(this.editor).findPositions(/^\s*$/g, Find.FindPrevious, this.getCurrentLineNumber(-1), true);
+    // If not found a blank line or the line found is the last line
+    if (positionsToReturn == undefined){
+      this.showInformationMessage("Previous blank line not found");
+      return;
+    }
+    //Find the previous line before a blank line with content
+    positionsToReturn = new Find(this.editor).findPositions(/[^\s]/g, Find.FindPrevious, this.editor.document.lineAt(positionsToReturn[0].line), true);
+    // If returned a position and the line found is not the last line from document
+    if (positionsToReturn) {
+      this.setCursorPosition(new Position(positionsToReturn[0].line, 0));
+    } else {
+      this.showInformationMessage("Previous blank line not found");
     }
   }
 

@@ -133,8 +133,17 @@
                 "title": "findPreviousParagraph"
             },
             {
+                "command": "extension.findNextBlankLine",
+                "title": "findNextBlankLine"
+            },
+            {
+                "command": "extension.findPreviousBlankLine",
+                "title": "findPreviousBlankLine"
+            },
+            {
                 "command": "extension.indent",
-                "key": "indent"
+                "key": "indent",
+                "title": "indent"
             }
         ],
         "menus": {
@@ -242,6 +251,14 @@
             {
                 "command": "extension.indent",
                 "key": "ctrl+p"
+            },
+            {
+                "command": "extension.findNextBlankLine",
+                "key": "alt+p"
+            },
+            {
+                "command": "extension.findPreviousBlankLine",
+                "key": "alt+shift+p"
             }
         ]
     },

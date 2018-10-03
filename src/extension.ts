@@ -55,6 +55,15 @@ export function activate(context: ExtensionContext) {
         var findPreviousParagraph = new Editor();
         findPreviousParagraph.findPreviousParagraph();
     }));
+    context.subscriptions.push(commands.registerCommand('extension.findNextBlankLine', () => {
+        var findNextParagraph = new Editor();
+        findNextParagraph.findNextBlankLine();
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.findPreviousBlankLine', () => {
+        var findPreviousParagraph = new Editor();
+        findPreviousParagraph.findPreviousBlankLine();
+    }));
+
     context.subscriptions.push(commands.registerCommand('extension.indent', () => {
         var indent = new Editor();
         indent.indent();
