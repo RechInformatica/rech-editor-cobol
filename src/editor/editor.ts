@@ -432,11 +432,11 @@ export default class Editor {
   /**
    * Indent the selection Buffer
    */
-  indent() {
+  indent(alignment: string) {
     // Select whole lines of the selection range
     this.selectWholeLines();
     //Indent the selection range
-    new Indenta().indenta(this.getSelectionBuffer(), this.getPath(), (buffer) => {
+    new Indenta().indenta(alignment, this.getSelectionBuffer(), this.getPath(), (buffer) => {
       this.replaceSelection(buffer.toString());
     }, (bufferErr) => {this.showWarningMessage(bufferErr);});
   }

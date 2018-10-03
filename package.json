@@ -144,6 +144,16 @@
                 "command": "extension.indent",
                 "key": "indent",
                 "title": "indent"
+            },
+            {
+                "command": "extension.indentLeft",
+                "key": "indentLeft",
+                "title": "indentLeft"
+            },
+            {
+                "command": "extension.indentRight",
+                "key": "indentRight",
+                "title": "indentRight"
             }
         ],
         "menus": {
@@ -251,6 +261,14 @@
             {
                 "command": "extension.indent",
                 "key": "ctrl+p"
+            },
+            {
+                "command": "extension.indentLeft",
+                "key": "alt+left"
+            },
+            {
+                "command": "extension.indentRight",
+                "key": "alt+right"
             },
             {
                 "command": "extension.findNextBlankLine",

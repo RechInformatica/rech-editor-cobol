@@ -66,7 +66,15 @@ export function activate(context: ExtensionContext) {
 
     context.subscriptions.push(commands.registerCommand('extension.indent', () => {
         var indent = new Editor();
-        indent.indent();
+        indent.indent("N");
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.indentLeft', () => {
+        var indent = new Editor();
+        indent.indent("E");
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.indentRight', () => {
+        var indent = new Editor();
+        indent.indent("D");
     }));
     context.subscriptions.push(commands.registerCommand('extension.findWordForward', () => {
         commands.executeCommand("editor.action.addSelectionToNextFindMatch");

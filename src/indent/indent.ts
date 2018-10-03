@@ -11,19 +11,20 @@ export default class Indenta {
   /**
    * Indent the block
    * 
+   * @param alignment 
    * @param bloco 
    * @param fonte 
    * @param callback 
-   * @param err
+   * @param err 
    */
-  public indenta(bloco: string[], fonte: string, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
+  public indenta(alignment: string, bloco: string[], fonte: string, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
     // Save the block in a file
     let file = new File(this.buildTmpFileName());
     file.saveBuffer(bloco).then(() => {
       let indentFile = new File(this.buildTmpFileName() + ".ident");
       let errFile = new File(this.buildTmpFileName() + ".err");
       // Run the indenter
-      new Executor().exec(this.buildCommandLine(fonte), () => {
+      new Executor().exec(this.buildCommandLine(alignment, fonte), () => {
         // If an error occurred
         if (errFile.exists()){
           err(errFile.loadBufferSync("latin1"));
@@ -40,10 +41,10 @@ export default class Indenta {
   /**
    * Build a command line to run the indenter
    */
-  private buildCommandLine(fonte: string): string {
+  private buildCommandLine(alignment: string, fonte: string): string {
     let cmd = "Identa.bat ";
     cmd += this.buildTmpFileName();
-    cmd += ";" + fonte + ";1;N;F;S -lines:3";
+    cmd += ";" + fonte + ";1;" + alignment + ";F;S -lines:3";
     return cmd;
   }
   
