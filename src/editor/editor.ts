@@ -50,6 +50,18 @@ export default class Editor {
   }
 
   /**
+   * 
+   * Defines and editor multi selections
+   */
+  setSelectionsRange(ranges: Range[]) {
+    let selects: Selection[] = new Array();
+    ranges.forEach(range => {
+      selects.push(new Selection(range.start, range.end))
+    });
+    this.editor.selections = selects;
+  }
+
+  /**
   * Defines an editor selection
   */
   setSelectionRange(range: Range) {
@@ -78,8 +90,16 @@ export default class Editor {
    * Adjusts selection to select the whole line
    */
   selectWholeLines() {
-    commands.executeCommand('cursorLineStart');
-    commands.executeCommand('cursorEndSelect');
+    let ranges: Range[] = new Array();
+    // Adjusts each range to fill whole line with selection
+    this.getSelectionRange().forEach(range => {
+      if (range.isEmpty || range.end.character != 0) {
+        ranges.push(new Range(new Position(range.start.line, 0), new Position(range.end.line + 1, 0)));
+      } else {
+        ranges.push(new Range(new Position(range.start.line, 0), range.end));
+      }
+    });
+    this.setSelectionsRange(ranges);
   }
 
   /**
@@ -313,6 +333,13 @@ export default class Editor {
   }
 
   /**
+   * Set cursor to start of line
+   */
+  cursorLineStart() {
+    commands.executeCommand('cursorLineStart')
+  }
+
+  /**
    * Inserts a blank line above
    */
   insertLineAbove() {
@@ -365,9 +392,7 @@ export default class Editor {
    */
   indent() {
     // Select whole lines of the selection range
-    let start = this.getSelectionRange()[0].start
-    let end = this.getSelectionRange()[0].end
-    this.setSelectionRange(new Range(new Position(start.line, 0), new Position(end.line + 1, 0)));
+    this.selectWholeLines();
     //Ident the selection range
     new Identa().identa(this.getSelectionBuffer(), this.getPath(), (buffer) => {
       this.replaceSelection(buffer.toString());

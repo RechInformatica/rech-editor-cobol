@@ -62,7 +62,7 @@ export default class GeradorCobol {
    */
   pasteLine() {
     let cursor = this.editor.getCursor();
-    this.editor.insertLineAbove();
+    this.editor.cursorLineStart();
     this.editor.clipboardPaste();
     this.editor.setCursor(cursor.line, cursor.character);
   }
