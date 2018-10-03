@@ -1,7 +1,7 @@
 import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
 import { Find } from './find';
-import { Identa } from '../ident/ident';
+import { Indenta } from '../ident/indent';
 
 /**
  * Class to manipulate vscode editor
@@ -435,8 +435,8 @@ export default class Editor {
   indent() {
     // Select whole lines of the selection range
     this.selectWholeLines();
-    //Ident the selection range
-    new Identa().identa(this.getSelectionBuffer(), this.getPath(), (buffer) => {
+    //Indent the selection range
+    new Indenta().indenta(this.getSelectionBuffer(), this.getPath(), (buffer) => {
       this.replaceSelection(buffer.toString());
     }, (bufferErr) => {this.showWarningMessage(bufferErr);});
   }

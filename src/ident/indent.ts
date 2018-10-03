@@ -6,21 +6,21 @@ import Executor from '../commons/executor';
 /**
  * Class to indent sources
  */
-export default class Identa {
+export default class Indenta {
   
   /**
-   * Ident the block
+   * Indent the block
    * 
    * @param bloco 
    * @param fonte 
    * @param callback 
    * @param err
    */
-  public identa(bloco: string[], fonte: string, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
+  public indenta(bloco: string[], fonte: string, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
     // Save the block in a file
     let file = new File(this.buildTmpFileName());
     file.saveBuffer(bloco).then(() => {
-      let identFile = new File(this.buildTmpFileName() + ".ident");
+      let indentFile = new File(this.buildTmpFileName() + ".ident");
       let errFile = new File(this.buildTmpFileName() + ".err");
       // Run the indenter
       new Executor().exec(this.buildCommandLine(fonte), () => {
@@ -29,7 +29,7 @@ export default class Identa {
           err(errFile.loadBufferSync("latin1"));
         } else {
           // Load a indent content
-          identFile.loadBuffer().then((buffer) => {
+          indentFile.loadBuffer().then((buffer) => {
             callback(buffer);
           });
         }
@@ -56,4 +56,4 @@ export default class Identa {
 
 }
 
-export { Identa };
+export { Indenta };
