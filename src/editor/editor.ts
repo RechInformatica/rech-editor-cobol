@@ -1,7 +1,7 @@
 import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
 import { Find } from './find';
-import { Indenta } from '../ident/indent';
+import { Indenta } from '../indent/indent';
 
 /**
  * Class to manipulate vscode editor
