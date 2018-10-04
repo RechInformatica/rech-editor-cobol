@@ -195,7 +195,7 @@
             },
             {
                 "command": "deleteAllRight",
-                "key": "ctrl+-"
+                "key": "alt+l"
             },
             {
                 "command": "editor.action.deleteLines",
