@@ -367,7 +367,7 @@ export default class Editor {
    */
   insertLineAbove() {
     commands.executeCommand('editor.action.insertLineBefore');
-    return commands.executeCommand('deleteAllLeft');
+    return commands.executeCommand('editor.action.trimTrailingWhitespace');
   }
 
   /**

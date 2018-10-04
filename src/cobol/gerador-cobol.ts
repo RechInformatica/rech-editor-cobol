@@ -74,7 +74,11 @@ export default class GeradorCobol {
   async newLineAbove() {
     let position = this.editor.getCursors()[0].character;
     await this.editor.insertLineAbove();
-    await this.editor.setColumn(position);
+    // Somente realoca o cursor se a coluna original já não era zero.
+    // Obs: insertLineAbove() já deixa o cursor posicionado na coluna 0
+    if (position != 0) {
+      await this.editor.setColumn(position);
+    }
   }
   
   /**
@@ -84,7 +88,6 @@ export default class GeradorCobol {
     await this.editor.insertLineAbove();
     await this.editor.type("      *>-> ");
   }
-
 
   /**
    * Adiciona um comentário
