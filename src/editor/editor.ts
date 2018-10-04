@@ -2,6 +2,7 @@ import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
 import { Find } from './find';
 import { Indenta } from '../indent/indent';
+import * as path from 'path';
 
 /**
  * Class to manipulate vscode editor
@@ -176,7 +177,7 @@ export default class Editor {
    * @param column 
    */
   setCursor(line: number, column: number) {
-    let positions : Position[] = new Array();
+    let positions: Position[] = new Array();
     positions.push(new Position(line, column));
     this.setCursors(positions);
   }
@@ -210,7 +211,7 @@ export default class Editor {
    * PS: works with multiple cursors
    */
   getCursors() {
-    let cursors : Position[] = new Array();
+    let cursors: Position[] = new Array();
     this.editor.selections.forEach(cursor => {
       cursors.push(new Position(cursor.start.line, cursor.start.character));
     });
@@ -401,7 +402,7 @@ export default class Editor {
     // Find a next blank line
     let positionsToReturn = new Find(this.editor).findPositions(/^\s*$/g, Find.FindNext, this.getCurrentLineNumber(1), true);
     // If not found a blank line or the line found is the last line
-    if (positionsToReturn == undefined || positionsToReturn[0].line >= (this.editor.document.lineCount - 1)){
+    if (positionsToReturn == undefined || positionsToReturn[0].line >= (this.editor.document.lineCount - 1)) {
       this.showInformationMessage("Next blank line not found");
       return;
     }
@@ -422,7 +423,7 @@ export default class Editor {
     // Find a previous blank line
     let positionsToReturn = new Find(this.editor).findPositions(/^\s*$/g, Find.FindPrevious, this.getCurrentLineNumber(-1), true);
     // If not found a blank line or the line found is the last line
-    if (positionsToReturn == undefined){
+    if (positionsToReturn == undefined) {
       this.showInformationMessage("Previous blank line not found");
       return;
     }
@@ -461,7 +462,21 @@ export default class Editor {
     //Indent the selection range
     new Indenta().indenta(alignment, this.getSelectionBuffer(), this.getPath(), (buffer) => {
       this.replaceSelection(buffer.toString());
-    }, (bufferErr) => {this.showWarningMessage(bufferErr);});
+    }, (bufferErr) => { this.showWarningMessage(bufferErr); });
+  }
+
+  /**
+   * Returns the basename of the file currently open in editor
+   */
+  getCurrentFileBaseName() {
+    return path.basename(this.getCurrentFileName());
+  }
+
+  /**
+   * Returns the full name of the file currently open in editor including it's directory
+   */
+  getCurrentFileName() {
+    return this.editor.document.fileName;
   }
 
   /**

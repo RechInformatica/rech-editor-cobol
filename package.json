@@ -125,6 +125,22 @@
                 "title": "fonGrep"
             },
             {
+                "command": "extension.checkout",
+                "title": "checkout"
+            },
+            {
+                "command": "extension.compile",
+                "title": "compile"
+            },
+            {
+                "command": "extension.update",
+                "title": "update"
+            },
+            {
+                "command": "extension.commit",
+                "title": "commit"
+            },
+            {
                 "command": "extension.findNextParagraph",
                 "title": "findNextParagraph"
             },
@@ -238,9 +254,20 @@
                 "key": "ctrl+l"
             },
             {
-                "key": "ctrl+f9",
-                "command": "workbench.action.tasks.runTask",
-                "args": "co"
+                "command": "extension.checkout",
+                "key": "alt+f5"
+            },
+            {
+                "command": "extension.compile",
+                "key": "ctrl+f9"
+            },
+            {
+                "command": "extension.update",
+                "key": "alt+f6"
+            },
+            {
+                "command": "extension.commit",
+                "key": "alt+f7"
             },
             {
                 "command": "extension.copyLine",

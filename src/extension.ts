@@ -5,6 +5,8 @@ import GeradorCobol from './cobol/gerador-cobol';
 import Editor from './editor/editor';
 import FonGrep from './fongrep/fongrep';
 import * as TasksProvider from './tasks/tasks-provider';
+import Executor from './commons/executor';
+import Compiler from './cobol/compiler';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -47,6 +49,23 @@ export function activate(context: ExtensionContext) {
         var fongrep = new FonGrep();
         fongrep.fonGrep();
     }));
+    context.subscriptions.push(commands.registerCommand('extension.update', () => {
+        new Editor().showInformationMessage("Executando Update...")
+        new Executor().exec("start cmd.exe /c F:\\BAT\\Update.bat");
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.commit', () => {
+        new Editor().showInformationMessage("Executando Commit...")
+        new Executor().exec("start cmd.exe /c F:\\BAT\\Commit.bat");
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.checkout', () => {
+        let baseName = new Editor().getCurrentFileBaseName();
+        new Editor().showInformationMessage("Executando Checkout de " + baseName + "...");
+        new Executor().exec("start cmd.exe /c F:\\BAT\\Checkout.bat  " + baseName);
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.compile', () => {
+        new Editor().showInformationMessage("Compilando " + new Editor().getCurrentFileBaseName() + "...");
+        new Compiler().compileCurrentFile();
+    }));
     context.subscriptions.push(commands.registerCommand('extension.findNextParagraph', () => {
         var findNextParagraph = new Editor();
         findNextParagraph.findNextParagraph();
@@ -63,7 +82,6 @@ export function activate(context: ExtensionContext) {
         var findPreviousParagraph = new Editor();
         findPreviousParagraph.findPreviousBlankLine();
     }));
-
     context.subscriptions.push(commands.registerCommand('extension.indent', () => {
         var indent = new Editor();
         indent.indent("N");
