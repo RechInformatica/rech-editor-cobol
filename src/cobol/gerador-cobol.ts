@@ -1,6 +1,7 @@
 'use babel';
 import { Editor } from '../editor/editor';
 import * as Colunas from './colunas';
+import { Position } from 'vscode';
 
 export default class GeradorCobol {
   editor: Editor;
@@ -51,17 +52,17 @@ export default class GeradorCobol {
    * Copy entire line to clipboard wherever the cursor is
    */
   copyLine() {
-    let cursor = this.editor.getCursor();
+    let originalCursors : Position[] = this.editor.getCursors();
     this.editor.selectWholeLines();
     this.editor.clipboardCopy();
-    this.editor.setCursor(cursor.line, cursor.character);
+    this.editor.setCursors(originalCursors);
   }
 
   /**
    * Paste clipboard in a new line wherever the cursor is
    */
   pasteLine() {
-    let cursor = this.editor.getCursor();
+    let cursor = this.editor.getCursors()[0];
     this.editor.cursorLineStart();
     this.editor.clipboardPaste();
     this.editor.setCursor(cursor.line, cursor.character);
@@ -71,7 +72,7 @@ export default class GeradorCobol {
    * Insert a new line above, keeping the cursor in the same position
    */
   async newLineAbove() {
-    let position = this.editor.getCursor().character;
+    let position = this.editor.getCursors()[0].character;
     await this.editor.insertLineAbove();
     await this.editor.setColumn(position);
   }

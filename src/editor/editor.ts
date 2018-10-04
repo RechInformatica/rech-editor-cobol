@@ -170,12 +170,30 @@ export default class Editor {
 
   /**
    * Defines the cursor position
+   * PS: works with multiple cursors
    * 
    * @param line 
    * @param column 
    */
   setCursor(line: number, column: number) {
-    this.setCursorPosition(new Position(line, column));
+    let positions : Position[] = new Array();
+    positions.push(new Position(line, column));
+    this.setCursors(positions);
+  }
+
+  /**
+   * Defines the cursor position
+   * PS: works with multiple cursors
+   * 
+   * @param line 
+   * @param column 
+   */
+  setCursors(positions: Position[]) {
+    let ranges: Range[] = new Array();
+    positions.forEach(position => {
+      ranges.push(new Range(position, position));
+    });
+    this.setSelectionsRange(ranges);
   }
 
   /**
@@ -188,10 +206,15 @@ export default class Editor {
   }
 
   /**
-   * Returns the cursor position
+   * Returns positions of each existing cursors
+   * PS: works with multiple cursors
    */
-  getCursor() {
-    return new Position(this.editor.selection.start.line, this.editor.selection.start.character);
+  getCursors() {
+    let cursors : Position[] = new Array();
+    this.editor.selections.forEach(cursor => {
+      cursors.push(new Position(cursor.start.line, cursor.start.character));
+    });
+    return cursors;
   }
 
   /**
