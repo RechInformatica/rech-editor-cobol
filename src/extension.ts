@@ -51,16 +51,16 @@ export function activate(context: ExtensionContext) {
     }));
     context.subscriptions.push(commands.registerCommand('extension.update', () => {
         new Editor().showInformationMessage("Executando Update...")
-        new Executor().exec("start cmd.exe /c F:\\BAT\\Update.bat");
+        new Executor().runAsync("start cmd.exe /c F:\\BAT\\Update.bat");
     }));
     context.subscriptions.push(commands.registerCommand('extension.commit', () => {
         new Editor().showInformationMessage("Executando Commit...")
-        new Executor().exec("start cmd.exe /c F:\\BAT\\Commit.bat");
+        new Executor().runAsync("start cmd.exe /c F:\\BAT\\Commit.bat");
     }));
     context.subscriptions.push(commands.registerCommand('extension.checkout', () => {
         let baseName = new Editor().getCurrentFileBaseName();
         new Editor().showInformationMessage("Executando Checkout de " + baseName + "...");
-        new Executor().exec("start cmd.exe /c F:\\BAT\\Checkout.bat  " + baseName);
+        new Executor().runAsync("start cmd.exe /c F:\\BAT\\Checkout.bat  " + baseName);
     }));
     context.subscriptions.push(commands.registerCommand('extension.compile', () => {
         new Editor().showInformationMessage("Compilando " + new Editor().getCurrentFileBaseName() + "...");

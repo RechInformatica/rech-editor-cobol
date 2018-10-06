@@ -24,7 +24,7 @@ export default class Indenta {
       let indentFile = new File(this.buildTmpFileName() + ".ident");
       let errFile = new File(this.buildTmpFileName() + ".err");
       // Run the indenter
-      new Executor().exec(this.buildCommandLine(alignment, fonte), () => {
+      new Executor().runAsync(this.buildCommandLine(alignment, fonte), () => {
         // If an error occurred
         if (errFile.exists()){
           err(errFile.loadBufferSync("latin1"));

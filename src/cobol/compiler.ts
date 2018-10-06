@@ -14,7 +14,7 @@ export default class Compiler {
         var baseName = new Editor().getCurrentFileBaseName();
         let args = this.buildArgs(fileName);
         let commandLine = "start cmd.exe /c F:\\BAT\\CO.bat " + baseName + args;
-        new Executor().exec(commandLine);
+        new Executor().runAsync(commandLine);
     }
 
     /**

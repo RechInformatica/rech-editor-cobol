@@ -7,12 +7,12 @@ import Process from './Process';
 export default class Executor {
 
     /**
-     * Executes a new process using the specified command-line
+     * Executes asynchronously a new process using the specified command-line
      * 
      * @param command command-line to be executed
      * @param callback optional callback executed after the process execution is completed
      */
-    exec(command: string, callback?: (process: Process) => any) {
+    runAsync(command: string, callback?: (process: Process) => any) {
         child.exec(command, (err, stdout, stderr) => {
             if (callback) {
                 callback(new Process(stdout, stderr, err));

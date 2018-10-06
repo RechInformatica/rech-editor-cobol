@@ -22,7 +22,7 @@ export default class FonGrep {
     runFonGrep(info: string | undefined) {
         if (info !== undefined && info.length > 0) {
             new Editor().showInformationMessage("Iniciando busca por '" + info + "'...");
-            new Executor().exec("cmd.exe /C F:\\BAT\\FonGrep.bat /noOpenEditor /show /delEmptyResult " + info, (process) => {
+            new Executor().runAsync("cmd.exe /C F:\\BAT\\FonGrep.bat /noOpenEditor /show /delEmptyResult " + info, (process) => {
                 this.handleResult(info, process.getStdout());
             });
         } else {
