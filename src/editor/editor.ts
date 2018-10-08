@@ -221,11 +221,11 @@ export default class Editor {
   async setColumn(column: number) {
     /* Insert the text into the selections from user */
     await this.editor.edit(editBuilder => {
-      this.editor.selections.forEach(element => {
-        let size = this.getLine(element.start.line).length;
+      this.editor.selections.forEach(selection => {
+        let size = this.getLine(selection.start.line).length;
         let diff = column - size;
         if (diff > 0) {
-          editBuilder.insert(element.start, " ".repeat(diff));
+          editBuilder.insert(new Position(selection.start.line, size), " ".repeat(diff));
         }
       });
     });

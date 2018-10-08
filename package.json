@@ -304,6 +304,30 @@
             {
                 "command": "extension.findPreviousBlankLine",
                 "key": "alt+shift+p"
+            },
+            {
+                "command": "extension.cursorPos51",
+                "key": "ctrl+1"
+            },
+            {
+                "command": "extension.cursorPos12",
+                "key": "ctrl+2"
+            },
+            {
+                "command": "extension.cursorPos30",
+                "key": "ctrl+3"
+            },
+            {
+                "command": "extension.cursorPos20",
+                "key": "ctrl+4"
+            },
+            {
+                "command": "extension.cursorPos35",
+                "key": "ctrl+5"
+            },
+            {
+                "command": "extension.cursorPos08",
+                "key": "ctrl+8"
             }
         ]
     },
