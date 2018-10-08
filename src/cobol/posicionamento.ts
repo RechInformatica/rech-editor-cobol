@@ -4,7 +4,7 @@ import { Editor } from '../editor/editor';
 /**
  * Módulo responsável pela identação de fontes Cobol
  */
-export default class Posicionamento {
+export class Posicionamento {
 
   /**
    * Posiciona na área A

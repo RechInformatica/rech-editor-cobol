@@ -21,8 +21,15 @@
     "activationEvents": [
         "onLanguage:COBOL"
     ],
-    "main": "./out/extension",
-    "types": "rech-editor-vscode.d.ts",
+    "main": "./out/extension.js",
+    "types": [
+        "./out/cobol/*.d.ts",
+        "./out/commons/*.d.ts",
+        "./out/editor/*.d.ts",
+        "./out/fongrep/*.d.ts",
+        "./out/indent/*.d.ts",
+        "./out/*.d.ts"
+    ],
     "contributes": {
         "taskDefinitions": [
             {

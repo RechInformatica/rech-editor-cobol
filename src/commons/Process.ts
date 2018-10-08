@@ -1,7 +1,7 @@
 /**
  * Class representing a process and it's general information
  */
-export default class Process {
+export class Process {
 
     /** Standard output */
     private stdout: string;

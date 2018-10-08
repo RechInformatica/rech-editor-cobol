@@ -13,7 +13,7 @@ const readFile = denodeify<string[]>(fs.readFile);
 /**
  * Class to manipulate files
  */
-export default class File {
+export class File {
 
   /** File name */
   private _fileName: string;
@@ -39,21 +39,21 @@ export default class File {
    * 
    * @param buffer 
    */
-  public saveBuffer(buffer: string[]) {
+  public saveBuffer(buffer: string[]): Q.Promise<{}> {
     return writeFile(this.fileName, buffer);
   }
 
   /**
    * Append a buffer in file
    */
-  public appendBuffer(buffer: string[]) {
+  public appendBuffer(buffer: string[]): Q.Promise<{}> {
     return appendFile(this.fileName, buffer);
   }
 
   /**
    * Load the file content
    */
-  public loadBuffer(encoding?: string) {
+  public loadBuffer(encoding?: string): Q.Promise<string[]> {
     return readFile(this.fileName, {encoding: encoding});
   }
 
@@ -97,5 +97,3 @@ export default class File {
   }
 
 }
-
-export { File };

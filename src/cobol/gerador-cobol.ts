@@ -1,9 +1,9 @@
 'use babel';
 import { Editor } from '../editor/editor';
 import * as Colunas from './colunas';
-import { Position } from 'vscode';
+ //import { Position } from 'vscode';
 
-export default class GeradorCobol {
+export class GeradorCobol {
   editor: Editor;
 
   constructor() {
@@ -51,35 +51,35 @@ export default class GeradorCobol {
   /**
    * Copy entire line to clipboard wherever the cursor is
    */
-  copyLine() {
-    let originalCursors : Position[] = this.editor.getCursors();
-    this.editor.selectWholeLines();
-    this.editor.clipboardCopy();
-    this.editor.setCursors(originalCursors);
-  }
+  // copyLine() {
+  //   let originalCursors : Position[] = this.editor.getCursors();
+  //   this.editor.selectWholeLines();
+  //   this.editor.clipboardCopy();
+  //   this.editor.setCursors(originalCursors);
+  // }
 
   /**
    * Paste clipboard in a new line wherever the cursor is
    */
-  pasteLine() {
-    let cursor = this.editor.getCursors()[0];
-    this.editor.cursorLineStart();
-    this.editor.clipboardPaste();
-    this.editor.setCursor(cursor.line, cursor.character);
-  }
+  // pasteLine() {
+  //   let cursor = this.editor.getCursors()[0];
+  //   this.editor.cursorLineStart();
+  //   this.editor.clipboardPaste();
+  //   this.editor.setCursor(cursor.line, cursor.character);
+  // }
 
   /**
    * Insert a new line above, keeping the cursor in the same position
    */
-  async newLineAbove() {
-    let position = this.editor.getCursors()[0].character;
-    await this.editor.insertLineAbove();
-    // Somente realoca o cursor se a coluna original já não era zero.
-    // Obs: insertLineAbove() já deixa o cursor posicionado na coluna 0
-    if (position != 0) {
-      await this.editor.setColumn(position);
-    }
-  }
+  // async newLineAbove() {
+  //   let position = this.editor.getCursors()[0].character;
+  //   await this.editor.insertLineAbove();
+  //   // Somente realoca o cursor se a coluna original já não era zero.
+  //   // Obs: insertLineAbove() já deixa o cursor posicionado na coluna 0
+  //   if (position != 0) {
+  //     await this.editor.setColumn(position);
+  //   }
+  // }
   
   /**
    * Insert a comment line above 

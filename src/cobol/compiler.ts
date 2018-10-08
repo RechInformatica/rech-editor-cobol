@@ -1,5 +1,5 @@
-import Executor from '../commons/executor';
-import Editor from '../editor/editor';
+import { Executor } from '../commons/executor';
+import { Editor } from '../editor/editor';
 
 /**
  * Class to compile Cobol programs

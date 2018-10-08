@@ -1,10 +1,10 @@
 import * as child from 'child_process';
-import Process from './Process';
+import { Process } from './Process';
 
 /**
  * Class to run external processes
  */
-export default class Executor {
+export class Executor {
 
     /**
      * Executes asynchronously a new process using the specified command-line

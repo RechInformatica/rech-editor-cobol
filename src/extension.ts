@@ -1,11 +1,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import { ExtensionContext, commands } from 'vscode';
-import GeradorCobol from './cobol/gerador-cobol';
-import Editor from './editor/editor';
-import FonGrep from './fongrep/fongrep';
+import { GeradorCobol } from './cobol/gerador-cobol';
+import { Editor } from './editor/editor';
+import { FonGrep } from './fongrep/fongrep';
 import * as TasksProvider from './tasks/tasks-provider';
-import Executor from './commons/executor';
+import { Executor } from './commons/executor';
 import Compiler from './cobol/compiler';
 
 // this method is called when your extension is activated
@@ -29,22 +29,22 @@ export function activate(context: ExtensionContext) {
         var gerador = new GeradorCobol();
         gerador.to();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.copyLine', () => {
-        var gerador = new GeradorCobol();
-        gerador.copyLine();
-    }));
-    context.subscriptions.push(commands.registerCommand('extension.pasteLine', () => {
-        var gerador = new GeradorCobol();
-        gerador.pasteLine();
-    }));
+    // context.subscriptions.push(commands.registerCommand('extension.copyLine', () => {
+    //     var gerador = new GeradorCobol();
+    //     gerador.copyLine();
+    // }));
+    // context.subscriptions.push(commands.registerCommand('extension.pasteLine', () => {
+    //     var gerador = new GeradorCobol();
+    //     gerador.pasteLine();
+    // }));
     context.subscriptions.push(commands.registerCommand('extension.cobolInsertCommentLine', () => {
         var gerador = new GeradorCobol();
         gerador.insertCommentLine();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.newLineAbove', () => {
-        var gerador = new GeradorCobol();
-        gerador.newLineAbove();
-    }));
+    // context.subscriptions.push(commands.registerCommand('extension.newLineAbove', () => {
+    //     var gerador = new GeradorCobol();
+    //     gerador.newLineAbove();
+    // }));
     context.subscriptions.push(commands.registerCommand('extension.fonGrep', () => {
         var editor = new Editor();
         var fongrep = new FonGrep();
@@ -125,4 +125,10 @@ export function deactivate() {
     TasksProvider.deactivate;
 }
 
+export * from "./commons/executor";
+export * from "./commons/file";
+export * from "./commons/path";
+export * from "./commons/Process";
 export * from "./editor/editor";
+export * from "./fongrep/fongrep";
+export * from "./indent/indent";

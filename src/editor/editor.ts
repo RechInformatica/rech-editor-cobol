@@ -1,13 +1,13 @@
 import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
-import { Find } from './Find';
+import { Find } from './find';
 import { Indenta } from '../indent/indent';
 import * as path from 'path';
 
 /**
  * Class to manipulate vscode editor
  */
-export default class Editor {
+export class Editor {
   private editor: TextEditor;
 
   constructor() {
@@ -42,7 +42,7 @@ export default class Editor {
   /**
    * Returns the range of the current selection
    */
-  getSelectionRange() {
+  private getSelectionRange() {
     let range: Range[] = new Array();
     this.editor.selections.forEach(element => {
       range.push(new Range(element.start, element.end));
@@ -54,7 +54,7 @@ export default class Editor {
    * 
    * Defines and editor multi selections
    */
-  setSelectionsRange(ranges: Range[]) {
+  private setSelectionsRange(ranges: Range[]) {
     let selects: Selection[] = new Array();
     ranges.forEach(range => {
       selects.push(new Selection(range.start, range.end))
@@ -65,14 +65,14 @@ export default class Editor {
   /**
   * Defines an editor selection
   */
-  setSelectionRange(range: Range) {
+  private setSelectionRange(range: Range) {
     this.editor.selection = new Selection(range.start, range.end);
   }
 
   /**
   * Returns the text of the specified range
   */
-  getRangeBuffer(range: Range) {
+  private getRangeBuffer(range: Range) {
     return this.editor.document.getText(range);
   }
 
@@ -162,7 +162,7 @@ export default class Editor {
   /**
    * Returns the current line text
    */
-  getCurrentLineNumber(add?: number) {
+  private getCurrentLineNumber(add?: number) {
     if (add == undefined) {
       add = 0;
     }
@@ -187,7 +187,7 @@ export default class Editor {
    * 
    * @param Positions 
    */
-  setCursors(positions: Position[]) {
+  private setCursors(positions: Position[]) {
     positions.forEach(position => {
       this.setCursorPosition(position);
     });
@@ -206,13 +206,13 @@ export default class Editor {
    * Returns positions of each existing cursors
    * PS: works with multiple cursors
    */
-  getCursors() {
-    let cursors: Position[] = new Array();
-    this.editor.selections.forEach(cursor => {
-      cursors.push(new Position(cursor.start.line, cursor.start.character));
-    });
-    return cursors;
-  }
+  // private getCursors() {
+  //   let cursors: Position[] = new Array();
+  //   this.editor.selections.forEach(cursor => {
+  //     cursors.push(new Position(cursor.start.line, cursor.start.character));
+  //   });
+  //   return cursors;
+  // }
 
   /**
    * Sets the cursor to a column, adding right spaces if necessary
@@ -502,9 +502,8 @@ export default class Editor {
   /**
   * Returns the active editor
   */
-  getActiveEditor() {
+  private getActiveEditor() {
     return window.activeTextEditor;
   }
 
 }
-export { Editor };

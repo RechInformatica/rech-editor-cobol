@@ -1,11 +1,11 @@
-import Executor from '../commons/executor';
-import Editor from '../editor/editor';
+import { Executor } from '../commons/executor';
+import { Editor } from '../editor/editor';
 import * as fs from 'fs';
 
 /**
  * Class to execute FonGrep from within VSCode
  */
-export default class FonGrep {
+export class FonGrep {
 
     /**
      * Executes FonGrep opening the result file on the editor

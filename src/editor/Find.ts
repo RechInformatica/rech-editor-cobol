@@ -3,7 +3,7 @@ import { TextEditor, Position, TextLine, TextDocument } from 'vscode';
 /**
  * Class to manipulate vscode editor
  */
-export default class Find {
+export class Find {
   /** Busca próximos */
   static readonly FindNext = 1
   /** Busca Anteriores */
@@ -110,4 +110,3 @@ export default class Find {
     }
   }
 }
-export { Find };

@@ -1,12 +1,12 @@
 'use babel';
 
 import { File } from '../commons/file';
-import Executor from '../commons/executor';
+import { Executor } from '../commons/executor';
 
 /**
  * Class to indent sources
  */
-export default class Indenta {
+export class Indenta {
   
   /**
    * Indent the block
@@ -56,5 +56,3 @@ export default class Indenta {
   }
 
 }
-
-export { Indenta };
