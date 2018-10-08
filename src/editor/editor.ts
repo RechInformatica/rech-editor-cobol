@@ -170,8 +170,7 @@ export default class Editor {
   }
 
   /**
-   * Defines the cursor position
-   * PS: works with multiple cursors
+   * Defines the cursor line and cloumn
    * 
    * @param line 
    * @param column 
@@ -186,15 +185,12 @@ export default class Editor {
    * Defines the cursor position
    * PS: works with multiple cursors
    * 
-   * @param line 
-   * @param column 
+   * @param Positions 
    */
   setCursors(positions: Position[]) {
-    let ranges: Range[] = new Array();
     positions.forEach(position => {
-      ranges.push(new Range(position, position));
+      this.setCursorPosition(position);
     });
-    this.setSelectionsRange(ranges);
   }
 
   /**
