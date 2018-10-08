@@ -480,6 +480,13 @@ export default class Editor {
   }
 
   /**
+   * Close the active editor
+   */
+  closeActiveEditor(){
+    commands.executeCommand('workbench.action.closeActiveEditor');
+  }
+
+  /**
    * TODO:
    * findFilePath
    * insertSnippetAboveCurrentLine

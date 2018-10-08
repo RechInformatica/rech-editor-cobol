@@ -59,7 +59,9 @@ export function activate(context: ExtensionContext) {
     }));
     context.subscriptions.push(commands.registerCommand('extension.checkout', () => {
         let baseName = new Editor().getCurrentFileBaseName();
-        new Editor().showInformationMessage("Executando Checkout de " + baseName + "...");
+        let editor = new Editor();
+        editor.showInformationMessage("Executando Checkout de " + baseName + "...");
+        editor.closeActiveEditor();
         new Executor().runAsync("start cmd.exe /c F:\\BAT\\Checkout.bat  " + baseName);
     }));
     context.subscriptions.push(commands.registerCommand('extension.compile', () => {
