@@ -46,8 +46,12 @@ export function activate(context: ExtensionContext) {
         gerador.newLineAbove();
     }));
     context.subscriptions.push(commands.registerCommand('extension.fonGrep', () => {
+        var editor = new Editor();
         var fongrep = new FonGrep();
-        fongrep.fonGrep();
+        var text = editor.getSelectionBuffer()[0];
+        if (text == '')
+            text = editor.getCurrentWord();
+        fongrep.fonGrep(text);
     }));
     context.subscriptions.push(commands.registerCommand('extension.update', () => {
         new Editor().showInformationMessage("Executando Update...")

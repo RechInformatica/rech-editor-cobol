@@ -107,7 +107,7 @@ export default class Editor {
    * Returns the current word
    */
   getCurrentWord() {
-    let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start);
+    let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-9_\\-])+/g);
     if (range === undefined) {
       return '';
     }
@@ -440,10 +440,11 @@ export default class Editor {
    * @param placeholder text placeholder to be shown when no text is typed
    * @param prompt prompt message
    * @param callback callback executed when Enter is pressed
+   * @param valuedef a default value to prefill in the input box
    */
-  showInputBox(placeholder: string, prompt: string, callback: (info: string | undefined) => any) {
+  showInputBox(placeholder: string, prompt: string, callback: (info: string | undefined) => any, valuedef?: string,) {
     window.showInputBox({
-      value: "",
+      value: valuedef,
       placeHolder: placeholder,
       prompt: prompt
     }).then((info) => callback(info));

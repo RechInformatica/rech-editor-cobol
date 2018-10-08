@@ -10,10 +10,10 @@ export default class FonGrep {
     /**
      * Executes FonGrep opening the result file on the editor
      */
-    public fonGrep() {
+    public fonGrep(word: string) {
         new Editor().showInputBox("Argumento a ser pesquisado pelo FonGrep", "FonGrep", (info) => {
             this.runFonGrep(info);
-        });
+        }, word);
     }
 
     /**
