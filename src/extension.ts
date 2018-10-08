@@ -30,22 +30,22 @@ export function activate(context: ExtensionContext) {
         var gerador = new GeradorCobol();
         gerador.to();
     }));
-    // context.subscriptions.push(commands.registerCommand('extension.copyLine', () => {
-    //     var gerador = new GeradorCobol();
-    //     gerador.copyLine();
-    // }));
-    // context.subscriptions.push(commands.registerCommand('extension.pasteLine', () => {
-    //     var gerador = new GeradorCobol();
-    //     gerador.pasteLine();
-    // }));
+    context.subscriptions.push(commands.registerCommand('extension.copyLine', () => {
+        var gerador = new GeradorCobol();
+        gerador.copyLine();
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.pasteLine', () => {
+        var gerador = new GeradorCobol();
+        gerador.pasteLine();
+    }));
     context.subscriptions.push(commands.registerCommand('extension.cobolInsertCommentLine', () => {
         var gerador = new GeradorCobol();
         gerador.insertCommentLine();
     }));
-    // context.subscriptions.push(commands.registerCommand('extension.newLineAbove', () => {
-    //     var gerador = new GeradorCobol();
-    //     gerador.newLineAbove();
-    // }));
+    context.subscriptions.push(commands.registerCommand('extension.newLineAbove', () => {
+        var gerador = new GeradorCobol();
+        gerador.newLineAbove();
+    }));
     context.subscriptions.push(commands.registerCommand('extension.fonGrep', () => {
         var editor = new Editor();
         var fongrep = new FonGrep();

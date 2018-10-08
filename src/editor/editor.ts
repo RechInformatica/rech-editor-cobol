@@ -1,6 +1,7 @@
 import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
 import { Find } from './find';
+import { RechPosition } from './rechposition';
 import { Indenta } from '../indent/indent';
 import * as path from 'path';
 
@@ -176,7 +177,7 @@ export class Editor {
    * @param column 
    */
   setCursor(line: number, column: number) {
-    this.setCursorPosition(new Position(line, column));
+    this.setCursorPosition(new RechPosition(line, column));
   }
 
   /**
@@ -185,10 +186,11 @@ export class Editor {
    * 
    * @param Positions 
    */
- private setCursors(positions: Position[]) {
+ setCursors(positions: RechPosition[]) {
     let ranges: Range[] = new Array();
     positions.forEach(position => {
-        ranges.push(new Range(position, position));
+      let p = new Position(position.line, position.column);
+      ranges.push(new Range(p, p));
     });
     this.setSelectionsRange(ranges);
   }
@@ -196,7 +198,8 @@ export class Editor {
   /**
    * Defines the cursor position for internal usage since it depends on VSCode API
    */
-  private setCursorPosition(cursor: Position) {
+  setCursorPosition(position: RechPosition) {
+    let cursor = new Position(position.line, position.column);
     let range = new Range(cursor, cursor);
     this.editor.revealRange(range, 2);
     return this.setSelectionRange(range);
@@ -206,10 +209,10 @@ export class Editor {
    * Returns positions of each existing cursors
    * PS: works with multiple cursors
    */
-  private getCursors() {
-    let cursors: Position[] = new Array();
+  getCursors() {
+    let cursors: RechPosition[] = new Array();
     this.editor.selections.forEach(cursor => {
-      cursors.push(new Position(cursor.start.line, cursor.start.character));
+      cursors.push(new RechPosition(cursor.start.line, cursor.start.character));
     });
     return cursors;
   }
@@ -373,7 +376,7 @@ export class Editor {
   findNextParagraph() {
     let positionsToReturn = new Find(this.editor).findPositions(/^\s{7}[\w\-]+\./g, Find.FindNext, this.getCurrentLineNumber(1), true);
     if (positionsToReturn) {
-      this.setCursorPosition(new Position(positionsToReturn[0].line, 7));
+      this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
       this.showInformationMessage("Next paragraph not found");
     }
@@ -385,7 +388,7 @@ export class Editor {
   findPreviousParagraph() {
     let positionsToReturn = new Find(this.editor).findPositions(/^\s{7}[\w\-]+\./g, Find.FindPrevious, this.getCurrentLineNumber(-1), true);
     if (positionsToReturn) {
-      this.setCursorPosition(new Position(positionsToReturn[0].line, 7));
+      this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
       this.showInformationMessage("Previous paragraph not found");
     }
@@ -406,7 +409,7 @@ export class Editor {
     positionsToReturn = new Find(this.editor).findPositions(/[^\s]/g, Find.FindNext, this.editor.document.lineAt(positionsToReturn[0].line), true);
     // If returned a position and the line found is not the last line from document
     if (positionsToReturn && positionsToReturn[0].line < (this.editor.document.lineCount - 1)) {
-      this.setCursorPosition(new Position(positionsToReturn[0].line, 0));
+      this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 0));
     } else {
       this.showInformationMessage("Next blank line not found");
     }
@@ -427,7 +430,7 @@ export class Editor {
     positionsToReturn = new Find(this.editor).findPositions(/[^\s]/g, Find.FindPrevious, this.editor.document.lineAt(positionsToReturn[0].line), true);
     // If returned a position and the line found is not the last line from document
     if (positionsToReturn) {
-      this.setCursorPosition(new Position(positionsToReturn[0].line, 0));
+      this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 0));
     } else {
       this.showInformationMessage("Previous blank line not found");
     }
