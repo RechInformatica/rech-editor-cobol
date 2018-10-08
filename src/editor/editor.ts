@@ -176,9 +176,7 @@ export default class Editor {
    * @param column 
    */
   setCursor(line: number, column: number) {
-    let positions: Position[] = new Array();
-    positions.push(new Position(line, column));
-    this.setCursors(positions);
+    this.setCursorPosition(new Position(line, column));
   }
 
   /**
@@ -188,9 +186,11 @@ export default class Editor {
    * @param Positions 
    */
   setCursors(positions: Position[]) {
+    let ranges: Range[] = new Array();
     positions.forEach(position => {
-      this.setCursorPosition(position);
+        ranges.push(new Range(position, position));
     });
+    this.setSelectionsRange(ranges);
   }
 
   /**
