@@ -26,7 +26,6 @@
         "./out/cobol/*.d.ts",
         "./out/commons/*.d.ts",
         "./out/editor/*.d.ts",
-        "./out/fongrep/*.d.ts",
         "./out/indent/*.d.ts",
         "./out/*.d.ts"
     ],
@@ -126,10 +125,6 @@
             {
                 "command": "extension.cobolTo",
                 "title": "TO"
-            },
-            {
-                "command": "extension.fonGrep",
-                "title": "fonGrep"
             },
             {
                 "command": "extension.checkout",
@@ -255,10 +250,6 @@
             {
                 "command": "extension.cobolInsertCommentLine",
                 "key": "alt+n"
-            },
-            {
-                "command": "extension.fonGrep",
-                "key": "ctrl+l"
             },
             {
                 "command": "extension.checkout",
