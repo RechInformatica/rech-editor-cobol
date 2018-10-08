@@ -3,7 +3,6 @@
 import { ExtensionContext, commands } from 'vscode';
 import { GeradorCobol } from './cobol/gerador-cobol';
 import { Editor } from './editor/editor';
-import { FonGrep } from './fongrep/fongrep';
 import * as TasksProvider from './tasks/tasks-provider';
 import { Executor } from './commons/executor';
 import Compiler from './cobol/compiler';
@@ -45,14 +44,6 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('extension.newLineAbove', () => {
         var gerador = new GeradorCobol();
         gerador.newLineAbove();
-    }));
-    context.subscriptions.push(commands.registerCommand('extension.fonGrep', () => {
-        var editor = new Editor();
-        var fongrep = new FonGrep();
-        var text = editor.getSelectionBuffer()[0];
-        if (text == '')
-            text = editor.getCurrentWord();
-        fongrep.fonGrep(text);
     }));
     context.subscriptions.push(commands.registerCommand('extension.update', () => {
         new Editor().showInformationMessage("Executando Update...")
@@ -155,5 +146,4 @@ export * from "./commons/file";
 export * from "./commons/path";
 export * from "./commons/Process";
 export * from "./editor/editor";
-export * from "./fongrep/fongrep";
 export * from "./indent/indent";
