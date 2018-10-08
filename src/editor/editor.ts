@@ -176,9 +176,7 @@ export class Editor {
    * @param column 
    */
   setCursor(line: number, column: number) {
-    let positions: Position[] = new Array();
-    positions.push(new Position(line, column));
-    this.setCursors(positions);
+    this.setCursorPosition(new Position(line, column));
   }
 
   /**
@@ -187,10 +185,12 @@ export class Editor {
    * 
    * @param Positions 
    */
-  private setCursors(positions: Position[]) {
+ private setCursors(positions: Position[]) {
+    let ranges: Range[] = new Array();
     positions.forEach(position => {
-      this.setCursorPosition(position);
+        ranges.push(new Range(position, position));
     });
+    this.setSelectionsRange(ranges);
   }
 
   /**
@@ -206,13 +206,13 @@ export class Editor {
    * Returns positions of each existing cursors
    * PS: works with multiple cursors
    */
-  // private getCursors() {
-  //   let cursors: Position[] = new Array();
-  //   this.editor.selections.forEach(cursor => {
-  //     cursors.push(new Position(cursor.start.line, cursor.start.character));
-  //   });
-  //   return cursors;
-  // }
+  private getCursors() {
+    let cursors: Position[] = new Array();
+    this.editor.selections.forEach(cursor => {
+      cursors.push(new Position(cursor.start.line, cursor.start.character));
+    });
+    return cursors;
+  }
 
   /**
    * Sets the cursor to a column, adding right spaces if necessary
@@ -221,11 +221,11 @@ export class Editor {
   async setColumn(column: number) {
     /* Insert the text into the selections from user */
     await this.editor.edit(editBuilder => {
-      this.editor.selections.forEach(element => {
-        let size = this.getLine(element.start.line).length;
+      this.editor.selections.forEach(selection => {
+        let size = this.getLine(selection.start.line).length;
         let diff = column - size;
         if (diff > 0) {
-          editBuilder.insert(element.start, " ".repeat(diff));
+          editBuilder.insert(new Position(selection.start.line, size), " ".repeat(diff));
         }
       });
     });

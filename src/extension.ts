@@ -7,6 +7,7 @@ import { FonGrep } from './fongrep/fongrep';
 import * as TasksProvider from './tasks/tasks-provider';
 import { Executor } from './commons/executor';
 import Compiler from './cobol/compiler';
+import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -117,6 +118,30 @@ export function activate(context: ExtensionContext) {
         commands.executeCommand("cursorWordRight");
         commands.executeCommand("cursorWordLeftSelect");
         commands.executeCommand("editor.action.clipboardPasteAction");
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.cursorPos51', () => {
+        var editor = new Editor();
+        editor.setColumn(COLUNA_VALUE - 1);
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.cursorPos12', () => {
+        var editor = new Editor();
+        editor.setColumn(AREA_B - 1);
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.cursorPos30', () => {
+        var editor = new Editor();
+        editor.setColumn(COLUNA_B - 1);
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.cursorPos20', () => {
+        var editor = new Editor();
+        editor.setColumn(COLUNA_A - 1);
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.cursorPos35', () => {
+        var editor = new Editor();
+        editor.setColumn(COLUNA_C - 1);
+    }));
+    context.subscriptions.push(commands.registerCommand('extension.cursorPos08', () => {
+        var editor = new Editor();
+        editor.setColumn(AREA_A - 1);
     }));
 }
 
