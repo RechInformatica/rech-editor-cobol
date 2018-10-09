@@ -10,7 +10,8 @@ import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './co
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: ExtensionContext) {
+export function activate(_context: any) {
+    let context = <ExtensionContext> _context;
     // Register tasks provider
     TasksProvider.activate(context);
     // Use the console to output diagnostic information (console.log) and errors (console.error)

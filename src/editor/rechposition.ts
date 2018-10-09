@@ -1,6 +1,6 @@
 
 /**
- * Class to manipulate vscode editor
+ * Class to manipulate positions
  */
 export class RechPosition {
     /** Line position */
@@ -9,7 +9,7 @@ export class RechPosition {
     private _column: number;
 
     /**
-     * Constructor of Positioning
+     * Constructor of RechPosition
      * 
      * @param line 
      * @param column 
