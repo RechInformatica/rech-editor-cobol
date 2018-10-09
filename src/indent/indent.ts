@@ -20,7 +20,7 @@ export class Indenta {
   public indenta(alignment: string, bloco: string[], fonte: string, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
     // Save the block in a file
     let file = new File(this.buildTmpFileName());
-    file.saveBuffer(bloco).then(() => {
+    file.saveBuffer(bloco, "latin1").then(() => {
       let indentFile = new File(this.buildTmpFileName() + ".ident");
       let errFile = new File(this.buildTmpFileName() + ".err");
       // Run the indenter
@@ -30,7 +30,7 @@ export class Indenta {
           err(errFile.loadBufferSync("latin1"));
         } else {
           // Load a indent content
-          indentFile.loadBuffer().then((buffer) => {
+          indentFile.loadBuffer("latin1").then((buffer) => {
             callback(buffer);
           });
         }
