@@ -80,13 +80,23 @@ export class GeradorCobol {
       await this.editor.setColumn(position);
     }
   }
-  
+
   /**
-   * Insert a comment line above 
+   * Insert a comment line above
    */
   async insertCommentLine() {
     await this.editor.insertLineAbove();
     await this.editor.type("      *>-> ");
+  }
+
+  /**
+   * Insert a Cobol line separator
+   */
+  async insertLineSeparator() {
+    let position = this.editor.getCursors()[0];
+    await this.editor.insertLineAbove();
+    await this.editor.type("      *>--------------------------------------------------------------------------------------------------------------<*");
+    await this.editor.setCursorPosition(new RechPosition(position.line + 1, position.column));
   }
 
   /**
