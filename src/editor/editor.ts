@@ -471,7 +471,14 @@ export class Editor {
   getCurrentFileBaseName() {
     return path.basename(this.getCurrentFileName());
   }
-
+  
+  /**
+   * Returns the directory of the file currently open in editor
+   */
+  getCurrentFileDirectory() {
+    return new Path(this.getCurrentFileName()).directory();
+  }
+  
   /**
    * Returns the full name of the file currently open in editor including it's directory
    */

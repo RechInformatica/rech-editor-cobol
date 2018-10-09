@@ -252,6 +252,10 @@
                 "key": "alt+n"
             },
             {
+                "command": "extension.cobolInsertLineSeparator",
+                "key": "alt+numpad_subtract"
+            },
+            {
                 "command": "extension.checkout",
                 "key": "alt+f5"
             },
