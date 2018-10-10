@@ -52,7 +52,7 @@ export class GeradorCobol {
    * Copy entire line to clipboard wherever the cursor is
    */
   copyLine() {
-    let originalCursors : RechPosition[] = this.editor.getCursors();
+    let originalCursors: RechPosition[] = this.editor.getCursors();
     this.editor.selectWholeLines();
     this.editor.clipboardCopy();
     this.editor.setCursors(originalCursors);
@@ -100,12 +100,44 @@ export class GeradorCobol {
   }
 
   /**
-   * Adiciona um comentário
+   * Inserts or removes dots in the end of the current line
    */
-  // comment(commentText: string) {
-  //   this.editor.insertSnippetAboveCurrentLineNoIdent("      *>-> ");
-  //   this.type(commentText);
-  // }
+  async updateLineDots() {
+    let originalPosotion = this.editor.getCursors()[0];
+    let lineText = this.editor.getCurrentLine();
+    if (lineText.length == Colunas.COLUNA_FIM && lineText.endsWith(".")) {
+      this.removeDotsAtEnd();
+    } else {
+      this.fillLineWithDots();
+    }
+    await this.editor.setCursorPosition(originalPosotion);
+  }
+
+  /**
+   * Removes dots in the end of the current line
+   */
+  private async removeDotsAtEnd() {
+    let lineText = this.editor.getCurrentLine();
+    while (lineText !== "" && lineText.endsWith(".")) {
+      lineText = lineText.slice(0, -1);
+    }
+    await this.editor.setCurrentLine(lineText);
+  }
+
+  /**
+   * Fills the end of the current line with dots
+   */
+  private async fillLineWithDots() {
+    let lineText = this.editor.getCurrentLine().replace(/\s+$/, ''); // Removes trailling spaces
+    var dots: string = "";
+    var missingDotsNumber = Colunas.COLUNA_FIM - lineText.length;
+    if (missingDotsNumber > 0) {
+      for (var i = 1; i <= missingDotsNumber; i++) {
+        dots = dots.concat(".");
+      }
+      await this.editor.setCurrentLine(lineText + dots);
+    }
+  }
 
   /**
    * Vai para a coluna do TO

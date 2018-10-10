@@ -46,6 +46,10 @@ export function activate(_context: any) {
         var gerador = new GeradorCobol();
         gerador.insertLineSeparator();
     }));
+    context.subscriptions.push(commands.registerCommand('extension.cobolUpdateLineDots', () => {
+        var gerador = new GeradorCobol();
+        gerador.updateLineDots();
+    }));
     context.subscriptions.push(commands.registerCommand('extension.newLineAbove', () => {
         var gerador = new GeradorCobol();
         gerador.newLineAbove();

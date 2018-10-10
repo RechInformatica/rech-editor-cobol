@@ -256,6 +256,10 @@
                 "key": "alt+numpad_subtract"
             },
             {
+                "command": "extension.cobolUpdateLineDots",
+                "key": "alt+abnt_c1"
+            },
+            {
                 "command": "extension.checkout",
                 "key": "alt+f5"
             },
