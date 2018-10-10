@@ -38,9 +38,10 @@ export class File {
    * Save a buffer in file
    * 
    * @param buffer 
+   * @param encoding 
    */
-  public saveBuffer(buffer: string[]): Q.Promise<{}> {
-    return writeFile(this.fileName, buffer);
+  public saveBuffer(buffer: string[], encoding?: string): Q.Promise<{}> {
+    return writeFile(this.fileName, buffer, { encoding: encoding });
   }
 
   /**
@@ -54,7 +55,7 @@ export class File {
    * Load the file content
    */
   public loadBuffer(encoding?: string): Q.Promise<string[]> {
-    return readFile(this.fileName, {encoding: encoding});
+    return readFile(this.fileName, { encoding: encoding });
   }
 
   /**
