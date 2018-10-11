@@ -352,14 +352,14 @@ export class Editor {
    * Pastes clipboard 
    */
   clipboardPaste() {
-    commands.executeCommand('editor.action.clipboardPasteAction');
+    return commands.executeCommand('editor.action.clipboardPasteAction');
   }
 
   /**
    * Set cursor to start of line
    */
   cursorLineStart() {
-    commands.executeCommand('cursorLineStart')
+    return commands.executeCommand('cursorLineStart')
   }
 
   /**

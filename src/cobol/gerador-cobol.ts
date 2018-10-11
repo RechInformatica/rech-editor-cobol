@@ -117,10 +117,10 @@ export class GeradorCobol {
   /**
    * Paste clipboard in a new line wherever the cursor is
    */
-  pasteLine() {
+  async pasteLine() {
     let cursor = this.editor.getCursors()[0];
-    this.editor.cursorLineStart();
-    this.editor.clipboardPaste();
+    await this.editor.cursorLineStart();
+    await this.editor.clipboardPaste();
     this.editor.setCursor(cursor.line, cursor.column);
   }
 
