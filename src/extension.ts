@@ -30,6 +30,10 @@ export function activate(_context: any) {
         var gerador = new GeradorCobol();
         gerador.to();
     }));
+    context.subscriptions.push(commands.registerCommand('extension.flagGenerator', () => {
+        var gerador = new GeradorCobol();
+        gerador.flagGenerator();
+    }));
     context.subscriptions.push(commands.registerCommand('extension.copyLine', () => {
         var gerador = new GeradorCobol();
         gerador.copyLine();
