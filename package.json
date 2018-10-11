@@ -127,6 +127,10 @@
                 "title": "TO"
             },
             {
+                "command": "extension.flagGenerator",
+                "title": "flagGenerator"
+            },
+            {
                 "command": "extension.checkout",
                 "title": "checkout"
             },
@@ -246,6 +250,10 @@
             {
                 "command": "extension.cobolTo",
                 "key": "ctrl+t"
+            },
+            {
+                "command": "extension.flagGenerator",
+                "key": "ctrl+alt+b"
             },
             {
                 "command": "extension.cobolInsertCommentLine",

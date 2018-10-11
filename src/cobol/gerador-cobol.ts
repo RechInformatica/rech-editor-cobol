@@ -49,6 +49,62 @@ export class GeradorCobol {
   }
 
   /**
+   * Generate the SIM and NAO flag declaration
+   */
+  async flagGenerator(){
+    // Verify if the current line is a variable declaration
+    if (!await this.isVariableDeclaration()){
+        this.editor.showInformationMessage("Isso não é uma declaração de variável!");
+        return;
+    }
+    // Save original position
+    let originalCursors: RechPosition[] = this.editor.getCursors();
+    // Find the first word column
+    let wordcolumn = await this.firstWordColumn();
+    // Get the line in focous
+    let line = await this.editor.getCurrentLine();
+    // Remove left whitespace
+    line = line.trimLeft();
+    // Remove duplicate whitespaces
+    line = line.replace(/\s+/g,' ');
+    // Create a array with each word from the line
+    let linesplitted = line.split(" ");
+    // The variable name, the suffix of SIM value and the suffix of NAO value
+    let varname, varsim, varnao = '';
+    // Verify if is a FD file
+    let regex = /.*[WREG].*/g;
+    if(regex.test(this.editor.getCurrentFileBaseName())){
+        // Return the variable name with the prefix
+        varname = linesplitted[1];
+        // Indicate that between value name and sufix has not a hyphen
+        varsim = 'SIM';
+        varnao = 'NAO';
+    } else {
+        // Find where the prefix
+        let posprefixo = linesplitted[1].indexOf("-");
+        // Return the variable name without the prefix
+        varname = linesplitted[1].substring(posprefixo + 1);
+        // Indicate that between value name and sufix has a hyphen
+        varsim = '-SIM';
+        varnao = '-NAO';
+    }
+    // Insert 88 SIM value
+    await this.editor.insertLineBelow();
+    await this.gotoCol(wordcolumn + 3);
+    await this.editor.type("88 " + varname + varsim);
+    await this.gotoCol(Colunas.COLUNA_VALUE);
+    await this.editor.type("VALUE IS 1.");
+    // Insert 88 NAO value
+    await this.editor.insertLineBelow();
+    await this.gotoCol(wordcolumn + 3);
+    await this.editor.type("88 " + varname + varnao);
+    await this.gotoCol(Colunas.COLUNA_VALUE);
+    await this.editor.type("VALUE IS 2.");
+    // Return to original position
+    this.editor.setCursors(originalCursors);
+  }
+
+  /**
    * Copy entire line to clipboard wherever the cursor is
    */
   copyLine() {
@@ -142,7 +198,7 @@ export class GeradorCobol {
   /**
    * Vai para a coluna do TO
    */
-  gotoColTo() {
+  private gotoColTo() {
     if (this.editor.getCurrentLineSize() < Colunas.COLUNA_B) {
       return this.gotoCol(Colunas.COLUNA_B);
     } else {
@@ -157,11 +213,40 @@ export class GeradorCobol {
   /**
    * Vai para uma coluna
    */
-  gotoCol(coluna: number) {
+  private gotoCol(coluna: number) {
     if (this.editor.getCurrentLineSize() < coluna - 1) {
       return this.editor.setColumn(coluna - 1);
     } else {
       return this.editor.type(" ");
     }
   }
+
+  /**
+   * Validate if the current line is a cobol variable declaration
+   */
+  private async isVariableDeclaration() {
+    // Get the line in focous
+    let line = await this.editor.getCurrentLine();
+    // Create a array with each word from the line
+    let linesplitted = line.split(" ");
+    // Find if the line is a variable declaration
+    let vardeclaration = false;
+    linesplitted.forEach(element => {
+        if (element.toUpperCase() === "PIC"){
+            vardeclaration = true;
+        }
+    });
+    return vardeclaration;
+  }
+  /**
+   * 
+   */
+  private async firstWordColumn() {
+    // Get the line in focous
+    let line = await this.editor.getCurrentLine();
+    // Find the first word column
+    let firstWordColumn: number = line.search(/\S|$/) + 1;
+    return firstWordColumn;
+  }
+
 };

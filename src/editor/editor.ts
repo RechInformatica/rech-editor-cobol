@@ -363,6 +363,14 @@ export class Editor {
   }
 
   /**
+   * Inserts a blank line below
+   */
+  insertLineBelow() {
+    commands.executeCommand('editor.action.insertLineAfter');
+    return commands.executeCommand('editor.action.trimTrailingWhitespace');
+  }
+
+  /**
    * Inserts a blank line above
    */
   insertLineAbove() {
