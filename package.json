@@ -297,11 +297,11 @@
             },
             {
                 "command": "extension.indentLeft",
-                "key": "alt+left"
+                "key": "alt+shift+left"
             },
             {
                 "command": "extension.indentRight",
-                "key": "alt+right"
+                "key": "alt+shift+right"
             },
             {
                 "command": "extension.findNextBlankLine",
@@ -334,6 +334,22 @@
             {
                 "command": "extension.cursorPos08",
                 "key": "ctrl+8"
+            },
+            {
+                "command": "editor.action.copyLinesUpAction",
+                "key": "ctrl+shift+up"
+            },
+            {
+                "command": "editor.action.copyLinesDownAction",
+                "key": "ctrl+shift+down"
+            },
+            {
+                "command": "editor.action.moveLinesDownAction",
+                "key": "alt+shift+down"
+            },
+            {                
+                "command": "editor.action.moveLinesUpAction",
+                "key": "alt+shift+up"
             }
         ]
     },
