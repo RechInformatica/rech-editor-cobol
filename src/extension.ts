@@ -22,128 +22,128 @@ export function activate(_context: any) {
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     //
-    context.subscriptions.push(commands.registerCommand('extension.cobolMove', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolMove', () => {
         var gerador = new GeradorCobol();
         gerador.move();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cobolTo', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolTo', () => {
         var gerador = new GeradorCobol();
         gerador.to();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.flagGenerator', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.flagGenerator', () => {
         var gerador = new GeradorCobol();
         gerador.flagGenerator();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.copyLine', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyLine', () => {
         var gerador = new GeradorCobol();
         gerador.copyLine();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.pasteLine', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.pasteLine', () => {
         var gerador = new GeradorCobol();
         gerador.pasteLine();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cobolInsertCommentLine', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertCommentLine', () => {
         var gerador = new GeradorCobol();
         gerador.insertCommentLine();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cobolInsertLineSeparator', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertLineSeparator', () => {
         var gerador = new GeradorCobol();
         gerador.insertLineSeparator();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cobolUpdateLineDots', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolUpdateLineDots', () => {
         var gerador = new GeradorCobol();
         gerador.updateLineDots();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.newLineAbove', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.newLineAbove', () => {
         var gerador = new GeradorCobol();
         gerador.newLineAbove();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.update', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.update', () => {
         new Editor().showInformationMessage("Executando Update...")
         new Executor().runAsync("start cmd.exe /c F:\\BAT\\Update.bat");
     }));
-    context.subscriptions.push(commands.registerCommand('extension.commit', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.commit', () => {
         new Editor().showInformationMessage("Executando Commit...")
         new Executor().runAsync("start cmd.exe /c F:\\BAT\\Commit.bat");
     }));
-    context.subscriptions.push(commands.registerCommand('extension.checkout', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.checkout', () => {
         let baseName = new Editor().getCurrentFileBaseName();
         let editor = new Editor();
         editor.showInformationMessage("Executando Checkout de " + baseName + "...");
         editor.closeActiveEditor();
         new Executor().runAsync("start cmd.exe /c F:\\BAT\\Checkout.bat  " + baseName);
     }));
-    context.subscriptions.push(commands.registerCommand('extension.compile', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.compile', () => {
         new Editor().showInformationMessage("Compilando " + new Editor().getCurrentFileBaseName() + "...");
         new Compiler().compileCurrentFile();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.findNextParagraph', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findNextParagraph', () => {
         var findNextParagraph = new Editor();
         findNextParagraph.findNextParagraph();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.findPreviousParagraph', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findPreviousParagraph', () => {
         var findPreviousParagraph = new Editor();
         findPreviousParagraph.findPreviousParagraph();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.findNextBlankLine', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findNextBlankLine', () => {
         var findNextParagraph = new Editor();
         findNextParagraph.findNextBlankLine();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.findPreviousBlankLine', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findPreviousBlankLine', () => {
         var findPreviousParagraph = new Editor();
         findPreviousParagraph.findPreviousBlankLine();
     }));
-    context.subscriptions.push(commands.registerCommand('extension.indent', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.indent', () => {
         var indent = new Editor();
         indent.indent("N");
     }));
-    context.subscriptions.push(commands.registerCommand('extension.indentLeft', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.indentLeft', () => {
         var indent = new Editor();
         indent.indent("E");
     }));
-    context.subscriptions.push(commands.registerCommand('extension.indentRight', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.indentRight', () => {
         var indent = new Editor();
         indent.indent("D");
     }));
-    context.subscriptions.push(commands.registerCommand('extension.findWordForward', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findWordForward', () => {
         commands.executeCommand("editor.action.addSelectionToNextFindMatch");
         commands.executeCommand("editor.action.nextMatchFindAction");
     }));
-    context.subscriptions.push(commands.registerCommand('extension.findWordBackward', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findWordBackward', () => {
         commands.executeCommand("editor.action.addSelectionToNextFindMatch");
         commands.executeCommand("editor.action.previousMatchFindAction");
     }));
-    context.subscriptions.push(commands.registerCommand('extension.copyWordUnderCursor', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyWordUnderCursor', () => {
         commands.executeCommand("cursorWordRight");
         commands.executeCommand("cursorWordLeftSelect");
         commands.executeCommand("editor.action.clipboardCopyAction");
     }));
-    context.subscriptions.push(commands.registerCommand('extension.replaceWordUnderCursor', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.replaceWordUnderCursor', () => {
         commands.executeCommand("cursorWordRight");
         commands.executeCommand("cursorWordLeftSelect");
         commands.executeCommand("editor.action.clipboardPasteAction");
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cursorPos51', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos51', () => {
         var editor = new Editor();
         editor.setColumn(COLUNA_VALUE - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cursorPos12', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos12', () => {
         var editor = new Editor();
         editor.setColumn(AREA_B - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cursorPos30', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos30', () => {
         var editor = new Editor();
         editor.setColumn(COLUNA_B - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cursorPos20', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos20', () => {
         var editor = new Editor();
         editor.setColumn(COLUNA_A - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cursorPos35', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos35', () => {
         var editor = new Editor();
         editor.setColumn(COLUNA_C - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('extension.cursorPos08', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos08', () => {
         var editor = new Editor();
         editor.setColumn(AREA_A - 1);
     }));

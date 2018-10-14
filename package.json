@@ -119,61 +119,61 @@
         ],
         "commands": [
             {
-                "command": "extension.cobolMove",
+                "command": "rech.editor.vscode.cobolMove",
                 "title": "MOVE"
             },
             {
-                "command": "extension.cobolTo",
+                "command": "rech.editor.vscode.cobolTo",
                 "title": "TO"
             },
             {
-                "command": "extension.flagGenerator",
+                "command": "rech.editor.vscode.flagGenerator",
                 "title": "flagGenerator"
             },
             {
-                "command": "extension.checkout",
+                "command": "rech.editor.vscode.checkout",
                 "title": "checkout"
             },
             {
-                "command": "extension.compile",
+                "command": "rech.editor.vscode.compile",
                 "title": "compile"
             },
             {
-                "command": "extension.update",
+                "command": "rech.editor.vscode.update",
                 "title": "update"
             },
             {
-                "command": "extension.commit",
+                "command": "rech.editor.vscode.commit",
                 "title": "commit"
             },
             {
-                "command": "extension.findNextParagraph",
+                "command": "rech.editor.vscode.findNextParagraph",
                 "title": "findNextParagraph"
             },
             {
-                "command": "extension.findPreviousParagraph",
+                "command": "rech.editor.vscode.findPreviousParagraph",
                 "title": "findPreviousParagraph"
             },
             {
-                "command": "extension.findNextBlankLine",
+                "command": "rech.editor.vscode.findNextBlankLine",
                 "title": "findNextBlankLine"
             },
             {
-                "command": "extension.findPreviousBlankLine",
+                "command": "rech.editor.vscode.findPreviousBlankLine",
                 "title": "findPreviousBlankLine"
             },
             {
-                "command": "extension.indent",
+                "command": "rech.editor.vscode.indent",
                 "key": "indent",
                 "title": "indent"
             },
             {
-                "command": "extension.indentLeft",
+                "command": "rech.editor.vscode.indentLeft",
                 "key": "indentLeft",
                 "title": "indentLeft"
             },
             {
-                "command": "extension.indentRight",
+                "command": "rech.editor.vscode.indentRight",
                 "key": "indentRight",
                 "title": "indentRight"
             }
@@ -181,12 +181,12 @@
         "menus": {
             "editor/context": [
                 {
-                    "command": "extension.cobolMove",
+                    "command": "rech.editor.vscode.cobolMove",
                     "group": "cobolplugin",
                     "when": "editorTextFocus && editorLangId == COBOL"
                 },
                 {
-                    "command": "extension.cobolTo",
+                    "command": "rech.editor.vscode.cobolTo",
                     "group": "cobolplugin",
                     "when": "editorTextFocus && editorLangId == COBOL"
                 }
@@ -224,123 +224,123 @@
                 "key": "ctrl+F12"
             },
             {
-                "command": "extension.findWordForward",
+                "command": "rech.editor.vscode.findWordForward",
                 "key": "ctrl+0"
             },
             {
-                "command": "extension.copyWordUnderCursor",
+                "command": "rech.editor.vscode.copyWordUnderCursor",
                 "key": "ctrl+abnt_c1"
             },
             {
-                "command": "extension.replaceWordUnderCursor",
+                "command": "rech.editor.vscode.replaceWordUnderCursor",
                 "key": "shift+ctrl+abnt_c1"
             },
             {
-                "command": "extension.findWordBackward",
+                "command": "rech.editor.vscode.findWordBackward",
                 "key": "ctrl+9"
             },
             {
-                "command": "extension.newLineAbove",
+                "command": "rech.editor.vscode.newLineAbove",
                 "key": "ctrl+n"
             },
             {
-                "command": "extension.cobolMove",
+                "command": "rech.editor.vscode.cobolMove",
                 "key": "ctrl+shift+m"
             },
             {
-                "command": "extension.cobolTo",
+                "command": "rech.editor.vscode.cobolTo",
                 "key": "ctrl+t"
             },
             {
-                "command": "extension.flagGenerator",
+                "command": "rech.editor.vscode.flagGenerator",
                 "key": "ctrl+alt+b"
             },
             {
-                "command": "extension.cobolInsertCommentLine",
+                "command": "rech.editor.vscode.cobolInsertCommentLine",
                 "key": "alt+n"
             },
             {
-                "command": "extension.cobolInsertLineSeparator",
+                "command": "rech.editor.vscode.cobolInsertLineSeparator",
                 "key": "alt+numpad_subtract"
             },
             {
-                "command": "extension.cobolUpdateLineDots",
+                "command": "rech.editor.vscode.cobolUpdateLineDots",
                 "key": "alt+abnt_c1"
             },
             {
-                "command": "extension.checkout",
+                "command": "rech.editor.vscode.checkout",
                 "key": "alt+f5"
             },
             {
-                "command": "extension.compile",
+                "command": "rech.editor.vscode.compile",
                 "key": "ctrl+f9"
             },
             {
-                "command": "extension.update",
+                "command": "rech.editor.vscode.update",
                 "key": "alt+f6"
             },
             {
-                "command": "extension.commit",
+                "command": "rech.editor.vscode.commit",
                 "key": "alt+f7"
             },
             {
-                "command": "extension.copyLine",
+                "command": "rech.editor.vscode.copyLine",
                 "key": "F10"
             },
             {
-                "command": "extension.pasteLine",
+                "command": "rech.editor.vscode.pasteLine",
                 "key": "F11"
             },
             {
-                "command": "extension.findNextParagraph",
+                "command": "rech.editor.vscode.findNextParagraph",
                 "key": "ctrl+k"
             },
             {
-                "command": "extension.findPreviousParagraph",
+                "command": "rech.editor.vscode.findPreviousParagraph",
                 "key": "ctrl+shift+k"
             },
             {
-                "command": "extension.indent",
+                "command": "rech.editor.vscode.indent",
                 "key": "ctrl+p"
             },
             {
-                "command": "extension.indentLeft",
+                "command": "rech.editor.vscode.indentLeft",
                 "key": "alt+shift+left"
             },
             {
-                "command": "extension.indentRight",
+                "command": "rech.editor.vscode.indentRight",
                 "key": "alt+shift+right"
             },
             {
-                "command": "extension.findNextBlankLine",
+                "command": "rech.editor.vscode.findNextBlankLine",
                 "key": "alt+p"
             },
             {
-                "command": "extension.findPreviousBlankLine",
+                "command": "rech.editor.vscode.findPreviousBlankLine",
                 "key": "alt+shift+p"
             },
             {
-                "command": "extension.cursorPos51",
+                "command": "rech.editor.vscode.cursorPos51",
                 "key": "ctrl+1"
             },
             {
-                "command": "extension.cursorPos12",
+                "command": "rech.editor.vscode.cursorPos12",
                 "key": "ctrl+2"
             },
             {
-                "command": "extension.cursorPos30",
+                "command": "rech.editor.vscode.cursorPos30",
                 "key": "ctrl+3"
             },
             {
-                "command": "extension.cursorPos20",
+                "command": "rech.editor.vscode.cursorPos20",
                 "key": "ctrl+4"
             },
             {
-                "command": "extension.cursorPos35",
+                "command": "rech.editor.vscode.cursorPos35",
                 "key": "ctrl+5"
             },
             {
-                "command": "extension.cursorPos08",
+                "command": "rech.editor.vscode.cursorPos08",
                 "key": "ctrl+8"
             },
             {
