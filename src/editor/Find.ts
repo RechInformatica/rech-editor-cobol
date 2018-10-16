@@ -27,12 +27,12 @@ export class Find {
  * 
  * @param term 
  */
-  findPositionOfDeclaration(term: string): Position | undefined {
+  public findPositionOfDeclaration(term: string): Position | undefined {
     let parse = new ParserCobol();
     let document = this.editor.document;
     for (let lineNumber = 0; lineNumber < document.lineCount; lineNumber++) {
       if (parse.isDeclaration(term, document.lineAt(lineNumber).text)) {
-        let match = <RegExpMatchArray> document.lineAt(lineNumber).text.match(/[a-zA-Z]/);
+        let match = <RegExpMatchArray> document.lineAt(lineNumber).text.match(term);
         return new Position(lineNumber, <number>match.index);
       }
     }
@@ -44,7 +44,7 @@ export class Find {
    * @param regex 
    * @param startLineToFind 
    */
-  findPositions(regex: RegExp, direction: number, startLineToFind?:TextLine, returnFrst?: boolean): Position[] | undefined {
+  public findPositions(regex: RegExp, direction: number, startLineToFind?:TextLine, returnFrst?: boolean): Position[] | undefined {
     let startLine = 0;
     if (startLineToFind) {
       startLine = startLineToFind.lineNumber;
