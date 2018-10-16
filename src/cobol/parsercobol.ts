@@ -105,28 +105,25 @@ export class ParserCobol {
    * @param termo2 
    */
   private equalsIgnoreReplacing(termo1: string, termo2?: string): boolean {
-    if (termo1 == null || termo2 == null) {
+    if (termo1 == undefined || termo2 == undefined) {
       return false;
     }
     if (termo1 == termo2) {
       return true;
     }
+    if (termo2.indexOf("(") >= 0) {
+      let pattern = new RegExp(termo2.replace(/\(.*?\)/, "(.*)"));
+      if (pattern.test(termo1)) {
+        return true;
+      }
+    }
+    if (termo1.indexOf("(") >= 0) {
+      let pattern = new RegExp(termo1.replace(/\(.*?\)/, "(.*)"));      
+      if (pattern.test(termo1)) {
+        return true;
+      }
+    }
     return false;
-
-    // if (termo2.indexOf("(") >= 0) {
-    //   let removeReplaceRegexp = /\([^\(^\)]*\)/;
-    //   let pattern = termo2.replace(/\(.*?\)/, "(.*)");
-    //   if (pattern.test(termo1)) {
-    //     return true;
-    //   }
-    // }
-    // if (termo1.indexOf("(") >= 0) {
-    //   let removeReplaceRegexp = /\([^\(^\)]*\)/;
-    //   let pattern = termo1.replace(/\(.*?\)/, "(.*)");
-    //   if (pattern.test(termo1)) {
-    //     return true;
-    //   }
-    // }
   }
 
 }
