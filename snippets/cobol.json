@@ -38,7 +38,15 @@
 			"   ${0:<body>}",
 			"END-IF."
 		]
-	},
+    },
+	"IF BOOLEAN": {
+		"prefix": "IFB",
+		"body": [
+			"IF ${1:<tst1>}",
+			"   ${0:<body>}",
+			"END-IF."
+		]
+	},    
 	"IF GREATER THAN": {
 		"prefix": "IFG",
 		"body": [
