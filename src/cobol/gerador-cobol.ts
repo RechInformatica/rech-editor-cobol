@@ -72,7 +72,7 @@ export class GeradorCobol {
     // The variable name, the suffix of SIM value and the suffix of NAO value
     let varname, varsim, varnao = '';
     // Verify if is a FD file
-    let regex = /.*[WREG].*/g;
+    let regex = /.*(WREG)+.*/g;
     if(regex.test(this.editor.getCurrentFileBaseName())){
         // Return the variable name with the prefix
         varname = linesplitted[1];
