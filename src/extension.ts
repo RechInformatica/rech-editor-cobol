@@ -147,6 +147,10 @@ export function activate(_context: any) {
         var editor = new Editor();
         editor.setColumn(AREA_A - 1);
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.goToDeclaration', () => {
+        var editor = new Editor();
+        editor.goToDeclaration();
+    }));
 }
 
 // this method is called when your extension is deactivated

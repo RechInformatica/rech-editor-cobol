@@ -163,6 +163,10 @@
                 "title": "findPreviousBlankLine"
             },
             {
+                "command": "rech.editor.vscode.goToDeclaration",
+                "title": "goToDeclaration"
+            },
+            {
                 "command": "rech.editor.vscode.indent",
                 "key": "indent",
                 "title": "indent"
@@ -214,6 +218,10 @@
             {
                 "command": "editor.action.previousMatchFindAction",
                 "key": "shift+F3"
+            },
+            {
+                "command": "rech.editor.vscode.goToDeclaration",
+                "key": "F12"
             },
             {
                 "command": "deleteAllRight",
