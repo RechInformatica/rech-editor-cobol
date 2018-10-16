@@ -59,7 +59,7 @@ export class ParserCobol {
     var match = /^\s+\d\d\s+([\w\-]+)(\s+|\.).*/g.exec(line);
     if (match == null) {
       // $SET CONSTANT
-      match = /^\s+\$SET\s+CONSTANT\s+([\w\-]+)\s+.*/g.exec(line);
+      match = /^\s+\$SET\s+CONSTANT\s+([\w\-]+)\s+.*/gi.exec(line);
       if (match == null) {
         return undefined;
       }
@@ -73,7 +73,7 @@ export class ParserCobol {
     * @param line 
     */
    private getDeclaracaoSelect(line: string): string | undefined {
-    var match = /^\s+SELECT ([\w\-]+)\s+ASSIGN.*/g.exec(line);
+    var match = /^\s+SELECT ([\w\-]+)\s+ASSIGN.*/gi.exec(line);
     if (match == null) {
       return undefined;
     }
@@ -87,10 +87,10 @@ export class ParserCobol {
    */
   private getDeclaracaoClasse(line: string): string | undefined {
     // IS Format
-    var match = /^\s+CLASS\s+([\w]+)\s+AS.*/g.exec(line);
+    var match = /^\s+CLASS\s+([\w]+)\s+AS.*/gi.exec(line);
     if (match == null) {
       // MF Format
-      match = /^\s+([\w]+)\s+IS\s+CLASS.*/g.exec(line);
+      match = /^\s+([\w]+)\s+IS\s+CLASS.*/gi.exec(line);
       if (match == null) {
         return undefined;
       }
@@ -115,14 +115,14 @@ export class ParserCobol {
 
     // if (termo2.indexOf("(") >= 0) {
     //   let removeReplaceRegexp = /\([^\(^\)]*\)/;
-    //   let pattern = termo2.replace(/\(.*?\)/g, "(.*)");
+    //   let pattern = termo2.replace(/\(.*?\)/, "(.*)");
     //   if (pattern.test(termo1)) {
     //     return true;
     //   }
     // }
     // if (termo1.indexOf("(") >= 0) {
     //   let removeReplaceRegexp = /\([^\(^\)]*\)/;
-    //   let pattern = termo1.replace(/\(.*?\)/g, "(.*)");
+    //   let pattern = termo1.replace(/\(.*?\)/, "(.*)");
     //   if (pattern.test(termo1)) {
     //     return true;
     //   }

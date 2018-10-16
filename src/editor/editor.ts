@@ -406,11 +406,12 @@ export class Editor {
    * Go to declaration of the current word
    */
   goToDeclaration() {
-    let positionsToReturn = new Find(this.editor).findPositionOfDeclaration(this.getCurrentWord());
+    let term = this.getCurrentWord();
+    let positionsToReturn = new Find(this.editor).findPositionOfDeclaration(term);
     if (positionsToReturn) {
       this.setCursorPosition(new RechPosition(positionsToReturn.line, positionsToReturn.character));
     } else {
-      this.showInformationMessage("Declaration not found");
+      this.showInformationMessage("Declaration of '" + term + "' not found");
     }
   }
 
