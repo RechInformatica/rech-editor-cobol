@@ -118,10 +118,15 @@ export class GeradorCobol {
    * Paste clipboard in a new line wherever the cursor is
    */
   async pasteLine() {
-    let cursor = this.editor.getCursors()[0];
-    await this.editor.cursorLineStart();
-    await this.editor.clipboardPaste();
-    this.editor.setCursor(cursor.line, cursor.column);
+    // Se tem conteúdo selecionado, faz a 
+    if (this.editor.getSelectionBuffer().join() != "") {
+      await this.editor.clipboardPaste();
+    } else {
+      let cursor = this.editor.getCursors()[0];
+      await this.editor.cursorLineStart();
+      await this.editor.clipboardPaste();
+      this.editor.setCursor(cursor.line, cursor.column);
+    }
   }
 
   /**
