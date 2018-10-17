@@ -107,8 +107,12 @@
 		"prefix": "ML",
 		"body": "MOVE LOW-VALUES TO ${0:<var1>},"
 	},
-	"MOVE SPAVES TO": {
-		"prefix": "ML",
+	"MOVE HIGH-VALUES TO": {
+		"prefix": "MH",
+		"body": "MOVE HIGH-VALUES TO ${0:<var1>},"
+	},
+	"MOVE SPACES TO": {
+		"prefix": "MS",
 		"body": "MOVE SPACES TO ${0:<var1>},"
 	},
 	"MOVE ZEROS TO": {
@@ -187,6 +191,10 @@
 		"prefix": "ZE",
 		"body": "ZEROS"
 	},
+	"ZEROS ": {
+		"prefix": "ZR",
+		"body": "ZEROS"
+	},
 	"SPACES": {
 		"prefix": "SP",
 		"body": "SPACES"
@@ -194,6 +202,22 @@
 	"LOW-VALUES": {
 		"prefix": "LV",
 		"body": "LOW-VALUES"
+	},
+	"LOW-VALUES ": {
+		"prefix": "LO",
+		"body": "LOW-VALUES"
+	},
+	"HIGH-VALUES": {
+		"prefix": "HV",
+		"body": "HIGH-VALUES"
+	},
+	"HIGH-VALUES ": {
+		"prefix": "HI",
+		"body": "HIGH-VALUES"
+	},
+	"BLANK WHEN ZERO": {
+		"prefix": "BWZ",
+		"body": "BLANK WHEN ZEROS"
 	},
 	"PERFORM UNTIL": {
 		"prefix": "PU",
