@@ -1,6 +1,6 @@
 import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
-import { Find } from './Find';
+import { Find } from './find';
 import { RechPosition } from './rechposition';
 import { Indenta } from '../indent/indent';
 import * as path from 'path';
@@ -52,7 +52,6 @@ export class Editor {
   }
 
   /**
-   * 
    * Defines and editor multi selections
    */
   private setSelectionsRange(ranges: Range[]) {
@@ -119,8 +118,17 @@ export class Editor {
    * Selects the current word
    */
   selectCurrentWord() {
-    commands.executeCommand('cursorWordStartLeft');
-    commands.executeCommand('cursorWordEndRightSelect');
+    //
+    // None of the functions below works in all cases. Testing where is the cursor can detect which one to use
+    //
+    // If cursor is exactly on word's left position (blank character at left)
+    if (this.getCurrentLine().charAt(this.getCursors()[0].column - 1) == ' ') {
+      commands.executeCommand("cursorWordRight");
+      commands.executeCommand("cursorWordLeftSelect");
+    } else {
+      commands.executeCommand('cursorWordStartLeft');
+      commands.executeCommand('cursorWordEndRightSelect');
+    }
   }
 
   /**
@@ -172,9 +180,9 @@ export class Editor {
 
   /**
    * Defines the cursor line and cloumn
-   * 
-   * @param line 
-   * @param column 
+   *
+   * @param line
+   * @param column
    */
   setCursor(line: number, column: number) {
     this.setCursorPosition(new RechPosition(line, column));
@@ -183,8 +191,8 @@ export class Editor {
   /**
    * Defines the cursor position
    * PS: works with multiple cursors
-   * 
-   * @param Positions 
+   *
+   * @param Positions
    */
  setCursors(positions: RechPosition[]) {
     let ranges: Range[] = new Array();
@@ -253,7 +261,7 @@ export class Editor {
 
   /**
    * Types a text in editor
-   * 
+   *
    * @param text Text to insert in editor
    */
   type(text: string) {
@@ -289,7 +297,7 @@ export class Editor {
 
   /**
    * Shows open dialog for file selection
-   * 
+   *
    * @param defaultDir default directory
    * @param callback callback function called for each selected file
    */
@@ -311,7 +319,7 @@ export class Editor {
 
   /**
    * Opens the specified file
-   * 
+   *
    * @param file file to be opened
    * @param callback callback function executed after the file is opened
    */
@@ -342,6 +350,14 @@ export class Editor {
   }
 
   /**
+   * Copy word under the cursor to clipboard
+   */
+  clipboardCopyWord() {
+    this.selectCurrentWord();
+    this.clipboardCopy();
+  }
+
+  /**
    * Copies the current selection to clipboard
    */
   clipboardCopy() {
@@ -349,7 +365,7 @@ export class Editor {
   }
 
   /**
-   * Pastes clipboard 
+   * Pastes clipboard
    */
   clipboardPaste() {
     return commands.executeCommand('editor.action.clipboardPasteAction');
@@ -403,6 +419,19 @@ export class Editor {
   }
 
   /**
+   * Go to declaration of the current word
+   */
+  goToDeclaration() {
+    let term = this.getCurrentWord();
+    let positionsToReturn = new Find(this.editor).findPositionOfDeclaration(term);
+    if (positionsToReturn) {
+      this.setCursorPosition(new RechPosition(positionsToReturn.line, positionsToReturn.character));
+    } else {
+      this.showInformationMessage("Declaration of '" + term + "' not found");
+    }
+  }
+
+  /**
    * Go to the next blank line
    */
   findNextBlankLine() {
@@ -447,7 +476,7 @@ export class Editor {
   /**
   /**
    * Shows input box and executes the specified callback when Enter is pressed
-   * 
+   *
    * @param placeholder text placeholder to be shown when no text is typed
    * @param prompt prompt message
    * @param callback callback executed when Enter is pressed
@@ -465,11 +494,20 @@ export class Editor {
    * Indent the selection Buffer
    */
   indent(alignment: string) {
+    // If doesn't have selection, backup actual cursor to restore it later
+    let restoreCursor: RechPosition;
+    if (this.getSelectionRange().length == 1 && this.getSelectionRange()[0].isEmpty) {
+      restoreCursor = this.getCursors()[0];
+    }
     // Select whole lines of the selection range
     this.selectWholeLines();
     //Indent the selection range
     new Indenta().indenta(alignment, this.getSelectionBuffer(), this.getPath(), (buffer) => {
       this.replaceSelection(buffer.toString());
+      // Restore original cursor if necessary. This won't keep selection on entire line after a single line indentation
+      if (restoreCursor != null) {
+        this.setCursorPosition(restoreCursor);
+      }
     }, (bufferErr) => { this.showWarningMessage(bufferErr); });
   }
 
@@ -479,14 +517,14 @@ export class Editor {
   getCurrentFileBaseName() {
     return path.basename(this.getCurrentFileName());
   }
-  
+
   /**
    * Returns the directory of the file currently open in editor
    */
   getCurrentFileDirectory() {
     return new Path(this.getCurrentFileName()).directory();
   }
-  
+
   /**
    * Returns the full name of the file currently open in editor including it's directory
    */

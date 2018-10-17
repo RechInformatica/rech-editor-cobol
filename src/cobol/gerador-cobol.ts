@@ -72,7 +72,7 @@ export class GeradorCobol {
     // The variable name, the suffix of SIM value and the suffix of NAO value
     let varname, varsim, varnao = '';
     // Verify if is a FD file
-    let regex = /.*[WREG].*/g;
+    let regex = /.*(WREG)+.*/g;
     if(regex.test(this.editor.getCurrentFileBaseName())){
         // Return the variable name with the prefix
         varname = linesplitted[1];
@@ -105,21 +105,10 @@ export class GeradorCobol {
   }
 
   /**
-   * Copy entire line to clipboard wherever the cursor is
-   */
-  copyLine() {
-    let originalCursors: RechPosition[] = this.editor.getCursors();
-    this.editor.selectWholeLines();
-    this.editor.clipboardCopy();
-    this.editor.setCursors(originalCursors);
-  }
-
-  /**
    * Paste clipboard in a new line wherever the cursor is
    */
   async pasteLine() {
     let cursor = this.editor.getCursors()[0];
-    await this.editor.cursorLineStart();
     await this.editor.clipboardPaste();
     this.editor.setCursor(cursor.line, cursor.column);
   }
@@ -143,6 +132,22 @@ export class GeradorCobol {
   async insertCommentLine() {
     await this.editor.insertLineAbove();
     await this.editor.type("      *>-> ");
+  }
+
+  /**
+   * Insert a comment statement starting current line
+   */
+  async insertStartComment() {
+    await this.editor.setColumn(Colunas.AREA_A - 2);
+    await this.editor.type("*>-> ");
+  }
+
+  /**
+   * Insert a comment statement ending current line
+   */
+  async insertStartEndComment() {
+    await this.editor.setColumn(Colunas.COLUNA_FIM - 4);
+    await this.editor.type("<-<*");
   }
 
   /**

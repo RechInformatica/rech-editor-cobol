@@ -163,6 +163,10 @@
                 "title": "findPreviousBlankLine"
             },
             {
+                "command": "rech.editor.vscode.goToDeclaration",
+                "title": "goToDeclaration"
+            },
+            {
                 "command": "rech.editor.vscode.indent",
                 "key": "indent",
                 "title": "indent"
@@ -216,6 +220,10 @@
                 "key": "shift+F3"
             },
             {
+                "command": "rech.editor.vscode.goToDeclaration",
+                "key": "F12"
+            },
+            {
                 "command": "deleteAllRight",
                 "key": "alt+l"
             },
@@ -256,6 +264,14 @@
                 "key": "ctrl+alt+b"
             },
             {
+                "command": "rech.editor.vscode.cobolInsertStartComment",
+                "key": "alt+numpad_multiply"
+            },
+            {
+                "command": "rech.editor.vscode.cobolInsertEndComment",
+                "key": "ctrl+shift+numpad_multiply"
+            },
+            {
                 "command": "rech.editor.vscode.cobolInsertCommentLine",
                 "key": "alt+n"
             },
@@ -290,6 +306,10 @@
             {
                 "command": "rech.editor.vscode.pasteLine",
                 "key": "F11"
+            },
+            {
+                "command": "rech.editor.vscode.replaceLine",
+                "key": "shift+F11"
             },
             {
                 "command": "rech.editor.vscode.findNextParagraph",
@@ -358,6 +378,14 @@
             {
                 "command": "editor.action.moveLinesUpAction",
                 "key": "alt+shift+up"
+            },
+            {
+                "command": "editor.action.transformToLowercase",
+                "key": "ctrl+alt+l"
+            },
+            {
+                "command": "editor.action.transformToUppercase",
+                "key": "ctrl+alt+u"
             }
         ]
     },

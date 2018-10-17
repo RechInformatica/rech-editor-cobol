@@ -1,7 +1,8 @@
 import { TextEditor, Position, TextLine, TextDocument } from 'vscode';
+import { ParserCobol } from '../cobol/parsercobol'
 
 /**
- * Class to manipulate vscode editor
+ * Class to scan and find thing in editor
  */
 export class Find {
   /** Busca próximos */
@@ -21,13 +22,29 @@ export class Find {
       this.editor = editor;
   }
 
+/**
+ * Find position of the declaration of the term
+ * 
+ * @param term 
+ */
+  public findPositionOfDeclaration(term: string): Position | undefined {
+    let parse = new ParserCobol();
+    let document = this.editor.document;
+    for (let lineNumber = 0; lineNumber < document.lineCount; lineNumber++) {
+      if (parse.isDeclaration(term, document.lineAt(lineNumber).text)) {
+        let match = <RegExpMatchArray> document.lineAt(lineNumber).text.match(term);
+        return new Position(lineNumber, <number>match.index);
+      }
+    }
+  }
+
   /**
    * Find the line positions of the regex
    * 
    * @param regex 
    * @param startLineToFind 
    */
-  findPositions(regex: RegExp, direction: number, startLineToFind?:TextLine, returnFrst?: boolean): Position[] | undefined {
+  public findPositions(regex: RegExp, direction: number, startLineToFind?:TextLine, returnFrst?: boolean): Position[] | undefined {
     let startLine = 0;
     if (startLineToFind) {
       startLine = startLineToFind.lineNumber;
