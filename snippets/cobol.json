@@ -149,7 +149,7 @@
 	},
 	"COMPUTE ROUNDED =": {
 		"prefix": "CR",
-		"body": "COMPUTE ROUNDED ${1:<var>} = ${0:<formula>},"
+		"body": "COMPUTE ${1:<var>} ROUNDED = ${0:<formula>},"
 	},
 	"ELSE,": {
 		"prefix": "EL",
