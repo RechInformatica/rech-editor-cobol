@@ -3,7 +3,6 @@
 import { ExtensionContext, commands } from 'vscode';
 import { GeradorCobol } from './cobol/gerador-cobol';
 import { Editor } from './editor/editor';
-import * as TasksProvider from './tasks/tasks-provider';
 import { Executor } from './commons/executor';
 import Compiler from './cobol/compiler';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
@@ -12,8 +11,6 @@ import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './co
 // your extension is activated the very first time the command is executed
 export function activate(_context: any) {
     let context = <ExtensionContext> _context;
-    // Register tasks provider
-    TasksProvider.activate(context);
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "rech-test-vscode" is now active!');
@@ -74,8 +71,7 @@ export function activate(_context: any) {
         editor.closeActiveEditor();
         new Executor().runAsync("start cmd.exe /c F:\\BAT\\Checkout.bat  " + baseName);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.compile', () => {
-        new Editor().showInformationMessage("Compilando " + new Editor().getCurrentFileBaseName() + "...");
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.compile', () => {        
         new Compiler().compileCurrentFile();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findNextParagraph', () => {
@@ -136,11 +132,6 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.goToDeclaration', () => {
         new Editor().goToDeclaration();
     }));
-}
-
-// this method is called when your extension is deactivated
-export function deactivate() {
-    TasksProvider.deactivate;
 }
 
 export * from "./commons/executor";
