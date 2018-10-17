@@ -99,6 +99,10 @@
 		"prefix": "SE",
 		"body": "SET ${0:<var1>} TO TRUE,"
 	},
+	"SET WARQ-TSTSTA-NAO": {
+		"prefix": "SET WARQ-TSTSTA-NAO",
+		"body": "SET WARQ-TSTSTA-NAO TO TRUE,"
+	},
 	"MOVE TO": {
 		"prefix": "MV",
 		"body": "MOVE ${1:<var1>} TO ${0:<var2>},"
