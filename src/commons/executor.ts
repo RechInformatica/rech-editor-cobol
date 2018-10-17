@@ -11,7 +11,7 @@ export class Executor {
    *
    * @param name Name of channel
    */
-  getOutputChannel(name: string): vscode.OutputChannel {
+  private getOutputChannel(name: string): vscode.OutputChannel {
     return vscode.window.createOutputChannel(name);
   }
 
@@ -23,7 +23,7 @@ export class Executor {
    * @param options 
    * @param onFinish 
    */
-  runOnChannel(channel: vscode.OutputChannel, command: string, options: cp.ExecOptions,
+  private runOnChannel(channel: vscode.OutputChannel, command: string, options: cp.ExecOptions,
     onFinish: (errorLevel: number) => void): Promise<{ stdout: string; stderr: string }> {
     return new Promise<{ stdout: string; stderr: string }>(
       (resolve, reject) => {
