@@ -264,6 +264,14 @@
                 "key": "ctrl+alt+b"
             },
             {
+                "command": "rech.editor.vscode.cobolInsertStartComment",
+                "key": "alt+numpad_multiply"
+            },
+            {
+                "command": "rech.editor.vscode.cobolInsertEndComment",
+                "key": "ctrl+shift+numpad_multiply"
+            },
+            {
                 "command": "rech.editor.vscode.cobolInsertCommentLine",
                 "key": "alt+n"
             },
@@ -366,6 +374,14 @@
             {
                 "command": "editor.action.moveLinesUpAction",
                 "key": "alt+shift+up"
+            },
+            {
+                "command": "editor.action.transformToLowercase",
+                "key": "ctrl+alt+l"
+            },
+            {
+                "command": "editor.action.transformToUppercase",
+                "key": "ctrl+alt+u"
             }
         ]
     },

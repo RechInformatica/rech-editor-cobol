@@ -42,6 +42,14 @@ export function activate(_context: any) {
         var gerador = new GeradorCobol();
         gerador.pasteLine();
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertStartComment', () => {
+        var gerador = new GeradorCobol();
+        gerador.insertStartComment();
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertEndComment', () => {
+        var gerador = new GeradorCobol();
+        gerador.insertStartEndComment();
+    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertCommentLine', () => {
         var gerador = new GeradorCobol();
         gerador.insertCommentLine();

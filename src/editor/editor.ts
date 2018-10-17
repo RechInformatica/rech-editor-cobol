@@ -478,11 +478,20 @@ export class Editor {
    * Indent the selection Buffer
    */
   indent(alignment: string) {
+    // If doesn't have selection, backup actual cursor to restore it later
+    let restoreCursor: RechPosition;
+    if (this.getSelectionRange().length == 1 && this.getSelectionRange()[0].isEmpty) {
+      restoreCursor = this.getCursors()[0];
+    }
     // Select whole lines of the selection range
     this.selectWholeLines();
     //Indent the selection range
     new Indenta().indenta(alignment, this.getSelectionBuffer(), this.getPath(), (buffer) => {
       this.replaceSelection(buffer.toString());
+      // Restore original cursor if necessary. This won't keep selection on entire line after a single line indentation
+      if (restoreCursor != null) {
+        this.setCursorPosition(restoreCursor);
+      }
     }, (bufferErr) => { this.showWarningMessage(bufferErr); });
   }
 

@@ -107,8 +107,12 @@
 		"prefix": "ML",
 		"body": "MOVE LOW-VALUES TO ${0:<var1>},"
 	},
-	"MOVE SPAVES TO": {
-		"prefix": "ML",
+	"MOVE HIGH-VALUES TO": {
+		"prefix": "MH",
+		"body": "MOVE HIGH-VALUES TO ${0:<var1>},"
+	},
+	"MOVE SPACES TO": {
+		"prefix": "MS",
 		"body": "MOVE SPACES TO ${0:<var1>},"
 	},
 	"MOVE ZEROS TO": {
@@ -187,6 +191,10 @@
 		"prefix": "ZE",
 		"body": "ZEROS"
 	},
+	"ZEROS ": {
+		"prefix": "ZR",
+		"body": "ZEROS"
+	},
 	"SPACES": {
 		"prefix": "SP",
 		"body": "SPACES"
@@ -194,6 +202,22 @@
 	"LOW-VALUES": {
 		"prefix": "LV",
 		"body": "LOW-VALUES"
+	},
+	"LOW-VALUES ": {
+		"prefix": "LO",
+		"body": "LOW-VALUES"
+	},
+	"HIGH-VALUES": {
+		"prefix": "HV",
+		"body": "HIGH-VALUES"
+	},
+	"HIGH-VALUES ": {
+		"prefix": "HI",
+		"body": "HIGH-VALUES"
+	},
+	"BLANK WHEN ZERO": {
+		"prefix": "BWZ",
+		"body": "BLANK WHEN ZEROS"
 	},
 	"PERFORM UNTIL": {
 		"prefix": "PU",
@@ -222,6 +246,76 @@
 			"   WHEN OTHER",
 			"      ${0:<body>}",
 		 	"END-EVALUATE."
+		]
+	},
+	"EXIBE-MENSAGEM": {
+		"prefix": "EXIBE-MENSAGEM",
+		"body": [
+			"MOVE \"${0:<text>}\" TO WME-LIT,",
+			"PERFORM EXIBE-MENSAGEM,"
+		]
+	},
+	"READ KEY ARQ-COMANDO": {
+		"prefix": "READ KEY",
+		"body": [
+			"MOVE \"READ ${1:XTABEL} KEY ${2:XXXX-CHA} IGNORE LOCK\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
+		]
+	},
+	"READ NEXT ARQ-COMANDO": {
+		"prefix": "READ NEXT",
+		"body": [
+			"MOVE \"READ ${1:XTABEL} NEXT IGNORE LOCK\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${2:MK-CHA},"
+		]
+	},
+	"READ PREVIOUS ARQ-COMANDO": {
+		"prefix": "READ PREVIOUS",
+		"body": [
+			"MOVE \"READ ${1:XTABEL} PREVIOUS IGNORE LOCK\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${2:MK-CHA},"
+		]
+	},
+	"START NOT LESS ARQ-COMANDO": {
+		"prefix": "START NOT LESS",
+		"body": [
+			"MOVE \"START ${1:XTABEL} NOT LESS ${2:XXXX-CHA}\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
+		]
+	},
+	"START NOT GREATER ARQ-COMANDO": {
+		"prefix": "START NOT GREATER",
+		"body": [
+			"MOVE \"START ${1:XTABEL} NOT GREATER ${2:XXXX-CHA}\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
+		]
+	},
+	"WRITE": {
+		"prefix": "WRITE",
+		"body": [
+			"MOVE \"WRITE ${1:XTABEL} ${2:XREG-XXX}\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
+		]
+	},
+	"REWRITE": {
+		"prefix": "REWRITE",
+		"body": [
+			"MOVE \"REWRITE ${1:XTABEL} ${2:XREG-XXX}\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
+		]
+	},
+	"RE/WRITE": {
+		"prefix": "RE/WRITE",
+		"body": [
+			"MOVE \"RE/WRITE ${1:XTABEL} ${2:XREG-XXX}\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
+		]
+	},
+	"DELETE": {
+		"prefix": "DELETE",
+		"body": [
+			"MOVE \"DELETE ${1:XTABEL} RECORD\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${2:MK-CHA},"
 		]
 	}
 }

@@ -146,6 +146,22 @@ export class GeradorCobol {
   }
 
   /**
+   * Insert a comment statement starting current line
+   */
+  async insertStartComment() {
+    await this.editor.setColumn(Colunas.AREA_A - 2);
+    await this.editor.type("*>-> ");
+  }
+
+  /**
+   * Insert a comment statement ending current line
+   */
+  async insertStartEndComment() {
+    await this.editor.setColumn(Colunas.COLUNA_FIM - 4);
+    await this.editor.type("<-<*");
+  }
+
+  /**
    * Insert a Cobol line separator
    */
   async insertLineSeparator() {
