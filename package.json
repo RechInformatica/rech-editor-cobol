@@ -264,6 +264,14 @@
                 "key": "ctrl+alt+b"
             },
             {
+                "command": "rech.editor.vscode.cobolInsertStartComment",
+                "key": "alt+numpad_multiply"
+            },
+            {
+                "command": "rech.editor.vscode.cobolInsertEndComment",
+                "key": "ctrl+shift+numpad_multiply"
+            },
+            {
                 "command": "rech.editor.vscode.cobolInsertCommentLine",
                 "key": "alt+n"
             },
