@@ -105,28 +105,12 @@ export class GeradorCobol {
   }
 
   /**
-   * Copy entire line to clipboard wherever the cursor is
-   */
-  copyLine() {
-    let originalCursors: RechPosition[] = this.editor.getCursors();
-    this.editor.selectWholeLines();
-    this.editor.clipboardCopy();
-    this.editor.setCursors(originalCursors);
-  }
-
-  /**
    * Paste clipboard in a new line wherever the cursor is
    */
   async pasteLine() {
-    // Se tem conteúdo selecionado, faz a 
-    if (this.editor.getSelectionBuffer().join() != "") {
-      await this.editor.clipboardPaste();
-    } else {
-      let cursor = this.editor.getCursors()[0];
-      await this.editor.cursorLineStart();
-      await this.editor.clipboardPaste();
-      this.editor.setCursor(cursor.line, cursor.column);
-    }
+    let cursor = this.editor.getCursors()[0];
+    await this.editor.clipboardPaste();
+    this.editor.setCursor(cursor.line, cursor.column);
   }
 
   /**

@@ -35,8 +35,7 @@ export function activate(_context: any) {
         gerador.flagGenerator();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyLine', () => {
-        var gerador = new GeradorCobol();
-        gerador.copyLine();
+        commands.executeCommand("editor.action.clipboardCopyAction");
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.pasteLine', () => {
         var gerador = new GeradorCobol();
@@ -122,9 +121,8 @@ export function activate(_context: any) {
         commands.executeCommand("editor.action.previousMatchFindAction");
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyWordUnderCursor', () => {
-        commands.executeCommand("cursorWordRight");
-        commands.executeCommand("cursorWordLeftSelect");
-        commands.executeCommand("editor.action.clipboardCopyAction");
+        var editor = new Editor();
+        editor.clipboardCopyWord();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.replaceWordUnderCursor', () => {
         commands.executeCommand("cursorWordRight");

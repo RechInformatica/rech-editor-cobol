@@ -341,6 +341,11 @@ export class Editor {
     window.showInformationMessage(message);
   }
 
+  clipboardCopyWord() {
+    this.selectCurrentWord();
+    this.clipboardCopy();
+  }
+
   /**
    * Copies the current selection to clipboard
    */
