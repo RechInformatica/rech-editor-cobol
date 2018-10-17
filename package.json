@@ -366,6 +366,14 @@
             {
                 "command": "editor.action.moveLinesUpAction",
                 "key": "alt+shift+up"
+            },
+            {
+                "command": "editor.action.transformToLowercase",
+                "key": "ctrl+alt+l"
+            },
+            {
+                "command": "editor.action.transformToUppercase",
+                "key": "ctrl+alt+u"
             }
         ]
     },
