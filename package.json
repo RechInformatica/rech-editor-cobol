@@ -308,6 +308,10 @@
                 "key": "F11"
             },
             {
+                "command": "rech.editor.vscode.replaceLine",
+                "key": "shift+F11"
+            },
+            {
                 "command": "rech.editor.vscode.findNextParagraph",
                 "key": "ctrl+k"
             },

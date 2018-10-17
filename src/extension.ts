@@ -41,6 +41,11 @@ export function activate(_context: any) {
         var gerador = new GeradorCobol();
         gerador.pasteLine();
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.replaceLine', () => {
+        commands.executeCommand("editor.action.deleteLines");
+        var gerador = new GeradorCobol();
+        gerador.pasteLine();
+    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertStartComment', () => {
         var gerador = new GeradorCobol();
         gerador.insertStartComment();
