@@ -200,7 +200,7 @@
       "name": "constant.numeric.cobol"
     },
     {
-      "match": "(?<![-_])(?i:true|false|null|nulls)(?=\\s|\\.|\\)|$)",
+      "match": "(?<![-_])(?i:true|false|null|nulls)(?=\\s|\\.|,|\\)|$)",
       "name": "constant.language.cobol"
     },
     {
