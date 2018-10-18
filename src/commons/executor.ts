@@ -59,7 +59,7 @@ export class Executor {
         this.streamToChannel(proc.stdout, channel);
         this.streamToChannel(proc.stderr, channel);
         proc.on("exit", code => {
-          channel.append(`return code ${code.valueOf()}`);
+          channel.append(`return code ${code.valueOf()}\n\n`);
           if (onFinish) onFinish(code.valueOf());
         });
       }
