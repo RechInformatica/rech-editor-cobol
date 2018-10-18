@@ -240,7 +240,7 @@ export class Editor {
         }
       });
     });
-    await commands.executeCommand('cursorLineStart');
+    await this.cursorLineStart();
     await commands.executeCommand('cursorMove', { to: 'right', value: column });
   }
 
@@ -384,6 +384,13 @@ export class Editor {
    */
   cursorLineStart() {
     return commands.executeCommand('cursorLineStart')
+  }
+
+  /**
+   * Set cursor to end of line
+   */
+  cursorLineEnd() {
+    return commands.executeCommand('cursorLineEnd')
   }
 
   /**

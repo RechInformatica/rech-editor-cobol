@@ -26,6 +26,9 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolTo', () => {
         new GeradorCobol().to();
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolElse', () => {
+        new GeradorCobol().else();
+    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.flagGenerator', () => {
         new GeradorCobol().flagGenerator();
     }));

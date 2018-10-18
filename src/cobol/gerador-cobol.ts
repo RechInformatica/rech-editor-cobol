@@ -50,6 +50,16 @@ export class GeradorCobol {
   }
 
   /**
+   * Insert a command "Else" in a new line below
+   */
+  async else() {
+    let indentColumn = this.currentIndentLevel();
+    await this.editor.cursorLineEnd();
+    // Mount text to insert, filling with spaces to reach correct indent level before and after ELSE statement
+    await this.editor.type("\n" + " ".repeat(indentColumn - 3) + "ELSE,\n" + " ".repeat(indentColumn));
+  }
+
+  /**
    * Generate the SIM and NAO flag declaration
    */
   async flagGenerator(){
@@ -233,6 +243,14 @@ export class GeradorCobol {
     } else {
       return this.editor.type(" ");
     }
+  }
+
+  /**
+   * Return indentation level (column) of current line
+   */
+  private currentIndentLevel() {
+    // Get the line in focous
+    return this.editor.getCurrentLine().search(/\S|$/);
   }
 
   /**
