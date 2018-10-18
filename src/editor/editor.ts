@@ -358,6 +358,14 @@ export class Editor {
   }
 
   /**
+   * Replace word under the cursor with clipboard content
+   */
+  clipboardReplaceWord() {
+    this.selectCurrentWord();
+    this.clipboardPaste();
+  }
+
+  /**
    * Copies the current selection to clipboard
    */
   clipboardCopy() {

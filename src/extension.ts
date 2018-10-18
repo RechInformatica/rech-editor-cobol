@@ -114,9 +114,7 @@ export function activate(_context: any) {
         new Editor().clipboardCopyWord();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.replaceWordUnderCursor', () => {
-        commands.executeCommand("cursorWordRight");
-        commands.executeCommand("cursorWordLeftSelect");
-        commands.executeCommand("editor.action.clipboardPasteAction");
+        new Editor().clipboardReplaceWord();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos51', () => {
         new Editor().setColumn(COLUNA_VALUE - 1);
