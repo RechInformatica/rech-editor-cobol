@@ -2,17 +2,26 @@ import * as cp from "child_process";
 import { Process } from "./Process";
 import * as vscode from "vscode";
 
+// Map of created channels by name
+let channels = new Map<string, vscode.OutputChannel>(); 
 /**
  * Class to run external processes
  */
 export class Executor {
+  
   /**
    * Creates OutputChannel
    *
    * @param name Name of channel
    */
   private getOutputChannel(name: string): vscode.OutputChannel {
-    return vscode.window.createOutputChannel(name);
+    // Try to get existing channel
+    let channel = channels.get(name);
+    if (!channel) {
+      channel = vscode.window.createOutputChannel(name);
+      channels.set(name, channel);
+    }
+    return channel;
   }
 
   /**
