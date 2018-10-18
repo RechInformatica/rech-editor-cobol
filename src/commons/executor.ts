@@ -30,8 +30,8 @@ export class Executor {
   /**
    * Append output stream process buffer to outputChannell, converting chartset to Windows-1252
    * 
-   * @param data 
-   * @param channel 
+   * @param stream StreamReader child process object 
+   * @param channel OutputChannel vscode object
    */
   private streamToChannel(stream: stream.Readable, channel: vscode.OutputChannel) {    
     stream.setEncoding("binary");
@@ -41,10 +41,10 @@ export class Executor {
   /**
    * Runs process and sends intercepted output to a channel
    * 
-   * @param channel 
-   * @param command 
-   * @param options 
-   * @param onFinish 
+   * @param channel OutputChannel vscode object
+   * @param command System operational command to be executed
+   * @param options Child process options
+   * @param onFinish OnFinish callback
    */
   private runOnChannel(channel: vscode.OutputChannel, command: string, options: cp.ExecOptions,
     onFinish: (errorLevel: number) => void): Promise<{ stdout: string; stderr: string }> {
