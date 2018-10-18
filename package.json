@@ -309,11 +309,13 @@
             },
             {
                 "command": "rech.editor.vscode.tab",
-                "key": "tab"
+                "key": "tab",
+                "when": "editorLangId == COBOL && !inSnippetMode"
             },
             {
                 "command": "rech.editor.vscode.revtab",
-                "key": "shift+tab"
+                "key": "shift+tab",
+                "when": "editorLangId == COBOL && !inSnippetMode"
             },
             {
                 "command": "rech.editor.vscode.copyLine",
