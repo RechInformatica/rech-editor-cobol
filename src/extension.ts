@@ -48,6 +48,9 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertCommentLine', () => {
         new GeradorCobol().insertCommentLine();
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.insertTodo', () => {
+        new GeradorCobol().insertCommentLineTodo();
+    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertLineSeparator', () => {
         new GeradorCobol().insertLineSeparator();
     }));

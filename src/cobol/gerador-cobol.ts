@@ -2,6 +2,7 @@
 import { Editor } from '../editor/editor';
 import { RechPosition } from '../editor/rechposition';
 import * as Colunas from './colunas';
+import * as os from 'os';
 
 export class GeradorCobol {
   editor: Editor;
@@ -132,6 +133,14 @@ export class GeradorCobol {
   async insertCommentLine() {
     await this.editor.insertLineAbove();
     await this.editor.type("      *>-> ");
+  }
+
+  /**
+   * Insert a comment line above with "TODO: <username> <current date>"
+   */
+  async insertCommentLineTodo() {
+    await this.editor.insertLineAbove();
+    await this.editor.type(`      *>-> TODO:(${os.userInfo().username} ${new Date().toLocaleDateString()}): `);
   }
 
   /**

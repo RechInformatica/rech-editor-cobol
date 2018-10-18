@@ -404,6 +404,11 @@
             {
                 "command": "editor.action.transformToUppercase",
                 "key": "ctrl+alt+u"
+            },
+            {
+                "command": "rech.editor.vscode.insertTodo",
+                "key": "ctrl+shift+d",
+                "when": "editorLangId == COBOL"
             }
         ]
     },
