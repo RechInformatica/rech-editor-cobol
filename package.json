@@ -78,11 +78,11 @@
                 "editor.rulers": [
                     120
                 ],
-                "editor.detectIndentation": false,
+                "editor.detectIndentation": true,
                 "editor.tabSize": 3,
                 "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
                 "editor.trimAutoWhitespace": false,
-                "editor.useTabStops": false
+                "editor.useTabStops": true
             }
         },
         "languages": [
@@ -404,6 +404,11 @@
             {
                 "command": "editor.action.transformToUppercase",
                 "key": "ctrl+alt+u"
+            },
+            {
+                "command": "rech.editor.vscode.insertTodo",
+                "key": "ctrl+shift+d",
+                "when": "editorLangId == COBOL"
             }
         ]
     },
