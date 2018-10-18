@@ -46,7 +46,7 @@
             "type": "object",
             "title": "COBOL configuration",
             "properties": {
-                "coboleditor.tabstops": {
+                "rech.editor.vscode.tabstops": {
                     "type": "array",
                     "items": {
                         "type": "number",
@@ -145,6 +145,14 @@
             {
                 "command": "rech.editor.vscode.commit",
                 "title": "commit"
+            },
+            {
+                "command": "rech.editor.vscode.tab",
+                "title": "tab"
+            },
+            {
+                "command": "rech.editor.vscode.revtab",
+                "title": "revtab"
             },
             {
                 "command": "rech.editor.vscode.findNextParagraph",
@@ -298,6 +306,16 @@
             {
                 "command": "rech.editor.vscode.commit",
                 "key": "alt+f7"
+            },
+            {
+                "command": "rech.editor.vscode.tab",
+                "key": "tab",
+                "when": "editorLangId == COBOL && !inSnippetMode"
+            },
+            {
+                "command": "rech.editor.vscode.revtab",
+                "key": "shift+tab",
+                "when": "editorLangId == COBOL && !inSnippetMode"
             },
             {
                 "command": "rech.editor.vscode.copyLine",

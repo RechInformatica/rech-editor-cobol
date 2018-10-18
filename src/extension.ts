@@ -6,6 +6,7 @@ import { Editor } from './editor/editor';
 import { Executor } from './commons/executor';
 import Compiler from './cobol/compiler';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
+import { TabStopper } from './cobol/TabStopper';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -103,13 +104,17 @@ export function activate(_context: any) {
         commands.executeCommand("editor.action.addSelectionToNextFindMatch");
         commands.executeCommand("editor.action.previousMatchFindAction");
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.tab', () => {
+        new TabStopper().processTabKey(true);
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.revtab', () => {
+        new TabStopper().processTabKey(false);
+    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyWordUnderCursor', () => {
         new Editor().clipboardCopyWord();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.replaceWordUnderCursor', () => {
-        commands.executeCommand("cursorWordRight");
-        commands.executeCommand("cursorWordLeftSelect");
-        commands.executeCommand("editor.action.clipboardPasteAction");
+        new Editor().clipboardReplaceWord();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos51', () => {
         new Editor().setColumn(COLUNA_VALUE - 1);
