@@ -1,9 +1,12 @@
 import * as cp from "child_process";
 import { Process } from "./Process";
 import * as vscode from "vscode";
+import stream = require("stream");
 
 // Map of created channels by name
 let channels = new Map<string, vscode.OutputChannel>(); 
+// Chartset convertor
+let iconv_lite = require('iconv-lite');
 /**
  * Class to run external processes
  */
@@ -25,6 +28,17 @@ export class Executor {
   }
 
   /**
+   * Append output stream process buffer to outputChannell, converting chartset to Windows-1252
+   * 
+   * @param data 
+   * @param channel 
+   */
+  private streamToChannel(stream: stream.Readable, channel: vscode.OutputChannel) {    
+    stream.setEncoding("binary");
+    stream.on("data", data => channel.append(iconv_lite.decode(data, "WINDOWS-1252")));
+  }
+
+  /**
    * Runs process and sends intercepted output to a channel
    * 
    * @param channel 
@@ -40,10 +54,10 @@ export class Executor {
           if (error) {
             reject({ error, stdout, stderr });
           }
-          resolve({ stdout, stderr });
+          resolve({ stdout, stderr });        
         });
-        proc.stdout.on("data", data => channel.append(data.toString()));
-        proc.stderr.on("data", data => channel.append(data.toString()));
+        this.streamToChannel(proc.stdout, channel);
+        this.streamToChannel(proc.stderr, channel);
         proc.on("exit", code => {
           channel.append(`return code ${code.valueOf()}`);
           if (onFinish) onFinish(code.valueOf());
@@ -69,7 +83,7 @@ export class Executor {
       if (err.stdout) {
         channel.appendLine(err.stdout);
       }
-      channel.appendLine("executeOutputChannelfailed!");
+      channel.appendLine("executeOutputChannelfailed!\n" + err);
     });
   }
 

@@ -416,6 +416,7 @@
     },
     "dependencies": {
         "@types/q": "^1.0.0",
+        "iconv-lite": "^0.4.24",
         "q": "^1.4.1"
     },
     "devDependencies": {
