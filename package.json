@@ -414,6 +414,16 @@
                 "command": "rech.editor.vscode.insertTodo",
                 "key": "ctrl+shift+d",
                 "when": "editorLangId == COBOL"
+            },
+            {
+                "command": "rech.editor.vscode.cobolLineEndDot",
+                "key": "alt+oem_period",
+                "when": "editorLangId == COBOL"
+            },
+            {
+                "command": "rech.editor.vscode.cobolLineEndComma",
+                "key": "alt+oem_comma",
+                "when": "editorLangId == COBOL"
             }
         ]
     },

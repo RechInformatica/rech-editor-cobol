@@ -60,6 +60,25 @@ export class GeradorCobol {
   }
 
   /**
+   * Insert/toggle terminators dot/comma at end of line
+   */
+  endLineToggle(char: string) {
+    let line = this.editor.getCurrentLine();
+    let lastChar = line.charAt(line.length - 1);
+    if (lastChar == char) {
+      return;
+    }
+    // If line already ends with a terminator
+    if (lastChar == '.' || lastChar == ',') {
+      line = line.substr(0, line.length - 1) + char;
+    } else {
+      line = line + char;
+    }
+    // Replace current line with the new one mounted with the terminator
+    this.editor.setCurrentLine(line);
+  }
+
+  /**
    * Generate the SIM and NAO flag declaration
    */
   async flagGenerator(){
