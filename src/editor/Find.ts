@@ -81,12 +81,17 @@ export class Find {
       if (!new File(cacheFileName).exists()) {
         cache=false;
       }
-      // Se deve usar o cache
+      // If must to use cache
       if (cache) {
         this.findDeclarationInPreprocessedSource(term, path, cacheFileName).then((result) => {
           resolve(result);
         }).catch(() => {
-          reject()
+          // Try reprocess
+          this.findDeclarationWithPreproc(term, path, false, callbackPreproc).then((result) => {
+            resolve(result);
+          }).catch(() => {
+            reject();
+          });
         });
       } else {
         if (callbackPreproc) {
