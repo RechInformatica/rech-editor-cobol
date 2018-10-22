@@ -121,19 +121,6 @@ export class Find {
             result = new RechPosition(<number>line, <number>column, this.getFullPath(file, path.directory()));
             iterator.stop();
           }
-
-          // if (parser.isDeclaration(term, buffer)) {
-          //   let match = <RegExpMatchArray> /.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(buffer);
-          //   let file = path.fullPath();
-          //   let row = parseInt(match[1]) - 1;
-          //   if (match[2] != undefined) {
-          //     file = match[2];
-          //   }
-          //   let line = (<RegExpMatchArray>buffer.match(term)).index
-          //   // build the result
-          //   result = new RechPosition(<number>row, <number>line, this.getFullPath(file, path.directory()));
-          //   break;
-          // }
         });
         if (result != null) {
           resolve(<RechPosition>result);
