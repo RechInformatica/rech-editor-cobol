@@ -16,7 +16,7 @@ export class Find {
   static readonly FindPrevious = 2
   /** Editor */
   private editor: TextEditor;
-    
+
   /**
    * Constructor of Find
    * 
@@ -47,7 +47,6 @@ export class Find {
       });
     });
   }
-
 
   private findDeclarationInBuffer(term: string, buffer: string): RechPosition | undefined {
     let parser = new ParserCobol();
@@ -233,4 +232,5 @@ export class Find {
       return new RechPosition(lineText.lineNumber, 1);
     }
   }
+
 }

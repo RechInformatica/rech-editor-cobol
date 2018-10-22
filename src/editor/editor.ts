@@ -259,10 +259,10 @@ export class Editor {
   }
 
   /**
-   * Returns true if this file is a ruby file
+   * Returns true if this file is a copy COBOL file
    */
-  isCobol(): boolean {
-    return (this.getPath().toString().toLowerCase().endsWith(".cbl") || this.getPath().toString().toLowerCase().endsWith(".cpb"));
+  isCopy(): boolean {
+    return (this.getPath().toString().toLowerCase().endsWith(".cpy") || this.getPath().toString().toLowerCase().endsWith(".cpb"));
   }
 
   /**
@@ -442,17 +442,41 @@ export class Editor {
   /**
    * Go to declaration of the current word
    */
-  goToDeclaration() {
+  public goToDeclaration() {
+    let path;
     let term = this.getSelectionBuffer()[0]
     if (term == "") {
       term = this.getCurrentWord();
     }
-    // Se a busca é muito curta
+    // if the search too short
     if (term.length < 3) {
-      this.showInformationMessage("Search too short");
+      this.showInformationMessage("Search too short, select at least 3 characters");
       return;
-    }    
-    new Find(this.editor).findDeclaration(term, this.getPath()).then((result: RechPosition) => {
+    }
+    path = this.getPath();
+    // if the file is a copy ask the .cbl file name
+    if (this.isCopy()) {
+      
+      new Editor().showOpenDialog(this.getCurrentFileDirectory(), (cblFileName) => {
+        if (!cblFileName) {
+          return;
+        }
+        path = new Path(cblFileName);
+        this.FindDeclaration(term, path)
+      });
+      return;
+    }
+    this.FindDeclaration(term, path); 
+  }
+
+  /**
+   * Find the declaration of the word
+   * 
+   * @param term 
+   * @param path 
+   */
+  private FindDeclaration(term: string, path: Path) {
+    new Find(this.editor).findDeclaration(term, path).then((result: RechPosition) => {
       if (result.file) {
         new Editor().openFile(result.file, () => {
           new Editor().setCursor(result.line, result.column);
