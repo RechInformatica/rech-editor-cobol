@@ -56,10 +56,10 @@ export class ParserCobol {
    */
   private getDeclaracaoVariavel(line: string): string | undefined {
     // variable
-    var match = /^\s+\d\d\s+([\w\-]+)(\s+|\.).*/g.exec(line);
+    var match = /^\s+\d\d\s+([\w\-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
       // $SET CONSTANT
-      match = /^\s+\$SET\s+CONSTANT\s+([\w\-]+)\s+.*/gi.exec(line);
+      match = /^\s+\$SET\s+CONSTANT\s+([\w\-]+)\s+.*/i.exec(line);
       if (match == null) {
         return undefined;
       }
@@ -73,7 +73,7 @@ export class ParserCobol {
     * @param line 
     */
    private getDeclaracaoSelect(line: string): string | undefined {
-    var match = /^\s+SELECT ([\w\-]+)\s+ASSIGN.*/gi.exec(line);
+    var match = /^\s+SELECT ([\w\-]+)\s+ASSIGN.*/i.exec(line);
     if (match == null) {
       return undefined;
     }
@@ -87,10 +87,10 @@ export class ParserCobol {
    */
   private getDeclaracaoClasse(line: string): string | undefined {
     // IS Format
-    var match = /^\s+CLASS\s+([\w]+)\s+AS.*/gi.exec(line);
+    var match = /^\s+CLASS\s+([\w]+)\s+AS.*/i.exec(line);
     if (match == null) {
       // MF Format
-      match = /^\s+([\w]+)\s+IS\s+CLASS.*/gi.exec(line);
+      match = /^\s+([\w]+)\s+IS\s+CLASS.*/i.exec(line);
       if (match == null) {
         return undefined;
       }
@@ -108,17 +108,19 @@ export class ParserCobol {
     if (termo1 == undefined || termo2 == undefined) {
       return false;
     }
+    termo1 = termo1.toLocaleLowerCase()
+    termo2 = termo2.toLocaleLowerCase()
     if (termo1 == termo2) {
       return true;
     }
     if (termo2.indexOf("(") >= 0) {
-      let pattern = new RegExp(termo2.replace(/\(.*?\)/, "(.*)"));
+      let pattern = new RegExp(termo2.replace(/\(.*?\)/i, "(.*)"));
       if (pattern.test(termo1)) {
         return true;
       }
     }
     if (termo1.indexOf("(") >= 0) {
-      let pattern = new RegExp(termo1.replace(/\(.*?\)/, "(.*)"));      
+      let pattern = new RegExp(termo1.replace(/\(.*?\)/i, "(.*)"));      
       if (pattern.test(termo1)) {
         return true;
       }
