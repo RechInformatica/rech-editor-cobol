@@ -1,6 +1,7 @@
 import { Path } from '../commons/path';
 import { File } from '../commons/file';
 import { Scan } from '../commons/Scan';
+import { Preproc } from '../commons/preproc';
 import { TextEditor, TextLine, TextDocument } from 'vscode';
 import { ParserCobol } from '../cobol/parsercobol'
 import { RechPosition } from './rechposition'
@@ -13,7 +14,6 @@ export class Find {
   static readonly FindNext = 1
   /** Busca Anteriores */
   static readonly FindPrevious = 2
-  
   /** Editor */
   private editor: TextEditor;
     
@@ -40,14 +40,6 @@ export class Find {
         resolve(result);
         return;
       }
-      // for (let lineNumber = 0; lineNumber < document.lineCount; lineNumber++) {
-      //   if (parser.isDeclaration(term, document.lineAt(lineNumber).text)) {
-      //     let match = <RegExpMatchArray> document.lineAt(lineNumber).text.match(term);
-      //     resolve(new RechPosition(lineNumber, <number>match.index));
-      //     return;
-      //   }
-      // }
-
       this.findDeclarationWithPreproc(term, path, true).then((result) => {
         resolve(result);
       }).catch(() => {
@@ -60,7 +52,7 @@ export class Find {
   private findDeclarationInBuffer(term: string, buffer: string): RechPosition | undefined {
     let parser = new ParserCobol();
     let result = undefined;
-    new Scan(buffer).scan(new RegExp(term, 'g'), (iterator: any) => {
+    new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
       if (parser.isDeclaration(term, iterator.lineContent)) {
         result = new RechPosition(iterator.row, iterator.column);
         iterator.stop();
@@ -90,7 +82,17 @@ export class Find {
           reject()
         });
       } else {
-        reject();
+        // Run preprocess and load the output buffet
+        let preproc = new Preproc();
+        preproc.setPath(path);
+        preproc.addOptions(["-scc", "-sco", "-" + "is", "-as=" + cacheFileName]);
+        preproc.exec().then(() => {
+          this.findDeclarationWithPreproc(term, path, true).then((result) => {
+            resolve(result);
+          }).catch(() => {
+            reject();
+          });
+        });
       }
     }); 
   }
@@ -108,15 +110,15 @@ export class Find {
       new File(tmpFile).loadBuffer().then((buffers: string[]) => {
         let result = null;
         let buffer = buffers.toString();
-        new Scan(buffer).scan(new RegExp(term, 'g'), (iterator: any) => {
+        new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
           if (parser.isDeclaration(term, iterator.lineContent)) {
             let match = <RegExpMatchArray> /.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
-            let file = path.fullPath();
             let line = parseInt(match[1]) - 1;
+            let file = path.fullPath();
             if (match[2] != undefined) {
               file = match[2];
             }
-            let column = (<RegExpMatchArray>iterator.lineContent.match(term)).index
+            let column = iterator.column;
             // build the result
             result = new RechPosition(<number>line, <number>column, this.getFullPath(file, path.directory()));
             iterator.stop();
