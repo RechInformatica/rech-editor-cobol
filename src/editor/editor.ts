@@ -18,8 +18,8 @@ export class Editor {
   /**
    * Returns the file path
    */
-  getPath() {
-    return new Path(this.editor.document.fileName).toString();
+  getPath(): Path {
+    return new Path(this.editor.document.fileName);
   }
 
   /**
@@ -247,17 +247,23 @@ export class Editor {
   /**
   * Returns true if this file is a bat file
   */
-  isBat() {
-    return this.getPath().toLowerCase().endsWith(".bat");
+  isBat(): boolean {
+    return this.getPath().toString().toLowerCase().endsWith(".bat");
   }
 
   /**
    * Returns true if this file is a ruby file
    */
-  isRuby() {
-    return this.getPath().toLowerCase().endsWith(".rb");
+  isRuby(): boolean {
+    return this.getPath().toString().toLowerCase().endsWith(".rb");
   }
 
+  /**
+   * Returns true if this file is a ruby file
+   */
+  isCobol(): boolean {
+    return (this.getPath().toString().toLowerCase().endsWith(".cbl") || this.getPath().toString().toLowerCase().endsWith(".cpb"));
+  }
 
   /**
    * Types a text in editor
@@ -437,13 +443,26 @@ export class Editor {
    * Go to declaration of the current word
    */
   goToDeclaration() {
-    let term = this.getCurrentWord();
-    let positionsToReturn = new Find(this.editor).findPositionOfDeclaration(term);
-    if (positionsToReturn) {
-      this.setCursorPosition(new RechPosition(positionsToReturn.line, positionsToReturn.character));
-    } else {
-      this.showInformationMessage("Declaration of '" + term + "' not found");
+    let term = this.getSelectionBuffer()[0]
+    if (term == "") {
+      term = this.getCurrentWord();
     }
+    // Se a busca é muito curta
+    if (term.length < 3) {
+      this.showInformationMessage("Search too short");
+      return;
+    }    
+    new Find(this.editor).findDeclaration(term, this.getPath()).then((result: RechPosition) => {
+      if (result.file) {
+        new Editor().openFile(result.file, () => {
+          new Editor().setCursor(result.line, result.column);
+        });
+      } else {
+        this.setCursorPosition(new RechPosition(result.line, result.column));
+      }
+    }).catch(() => {
+      this.showInformationMessage("Declaration of '" + term + "' not found");
+    });
   }
 
   /**
@@ -517,7 +536,7 @@ export class Editor {
     // Select whole lines of the selection range
     this.selectWholeLines();
     //Indent the selection range
-    new Indenta().indenta(alignment, this.getSelectionBuffer(), this.getPath(), (buffer) => {
+    new Indenta().indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), (buffer) => {
       this.replaceSelection(buffer.toString());
       // Restore original cursor if necessary. This won't keep selection on entire line after a single line indentation
       if (restoreCursor != null) {
