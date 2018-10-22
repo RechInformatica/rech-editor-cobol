@@ -456,7 +456,6 @@ export class Editor {
     path = this.getPath();
     // if the file is a copy ask the .cbl file name
     if (this.isCopy()) {
-      
       new Editor().showOpenDialog(this.getCurrentFileDirectory(), (cblFileName) => {
         if (!cblFileName) {
           return;
@@ -476,7 +475,9 @@ export class Editor {
    * @param path 
    */
   private FindDeclaration(term: string, path: Path) {
-    new Find(this.editor).findDeclaration(term, path).then((result: RechPosition) => {
+    new Find(this.editor).findDeclaration(term, path, () => {
+      this.showInformationMessage("preprocessing " + path);
+    }).then((result: RechPosition) => {
       if (result.file) {
         new Editor().openFile(result.file, () => {
           new Editor().setCursor(result.line, result.column);

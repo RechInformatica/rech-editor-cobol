@@ -29,9 +29,10 @@ export class Find {
 /**
  * Find the declaration of the term
  * 
+ * @param path 
  * @param term 
  */
-  public findDeclaration(term: string, path: Path): Promise<RechPosition> {
+  public findDeclaration(term: string, path: Path, callbackPreproc?: () => any): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       // Busca declaração no próprio documento
       let document = this.editor.document;
@@ -40,7 +41,7 @@ export class Find {
         resolve(result);
         return;
       }
-      this.findDeclarationWithPreproc(term, path, true).then((result) => {
+      this.findDeclarationWithPreproc(term, path, true, callbackPreproc).then((result) => {
         resolve(result);
       }).catch(() => {
         reject();  
@@ -48,6 +49,12 @@ export class Find {
     });
   }
 
+  /**
+   * Find the declaration in atual buffer
+   * 
+   * @param term 
+   * @param buffer 
+   */
   private findDeclarationInBuffer(term: string, buffer: string): RechPosition | undefined {
     let parser = new ParserCobol();
     let result = undefined;
@@ -59,6 +66,7 @@ export class Find {
     });
     return result;
   }
+
   /**
    * Find the declaration of term with preprocessed source
    * 
@@ -66,7 +74,7 @@ export class Find {
    * @param path 
    * @param cache 
    */
-  private findDeclarationWithPreproc(term: string, path: Path, cache: boolean): Promise<RechPosition> {
+  private findDeclarationWithPreproc(term: string, path: Path, cache: boolean, callbackPreproc?: () => any): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       let cacheFileName = "c:\\tmp\\PREPROC\\" + path.fileName();
       // Se o arquivo de cache não existe, não tenta ler dele
@@ -81,6 +89,9 @@ export class Find {
           reject()
         });
       } else {
+        if (callbackPreproc) {
+          callbackPreproc();
+        }
         // Run preprocess and load the output buffet
         let preproc = new Preproc();
         preproc.setPath(path);
