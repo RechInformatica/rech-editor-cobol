@@ -79,9 +79,28 @@ export class GeradorCobol {
   }
 
   /**
+   * Invert operators of COBOL MOVE command in all selected lines
+   */
+  async invertMoveOperators() {
+    this.editor.selectWholeLines();
+    let selectedBuffer = this.editor.getSelectionBuffer();
+    /**
+     * Regex to find all COBOL MOVE commands in current selection. There are 4 elements between () used to replace 
+     *    1º - Spaces starting line. These keep the current indent level
+     *    2º - 1st MOVE's operator. Used to invert with the 2nd MOVE's operator
+     *    3º - 2nd MOVE's operator. Used to invert with the 1st MOVE's operator
+     *    4º - Other elements endind line (dot/comma, inline comments and line break character)
+     */
+    let regex = /^( +)MOVE +([a-zA-Z0-9_\-\(\)]+) +TO +([a-zA-Z0-9_\-\(\)]+)(.*$)/gmi;
+    let replacedBuffer = selectedBuffer[0].replace(regex, "$1MOVE $3 TO $2$4");
+    await this.editor.replaceSelection(replacedBuffer);
+    await this.editor.indent("N");
+  }
+
+  /**
    * Generate the SIM and NAO flag declaration
    */
-  async flagGenerator(){
+  async flagGenerator() {
     // Verify if the current line is a variable declaration
     if (!await this.isVariableDeclaration()){
         this.editor.showInformationMessage("Isso não é uma declaração de variável!");

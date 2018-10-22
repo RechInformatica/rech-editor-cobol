@@ -107,7 +107,7 @@ export class Editor {
    * Returns the current word
    */
   getCurrentWord() {
-    let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-9_\\-])+/g);
+    let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-9_\-])+/g);
     if (range === undefined) {
       return '';
     }

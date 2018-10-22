@@ -127,7 +127,7 @@
                 "title": "TO"
             },
             {
-                "command": "rech.editor.vscode.flagGenerator",
+                "command": "rech.editor.vscode.CobolFlagGenerator",
                 "title": "flagGenerator"
             },
             {
@@ -277,7 +277,7 @@
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.flagGenerator",
+                "command": "rech.editor.vscode.CobolFlagGenerator",
                 "key": "ctrl+alt+b",
                 "when": "editorLangId == COBOL"
             },
@@ -445,6 +445,11 @@
             {
                 "command": "rech.editor.vscode.cobolLineEndComma",
                 "key": "alt+oem_comma",
+                "when": "editorLangId == COBOL"
+            },
+            {
+                "command": "rech.editor.vscode.cobolInvertMoveOperators",
+                "key": "ctrl+alt+d",
                 "when": "editorLangId == COBOL"
             }
         ]
