@@ -35,7 +35,10 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolLineEndComma', () => {
         new GeradorCobol().endLineToggle(',');
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.flagGenerator', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInvertMoveOperators', () => {
+        new GeradorCobol().invertMoveOperators();
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.CobolFlagGenerator', () => {
         new GeradorCobol().flagGenerator();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyLine', () => {
