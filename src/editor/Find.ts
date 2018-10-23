@@ -1,7 +1,6 @@
 import { Path } from '../commons/path';
 import { File } from '../commons/file';
 import { Scan } from '../commons/Scan';
-import { Preproc } from '../commons/preproc';
 import { TextEditor, TextLine, TextDocument } from 'vscode';
 import { ParserCobol } from '../cobol/parsercobol'
 import { RechPosition } from './rechposition'
