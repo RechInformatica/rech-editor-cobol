@@ -1,4 +1,4 @@
-import { Executor } from "../commons/executor";
+// import { Executor } from "../commons/executor";
 import { Editor } from "../editor/editor";
 
 /**
@@ -14,13 +14,13 @@ export default class Compiler {
         var fileName = new Editor().getCurrentFileName();
         let args = this.buildArgs(fileName);
         let commandLine = "cmd.exe /c F:\\BAT\\CO.bat " + baseName + args;
-        new Executor().runAsyncOutputChannel("co", commandLine, (errorLevel: number) => {
-            if (errorLevel == 0) {
-            new Editor().showInformationMessage(`${baseName} compilado!`);
-            } else {
-            new Editor().showWarningMessage(`${baseName} compilado com erro!`);
-            }
-        });
+        // new Executor().runAsyncOutputChannel("co", commandLine, (errorLevel: number) => {
+        //     if (errorLevel == 0) {
+        //     new Editor().showInformationMessage(`${baseName} compilado!`);
+        //     } else {
+        //     new Editor().showWarningMessage(`${baseName} compilado com erro!`);
+        //     }
+        // });
         return;
     }
 
