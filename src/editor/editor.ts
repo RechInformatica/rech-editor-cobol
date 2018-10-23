@@ -482,6 +482,7 @@ export class Editor {
    */
   private FindDeclaration(term: string, path: Path, cacheFileName: string) {
     new Find(this.editor.document.getText()).findDeclaration(term, path, cacheFileName, () => {
+    new Find(this.editor).findDeclaration(term, path, cacheFileName, () => {
       this.showInformationMessage("preprocessing " + path);
         Editor.sourceExpander.setPath(path).buildCommandLine(["-scc", "-sco", "-" + "is", "-as=" + cacheFileName]);
         return Editor.sourceExpander.exec();

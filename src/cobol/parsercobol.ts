@@ -108,8 +108,8 @@ export class ParserCobol {
     if (termo1 == undefined || termo2 == undefined) {
       return false;
     }
-    termo1 = termo1.toLocaleLowerCase()
-    termo2 = termo2.toLocaleLowerCase()
+    termo1 = termo1.toLocaleLowerCase();
+    termo2 = termo2.toLocaleLowerCase();
     if (termo1 == termo2) {
       return true;
     }
