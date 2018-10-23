@@ -3,14 +3,18 @@ import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri,
 import { Find } from './find';
 import { RechPosition } from './rechposition';
 import { Indenta } from '../indent/indent';
+import { GenericExecuter } from '../commons/genericexecuter';
 import * as path from 'path';
 
 /**
  * Class to manipulate vscode editor
  */
 export class Editor {
+  /** Text editor */
   private editor: TextEditor;
-
+  /** Source expander function */
+  private static sourceExpander: GenericExecuter;
+  
   constructor() {
     this.editor = <TextEditor>this.getActiveEditor();
   }
@@ -461,11 +465,13 @@ export class Editor {
           return;
         }
         path = new Path(cblFileName);
-        this.FindDeclaration(term, path)
+        let cacheFileName = "c:\\tmp\\PREPROC\\" + path.fileName();
+        this.FindDeclaration(term, path, cacheFileName)
       });
       return;
     }
-    this.FindDeclaration(term, path); 
+    let cacheFileName = "c:\\tmp\\PREPROC\\" + path.fileName();
+    this.FindDeclaration(term, path, cacheFileName); 
   }
 
   /**
@@ -474,9 +480,11 @@ export class Editor {
    * @param term 
    * @param path 
    */
-  private FindDeclaration(term: string, path: Path) {
-    new Find(this.editor).findDeclaration(term, path, () => {
+  private FindDeclaration(term: string, path: Path, cacheFileName: string) {
+    new Find(this.editor).findDeclaration(term, path, cacheFileName, () => {
       this.showInformationMessage("preprocessing " + path);
+        Editor.sourceExpander.setPath(path).buildCommandLine(["-scc", "-sco", "-" + "is", "-as=" + cacheFileName]);
+        return Editor.sourceExpander.exec();
     }).then((result: RechPosition) => {
       if (result.file) {
         new Editor().openFile(result.file, () => {
@@ -619,6 +627,16 @@ export class Editor {
   */
   private getActiveEditor() {
     return window.activeTextEditor;
+  }
+
+  
+  /**
+   * Define the source expander function
+   * 
+   * @param sourceExpander 
+   */
+  public static setSourceExpander(sourceExpander: GenericExecuter) {
+    this.sourceExpander = sourceExpander
   }
 
 }

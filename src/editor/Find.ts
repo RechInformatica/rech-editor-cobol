@@ -32,7 +32,7 @@ export class Find {
  * @param path 
  * @param term 
  */
-  public findDeclaration(term: string, path: Path, callbackPreproc?: () => any): Promise<RechPosition> {
+  public findDeclaration(term: string, path: Path, cacheFileName: string, callbackSourceExpander?: () => Promise<any>): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       // Busca declaração no próprio documento
       let document = this.editor.document;
@@ -41,7 +41,7 @@ export class Find {
         resolve(result);
         return;
       }
-      this.findDeclarationWithPreproc(term, path, true, callbackPreproc).then((result) => {
+      this.findDeclarationWithPreproc(term, path, cacheFileName, true, callbackSourceExpander).then((result) => {
         resolve(result);
       }).catch(() => {
         reject();  
@@ -74,9 +74,8 @@ export class Find {
    * @param path 
    * @param cache 
    */
-  private findDeclarationWithPreproc(term: string, path: Path, cache: boolean, callbackPreproc?: () => any): Promise<RechPosition> {
+  private findDeclarationWithPreproc(term: string, path: Path, cacheFileName: string, cache: boolean, callbackSourceExpander?: () => Promise<any>): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
-      let cacheFileName = "c:\\tmp\\PREPROC\\" + path.fileName();
       // Se o arquivo de cache não existe, não tenta ler dele
       if (!new File(cacheFileName).exists()) {
         cache=false;
@@ -87,27 +86,22 @@ export class Find {
           resolve(result);
         }).catch(() => {
           // Try reprocess
-          this.findDeclarationWithPreproc(term, path, false, callbackPreproc).then((result) => {
+          this.findDeclarationWithPreproc(term, path, cacheFileName, false, callbackSourceExpander).then((result) => {
             resolve(result);
           }).catch(() => {
             reject();
           });
         });
       } else {
-        if (callbackPreproc) {
-          callbackPreproc();
-        }
-        // Run preprocess and load the output buffet
-        let preproc = new Preproc();
-        preproc.setPath(path);
-        preproc.addOptions(["-scc", "-sco", "-" + "is", "-as=" + cacheFileName]);
-        preproc.exec().then(() => {
-          this.findDeclarationWithPreproc(term, path, true).then((result) => {
-            resolve(result);
-          }).catch(() => {
-            reject();
+        if (callbackSourceExpander) {
+          callbackSourceExpander().then(() => {
+            this.findDeclarationWithPreproc(term, path, cacheFileName, true).then((result) => {
+              resolve(result);
+            }).catch(() => {
+              reject();
+            });
           });
-        });
+        }
       }
     }); 
   }
