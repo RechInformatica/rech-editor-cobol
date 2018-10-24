@@ -136,8 +136,8 @@ export function sendExternalPreprocExecution(uri: string, cacheFileName: string)
  */
 export function createLocation(uri: string, position: RechPosition) {
 	let firstCharRange = Range.create(
-		Position.create(position.line, position.line),
-		Position.create(position.line, position.line)
+		Position.create(position.line, position.column),
+		Position.create(position.line, position.column)
 	);
 	let fileUri = uri.replace(/\\\\/g, "/").replace("F:", "file:///F%3A");
 	return Location.create(fileUri, firstCharRange);
