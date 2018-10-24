@@ -1,6 +1,6 @@
 'use babel';
 
-class Path {
+export class Path {
   path: string;
   
   constructor(path: any) {
@@ -53,5 +53,3 @@ class Path {
   }
 
 }
-
-export {Path};

@@ -1,8 +1,6 @@
 import { Path } from '../commons/path';
 import { File } from '../commons/file';
 import { Scan } from '../commons/Scan';
-// import { TextEditor, TextLine, TextDocument } from 'vscode';
-import { TextEditor, TextLine, TextDocument } from 'vscode';
 import { ParserCobol } from '../cobol/parsercobol'
 import { RechPosition } from './rechposition'
 
@@ -23,16 +21,17 @@ export class Find {
    * @param editor 
    */
   constructor(text: string) {
-      this.text = text;
+    this.text = text;
   }
 
-/**
- * Find the declaration of the term
- * 
- * @param path 
- * @param term 
- */
-  public findDeclaration(term: string, path: Path, cacheFileName: string, callbackSourceExpander?: () => Promise<any>): Promise<RechPosition> {
+
+  /**
+   * Find the declaration of the term
+   * 
+   * @param path 
+   * @param term 
+   */
+  public findDeclaration(term: string, path: Path, cacheFileName: string, callbackSourceExpander?: () => Thenable<any>): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       // Busca declaração no próprio documento
       let result = this.findDeclarationInBuffer(term, this.text);
@@ -43,7 +42,7 @@ export class Find {
       this.findDeclarationWithPreproc(term, path, cacheFileName, true, callbackSourceExpander).then((result) => {
         resolve(result);
       }).catch(() => {
-        reject();  
+        reject();
       });
     });
   }
@@ -73,11 +72,12 @@ export class Find {
    * @param path 
    * @param cache 
    */
-  private findDeclarationWithPreproc(term: string, path: Path, cacheFileName: string, cache: boolean, callbackSourceExpander?: () => Promise<any>): Promise<RechPosition> {
+  private findDeclarationWithPreproc(term: string, path: Path, cacheFileName: string, cache: boolean, callbackSourceExpander?: () => Thenable<any>): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
+      let processou = false;
       // Se o arquivo de cache não existe, não tenta ler dele
       if (!new File(cacheFileName).exists()) {
-        cache=false;
+        cache = false;
       }
       // If must to use cache
       if (cache) {
@@ -92,17 +92,22 @@ export class Find {
           });
         });
       } else {
-        if (callbackSourceExpander) {
+        if (callbackSourceExpander && !processou) {
           callbackSourceExpander().then(() => {
+            processou = true;
             this.findDeclarationWithPreproc(term, path, cacheFileName, true).then((result) => {
               resolve(result);
             }).catch(() => {
               reject();
             });
+          }, () => {
+            reject();
           });
+        } else {
+          reject();
         }
       }
-    }); 
+    });
   }
 
   /**
@@ -120,7 +125,7 @@ export class Find {
         let buffer = buffers.toString();
         new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
           if (parser.isDeclaration(term, iterator.lineContent)) {
-            let match = <RegExpMatchArray> /.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
+            let match = <RegExpMatchArray>/.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
             let line = parseInt(match[1]) - 1;
             let file = path.fullPath();
             if (match[2] != undefined) {
@@ -142,7 +147,7 @@ export class Find {
       });
     });
   }
-  
+
   /**
    * Return the full path of a file
    */
@@ -153,93 +158,5 @@ export class Find {
     return "F:\\SIGER\\DES\\FON\\" + file;
   }
 
-  /**
-   * Find the line positions of the regex
-   * 
-   * @param regex 
-   * @param startLineToFind 
-   */
-  // public findPositions(regex: RegExp, direction: number, startLineToFind?:TextLine, returnFrst?: boolean): RechPosition[] | undefined {
-    // let startLine = 0;
-    // if (startLineToFind) {
-    //   startLine = startLineToFind.lineNumber;
-    // }
-    // let document = this.editor.document;
-    // // If direction next
-    // if (direction == Find.FindNext){
-    //   return this.findNextPositions(regex, startLine, document, returnFrst);
-    // } else {
-    // // If direction previous
-    //   return this.findPreviousPositions(regex, startLine, document, returnFrst);
-    // }
-  // }
-
-  /**
-   * Find the next positions
-   * 
-   * @param regex 
-   * @param startLine 
-   * @param document 
-   * @param returnFrst 
-   */
-  // private findNextPositions(regex: RegExp, startLine: number, document: TextDocument, returnFrst?: boolean): RechPosition[] | undefined {
-    // let positionsToReturn = new Array<RechPosition>();
-    // // If the start lina is greater than the last line of the document
-    // if (startLine > document.lineCount){
-    //   return;
-    // }
-    // for (let lineNumber = startLine; lineNumber < document.lineCount; lineNumber++) {
-    //   let p = this.findMacherAtLine(regex, lineNumber, document);
-    //   if (p) {
-    //     positionsToReturn.push(p)
-    //     if (returnFrst){
-    //       break;
-    //     }
-    //   } 
-    // }
-    // if (positionsToReturn.length > 0) {
-    //   return(positionsToReturn);
-    // }
-  // }
-
-  /**
-   * * Find the previous positions
-   * 
-   * @param regex 
-   * @param startLine 
-   * @param document 
-   * @param returnFrst 
-   */
-  // private findPreviousPositions(regex: RegExp, startLine: number, document: TextDocument, returnFrst?: boolean): RechPosition[] | undefined {
-    // let positionsToReturn = new Array<RechPosition>();
-    // for (let lineNumber = startLine; lineNumber > 0; lineNumber--) {
-    //   let p = this.findMacherAtLine(regex, lineNumber, document);
-    //   if (p) {
-    //     positionsToReturn.push(p)
-    //     if (returnFrst){
-    //       break;
-    //     }
-    //   } 
-    // }
-    // if (positionsToReturn.length > 0) {
-    //   return(positionsToReturn);
-    // }
-  // }
-
-  /**
-   * Find the macher position at line
-   * 
-   * @param regex 
-   * @param lineNumber 
-   * @param document 
-   */
-  // private findMacherAtLine(regex: RegExp, lineNumber: number, document: TextDocument): RechPosition | undefined {
-    // let lineText = document.lineAt(lineNumber);
-    // let matcher = lineText.text.match(regex);
-    // if (matcher) {
-    //   //Temporariamente está retornando apenas a posição inicial da linha onde encontrou o conteúdo
-    //   return new RechPosition(lineText.lineNumber, 1);
-    // }
-  // }
 
 }

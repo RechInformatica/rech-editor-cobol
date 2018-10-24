@@ -7,22 +7,26 @@ import { Executor } from './commons/executor';
 import Compiler from './cobol/compiler';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
 import { TabStopper } from './cobol/TabStopper';
-import Client from './lsp/client';
+import { Client } from './lsp/client';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(_context: any) {
-    let context = <ExtensionContext> _context;
+    let context = <ExtensionContext>_context;
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "rech-test-vscode" is now active!');
-    new Client().startServerAndEstablishCommunication(_context);
+    Client.startServerAndEstablishCommunication(_context);
     //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     //
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolMove', () => {
+        if (Editor.getSourceExpander()) {
+            new Editor().showInformationMessage("Encontrou o source expander no editor");
+        } else {
+            new Editor().showInformationMessage("Não encontrou o source expander no editor");
+        };
         new GeradorCobol().move();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolTo', () => {
@@ -89,7 +93,7 @@ export function activate(_context: any) {
         editor.closeActiveEditor();
         new Executor().runAsync("start cmd.exe /c F:\\BAT\\Checkout.bat  " + baseName);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.compile', () => {        
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.compile', () => {
         new Compiler().compileCurrentFile();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findNextParagraph', () => {
@@ -153,6 +157,7 @@ export function activate(_context: any) {
     }));
 }
 
+
 export * from "./commons/executor";
 export * from "./commons/file";
 export * from "./commons/path";
@@ -163,3 +168,4 @@ export * from "./editor/rechposition";
 export * from "./commons/genericexecuter";
 export * from "./indent/indent";
 export * from "./cobol/parsercobol";
+export * from "./editor/Find";

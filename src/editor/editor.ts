@@ -198,7 +198,7 @@ export class Editor {
    *
    * @param Positions
    */
- setCursors(positions: RechPosition[]) {
+  setCursors(positions: RechPosition[]) {
     let ranges: Range[] = new Array();
     positions.forEach(position => {
       let p = new Position(position.line, position.column);
@@ -471,7 +471,7 @@ export class Editor {
       return;
     }
     let cacheFileName = "c:\\tmp\\PREPROC\\" + path.fileName();
-    this.FindDeclaration(term, path, cacheFileName); 
+    this.FindDeclaration(term, path, cacheFileName);
   }
 
   /**
@@ -481,23 +481,26 @@ export class Editor {
    * @param path 
    */
   private FindDeclaration(term: string, path: Path, cacheFileName: string) {
-    new Find(this.editor.document.getText()).findDeclaration(term, path, cacheFileName, () => {
-    new Find(this.editor).findDeclaration(term, path, cacheFileName, () => {
-      this.showInformationMessage("preprocessing " + path);
-        Editor.sourceExpander.setPath(path).buildCommandLine(["-scc", "-sco", "-" + "is", "-as=" + cacheFileName]);
-        return Editor.sourceExpander.exec();
-    }).then((result: RechPosition) => {
-      if (result.file) {
-        new Editor().openFile(result.file, () => {
-          new Editor().setCursor(result.line, result.column);
-        });
-      } else {
-        this.setCursorPosition(new RechPosition(result.line, result.column));
-      }
-    }).catch(() => {
-      this.showInformationMessage("Declaration of '" + term + "' not found");
-    });
+    if (term && path && cacheFileName) {
+      console.log("here");
+    }
+  //   new Find(this.editor.document.getText()).findDeclaration(term, path, cacheFileName, () => {
+  //     this.showInformationMessage("preprocessing " + path);
+  //     return Editor.sourceExpander.exec(cacheFileName);
+  //   }).then((result: RechPosition) => {
+  //     if (result.file) {
+  //       new Editor().openFile(result.file, () => {
+  //         new Editor().setCursor(result.line, result.column);
+  //       });
+  //     } else {
+  //       this.setCursorPosition(new RechPosition(result.line, result.column));
+  //     }
+  //   }).catch(() => {
+  //     this.showInformationMessage("Declaration of '" + term + "' not found");
+  //   });
   }
+
+
 
   /**
    * Go to the next blank line
@@ -550,7 +553,7 @@ export class Editor {
    * @param callback callback executed when Enter is pressed
    * @param valuedef a default value to prefill in the input box
    */
-  showInputBox(placeholder: string, prompt: string, callback: (info: string | undefined) => any, valuedef?: string,) {
+  showInputBox(placeholder: string, prompt: string, callback: (info: string | undefined) => any, valuedef?: string) {
     window.showInputBox({
       value: valuedef,
       placeHolder: placeholder,
@@ -603,7 +606,7 @@ export class Editor {
   /**
    * Close the active editor
    */
-  closeActiveEditor(){
+  closeActiveEditor() {
     commands.executeCommand('workbench.action.closeActiveEditor');
   }
 
@@ -638,6 +641,15 @@ export class Editor {
    */
   public static setSourceExpander(sourceExpander: GenericExecuter) {
     this.sourceExpander = sourceExpander
+  }
+  
+  /**
+   * Define the source expander function
+   * 
+   * @param sourceExpander 
+   */
+  public static getSourceExpander() {
+    return this.sourceExpander
   }
 
 }

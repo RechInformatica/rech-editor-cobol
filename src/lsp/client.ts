@@ -1,24 +1,19 @@
-import { workspace, ExtensionContext, DefinitionProvider, TextDocument, Location, Position, languages, DocumentFilter } from 'vscode';
+import { workspace, ExtensionContext, DocumentFilter } from 'vscode';
+import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
+import { Editor } from '../editor/editor';
 import * as path from 'path';
-import {
-	LanguageClient,
-	LanguageClientOptions,
-	ServerOptions,
-	TransportKind
-} from 'vscode-languageclient';
 
-const COBOL_MODE: DocumentFilter = { language: 'COBOL', scheme: 'file' };
 /**
  * Language Server Provider client
  */
-export default class Client {
+export class Client {
 
-	private client: LanguageClient | undefined;
+	private static client: LanguageClient | undefined;
 
 	/**
      * Starts the LSP server and establishes communication between them
      */
-	startServerAndEstablishCommunication(context: ExtensionContext) {
+	public static startServerAndEstablishCommunication(context: ExtensionContext) {
 		// The server is implemented in node
 		let serverModule = context.asAbsolutePath(
 			path.join('out', 'lsp', 'server.js')
@@ -46,27 +41,44 @@ export default class Client {
 				fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
 			}
 		};
-
 		// Create the language client and start the client.
-		this.client = new LanguageClient(
+		Client.client = new LanguageClient(
 			'languageServerExample',
 			'Language Server Example',
 			serverOptions,
 			clientOptions
 		);
-
 		// Start the client. This will also launch the server
-		this.client.start();
+		Client.client.start();
+		Client.client.onReady().then(() => {
+
+			if (Client.client) {
+				Client.client.onRequest("custom/runPreproc", (files: string[]) => {
+
+					return new Promise<string>((resolve, reject) => {
+						let currentFile = files[0];
+						let cacheFile = files[1];
+						Editor.getSourceExpander().setPath(currentFile).exec(cacheFile).then(() => {
+							resolve();
+						}).catch(() => {
+							reject();
+						});
+					});
+					
+				});
+			}
+
+		});
 	}
 
 	/**
 	 * 
 	 */
 	stopClient() {
-		if (!this.client) {
+		if (!Client.client) {
 			return undefined;
 		}
-		return this.client.stop();
+		return Client.client.stop();
 	}
 
 }
