@@ -1,18 +1,15 @@
-import { Path } from '../commons/path';
-import { File } from '../commons/file';
-import { Scan } from '../commons/Scan';
 import { TextEditor, TextLine, TextDocument } from 'vscode';
-import { ParserCobol } from '../cobol/parsercobol'
 import { RechPosition } from './rechposition'
 
 /**
  * Class to scan and find thing in editor
  */
-export class Find {
+export class PositionFinder {
+
   /** Busca próximos */
-  static readonly FindNext = 1
+  public static readonly FindNext = 1
   /** Busca Anteriores */
-  static readonly FindPrevious = 2
+  public static readonly FindPrevious = 2
   /** Editor */
   private editor: TextEditor;
 
@@ -23,7 +20,7 @@ export class Find {
    */
   constructor(editor: TextEditor) {
     this.editor = editor;
-}
+  }
 
   /**
    * Find the line positions of the regex
@@ -38,7 +35,7 @@ export class Find {
     }
     let document = this.editor.document;
     // If direction next
-    if (direction == Find.FindNext) {
+    if (direction == PositionFinder.FindNext) {
       return this.findNextPositions(regex, startLine, document, returnFrst);
     } else {
       // If direction previous

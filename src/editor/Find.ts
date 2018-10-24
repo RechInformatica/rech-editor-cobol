@@ -8,10 +8,7 @@ import { RechPosition } from './rechposition'
  * Class to scan and find thing in editor
  */
 export class Find {
-  /** Busca próximos */
-  static readonly FindNext = 1
-  /** Busca Anteriores */
-  static readonly FindPrevious = 2
+
   /** Editor text*/
   private text: string;
 

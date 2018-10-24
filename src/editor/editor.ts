@@ -1,10 +1,10 @@
 import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
-import { Find } from './find';
 import { RechPosition } from './rechposition';
 import { Indenta } from '../indent/indent';
 import { GenericExecuter } from '../commons/genericexecuter';
 import * as path from 'path';
+import { PositionFinder } from './PositionFinder';
 
 /**
  * Class to manipulate vscode editor
@@ -423,104 +423,45 @@ export class Editor {
    * Go to the next paragraph
    */
   findNextParagraph() {
-    // let positionsToReturn = new Find(this.editor.document.getText()).findPositions(/^\s{7}[\w\-]+\./g, Find.FindNext, this.getCurrentLineNumber(1), true);
-    // if (positionsToReturn) {
-    //   this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
-    // } else {
-    //   this.showInformationMessage("Next paragraph not found");
-    // }
+    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-]+\./g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    if (positionsToReturn) {
+      this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
+    } else {
+      this.showInformationMessage("Next paragraph not found");
+    }
   }
 
   /**
    * Go to the previous paragraph
    */
   findPreviousParagraph() {
-    // let positionsToReturn = new Find(this.editor.document.getText()).findPositions(/^\s{7}[\w\-]+\./g, Find.FindPrevious, this.getCurrentLineNumber(-1), true);
-    // if (positionsToReturn) {
-    //   this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
-    // } else {
-    //   this.showInformationMessage("Previous paragraph not found");
-    // }
+    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-]+\./g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    if (positionsToReturn) {
+      this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
+    } else {
+      this.showInformationMessage("Previous paragraph not found");
+    }
   }
-
-  /**
-   * Go to declaration of the current word
-   */
-  public goToDeclaration() {
-    let path;
-    let term = this.getSelectionBuffer()[0]
-    if (term == "") {
-      term = this.getCurrentWord();
-    }
-    // if the search too short
-    if (term.length < 3) {
-      this.showInformationMessage("Search too short, select at least 3 characters");
-      return;
-    }
-    path = this.getPath();
-    // if the file is a copy ask the .cbl file name
-    if (this.isCopy()) {
-      new Editor().showOpenDialog(this.getCurrentFileDirectory(), (cblFileName) => {
-        if (!cblFileName) {
-          return;
-        }
-        path = new Path(cblFileName);
-        let cacheFileName = "c:\\tmp\\PREPROC\\" + path.fileName();
-        this.FindDeclaration(term, path, cacheFileName)
-      });
-      return;
-    }
-    let cacheFileName = "c:\\tmp\\PREPROC\\" + path.fileName();
-    this.FindDeclaration(term, path, cacheFileName);
-  }
-
-  /**
-   * Find the declaration of the word
-   * 
-   * @param term 
-   * @param path 
-   */
-  private FindDeclaration(term: string, path: Path, cacheFileName: string) {
-    if (term && path && cacheFileName) {
-      console.log("here");
-    }
-  //   new Find(this.editor.document.getText()).findDeclaration(term, path, cacheFileName, () => {
-  //     this.showInformationMessage("preprocessing " + path);
-  //     return Editor.sourceExpander.exec(cacheFileName);
-  //   }).then((result: RechPosition) => {
-  //     if (result.file) {
-  //       new Editor().openFile(result.file, () => {
-  //         new Editor().setCursor(result.line, result.column);
-  //       });
-  //     } else {
-  //       this.setCursorPosition(new RechPosition(result.line, result.column));
-  //     }
-  //   }).catch(() => {
-  //     this.showInformationMessage("Declaration of '" + term + "' not found");
-  //   });
-  }
-
-
 
   /**
    * Go to the next blank line
    */
   findNextBlankLine() {
-    // // Find a next blank line
-    // let positionsToReturn = new Find(this.editor.document.getText()).findPositions(/^\s*$/g, Find.FindNext, this.getCurrentLineNumber(1), true);
-    // // If not found a blank line or the line found is the last line
-    // if (positionsToReturn == undefined || positionsToReturn[0].line >= (this.editor.document.lineCount - 1)) {
-    //   this.showInformationMessage("Next blank line not found");
-    //   return;
-    // }
-    //Find the next line after a blank line with content
-    // positionsToReturn = new Find(this.editor.document.getText()).findPositions(/[^\s]/g, Find.FindNext, this.editor.document.lineAt(positionsToReturn[0].line), true);
-    // // If returned a position and the line found is not the last line from document
-    // if (positionsToReturn && positionsToReturn[0].line < (this.editor.document.lineCount - 1)) {
-    //   this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 0));
-    // } else {
-    //   this.showInformationMessage("Next blank line not found");
-    // }
+    // Find a next blank line
+    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s*$/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    // If not found a blank line or the line found is the last line
+    if (positionsToReturn == undefined || positionsToReturn[0].line >= (this.editor.document.lineCount - 1)) {
+      this.showInformationMessage("Next blank line not found");
+      return;
+    }
+    // Find the next line after a blank line with content
+    positionsToReturn = new PositionFinder(this.editor).findPositions(/[^\s]/g, PositionFinder.FindNext, this.editor.document.lineAt(positionsToReturn[0].line), true);
+    // If returned a position and the line found is not the last line from document
+    if (positionsToReturn && positionsToReturn[0].line < (this.editor.document.lineCount - 1)) {
+      this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 0));
+    } else {
+      this.showInformationMessage("Next blank line not found");
+    }
   }
 
   /**
@@ -528,20 +469,20 @@ export class Editor {
    */
   findPreviousBlankLine() {
     // Find a previous blank line
-    // let positionsToReturn = new Find(this.editor.document.getText()).findPositions(/^\s*$/g, Find.FindPrevious, this.getCurrentLineNumber(-1), true);
-    // // If not found a blank line or the line found is the last line
-    // if (positionsToReturn == undefined) {
-    //   this.showInformationMessage("Previous blank line not found");
-    //   return;
-    // }
-    //Find the previous line before a blank line with content
-    // positionsToReturn = new Find(this.editor.document.getText()).findPositions(/[^\s]/g, Find.FindPrevious, this.editor.document.lineAt(positionsToReturn[0].line), true);
-    // // If returned a position and the line found is not the last line from document
-    // if (positionsToReturn) {
-    //   this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 0));
-    // } else {
-    //   this.showInformationMessage("Previous blank line not found");
-    // }
+    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s*$/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    // If not found a blank line or the line found is the last line
+    if (positionsToReturn == undefined) {
+      this.showInformationMessage("Previous blank line not found");
+      return;
+    }
+    // Find the previous line before a blank line with content
+    positionsToReturn = new PositionFinder(this.editor).findPositions(/[^\s]/g, PositionFinder.FindPrevious, this.editor.document.lineAt(positionsToReturn[0].line), true);
+    // If returned a position and the line found is not the last line from document
+    if (positionsToReturn) {
+      this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 0));
+    } else {
+      this.showInformationMessage("Previous blank line not found");
+    }
   }
 
   /**

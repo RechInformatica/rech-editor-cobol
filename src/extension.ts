@@ -13,8 +13,7 @@ import { Client } from './lsp/client';
 // your extension is activated the very first time the command is executed
 export function activate(_context: any) {
     let context = <ExtensionContext>_context;
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
+    // Starts the LSP Client
     Client.startServerAndEstablishCommunication(_context);
     //
     // The command has been defined in the package.json file
@@ -157,6 +156,10 @@ export function activate(_context: any) {
     }));
 }
 
+// this method is called when your extension is deactivated
+export function deactivate() {
+    Client.stopClient();
+}
 
 export * from "./commons/executor";
 export * from "./commons/file";

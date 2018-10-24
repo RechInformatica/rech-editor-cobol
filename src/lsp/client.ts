@@ -2,12 +2,14 @@ import { workspace, ExtensionContext, DocumentFilter } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
 import { Editor } from '../editor/editor';
 import * as path from 'path';
+import { configure } from 'vscode/lib/testrunner';
 
 /**
  * Language Server Provider client
  */
 export class Client {
 
+	/** Client instance of the Language Server Provider (LSP) */
 	private static client: LanguageClient | undefined;
 
 	/**
@@ -31,7 +33,6 @@ export class Client {
 				options: debugOptions
 			}
 		};
-
 		// Options to control the language client
 		let clientOptions: LanguageClientOptions = {
 			// Register the server for plain text documents
@@ -51,30 +52,47 @@ export class Client {
 		// Start the client. This will also launch the server
 		Client.client.start();
 		Client.client.onReady().then(() => {
-
-			if (Client.client) {
-				Client.client.onRequest("custom/runPreproc", (files: string[]) => {
-
-					return new Promise<string>((resolve, reject) => {
-						let currentFile = files[0];
-						let cacheFile = files[1];
-						Editor.getSourceExpander().setPath(currentFile).exec(cacheFile).then(() => {
-							resolve();
-						}).catch(() => {
-							reject();
-						});
-					});
-					
-				});
-			}
-
+			Client.configureClientWhenReady();
 		});
 	}
 
 	/**
-	 * 
+	 * Configures the LSP client when it's ready for execution
 	 */
-	stopClient() {
+	private static configureClientWhenReady() {
+		if (Client.client) {
+			Client.client.onRequest("custom/runPreproc", (files: string[]) => {
+				return Client.createPreprocExecutionPromise(files);
+			});
+		}
+	}
+
+	/**
+	 * Creates a promise for Cobol Preprocessor execution
+	 * 
+	 * @param files file array with necessary files 
+	 */
+	private static createPreprocExecutionPromise(files: string[]) {
+		return new Promise<string>((resolve, reject) => {
+			let currentFile = files[0];
+			let cacheFile = files[1];
+			let executor = Editor.getSourceExpander();
+			if (executor) {
+				executor.setPath(currentFile).exec(cacheFile).then(() => {
+					resolve();
+				}).catch(() => {
+					reject();
+				});
+			} else {
+				reject();
+			}
+		});
+	}
+
+	/**
+	 * Stops the LSP client if it has ben previously started
+	 */
+	public static stopClient() {
 		if (!Client.client) {
 			return undefined;
 		}

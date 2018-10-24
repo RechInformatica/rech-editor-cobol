@@ -4,14 +4,12 @@
  * ------------------------------------------------------------------------------------------ */
 'use strict';
 
-// import {ExtensionContext, languages, DocumentFilter, DefinitionProvider, TextDocument, Location, Position} from "vscode";
 import {
 	createConnection,
 	TextDocuments,
 	ProposedFeatures,
 	DidChangeConfigurationNotification,
 	Location,
-	Definition,
 	TextDocumentPositionParams,
 	Range,
 	Position
@@ -19,7 +17,7 @@ import {
 import { Find } from '../editor/find';
 import { Path } from '../commons/path';
 import { RechPosition } from '../editor/rechposition';
-import { reject, isRejected } from 'q';
+import { CobolWordFinder } from '../commons/CobolWordFinder';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -37,7 +35,6 @@ connection.onInitialize(() => {
 	};
 });
 
-
 connection.onInitialized(() => {
 	// Register for all configuration changes.
 	connection.client.register(
@@ -49,31 +46,9 @@ connection.onInitialized(() => {
 connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location> | Thenable<undefined> | undefined => {
 	let fullDocument = documents.get(params.textDocument.uri);
 	if (fullDocument) {
-		var path = new Path(params.textDocument.uri);
-		var text = fullDocument.getText();
-		var currentLine = text.split("\n")[params.position.line];
-		var cobolWordRegex = /([a-zA-Z0-9_\-])+/g;
-		var result: any;
-		while ((result = cobolWordRegex.exec(currentLine)) !== null) {
-			let start = result.index;
-			let end = start + result[0].length;
-			if (start <= params.position.character && params.position.character <= end) {
-				let cacheFileName = "c:\\tmp\\PREPROC\\" + path.fileName();
-				return new Promise<Location>((resolve, reject) => {
-					new Find(text).findDeclaration(result[0], path, cacheFileName, () => {
-						var files = [params.textDocument.uri, cacheFileName];
-						return connection.sendRequest("custom/runPreproc", [files]);
-					}).then((position: RechPosition) => {
-						if (position.file) {
-							resolve(createLocation(position.file, position));
-						}
-						else resolve(createLocation(params.textDocument.uri, position));
-					}).catch(() => {
-						reject();
-					});
-				});
-			}
-		}
+		let text = fullDocument.getText();
+		let word = getLineText(text, params.position.line, params.position.character);
+		return createPromiseForWordDeclaration(text, word, params.textDocument.uri);
 	} else {
 		return undefined;
 	}
@@ -84,6 +59,74 @@ connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location>
 documents.listen(connection);
 // Listen on the connection
 connection.listen();
+
+
+/**
+ * Returns the specified line within the document text
+ * 
+ * @param documentText document text
+ * @param line line
+ * @param column column
+ */
+export function getLineText(documentText: string, line: number, column: number) {
+	var currentLine = documentText.split("\n")[line];
+	return new CobolWordFinder().findWordAt(currentLine, column);
+}
+
+/**
+ * Creates a promise to find the specified word declaration
+ * 
+ * @param documentFullText full text of the current document
+ * @param word the target word which declaration will be searched
+ * @param uri URI of the current file open in editor
+ */
+export function createPromiseForWordDeclaration(documentFullText: string, word: string, uri: string, ) {
+	// Creates an external promise so the reject function can be called when no definition
+	// is found for the specified word
+	return new Promise<Location>((resolve, reject) => {
+		// Cache filename where the declaration is searched before
+		// invoking Cobol preprocessor
+		let cacheFileName = buildCacheFileName(uri);
+		// Creates a promise to find the word declaration
+		new Find(documentFullText).findDeclaration(word, new Path(uri), cacheFileName, () => {
+			// Runs Cobol preprocessor on client-side
+			return sendExternalPreprocExecution(uri, cacheFileName);
+		}).then((position: RechPosition) => {
+			// If the delcaration was found on an external file
+			if (position.file) {
+				// Retrieves the location on the external file
+				resolve(createLocation(position.file, position));
+			} else {
+				// Retrieves the location on the current file
+				resolve(createLocation(uri, position));
+			}
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+
+/**
+ * Builds Cobol preprocessor cache filename
+ *  
+ * @param uri current URI of the file open in editor
+ */
+export function buildCacheFileName(uri: string) {
+	var path = new Path(uri);
+	return "c:\\tmp\\PREPROC\\" + path.fileName();
+}
+
+/**
+ * Sends a request to the client for Cobol preprocessor execution
+ * 
+ * @param uri current URI of the file open in editor
+ * @param cacheFileName Cache filename where the declaration is searched before
+ * invoking Cobol preprocessor
+ */
+export function sendExternalPreprocExecution(uri: string, cacheFileName: string) {
+	var files = [uri, cacheFileName];
+	return connection.sendRequest("custom/runPreproc", [files]);
+}
 
 /**
  * Creates a location with the specified uri and position
