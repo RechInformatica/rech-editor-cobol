@@ -10,16 +10,18 @@ export default class Compiler {
      * Compiles the file currently open on editor
      */
     compileCurrentFile() {
-        var baseName = new Editor().getCurrentFileBaseName();
-        new Editor().showInformationMessage(`Compilando ${baseName}...`);
-        var fileName = new Editor().getCurrentFileName();
+        let editor = new Editor();
+        editor.saveActiveEditor();
+        var baseName = editor.getCurrentFileBaseName();
+        editor.showInformationMessage(`Compilando ${baseName}...`);
+        var fileName = editor.getCurrentFileName();
         let args = this.buildArgs(fileName);
         let commandLine = "cmd.exe /c F:\\BAT\\CO.bat " + baseName + args;
         new Executor().runAsyncOutputChannel("co", commandLine, (errorLevel: number) => {
             if (errorLevel == 0) {
-            new Editor().showInformationMessage(`${baseName} compilado!`);
+                editor.showInformationMessage(`${baseName} compilado!`);
             } else {
-            new Editor().showWarningMessage(`${baseName} compilado com erro!`);
+                editor.showWarningMessage(`${baseName} compilado com erro!`);
             }
         });
         return;

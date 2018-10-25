@@ -552,6 +552,13 @@ export class Editor {
   }
 
   /**
+   * Save file on active editor
+   */
+  saveActiveEditor() {
+    commands.executeCommand('workbench.action.files.save');
+  }
+
+  /**
    * TODO:
    * findFilePath
    * insertSnippetAboveCurrentLine
