@@ -325,12 +325,12 @@
 	"REC DEFAULT" : {
 		"prefix": "REC DEFAULT",
 		"body": "*>(( REC DEFAULT ))\n",
-		"description": "Indica qual enumerado È default"
+		"description": "Indica qual enumerado √© default"
 	},
 	"REC REC AJUSTAR_TIPO_REGISTRO" : {
 		"prefix": "REC REC AJUSTAR_TIPO_REGISTRO",
 		"body": "*>(( REC AJUSTAR_TIPO_REGISTRO ))\n",
-		"description": "Indica que esta tabela est· com as chaves de tipo de registro inv·lidas"
+		"description": "Indica que esta tabela est√° com as chaves de tipo de registro inv√°lidas"
 	},
 	"REC BROWSE" : {
 		"prefix": "REC BROWSE",
@@ -340,47 +340,47 @@
 	"REC CHAVE_ID" : {
 		"prefix": "REC CHAVE_ID",
 		"body": "*>(( REC CHAVE_ID ))\n",
-		"description": "Indica que a chave do registro È ID"
+		"description": "Indica que a chave do registro √© ID"
 	},
 	"REC ARQUIVO_VIRTUAL" : {
 		"prefix": "REC ARQUIVO_VIRTUAL",
 		"body": "*>(( REC ARQUIVO_VIRTUAL ))\n",
-		"description": "Indica que essa tabela È uma FD virtual"
+		"description": "Indica que essa tabela √© uma FD virtual"
 	},
 	"REC TIPO_TABELA" : {
 		"prefix": "REC TIPO_TABELA",
 		"body": "*>(( REC TIPO_TABELA=$1 ))\n",
-		"description": "Indica se a tabela È CADASTRO ou MOVIMENTO"
+		"description": "Indica se a tabela √© CADASTRO ou MOVIMENTO"
 	},
 	"REC CHAVE_NAO_SUGERE_ORDEM" : {
 		"prefix": "REC CHAVE_NAO_SUGERE_ORDEM",
 		"body": "*>(( REC CHAVE_NAO_SUGERE_ORDEM ))\n",
-		"description": "Indica que chave n„o pode ser sugerida na rotina de melhor ordem"
+		"description": "Indica que chave n√£o pode ser sugerida na rotina de melhor ordem"
 	},
 	"REC CHAVE_EDITADA" : {
 		"prefix": "REC CHAVE_EDITADA",
 		"body": "*>(( REC CHAVE_EDITADA=$1 ))\n",
-		"description": "Indica que a chave ser· usada na rotina de ediÁ„o de chave no lugar da chave original"
+		"description": "Indica que a chave ser√° usada na rotina de edi√ß√£o de chave no lugar da chave original"
 	},
 	"REC COMPLEMENTARES" : {
 		"prefix": "REC COMPLEMENTARES",
 		"body": "*>(( REC COMPLEMENTARES ))\n",
-		"description": "Indica que campos abaixo s„o complementares"
+		"description": "Indica que campos abaixo s√£o complementares"
 	},
 	"REC COPY" : {
 		"prefix": "REC COPY",
 		"body": "*>(( REC COPY XXX1 XXX2 ))\n",
-		"description": "Indica que prÛxima linha È copy"
+		"description": "Indica que pr√≥xima linha √© copy"
 	},
 	"REC DATE_TIME" : {
 		"prefix": "REC DATE_TIME",
 		"body": "*>(( REC DATE_TIME ))\n",
-		"description": "Indica que data e hora s„o usadas em conjunto"
+		"description": "Indica que data e hora s√£o usadas em conjunto"
 	},
 	"REC DEFAULT2" : {
 		"prefix": "REC DEFAULT",
 		"body": "*>(( REC DEFAULT ))\n",
-		"description": "Indica qual enumerado È default"
+		"description": "Indica qual enumerado √© default"
 	},
 	"REC DEFAULT3" : {
 		"prefix": "REC DEFAULT",
@@ -390,12 +390,12 @@
 	"REC FILLER_MINIMO" : {
 		"prefix": "REC FILLER_MINIMO",
 		"body": "*>(( REC FILLER_MINIMO=$1 ))\n",
-		"description": "Tamanho mÔøΩnimo que o filler deve ter"
+		"description": "Tamanho m√Ø¬ø¬Ωnimo que o filler deve ter"
 	},
 	"REC FILLER_MINIMO2" : {
 		"prefix": "REC FILLER_MINIMO",
 		"body": "*>(( REC FILLER_MINIMO=$1 RNS=99999/9))\n",
-		"description": "Tamanho mÔøΩnimo que o filler deve ter, com RNS de convers„o"
+		"description": "Tamanho m√Ø¬ø¬Ωnimo que o filler deve ter, com RNS de convers√£o"
 	},
 	"REC FILLER" : {
 		"prefix": "REC FILLER",
@@ -405,7 +405,7 @@
 	"REC MAIUSCULO" : {
 		"prefix": "REC MAIUSCULO",
 		"body": "*>(( REC MAIUSCULO ))\n",
-		"description": "Indica que o campo sÛ pode ter conte˙do em mai˙sculo"
+		"description": "Indica que o campo s√≥ pode ter conte√∫do em mai√∫sculo"
 	},
 	"REC MAS=ARQUIVO" : {
 		"prefix": "REC MAS=ARQUIVO",
@@ -425,7 +425,7 @@
 	"REC MAS=CEI" : {
 		"prefix": "REC MAS=CEI",
 		"body": "*>(( REC MASCARA=CEI ))\n",
-		"description": "Campo de cadastro especÌfico do INSS"
+		"description": "Campo de cadastro espec√≠fico do INSS"
 	},
 	"REC MAS=CEP" : {
 		"prefix": "REC MAS=CEP",
@@ -435,12 +435,12 @@
 	"REC MAS=CIDADE" : {
 		"prefix": "REC MAS=CIDADE",
 		"body": "*>(( REC MASCARA=CIDADE ))\n",
-		"description": "Campo de descriÁ„o da cidade"
+		"description": "Campo de descri√ß√£o da cidade"
 	},
 	"REC MAS=CLIENTE" : {
 		"prefix": "REC MAS=CLIENTE",
 		"body": "*>(( REC MASCARA=CLIENTE ))\n",
-		"description": "Campo de cÛdigo de cliente"
+		"description": "Campo de c√≥digo de cliente"
 	},
 	"REC MAS=CNPJ" : {
 		"prefix": "REC MAS=CNPJ",
@@ -450,12 +450,12 @@
 	"REC MAS=COMBINACAO" : {
 		"prefix": "REC MAS=COMBINACAO",
 		"body": "*>(( REC MASCARA=COMBINACAO ))\n",
-		"description": "Campo de combinaÁ„o"
+		"description": "Campo de combina√ß√£o"
 	},
 	"REC MAS=CONFIGURACAO" : {
 		"prefix": "REC MAS=CONFIGURACAO",
 		"body": "*>(( REC MASCARA=CONFIGURACAO ))\n",
-		"description": "Campo de configuraÁ„o do produto"
+		"description": "Campo de configura√ß√£o do produto"
 	},
 	"REC MAS=CPF" : {
 		"prefix": "REC MAS=CPF",
@@ -470,12 +470,12 @@
 	"REC MAS=DIRETORIO" : {
 		"prefix": "REC MAS=DIRETORIO",
 		"body": "*>(( REC MASCARA=DIRETORIO ))\n",
-		"description": "Campo de diretÛrio"
+		"description": "Campo de diret√≥rio"
 	},
 	"REC MAS=DOM.GRP.TRAB" : {
 		"prefix": "REC MAS=DOM.GRP.TRAB",
 		"body": "*>(( REC MASCARA=DOM.GRP.TRAB ))\n",
-		"description": "DomÌnio ou grupo de trabalho"
+		"description": "Dom√≠nio ou grupo de trabalho"
 	},
 	"REC MAS=DSD.DOC" : {
 		"prefix": "REC MAS=DSD.DOC",
@@ -490,12 +490,12 @@
 	"REC MAS=ENDERECO" : {
 		"prefix": "REC MAS=ENDERECO",
 		"body": "*>(( REC MASCARA=ENDERECO ))\n",
-		"description": "Campo de endereÁo"
+		"description": "Campo de endere√ßo"
 	},
 	"REC MAS=ENDERECO_LONGO" : {
 		"prefix": "REC MAS=ENDERECO_LONGO",
 		"body": "*>(( REC MASCARA=ENDERECO_LONGO ))\n",
-		"description": "Campo de endereÁo longo"
+		"description": "Campo de endere√ßo longo"
 	},
 	"REC MAS=FILIAL.FPA" : {
 		"prefix": "REC MAS=FILIAL.FPA",
@@ -505,7 +505,7 @@
 	"REC FK_1N=" : {
 		"prefix": "REC FK_1N=",
 		"body": "*>(( REC FK_1N=$1XXX ))\n",
-		"description": "Indica a tabela que ser· feito o filtro 1:N"
+		"description": "Indica a tabela que ser√° feito o filtro 1:N"
 	},
 	"REC MAS=FONE" : {
 		"prefix": "REC MAS=FONE",
@@ -515,17 +515,17 @@
 	"REC MAS=FORNECEDOR" : {
 		"prefix": "REC MAS=FORNECEDOR",
 		"body": "*>(( REC MASCARA=FORNECEDOR ))\n",
-		"description": "Campo de cÛdigo de fornecedor"
+		"description": "Campo de c√≥digo de fornecedor"
 	},
 	"REC MAS=INSC.EST" : {
 		"prefix": "REC MAS=INSC.EST",
 		"body": "*>(( REC MASCARA=INSC.EST ))\n",
-		"description": "Campo de inscriÁ„o estadual"
+		"description": "Campo de inscri√ß√£o estadual"
 	},
 	"REC MAS=INSC.MUN" : {
 		"prefix": "REC MAS=INSC.MUN",
 		"body": "*>(( REC MASCARA=INSC.MUN ))\n",
-		"description": "Campo de inscriÁ„o municipal"
+		"description": "Campo de inscri√ß√£o municipal"
 	},
 	"REC MAS=MEMO" : {
 		"prefix": "REC MAS=MEMO",
@@ -545,12 +545,12 @@
 	"REC MAS=NRO.DOC" : {
 		"prefix": "REC MAS=NRO.DOC",
 		"body": "*>(( REC MASCARA=NRO.DOC ))\n",
-		"description": "Campo de n˙mero do docto"
+		"description": "Campo de n√∫mero do docto"
 	},
 	"REC MAS=NRO.NOTA" : {
 		"prefix": "REC MAS=NRO.NOTA",
 		"body": "*>(( REC MASCARA=NRO.NOTA ))\n",
-		"description": "Campo de n˙mero da nota"
+		"description": "Campo de n√∫mero da nota"
 	},
 	"REC MAS=PIS" : {
 		"prefix": "REC MAS=PIS",
@@ -560,12 +560,12 @@
 	"REC MAS=REFERENCIA" : {
 		"prefix": "REC MAS=REFERENCIA",
 		"body": "*>(( REC MASCARA=REFERENCIA ))\n",
-		"description": "Campo de referÔøΩncia do produto"
+		"description": "Campo de refer√Ø¬ø¬Ωncia do produto"
 	},
 	"REC MAS=NUM.REG.EST" : {
 		"prefix": "REC MAS=NUM.REG.EST",
 		"body": "*>(( REC MASCARA=NUM.REG.ESTOQUE ))\n",
-		"description": "Campo de n˙mero do registro do estoque"
+		"description": "Campo de n√∫mero do registro do estoque"
 	},
 	"REC MAS=QTD.GRADE" : {
 		"prefix": "REC MAS=QTD.GRADE",
@@ -575,12 +575,12 @@
 	"REC MAS=SER.ECF" : {
 		"prefix": "REC MAS=SER.ECF",
 		"body": "*>(( REC MASCARA=SER.ECF ))\n",
-		"description": "Campo de n˙mero de sÈrie da ECF"
+		"description": "Campo de n√∫mero de s√©rie da ECF"
 	},
 	"REC MAS=SER.NOTA" : {
 		"prefix": "REC MAS=SER.NOTA",
 		"body": "*>(( REC MASCARA=SER.NOTA ))\n",
-		"description": "Campo de sÈrie da nota"
+		"description": "Campo de s√©rie da nota"
 	},
 	"REC MAS=SKYPE" : {
 		"prefix": "REC MAS=SKYPE",
@@ -595,57 +595,57 @@
 	"REC MAS=USU.COD" : {
 		"prefix": "REC MAS=USU.COD",
 		"body": "*>(( REC MASCARA=USU.COD ))\n",
-		"description": "cÛdigo do usu·rio"
+		"description": "c√≥digo do usu√°rio"
 	},
 	"REC MAS=USU.REDE" : {
 		"prefix": "REC MAS=USU.REDE",
 		"body": "*>(( REC MASCARA=USU.REDE ))\n",
-		"description": "Usu·rio da rede"
+		"description": "Usu√°rio da rede"
 	},
 	"REC MAS=WWW" : {
 		"prefix": "REC MAS=WWW",
 		"body": "*>(( REC MASCARA=WWW ))\n",
-		"description": "Campo de endereÁo de internet"
+		"description": "Campo de endere√ßo de internet"
 	},
 	"REC MINUSCULO=" : {
 		"prefix": "REC MINUSCULO=",
 		"body": "*>(( REC MINUSCULO ))\n",
-		"description": "Indica que o campo sÛ pode ter conte˙do em min˙sculo"
+		"description": "Indica que o campo s√≥ pode ter conte√∫do em min√∫sculo"
 	},
 	"REC NOTBD" : {
 		"prefix": "REC NOTBD",
 		"body": "*>(( REC NOTBD ))\n",
-		"description": "NÌvel n„o pode ir para o banco de dados"
+		"description": "N√≠vel n√£o pode ir para o banco de dados"
 	},
 	"REC NOTCOMPLEMENTARES" : {
 		"prefix": "REC NOTCOMPLEMENTARES",
 		"body": "*>(( REC NOTCOMPLEMENTARES ))\n",
-		"description": "Indica que campos abaixo n„o s„o complementares"
+		"description": "Indica que campos abaixo n√£o s√£o complementares"
 	},
 	"REC NOTCOPY" : {
 		"prefix": "REC NOTCOPY",
 		"body": "*>(( REC NOTCOPY ))\n",
-		"description": "Indica que n„o deve importar o copy"
+		"description": "Indica que n√£o deve importar o copy"
 	},
 	"REC NOTDIC" : {
 		"prefix": "REC NOTDIC",
 		"body": "*>(( REC NOTDIC ))\n",
-		"description": "NÌvel n„o pode ir para o dicion·rio de dados"
+		"description": "N√≠vel n√£o pode ir para o dicion√°rio de dados"
 	},
 	"REC NOTENUMERADO" : {
 		"prefix": "REC NOTENUMERADO",
 		"body": "*>(( REC NOTENUMERADO ))\n",
-		"description": "Campo n„o pode ser enumerado"
+		"description": "Campo n√£o pode ser enumerado"
 	},
 	"REC NOTGERADOR" : {
 		"prefix": "REC NOTGERADOR",
 		"body": "*>(( REC NOTGERADOR ))\n",
-		"description": "NÌvel n„o pode ir para o gerador"
+		"description": "N√≠vel n√£o pode ir para o gerador"
 	},
 	"REC NOTIMPORT" : {
 		"prefix": "REC NOTIMPORT",
 		"body": "*>(( REC NOTIMPORT ))\n",
-		"description": "Tabela n„o pode ser importada no dicion·rio"
+		"description": "Tabela n√£o pode ser importada no dicion√°rio"
 	},
 	"REC OVA_FK=" : {
 		"prefix": "REC OVA_FK=",
@@ -660,12 +660,12 @@
 	"REC PERIODO" : {
 		"prefix": "REC PERIODO",
 		"body": "*>(( REC PERIODO ))\n",
-		"description": "Indica que campo È somente de perÌodo"
+		"description": "Indica que campo √© somente de per√≠odo"
 	},
 	"REC REGISTRO" : {
 		"prefix": "REC REGISTRO",
 		"body": "*>(( REC REGISTRO=$1999-X---XX---XXXX ))\n",
-		"description": "Indica tipo de registro e a descriÁ„o"
+		"description": "Indica tipo de registro e a descri√ß√£o"
 	},
 	"REC SUBSTCAMPOS" : {
 		"prefix": "REC SUBSTCAMPOS",
@@ -690,12 +690,12 @@
 	"REC TIME" : {
 		"prefix": "REC TIME",
 		"body": "*>(( REC TIME=HHMMSSCC$1 ))\n",
-		"description": "Informar a m·scara do campo hora"
+		"description": "Informar a m√°scara do campo hora"
 	},
 	"REC TAMANHO_VARIAVEL" : {
 		"prefix": "REC TAMANHO_VARIAVEL",
 		"body": "*>(( REC TAMANHO_VARIAVEL ))\n",
-		"description": "Indica que possui arquivo tamanho vari·vel"
+		"description": "Indica que possui arquivo tamanho vari√°vel"
 	},
 	"REC CTREE=" : {
 		"prefix": "REC CTREE=",
@@ -704,27 +704,27 @@
 	},
 	"RECDOC" : {
 		"prefix": "RECDOC",
-		"body": "      *>/**\n      *> $1\n      *>\n      *> @param  X---X par‚metro\n      *> @return X---X SaÌda\n      *> @throws X---X Erro\n      *>*/\n",
-		"description": "DocumentaÁ„o RechDoc"
+		"body": "      *>/**\n      *> $1\n      *>\n      *> @param  X---X par√¢metro\n      *> @return X---X Sa√≠da\n      *> @throws X---X Erro\n      *>*/\n",
+		"description": "Documenta√ß√£o RechDoc"
 	},
 	"RECHDOC" : {
 		"prefix": "RECHDOC",
-		"body": "      *>/**\n      *> $1\n      *>\n      *> @param  X---X par‚metro\n      *> @return X---X SaÌda\n      *> @throws X---X Erro\n      *>*/\n",
-		"description": "DocumentaÁ„o RechDoc"
+		"body": "      *>/**\n      *> $1\n      *>\n      *> @param  X---X par√¢metro\n      *> @return X---X Sa√≠da\n      *> @throws X---X Erro\n      *>*/\n",
+		"description": "Documenta√ß√£o RechDoc"
 	},
 	"@param" : {
 		"prefix": "@param",
-		"body": "@param $1 <DescriÔøΩÔøΩo>\n",
-		"description": "ag RechDoc de par‚metro"
+		"body": "@param $1 <Descri√Ø¬ø¬Ω√Ø¬ø¬Ωo>\n",
+		"description": "ag RechDoc de par√¢metro"
 	},
 	"@return" : {
 		"prefix": "@return",
-		"body": "@return $1 <DescriÔøΩÔøΩo>\n",
+		"body": "@return $1 <Descri√Ø¬ø¬Ω√Ø¬ø¬Ωo>\n",
 		"description": "ag RechDoc de retorno"
 	},
 	"@throws" : {
 		"prefix": "@throws",
-		"body": "@throws $1 <DescriÔøΩÔøΩo>\n",
+		"body": "@throws $1 <Descri√Ø¬ø¬Ω√Ø¬ø¬Ωo>\n",
 		"description": "ag RechDoc de status de retorno"
 	},
 	"@enum" : {
@@ -735,7 +735,7 @@
 	"@optional" : {
 		"prefix": "@optional",
 		"body": "   @optional$1\n",
-		"description": "ag RechDoc de par‚metro opcional"
+		"description": "ag RechDoc de par√¢metro opcional"
 	},
 	"@default" : {
 		"prefix": "@default",
@@ -744,7 +744,7 @@
 	},
 	"SEARCH" : {
 		"prefix": "SEARCH",
-		"body": "      *>-> Busca ... na tabela de ...\n           SEARCH ALL             <Nome_Tabela>\n      *>-> Se chegou ao fim da busca\n              AT END\n                 ...\n      *>-> Se encontrou\n              WHEN <condiÔøΩÔøΩo>\n                 NEXT             SENTENCE,\n           END-SEARCH.\n",
+		"body": "      *>-> Busca ... na tabela de ...\n           SEARCH ALL             <Nome_Tabela>\n      *>-> Se chegou ao fim da busca\n              AT END\n                 ...\n      *>-> Se encontrou\n              WHEN <condi√Ø¬ø¬Ω√Ø¬ø¬Ωo>\n                 NEXT             SENTENCE,\n           END-SEARCH.\n",
 		"description": "Busca em uma tabela"
 	},
 	"STRING" : {
@@ -810,7 +810,7 @@
 	"FUN LENGTH" : {
 		"prefix": "FUN LENGTH",
 		"body": "FUNCTION LENGTH ($1)\n",
-		"description": "Retorna um inteiro igual ao comprimento da vari·vel em argument-1"
+		"description": "Retorna um inteiro igual ao comprimento da vari√°vel em argument-1"
 	},
 	"FUN DATE" : {
 		"prefix": "FUN DATE",
@@ -820,17 +820,17 @@
 	"FUN UPPER" : {
 		"prefix": "FUN UPPER",
 		"body": "FUNCTION UPPER-CASE ($1)\n",
-		"description": "Retorna o alfanumÈricos de argument-1 em mai˙sculas"
+		"description": "Retorna o alfanum√©ricos de argument-1 em mai√∫sculas"
 	},
 	"FUN LOWER" : {
 		"prefix": "FUN LOWER",
 		"body": "FUNCTION LOWER-CASE ($1)\n",
-		"description": "Retorna o alfanumÈricos de argument-1 em min˙sculas"
+		"description": "Retorna o alfanum√©ricos de argument-1 em min√∫sculas"
 	},
 	"FUN MOD" : {
 		"prefix": "FUN MOD",
 		"body": "FUNCTION MOD ($1)\n",
-		"description": "Retorna o resto da divis„o entre argument-1 e argument-2"
+		"description": "Retorna o resto da divis√£o entre argument-1 e argument-2"
 	},
 	"FUN INTEGER" : {
 		"prefix": "FUN INTEGER",
@@ -845,17 +845,17 @@
 	"FUN NUMVAL" : {
 		"prefix": "FUN NUMVAL",
 		"body": "FUNCTION NUMVAL ($1)\n",
-		"description": "Retorna um valor numÈrico para o valor alfanumÈricos de argument-1"
+		"description": "Retorna um valor num√©rico para o valor alfanum√©ricos de argument-1"
 	},
 	"FUN LOG10" : {
 		"prefix": "FUN LOG10",
 		"body": "FUNCTION LOG10 ($1)\n",
-		"description": "Retorna um valor numÈrico aproximado para o logaritmo de base 10 de argument-1"
+		"description": "Retorna um valor num√©rico aproximado para o logaritmo de base 10 de argument-1"
 	},
 	"FUN REM" : {
 		"prefix": "FUN REM",
 		"body": "FUNCTION REM ($1)\n",
-		"description": "Retorna o resto da divis„o entre argument-1 e argument-2"
+		"description": "Retorna o resto da divis√£o entre argument-1 e argument-2"
 	},
 	"FUN ABS" : {
 		"prefix": "FUN ABS",
@@ -870,12 +870,12 @@
 	"XFD ALPHA" : {
 		"prefix": "XFD ALPHA",
 		"body": "*>(( XFD ALPHA ))\n",
-		"description": "Item tratado como alfanumÈricos no banco de dados"
+		"description": "Item tratado como alfanum√©ricos no banco de dados"
 	},
 	"XFD BINARY" : {
 		"prefix": "XFD BINARY",
 		"body": "*>(( XFD BINARY ))\n",
-		"description": "Item tratado como dados bin·rios no banco de dados"
+		"description": "Item tratado como dados bin√°rios no banco de dados"
 	},
 	"XFD COBTRG" : {
 		"prefix": "XFD COBTRG",
@@ -885,7 +885,7 @@
 	"XFD CMT" : {
 		"prefix": "XFD CMT",
 		"body": "*>(( XFD COMMENT $1))\n",
-		"description": "Insere um comentÔøΩrio na XFD"
+		"description": "Insere um coment√Ø¬ø¬Ωrio na XFD"
 	},
 	"XFD DATE USE GROUP" : {
 		"prefix": "XFD DATE USE GROUP",
@@ -900,12 +900,12 @@
 	"XFD FILE" : {
 		"prefix": "XFD FILE",
 		"body": "*>(( XFD FILE=$1 ))\n",
-		"description": "Nome do arquivo fÔøΩsico"
+		"description": "Nome do arquivo f√Ø¬ø¬Ωsico"
 	},
 	"XFD HIDDEN" : {
 		"prefix": "XFD HIDDEN",
 		"body": "*>(( XFD HIDDEN $1))\n",
-		"description": "Campo n„o È utilizado na XFD"
+		"description": "Campo n√£o √© utilizado na XFD"
 	},
 	"XFD NAME" : {
 		"prefix": "XFD NAME",
@@ -915,12 +915,12 @@
 	"XFD NUM" : {
 		"prefix": "XFD NUM",
 		"body": "*>(( XFD NUMERIC ))\n",
-		"description": "Item tratado como numÈrico no banco de dados"
+		"description": "Item tratado como num√©rico no banco de dados"
 	},
 	"XFD SEC" : {
 		"prefix": "XFD SEC",
 		"body": "*>(( XFD SECONDARY TABLE ))\n",
-		"description": "Grava em uma tabela secund·ria (1:1) no banco de dados"
+		"description": "Grava em uma tabela secund√°ria (1:1) no banco de dados"
 	},
 	"XFD SUB" : {
 		"prefix": "XFD SUB",

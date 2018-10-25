@@ -20,12 +20,12 @@
     "ifc" : {
         "prefix": "ifc",
         "body": "if /i \"%COMPUTERNAME%\"==\"$1\" (\n   $2\n)",
-        "description": "Teste do nome do computador que est· executando o Batch"
+        "description": "Teste do nome do computador que est√° executando o Batch"
     },
     "ife" : {
         "prefix": "ife",
         "body": "if exist \"$1\" (\n   $2\n) else (\n   $3\n)",
-        "description": "Teste de existÍncia de arquivo"
+        "description": "Teste de exist√™ncia de arquivo"
     },
     "ifeq" : {
         "prefix": "ifeq",
@@ -35,12 +35,12 @@
     "ifi" : {
         "prefix": "ifi",
         "body": "if /i \"%$1%\"==\"$2\" (\n   $3\n) else (\n   $4\n)",
-        "description": "Teste ignorando mai˙sculas/min˙sculas"
+        "description": "Teste ignorando mai√∫sculas/min√∫sculas"
     },
     "ifin" : {
         "prefix": "ifin",
         "body": "if /i not \"%$1%\"==\"$2\" (\n   $3\n) else (\n   $4\n)",
-        "description": "Teste com negaÁ„o ignorando mai˙sculas/min˙sculas"
+        "description": "Teste com nega√ß√£o ignorando mai√∫sculas/min√∫sculas"
    },
     "ifg" : {
        "prefix": "ifg",
@@ -65,12 +65,12 @@
     "ifn" : {
         "prefix": "ifn",
         "body": "if not \"%$1%\"==\"$2\" (\n   $3\n) else (\n   $4\n)",
-        "description": "Teste com negaÁ„o"
+        "description": "Teste com nega√ß√£o"
     },
     "ifne" : {
         "prefix": "ifne",
         "body": "if not exist \"$1\" (\n   $2\n) else (\n   $3\n)",
-        "description": "Teste de n„o existÍncia de arquivo"
+        "description": "Teste de n√£o exist√™ncia de arquivo"
     },
     "ifnq" : {
         "prefix": "ifnq",
@@ -85,67 +85,67 @@
     "ifu" : {
         "prefix": "ifu",
         "body": "if /i \"%USERNAME%\"==\"${CURRENT_USERNAME}\" (\n   $1\n)",
-        "description": "Teste do nome do usu·rio que est· executando o Batch"
+        "description": "Teste do nome do usu√°rio que est√° executando o Batch"
     },
     "ini" : {
         "prefix": "ini",
         "body": "@echo off\nrem\nrem ####################################################################################################################\nrem *** $1\nrem --------------------------------------------------------------------------------------------------------------------\n    setlocal",
-        "description": "Coment·rios e comandos iniciais do Batch"
+        "description": "Coment√°rios e comandos iniciais do Batch"
     },
     "fin" : {
         "prefix": "fin",
-        "body": "rem\nrem FinalizaÁ„o.........................................................................................................\n:Fim\n    endlocal\n",
-        "description": "Label de finalizaÁ„o do Batch"
+        "body": "rem\nrem Finaliza√ß√£o.........................................................................................................\n:Fim\n    endlocal\n",
+        "description": "Label de finaliza√ß√£o do Batch"
     },
     "for" : {
         "prefix": "for",
         "body": "for %%i in ($1) do (\n   $2\n)",
-        "description": "LaÁo padr„o"
+        "description": "La√ßo padr√£o"
     },
     "fora" : {
         "prefix": "fora",
         "body": "for /f %%i in ($1) do (\n   $2\n)",
-        "description": "LaÁo para leitura linha a linha de arquivo"
+        "description": "La√ßo para leitura linha a linha de arquivo"
     },
     "forc" : {
         "prefix": "forc",
         "body": "for /f %%i in ('$1') do (\n   $2\n)",
-        "description": "Varre o resultado da saÌda de um comando"
+        "description": "Varre o resultado da sa√≠da de um comando"
     },
     "ford" : {
         "prefix": "ford",
         "body": "for /d %%i in ($1,,) do (\n   $2\n)",
-        "description": "LaÁo em lista delimitada por vÌrgula"
+        "description": "La√ßo em lista delimitada por v√≠rgula"
     },
     "fore" : {
         "prefix": "fore",
         "body": "for /f \"tokens=$1 delims=,\" %%i in () do (\n   $2\n)",
-        "description": "LaÁo para leitura linha a linha de arquivo com opÁıes"
+        "description": "La√ßo para leitura linha a linha de arquivo com op√ß√µes"
     },
     "fori" : {
         "prefix": "fori",
         "body": "for /l %%i in (1,1,$1) do (\n   $2\n)",
-        "description": "LaÁo utilizando incremento"
+        "description": "La√ßo utilizando incremento"
     },
     "forl" : {
         "prefix": "forl",
         "body": "for /l %%i in (0,0,0) do (\n   $1\n)",
-        "description": "LaÁo infinito"
+        "description": "La√ßo infinito"
     },
     "forn" : {
         "prefix": "forn",
         "body": "for /f \"skip=$1 tokens= delims=,\" %%i in () do (\n   $2\n)",
-        "description": "LaÁo para leitura linha a linha de arquivo com opÁıes, ignorando as primeiras n linhas"
+        "description": "La√ßo para leitura linha a linha de arquivo com op√ß√µes, ignorando as primeiras n linhas"
     },
     "foro" : {
         "prefix": "foro",
         "body": "for %%a in (\"$1\" \"\" \"\" \"\") do (\n   if /i \"%1\"==%%a (\n      $2\n   )\n)",
-        "description": "LaÁo para simular teste com OR"
+        "description": "La√ßo para simular teste com OR"
     },
     "forv" : {
         "prefix": "forv",
         "body": "for /f %%i in ('$1') do set VARIAVEL=%%i",
-        "description": "Resultado da saÌda de um comando em uma vari·vel"
+        "description": "Resultado da sa√≠da de um comando em uma vari√°vel"
     },
     "goeof" : {
         "prefix": "goeof",
@@ -160,22 +160,22 @@
     "delay" : {
         "prefix": "delay",
         "body": "setlocal EnableDelayedExpansion",
-        "description": "Habilita a expans„o de vari·veis de ambiente atrasada"
+        "description": "Habilita a expans√£o de vari√°veis de ambiente atrasada"
     },
     "enable" : {
         "prefix": "enable",
         "body": "setlocal EnableDelayedExpansion",
-        "description": "Habilita a expans„o de vari·veis de ambiente atrasada"
+        "description": "Habilita a expans√£o de vari√°veis de ambiente atrasada"
     },
     "log" : {
         "prefix": "log",
         "body": "call GravaLog.bat %0 %*",
-        "description": "Grava log de execuÁ„o do batch"
+        "description": "Grava log de execu√ß√£o do batch"
     },
     "replace" : {
         "prefix": "replace",
         "body": "    set VAR=%VAR:$1=%",
-        "description": "Faz troca de conte˙do em uma vari·vel"
+        "description": "Faz troca de conte√∫do em uma vari√°vel"
     },
     "substring" : {
         "prefix": "substring",
@@ -185,15 +185,15 @@
     "substringd" : {
         "prefix": "substringd",
         "body": ":~d",
-        "description": "Substring de um deslocamento (d) atÈ o fim da String"
+        "description": "Substring de um deslocamento (d) at√© o fim da String"
     },
     "thelp" : {
         "prefix": "thelp",
-        "body": "rem OpÁıes de exibiÁ„o de ajuda\n    for %%a in (\"\" \"/H\" \"/Help\" \"Help\") do if /i \"%~1\"==%%a (goto :Help)",
-        "description": "Teste opÁıes de ajuda"
+        "body": "rem Op√ß√µes de exibi√ß√£o de ajuda\n    for %%a in (\"\" \"/H\" \"/Help\" \"Help\") do if /i \"%~1\"==%%a (goto :Help)",
+        "description": "Teste op√ß√µes de ajuda"
     },
     "help" : {
         "prefix": "Help",
-        "body": "rem\nrem Exibe Ajuda.........................................................................................................\n:Help\n    echo Insira aqui a descriÁ„o do que faz o batch\n    echo.\n    echo Sintaxe: NOME_BATCH VERSAO OUTROS_PARAMETROS_OBRIGATORIOS [PAR_OPCIONAL_1] [PAR_OPCIONAL_2]\n    echo.\n    echo                     VERSAO = N˙mero, Sigla ou AbreviaÁ„o da Vers„o do SIGER\n    echo        OUTROS_PARAMETROS_1 = Ajuda do par‚metro 1\n    echo        OUTROS_PARAMETROS_2 = Ajuda do par‚metro 2\n    echo             PAR_OPCIONAL_1 = Ajuda do par‚metro opcional 1\n    echo             PAR_OPCIONAL_2 = Ajuda do par‚metro opcional 2\n    echo.\n    echo Exemplos:\n    echo -----------\n    echo NOME_BATCH PARAMETROS\n    echo ExplicaÁ„o do que faz o comando\n    echo.\n    echo NOME_BATCH PARAMETROS\n    echo ExplicaÁ„o do que faz o comando\n    echo.\n    goto :Fim",
+        "body": "rem\nrem Exibe Ajuda.........................................................................................................\n:Help\n    echo Insira aqui a descri√ß√£o do que faz o batch\n    echo.\n    echo Sintaxe: NOME_BATCH VERSAO OUTROS_PARAMETROS_OBRIGATORIOS [PAR_OPCIONAL_1] [PAR_OPCIONAL_2]\n    echo.\n    echo                     VERSAO = N√∫mero, Sigla ou Abrevia√ß√£o da Vers√£o do SIGER\n    echo        OUTROS_PARAMETROS_1 = Ajuda do par√¢metro 1\n    echo        OUTROS_PARAMETROS_2 = Ajuda do par√¢metro 2\n    echo             PAR_OPCIONAL_1 = Ajuda do par√¢metro opcional 1\n    echo             PAR_OPCIONAL_2 = Ajuda do par√¢metro opcional 2\n    echo.\n    echo Exemplos:\n    echo -----------\n    echo NOME_BATCH PARAMETROS\n    echo Explica√ß√£o do que faz o comando\n    echo.\n    echo NOME_BATCH PARAMETROS\n    echo Explica√ß√£o do que faz o comando\n    echo.\n    goto :Fim",
         "description": "Exibe ajuda"
     },
