@@ -956,5 +956,5 @@
 		"prefix": "VSTART LES",
 		"body": "      *>-> Varre o virtual de %desarq%\n           MOVE    HIGH-VALUES TO W-%sigarq%-CHA.\n           PERFORM                %sigarq%-START-LESS.\n           PERFORM                UNTIL EXIT\n              PERFORM             %sigarq%-READ-NEXT,\n              IF NOT %sigarq%-FS-OK\n                 EXIT             PERFORM,\n              END-IF,\n           END-PERFORM.\n",
 		"description": "Loop de leitura em virtual - START LESS"
-	},
+	}
 }
