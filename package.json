@@ -115,6 +115,10 @@
             {
                 "language": "COBOL",
                 "path": "./snippets/cobol.json"
+            },
+            {
+                "language": "bat",
+                "path": "./snippets/bat.json"
             }
         ],
         "commands": [
