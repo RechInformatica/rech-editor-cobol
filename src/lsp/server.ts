@@ -14,7 +14,7 @@ import {
 	Range,
 	Position
 } from 'vscode-languageserver';
-import { Find } from '../editor/find';
+import { Find } from '../editor/Find';
 import { Path } from '../commons/path';
 import { RechPosition } from '../editor/rechposition';
 import { CobolWordFinder } from '../commons/CobolWordFinder';
