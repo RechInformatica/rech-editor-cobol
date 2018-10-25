@@ -4,14 +4,14 @@ import { Path } from './path';
 /**
  * Generic Executer class
  */
-export interface GenericExecuter {
+export interface GenericExecutor {
     
   /**
    * Define path
    * 
    * @param path 
    */
-  setPath(path: string | Path): GenericExecuter;
+  setPath(path: string | Path): GenericExecutor;
  
   /**
    * Execute

@@ -168,7 +168,7 @@ export * from "./commons/Process";
 export * from "./commons/Scan";
 export * from "./editor/editor";
 export * from "./editor/rechposition";
-export * from "./commons/genericexecuter";
+export * from "./commons/genericexecutor";
 export * from "./indent/indent";
 export * from "./cobol/parsercobol";
 export * from "./editor/Find";

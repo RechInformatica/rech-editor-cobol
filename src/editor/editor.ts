@@ -2,7 +2,7 @@ import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
 import { RechPosition } from './rechposition';
 import { Indenta } from '../indent/indent';
-import { GenericExecuter } from '../commons/genericexecuter';
+import { GenericExecutor } from '../commons/genericexecutor';
 import * as path from 'path';
 import { PositionFinder } from './PositionFinder';
 
@@ -13,7 +13,7 @@ export class Editor {
   /** Text editor */
   private editor: TextEditor;
   /** Source expander function */
-  private static sourceExpander: GenericExecuter;
+  private static sourceExpander: GenericExecutor;
   
   constructor() {
     this.editor = <TextEditor>this.getActiveEditor();
@@ -580,7 +580,7 @@ export class Editor {
    * 
    * @param sourceExpander 
    */
-  public static setSourceExpander(sourceExpander: GenericExecuter) {
+  public static setSourceExpander(sourceExpander: GenericExecutor) {
     this.sourceExpander = sourceExpander
   }
   
