@@ -99,6 +99,7 @@
                     ".cob",
                     ".cpy",
                     ".cpb",
+                    ".tpl",
                     ".lsr"
                 ],
                 "configuration": "./cobol.configuration.json"
