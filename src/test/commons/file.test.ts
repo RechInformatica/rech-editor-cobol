@@ -3,7 +3,7 @@ import 'mocha';
 import { File } from '../../commons/file'
 import { reject } from 'q';
 
-describe('New File Function', () => {
+describe('File Functions', () => {
 
   // Try create a new file
   it('Create a new file', (done) => {
