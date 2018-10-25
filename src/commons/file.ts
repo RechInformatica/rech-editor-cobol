@@ -47,8 +47,8 @@ export class File {
   /**
    * Append a buffer in file
    */
-  public appendBuffer(buffer: string[]): Q.Promise<{}> {
-    return appendFile(this.fileName, buffer);
+  public appendBuffer(buffer: string[], encoding?: string): Q.Promise<{}> {
+    return appendFile(this.fileName, buffer, { encoding: encoding });
   }
 
   /**
@@ -86,8 +86,15 @@ export class File {
   /**
    * Copy file
    */
-  public copy(dest: string) {
-    fs.createReadStream(this.fileName).pipe(fs.createWriteStream(dest));
+  public copy(dest: string, callback: () => void) {
+    fs.copyFile(this.fileName, dest, callback);
+  }
+
+  /**
+   * Delete file
+   */
+  public delete() {
+    fs.unlinkSync(this.fileName);
   }
 
   /**
