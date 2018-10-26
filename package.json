@@ -136,6 +136,10 @@
                 "title": "flagGenerator"
             },
             {
+                "command": "rech.editor.vscode.pullWord",
+                "title": "pullWord"
+            },
+            {
                 "command": "rech.editor.vscode.checkout",
                 "title": "checkout"
             },
@@ -276,6 +280,10 @@
                 "command": "rech.editor.vscode.CobolFlagGenerator",
                 "key": "ctrl+alt+b",
                 "when": "editorLangId == COBOL"
+            },
+            {
+                "command": "rech.editor.vscode.pullWord",
+                "key": "alt+w"
             },
             {
                 "command": "rech.editor.vscode.cobolInsertStartComment",

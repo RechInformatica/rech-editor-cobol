@@ -25,6 +25,7 @@ let connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager. The text document manager
 // supports full document sync only
+
 let documents: TextDocuments = new TextDocuments();
 connection.onInitialize(() => {
 	return {
@@ -63,7 +64,7 @@ connection.listen();
 
 /**
  * Returns the specified line within the document text
- * 
+ *
  * @param documentText document text
  * @param line line
  * @param column column
@@ -75,7 +76,7 @@ export function getLineText(documentText: string, line: number, column: number) 
 
 /**
  * Creates a promise to find the specified word declaration
- * 
+ *
  * @param documentFullText full text of the current document
  * @param word the target word which declaration will be searched
  * @param uri URI of the current file open in editor
@@ -108,7 +109,7 @@ export function createPromiseForWordDeclaration(documentFullText: string, word: 
 
 /**
  * Builds Cobol preprocessor cache filename
- *  
+ *
  * @param uri current URI of the file open in editor
  */
 export function buildCacheFileName(uri: string) {
@@ -118,7 +119,7 @@ export function buildCacheFileName(uri: string) {
 
 /**
  * Sends a request to the client for Cobol preprocessor execution
- * 
+ *
  * @param uri current URI of the file open in editor
  * @param cacheFileName Cache filename where the declaration is searched before
  * invoking Cobol preprocessor
@@ -130,9 +131,9 @@ export function sendExternalPreprocExecution(uri: string, cacheFileName: string)
 
 /**
  * Creates a location with the specified uri and position
- * 
- * @param uri 
- * @param position 
+ *
+ * @param uri
+ * @param position
  */
 export function createLocation(uri: string, position: RechPosition) {
 	let firstCharRange = Range.create(
