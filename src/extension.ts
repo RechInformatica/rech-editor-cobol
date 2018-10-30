@@ -8,6 +8,7 @@ import Compiler from './cobol/compiler';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
 import { TabStopper } from './cobol/TabStopper';
 import { Client } from './lsp/client';
+import { CobolWordPuller } from './commons/CobolWordPuller';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -45,6 +46,9 @@ export function activate(_context: any) {
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.CobolFlagGenerator', () => {
         new GeradorCobol().flagGenerator();
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.pullWord', () => {
+        new CobolWordPuller().pullNextWord();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyLine', () => {
         commands.executeCommand("editor.action.clipboardCopyAction");

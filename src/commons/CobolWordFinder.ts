@@ -1,3 +1,4 @@
+
 /**
  * Class used to find Cobol words
  */
@@ -9,8 +10,8 @@ export class CobolWordFinder {
      * @param lineText line text
      * @param column column where part the word is located
      */
-    findWordAt(lineText: string, column: number): string {
-        var cobolWordRegex = /([a-zA-Z0-9_\-])+/g;
+    public findWordAt(lineText: string, column: number): string {
+        var cobolWordRegex = this.getCobolWordRegex();
         var result: any;
         while ((result = cobolWordRegex.exec(lineText)) !== null) {
             let start = result.index;
@@ -21,5 +22,32 @@ export class CobolWordFinder {
         }
         return "";
     }
+
+    /**
+     * Returns the next Cobol word in the current line starting from the specified column
+     * 
+     * @param lineText current line
+     * @param column initial column
+     */
+    public getNextWordColumn(lineText: string, column: number): number {
+        var cobolWordRegex = this.getCobolWordRegex();
+        var result: any;
+        while ((result = cobolWordRegex.exec(lineText)) !== null) {
+            let start = result.index;
+            if (start > column) {
+                return start;
+            }
+        }
+        return column;
+    }
+
+    /**
+     * Returns the Cobol Word Regex
+     */
+    private getCobolWordRegex(): RegExp {
+        return /([a-zA-Z0-9_\-])+/g;
+    }
+
+
 
 }

@@ -126,7 +126,8 @@ export class Editor {
     // None of the functions below works in all cases. Testing where is the cursor can detect which one to use
     //
     // If cursor is exactly on word's left position (blank character at left)
-    if (this.getCurrentLine().charAt(this.getCursors()[0].column - 1) == ' ') {
+    if (this.getCursors()[0].column == 0 ||
+        this.getCurrentLine().charAt(this.getCursors()[0].column - 1) == ' ') {
       commands.executeCommand("cursorWordRight");
       commands.executeCommand("cursorWordLeftSelect");
     } else {
@@ -549,6 +550,13 @@ export class Editor {
    */
   closeActiveEditor() {
     commands.executeCommand('workbench.action.closeActiveEditor');
+  }
+
+  /**
+   * Save file on active editor
+   */
+  saveActiveEditor() {
+    commands.executeCommand('workbench.action.files.save');
   }
 
   /**
