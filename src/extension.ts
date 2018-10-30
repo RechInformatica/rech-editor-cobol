@@ -3,8 +3,6 @@
 import { ExtensionContext, commands } from 'vscode';
 import { GeradorCobol } from './cobol/gerador-cobol';
 import { Editor } from './editor/editor';
-import { Executor } from './commons/executor';
-import Compiler from './cobol/compiler';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
 import { TabStopper } from './cobol/TabStopper';
 import { Client } from './lsp/client';
@@ -81,24 +79,6 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.newLineAbove', () => {
         new GeradorCobol().newLineAbove();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.update', () => {
-        new Editor().showInformationMessage("Executando Update...")
-        new Executor().runAsync("start cmd.exe /c F:\\BAT\\Update.bat");
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.commit', () => {
-        new Editor().showInformationMessage("Executando Commit...")
-        new Executor().runAsync("start cmd.exe /c F:\\BAT\\Commit.bat");
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.checkout', () => {
-        let baseName = new Editor().getCurrentFileBaseName();
-        let editor = new Editor();
-        editor.showInformationMessage("Executando Checkout de " + baseName + "...");
-        editor.closeActiveEditor();
-        new Executor().runAsync("start cmd.exe /c F:\\BAT\\Checkout.bat  " + baseName);
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.compile', () => {
-        new Compiler().compileCurrentFile();
-    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findNextParagraph', () => {
         new Editor().findNextParagraph();
     }));
@@ -110,15 +90,6 @@ export function activate(_context: any) {
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findPreviousBlankLine', () => {
         new Editor().findPreviousBlankLine();
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.indent', () => {
-        new Editor().indent("N");
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.indentLeft', () => {
-        new Editor().indent("E");
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.indentRight', () => {
-        new Editor().indent("D");
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findWordForward', () => {
         commands.executeCommand("editor.action.addSelectionToNextFindMatch");
@@ -175,4 +146,5 @@ export * from "./editor/rechposition";
 export * from "./commons/genericexecutor";
 export * from "./indent/indent";
 export * from "./cobol/parsercobol";
+export * from "./cobol/compiler";
 export * from "./editor/Find";

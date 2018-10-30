@@ -140,22 +140,6 @@
                 "title": "pullWord"
             },
             {
-                "command": "rech.editor.vscode.checkout",
-                "title": "checkout"
-            },
-            {
-                "command": "rech.editor.vscode.compile",
-                "title": "compile"
-            },
-            {
-                "command": "rech.editor.vscode.update",
-                "title": "update"
-            },
-            {
-                "command": "rech.editor.vscode.commit",
-                "title": "commit"
-            },
-            {
                 "command": "rech.editor.vscode.tab",
                 "title": "tab"
             },
@@ -178,21 +162,6 @@
             {
                 "command": "rech.editor.vscode.findPreviousBlankLine",
                 "title": "findPreviousBlankLine"
-            },
-            {
-                "command": "rech.editor.vscode.indent",
-                "key": "indent",
-                "title": "indent"
-            },
-            {
-                "command": "rech.editor.vscode.indentLeft",
-                "key": "indentLeft",
-                "title": "indentLeft"
-            },
-            {
-                "command": "rech.editor.vscode.indentRight",
-                "key": "indentRight",
-                "title": "indentRight"
             }
         ],
         "menus": {
@@ -308,26 +277,6 @@
                 "key": "alt+abnt_c1"
             },
             {
-                "command": "rech.editor.vscode.checkout",
-                "key": "alt+f5",
-                "when": "editorLangId == COBOL"
-            },
-            {
-                "command": "rech.editor.vscode.compile",
-                "key": "ctrl+f9",
-                "when": "editorLangId == COBOL"
-            },
-            {
-                "command": "rech.editor.vscode.update",
-                "key": "alt+f6",
-                "when": "editorLangId == COBOL"
-            },
-            {
-                "command": "rech.editor.vscode.commit",
-                "key": "alt+f7",
-                "when": "editorLangId == COBOL"
-            },
-            {
                 "command": "rech.editor.vscode.tab",
                 "key": "tab",
                 "when": "editorLangId == COBOL && !inSnippetMode"
@@ -357,21 +306,6 @@
             {
                 "command": "rech.editor.vscode.findPreviousParagraph",
                 "key": "alt+shift+k",
-                "when": "editorLangId == COBOL"
-            },
-            {
-                "command": "rech.editor.vscode.indent",
-                "key": "ctrl+p",
-                "when": "editorLangId == COBOL"
-            },
-            {
-                "command": "rech.editor.vscode.indentLeft",
-                "key": "alt+shift+left",
-                "when": "editorLangId == COBOL"
-            },
-            {
-                "command": "rech.editor.vscode.indentRight",
-                "key": "alt+shift+right",
                 "when": "editorLangId == COBOL"
             },
             {
