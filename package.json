@@ -351,12 +351,12 @@
             },
             {
                 "command": "rech.editor.vscode.findNextParagraph",
-                "key": "ctrl+k",
+                "key": "alt+k",
                 "when": "editorLangId == COBOL"
             },
             {
                 "command": "rech.editor.vscode.findPreviousParagraph",
-                "key": "ctrl+shift+k",
+                "key": "alt+shift+k",
                 "when": "editorLangId == COBOL"
             },
             {
