@@ -254,7 +254,7 @@
             },
             {
                 "command": "rech.editor.vscode.newLineAbove",
-                "key": "ctrl+n"
+                "key": "ctrl+shift+enter"
             },
             {
                 "command": "rech.editor.vscode.cobolMove",
