@@ -5,7 +5,7 @@ import { Executor } from "../commons/executor";
 /**
  * Class to compile Cobol programs
  */
-export default class Compiler {
+export class Compiler {
     /**
      * Compiles the file currently open on editor
      */
