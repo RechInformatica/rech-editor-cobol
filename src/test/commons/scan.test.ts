@@ -13,7 +13,7 @@ describe("Buffer scan functions", () => {
       new Scan(buffer.toString()).scan(new RegExp(term, "gi"), (iterator: any) => {
         if (iterator.lineContent.includes(term)) {
           assert.equal(34, iterator.column);
-          assert.equal(1721, iterator.row + 1);
+          assert.equal(9, iterator.row + 1);
           iterator.stop();
         }
       });
