@@ -165,22 +165,19 @@
 	"EXIT PERFORM CYCLE": {
 		"prefix": "XC",
 		"body": [
-			"EXIT PERFORM CYCLE,",
-			""
+			"EXIT PERFORM CYCLE,"
 		]
 	},
 	"EXIT PERFORM": {
 		"prefix": "XP",
 		"body": [
-			"EXIT PERFORM,",
-			""
+			"EXIT PERFORM,"
 		]
 	},
 	"EXIT PARAGRAPH": {
 		"prefix": "XH",
 		"body": [
-			"EXIT PARAGRAPH,",
-			""
+			"EXIT PARAGRAPH,"
 		]
 	},
 	"VALUE IS": {
@@ -777,7 +774,7 @@
 		"body": "STRING           $1X---X, X---X,\n   DELIMITED BY SIZE INTO X---X.\n      WITH POINTER X---X,\n",
 		"description": "STRING DELIMITED/WITH POINTER (18)"
 	},
-	"INITIALIZE" : {
+	"INITIALIZE1" : {
 		"prefix": "INITIALIZE",
 		"body": "INITIALIZE             $1X---X\n   REPLACING           ALPHANUMERIC DATA BY SPACES.\n",
 		"description": "INITIALIZE ... REPLACING ALPHANUMERIC (12)"
