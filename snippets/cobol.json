@@ -291,31 +291,59 @@
 			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
 		]
 	},
-	"WRITE": {
+	"INIPRE ARQ-COMANDO": {
+		"prefix": "INIPRE",
+		"body": [
+			"MOVE \"INIPRE ${1:XTABEL}\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${2:MK-CHA},"
+		]
+	},
+	"PREPARE ARQ-COMANDO": {
+		"prefix": "PREPARE",
+		"body": [
+			"MOVE \"PREPARE ${1:XTABEL} ${2:XXXX-CHA}\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
+		]
+	},
+	"FETCH ARQ-COMANDO": {
+		"prefix": "FETCH",
+		"body": [
+			"MOVE \"FETCH ${1:XTABEL} IGNORE LOCK\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${2:MK-CHA},"
+		]
+	},
+	"WRITE ARQ-COMANDO": {
 		"prefix": "WRITE",
 		"body": [
 			"MOVE \"WRITE ${1:XTABEL} ${2:XREG-XXX}\" TO WARQ-CMD,",
 			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
 		]
 	},
-	"REWRITE": {
+	"REWRITE ARQ-COMANDO": {
 		"prefix": "REWRITE",
 		"body": [
 			"MOVE \"REWRITE ${1:XTABEL} ${2:XREG-XXX}\" TO WARQ-CMD,",
 			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
 		]
 	},
-	"RE/WRITE": {
+	"RE/WRITE ARQ-COMANDO": {
 		"prefix": "RE/WRITE",
 		"body": [
 			"MOVE \"RE/WRITE ${1:XTABEL} ${2:XREG-XXX}\" TO WARQ-CMD,",
 			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
 		]
 	},
-	"DELETE": {
+	"DELETE ARQ-COMANDO": {
 		"prefix": "DELETE",
 		"body": [
 			"MOVE \"DELETE ${1:XTABEL} RECORD\" TO WARQ-CMD,",
+			"PERFORM ARQ-COMANDO-${2:MK-CHA},"
+		]
+	},
+	"UNLOCK ARQ-COMANDO": {
+		"prefix": "UNLOCK",
+		"body": [
+			"MOVE \"UNLOCK ${1:XTABEL}\" TO WARQ-CMD,",
 			"PERFORM ARQ-COMANDO-${2:MK-CHA},"
 		]
 	},
