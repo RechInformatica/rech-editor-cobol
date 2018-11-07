@@ -6,6 +6,7 @@ import { Editor } from './editor/editor';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
 import { TabStopper } from './cobol/TabStopper';
 import { Client } from './lsp/client';
+import { CustomDecorator } from './decoration/CustomDecorator';
 import { CobolWordPuller } from './commons/CobolWordPuller';
 
 // this method is called when your extension is activated
@@ -14,6 +15,8 @@ export function activate(_context: any) {
     let context = <ExtensionContext>_context;
     // Starts the LSP Client
     Client.startServerAndEstablishCommunication(_context);
+    // Custom decorators beyond language syntax highlight
+    CustomDecorator.activate(_context);
     //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand

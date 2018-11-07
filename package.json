@@ -67,6 +67,42 @@
                         34
                     ],
                     "description": "COBOL tabstops"
+                },
+                "comments-highlight.tags": {
+                    "type": "array",
+                    "description": "Tags which are used to color the comments. Changes require a restart of VS Code to take effect",
+                    "default": [
+                        {
+                            "tag": "!",
+                            "color": "#ff2d00",
+                            "backgroundColor": "transparent"
+                        },
+                        {
+                            "tag": "?",
+                            "color": "#3498db",
+                            "backgroundColor": "transparent"
+                        },
+                        {
+                            "tag": "todo",
+                            "color": "#ff8c00",
+                            "backgroundColor": "transparent"
+                        },
+                        {
+                            "tag": "*",
+                            "color": "#98c379",
+                            "backgroundColor": "transparent"
+                        },
+                        {
+                            "tag": "RechDocType",
+                            "color": "#b294bb",
+                            "backgroundColor": "transparent"
+                        },
+                        {
+                            "tag": "RechDocVariable",
+                            "color": "#c5c8c6",
+                            "backgroundColor": "transparent"
+                        }
+                    ]
                 }
             }
         },
