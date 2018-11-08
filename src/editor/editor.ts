@@ -206,6 +206,7 @@ export class Editor {
       ranges.push(new Range(p, p));
     });
     this.setSelectionsRange(ranges);
+    this.editor.revealRange(ranges[0], 2);
   }
 
   /**
