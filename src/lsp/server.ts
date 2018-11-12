@@ -113,8 +113,8 @@ export function createPromiseForWordDeclaration(documentFullText: string, word: 
  * @param uri current URI of the file open in editor
  */
 export function buildCacheFileName(uri: string) {
-	var path = new Path(uri);
-	return "c:\\tmp\\PREPROC\\" + path.fileName();
+	var path = new Path(uri).fullPathWin();
+	return "c:\\tmp\\PREPROC\\" + new Path(path).fileName();
 }
 
 /**

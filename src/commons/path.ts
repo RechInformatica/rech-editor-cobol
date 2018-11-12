@@ -42,6 +42,13 @@ export class Path {
   }
 
   /**
+   * Return the Windows fullPath
+   */
+  fullPathWin() {
+    return this.path.replace(/\//g, "\\").replace("file:\\\\\\", "").replace("%3A", ":").replace(/%5C/gi, "\\");
+  }
+
+  /**
    * Retorna um novo Path com um nome diferente
    */
   setFileName(fileName: string) {
