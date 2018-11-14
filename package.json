@@ -429,6 +429,7 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
+        "package": "vsce package",
         "compile": "tsc -p ./",
         "watch:client": "tsc -watch -p ./",
         "watch:server": "tsc -watch -p ./",
@@ -449,6 +450,7 @@
         "ts-node": "^7.0.1",
         "typescript": "^2.6.1",
         "vscode": "^1.1.21",
+        "vsce": "^1.53.0",
         "vscode-languageclient": "^4.1.4",
         "vscode-languageserver": "^4.1.3"
     }

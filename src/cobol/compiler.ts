@@ -1,6 +1,7 @@
 // import { Executor } from "../commons/executor";
 import { Editor } from "../editor/editor";
 import { Executor } from "../commons/executor";
+import { Path } from "../commons/path";
 
 /**
  * Class to compile Cobol programs
@@ -12,40 +13,20 @@ export class Compiler {
     compileCurrentFile() {
         let editor = new Editor();
         editor.saveActiveEditor();
-        var baseName = editor.getCurrentFileBaseName();
-        editor.showInformationMessage(`Compilando ${baseName}...`);
-        var fileName = editor.getCurrentFileName();
-        let args = this.buildArgs(fileName);
-        let commandLine = "cmd.exe /c F:\\BAT\\CO.bat " + baseName + args;
+        let path = new Path(editor.getCurrentFileName());
+        let baseName = path.baseName();
+        let extension = path.extension();
+        let directory = path.directory();
+        editor.showInformationMessage(`Compilando ${path.fileName()}...`);
+        let commandLine = "cmd.exe /c F:\\BAT\\VSCodeComp.bat " + baseName + " " + extension + " " + directory;
         new Executor().runAsyncOutputChannel("co", commandLine, (errorLevel: number) => {
             if (errorLevel == 0) {
-                editor.showInformationMessage(`${baseName} compilado!`);
+                editor.showInformationMessage(`Compilação finalizada para ${path.fileName()}.`);
             } else {
-                editor.showWarningMessage(`${baseName} compilado com erro!`);
+                editor.showWarningMessage(`Compilação para ${path.fileName()} finalizada com erro.`);
             }
         });
         return;
     }
 
-    /**
-     * Build the compilation arguments for the final command-line
-     *
-     * @param program program name
-     */
-    private buildArgs(program: string) {
-        if (this.isTrunk(program)) {
-            return " /F";
-        }
-        return "";
-    }
-
-    /**
-     * Returns if the program is located on trunk directory
-     *
-     * @param program program name
-     */
-    private isTrunk(program: string) {
-        let upper: string = program.toUpperCase();
-        return (upper.startsWith("F:\\FONTES\\") || upper.startsWith("F:\\SIGER\\DES\\FON\\"));
-    }
 }
