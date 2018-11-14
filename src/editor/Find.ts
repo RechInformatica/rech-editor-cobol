@@ -130,7 +130,7 @@ export class Find {
             }
             let column = iterator.column;
             // build the result
-            result = new RechPosition(<number>line, <number>column, this.getFullPath(file, path.directory()));
+            result = new RechPosition(<number>line, <number>column, this.getFullPath(file, path));
             iterator.stop();
           }
         });
@@ -148,7 +148,8 @@ export class Find {
   /**
    * Return the full path of a file
    */
-  private getFullPath(file: string, preferredDirectory: string): string {
+  private getFullPath(file: string, path: Path): string {
+    let preferredDirectory = new Path(path.fullPathWin()).directory().toUpperCase();
     if (new File(preferredDirectory + file).exists()) {
       return preferredDirectory + file;
     }

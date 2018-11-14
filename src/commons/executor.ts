@@ -99,4 +99,16 @@ export class Executor {
       }
     });
   }
+
+  /**
+   * Executes asynchronously a new process using the specified command-line
+   *
+   * @param command command-line to be executed
+   * @param callback optional callback executed after the process execution is completed
+   */
+  runSync(command: string) {
+    let exec = cp.execSync(command);
+    return exec.toString();
+  }
+
 }
