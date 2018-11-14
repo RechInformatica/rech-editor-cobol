@@ -429,6 +429,7 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
+        "package": "vsce package",
         "compile": "tsc -p ./",
         "watch:client": "tsc -watch -p ./",
         "watch:server": "tsc -watch -p ./",
@@ -438,7 +439,8 @@
     "dependencies": {
         "@types/q": "^1.0.0",
         "iconv-lite": "^0.4.24",
-        "q": "^1.4.1"
+        "q": "^1.4.1",
+        "vsce": "^1.53.0"
     },
     "devDependencies": {
         "@types/chai": "^4.1.6",
