@@ -18,6 +18,7 @@ import { Find } from '../editor/Find';
 import { Path } from '../commons/path';
 import { RechPosition } from '../editor/rechposition';
 import { CobolWordFinder } from '../commons/CobolWordFinder';
+import { reject } from 'q';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -84,7 +85,7 @@ export function getLineText(documentText: string, line: number, column: number) 
 export function createPromiseForWordDeclaration(documentFullText: string, word: string, uri: string, ) {
 	// Creates an external promise so the reject function can be called when no definition
 	// is found for the specified word
-	return new Promise<Location>((resolve, reject) => {
+	return new Promise<Location>((resolve) => {
 		// Cache filename where the declaration is searched before
 		// invoking Cobol preprocessor
 		let cacheFileName = buildCacheFileName(uri);
@@ -102,7 +103,7 @@ export function createPromiseForWordDeclaration(documentFullText: string, word: 
 				resolve(createLocation(uri, position));
 			}
 		}).catch(() => {
-			reject();
+			resolve(undefined);
 		});
 	});
 }
