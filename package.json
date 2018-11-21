@@ -118,7 +118,7 @@
                 "editor.tabSize": 3,
                 "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
                 "editor.trimAutoWhitespace": false,
-                "editor.useTabStops": true
+                "editor.useTabStops": false
             }
         },
         "languages": [
