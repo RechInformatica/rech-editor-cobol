@@ -35,12 +35,8 @@ export class Client {
 		};
 		// Options to control the language client
 		let clientOptions: LanguageClientOptions = {
-			// Register the server for plain text documents
-			documentSelector: [{ scheme: 'file', language: 'COBOL' }],
-			synchronize: {
-				// Notify the server about file changes to '.clientrc files contained in the workspace
-				fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
-			}
+			// Register the server for COBOL documents
+			documentSelector: [{ scheme: 'file', language: 'COBOL' }]
 		};
 		// Create the language client and start the client.
 		Client.client = new LanguageClient(
