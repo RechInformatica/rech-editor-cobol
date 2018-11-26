@@ -45,6 +45,16 @@ export class File {
   }
 
   /**
+   * Synchronously save a buffer in file
+   * 
+   * @param buffer 
+   * @param encoding 
+   */
+  public saveBufferSync(buffer: string[], encoding?: string): void {
+    fs.writeFileSync(this.fileName, buffer, { encoding: encoding });
+  }
+
+  /**
    * Append a buffer in file
    */
   public appendBuffer(buffer: string[], encoding?: string): Q.Promise<{}> {
@@ -59,12 +69,11 @@ export class File {
   }
 
   /**
-   * load the file content synchronously
+   * Load the file content synchronously
    */
   public loadBufferSync(encoding: string): string {
     return fs.readFileSync(this.fileName, {encoding: encoding});
   }
-
 
   /**
    * Tests whether the file exists
@@ -95,6 +104,17 @@ export class File {
    */
   public delete() {
     fs.unlinkSync(this.fileName);
+  }
+  
+  /**
+   * Returns the file last modification date
+   * 
+   * @returns Date
+   */
+  public lastModified(): Date {
+    let stats = fs.statSync(this.fileName);
+    let mtime = new Date(stats.mtime);
+    return mtime;
   }
 
   /**
