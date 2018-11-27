@@ -78,12 +78,12 @@
                             "backgroundColor": "transparent"
                         },
                         {
-                            "tag": "?",
-                            "color": "#3498db",
+                            "tag": "todo:",
+                            "color": "#ff8c00",
                             "backgroundColor": "transparent"
                         },
                         {
-                            "tag": "todo",
+                            "tag": "todo-",
                             "color": "#ff8c00",
                             "backgroundColor": "transparent"
                         },
