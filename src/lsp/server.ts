@@ -12,13 +12,21 @@ import {
 	Location,
 	TextDocumentPositionParams,
 	Range,
-	Position
+	Position,
+	CompletionItem,
+	CompletionItemKind,
+	TextEdit,
+	InsertTextFormat,
+	TextDocument
 } from 'vscode-languageserver';
 import { Find } from '../editor/Find';
 import { Path } from '../commons/path';
 import { RechPosition } from '../editor/rechposition';
 import { CobolWordFinder } from '../commons/CobolWordFinder';
-import { reject } from 'q';
+import { ParserCobol } from '../cobol/parsercobol';
+
+// Cobol column for 'PIC' clause declaration
+const PIC_COLUMN_DECLARATION = 35;
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -33,9 +41,99 @@ connection.onInitialize(() => {
 		capabilities: {
 			textDocumentSync: documents.syncKind,
 			definitionProvider: true,
+			// Tell the client that the server supports code completion
+			completionProvider: {
+				resolveProvider: true
+			}
 		}
 	};
 });
+
+// This handler provides the initial list of the completion items.
+connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+	let items: CompletionItem[] = [];
+	let line = _textDocumentPosition.position.line;
+	let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
+	if (fullDocument && shouldSuggestVarDeclaration(line, fullDocument)) {
+		items.push(createVarDeclarationItem(_textDocumentPosition));
+	}
+	return items;
+});
+
+/**
+ * Returns true if the editor should suggest Cobol variable declaration
+ */
+export function shouldSuggestVarDeclaration(line: number, fullDocument: TextDocument): boolean {
+	let fullDocumentText = fullDocument.getText();
+	let currentLine = fullDocumentText.split("\n")[line];
+	if (new ParserCobol().getDeclaracaoVariavel(currentLine)) {
+		return isVariableLevelAndNameDeclared(currentLine);
+	}
+	return false;
+}
+
+/**
+ * Returns true if the level and the name of the Cobol variable are declared.
+ *
+ * This regular expression checks if the variable is ready to receive the 'PIC'
+ * and 'VALUE IS' clauses.
+ * 
+ * @param line target line to test variable declaration
+ */
+export function isVariableLevelAndNameDeclared(line: string) {
+	let result = /(\d+\w.+\s)([^\s].*)/.exec(line);
+	if (result && result[2]) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Creates an IntelliSense entry to generate code-completion for variable declaration
+ * 
+ * @param _textDocumentPosition document information
+ */
+export function createVarDeclarationItem(_textDocumentPosition: TextDocumentPositionParams): CompletionItem {
+	let cursorColumn = _textDocumentPosition.position.character;
+	let text = fillPicMissingSpaces(cursorColumn) + "PIC IS $1($2)    VALUE IS $3     ${4:COMP-X}.";
+	return {
+		label: 'Completar declaração de variável',
+		detail: 'Completa a declaração da variável.',
+		insertText: text,
+		insertTextFormat: InsertTextFormat.Snippet,
+		filterText: "PIC",
+		preselect: true,
+		commitCharacters: ['X', '9', 'Z', 'B', ' '],
+		kind: CompletionItemKind.Variable,
+		data: 1
+	};
+}
+
+// This handler resolve additional information for the item selected in
+// the completion list.
+connection.onCompletionResolve(
+	(item: CompletionItem): CompletionItem => {
+		if (item.data === 1) {
+			(item.documentation = 'Serão inseridas cláusulas PIC e VALUE IS nos lugares apropriados.');
+		}
+		return item;
+	}
+);
+
+/**
+ * Fills missing spaces for 'PIC' clause declaration considering the column
+ * where the cursor is currently positioned
+ * 
+ * @param cursorColumn cursor column
+ */
+export function fillPicMissingSpaces(cursorColumn: number): string {
+	let missingSpaces = PIC_COLUMN_DECLARATION - cursorColumn;
+	let text = '';
+	for (var i = 1; i < missingSpaces; i++) {
+		text = text.concat(" ");
+	}
+	return text;
+}
 
 connection.onInitialized(() => {
 	// Register for all configuration changes.
