@@ -23,11 +23,6 @@ export function activate(_context: any) {
     // The commandId parameter must match the command field in package.json
     //
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolMove', () => {
-        if (Editor.getSourceExpander()) {
-            new Editor().showInformationMessage("Encontrou o source expander no editor");
-        } else {
-            new Editor().showInformationMessage("Não encontrou o source expander no editor");
-        };
         new GeradorCobol().move();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolTo', () => {
