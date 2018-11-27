@@ -54,7 +54,7 @@ export class ParserCobol {
    * 
    * @param line 
    */
-  private getDeclaracaoVariavel(line: string): string | undefined {
+  public getDeclaracaoVariavel(line: string): string | undefined {
     // variable
     var match = /^\s+\d\d\s+([\w\-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
