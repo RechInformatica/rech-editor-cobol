@@ -2,6 +2,7 @@
 import { Editor } from "../editor/editor";
 import { Executor } from "../commons/executor";
 import { Path } from "../commons/path";
+import { commands } from "vscode";
 
 /**
  * Class to compile Cobol programs
@@ -18,6 +19,7 @@ export class Compiler {
         let extension = path.extension();
         let directory = path.directory();
         editor.showInformationMessage(`Compilando ${path.fileName()}...`);
+        commands.executeCommand('workbench.output.action.clearOutput');
         let commandLine = "cmd.exe /c F:\\BAT\\VSCodeComp.bat " + baseName + " " + extension + " " + directory;
         new Executor().runAsyncOutputChannel("co", commandLine, (errorLevel: number) => {
             if (errorLevel == 0) {
