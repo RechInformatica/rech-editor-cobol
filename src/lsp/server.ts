@@ -15,15 +15,15 @@ import {
 	Position,
 	CompletionItem,
 	CompletionItemKind,
-	TextEdit,
 	InsertTextFormat,
-	TextDocument
+	TextDocument,
 } from 'vscode-languageserver';
 import { Find } from '../editor/Find';
 import { Path } from '../commons/path';
 import { RechPosition } from '../editor/rechposition';
 import { CobolWordFinder } from '../commons/CobolWordFinder';
 import { ParserCobol } from '../cobol/parsercobol';
+import { ParagraphCompletion } from './ParagraphCompletion';
 
 // Cobol column for 'PIC' clause declaration
 const PIC_COLUMN_DECLARATION = 35;
@@ -54,8 +54,13 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
 	let items: CompletionItem[] = [];
 	let line = _textDocumentPosition.position.line;
 	let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
-	if (fullDocument && shouldSuggestVarDeclaration(line, fullDocument)) {
-		items.push(createVarDeclarationItem(_textDocumentPosition));
+	if (fullDocument) {
+		if (shouldSuggestVarDeclaration(line, fullDocument)) {
+			items.push(createVarDeclarationItem(_textDocumentPosition));
+		}
+		if (isParagraphPerform(line, fullDocument)) {
+			fillItemsWithParagraphs(items, fullDocument);
+		}
 	}
 	return items;
 });
@@ -70,6 +75,32 @@ export function shouldSuggestVarDeclaration(line: number, fullDocument: TextDocu
 		return isVariableLevelAndNameDeclared(currentLine);
 	}
 	return false;
+}
+
+/**
+ * Returns true if the current line represents a paragraph perform
+ */
+export function isParagraphPerform(line: number, fullDocument: TextDocument): boolean {
+	let fullDocumentText = fullDocument.getText();
+	let currentLine = fullDocumentText.split("\n")[line];
+	if (/\s+PERFORM.*/.exec(currentLine)) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Fills the completion items with Cobol paragraphs
+ * 
+ * @param items items array
+ * @param fullDocument full document information
+ */
+export function fillItemsWithParagraphs(items: CompletionItem[], fullDocument: TextDocument) {
+	let paragraphCompletion = new ParagraphCompletion();
+	let lines = fullDocument.getText().split("\r\n");
+	paragraphCompletion.generateCompletionItems(lines).forEach(element => {
+		items.push(element);
+	});
 }
 
 /**
