@@ -16,7 +16,7 @@ export interface GenericExecutor {
   /**
    * Execute
    */
-  exec(file: string): Promise<any>;
+  exec(file?: string): Promise<any>;
 
 }
 

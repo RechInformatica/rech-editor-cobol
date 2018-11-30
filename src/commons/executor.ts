@@ -2,11 +2,11 @@ import * as cp from "child_process";
 import { Process } from "./Process";
 import * as vscode from "vscode";
 import stream = require("stream");
+import * as iconv_lite from 'iconv-lite';
 
 // Map of created channels by name
 let channels = new Map<string, vscode.OutputChannel>(); 
-// Chartset convertor
-let iconv_lite = require('iconv-lite');
+
 /**
  * Class to run external processes
  */
@@ -35,7 +35,7 @@ export class Executor {
    */
   private streamToChannel(stream: stream.Readable, channel: vscode.OutputChannel) {    
     stream.setEncoding("binary");
-    stream.on("data", data => channel.append(iconv_lite.decode(data, "WINDOWS-1252")));
+    stream.on("data", data => channel.append(iconv_lite.decode(<Buffer> data, "WINDOWS-1252")));
   }
 
   /**
@@ -92,10 +92,29 @@ export class Executor {
    * @param command command-line to be executed
    * @param callback optional callback executed after the process execution is completed
    */
-  runAsync(command: string, callback?: (process: Process) => any) {
-    cp.exec(command, (err, stdout, stderr) => {
+  runAsync(command: string, callback?: (process: Process) => any, encoding?: string) {
+    if (encoding) {
+      this.runAsyncAndReturnFormattedProcess(command, encoding, callback);
+    } else {
+      cp.exec(command, (err, stdout, stderr) => {
+        if (callback) {
+          callback(new Process(stdout, stderr, err));
+        }
+      });
+    }
+  }
+
+  /**
+   * Executes asynchronously a new process using the specified command-line and return the Process result formatted as encoding
+   * 
+   * @param command 
+   * @param encoding 
+   * @param callback 
+   */
+  private runAsyncAndReturnFormattedProcess(command: string, encoding: string, callback?: (process: Process) => any) {
+    cp.exec(command, {encoding: "buffer"}, (err, stdout, stderr) => {
       if (callback) {
-        callback(new Process(stdout, stderr, err));
+        callback(new Process(iconv_lite.decode(stdout, encoding), iconv_lite.decode(stderr, encoding), err));
       }
     });
   }

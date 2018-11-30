@@ -3,6 +3,8 @@ import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } f
 import { Editor } from '../editor/editor';
 import * as path from 'path';
 import { configure } from 'vscode/lib/testrunner';
+import { File } from '../extension';
+import { Process } from '../commons/Process';
 
 /**
  * Language Server Provider client
@@ -57,10 +59,35 @@ export class Client {
 	 */
 	private static configureClientWhenReady() {
 		if (Client.client) {
-			Client.client.onRequest("custom/runPreproc", (files: string[]) => {
-				return Client.createPreprocExecutionPromise(files);
+			Client.client.onRequest("custom/runPreprocExpander", (files: string[]) => {
+				return Client.createPreprocExpanderExecutionPromise(files);
+			});
+			Client.client.onRequest("custom/runPreprocessor", (files: string[]) => {
+				return Client.createPreprocessorExecutionPromise(files);
 			});
 		}
+	}
+
+	/**
+	 * Creates a promise for Cobol Preprocessor expander execution
+	 * 
+	 * @param files file array with necessary files 
+	 */
+	private static createPreprocExpanderExecutionPromise(files: string[]) {
+		return new Promise<string>((resolve, reject) => {
+			let currentFile = files[0];
+			let cacheFile = files[1];
+			let executor = Editor.getPreprocessor();
+			if (executor) {
+				executor.setPath(currentFile).exec(cacheFile).then(() => {
+					resolve();
+				}).catch(() => {
+					reject();
+				});
+			} else {
+				reject();
+			}
+		});
 	}
 
 	/**
@@ -68,14 +95,17 @@ export class Client {
 	 * 
 	 * @param files file array with necessary files 
 	 */
-	private static createPreprocExecutionPromise(files: string[]) {
+	private static createPreprocessorExecutionPromise(files: string[]) {
 		return new Promise<string>((resolve, reject) => {
 			let currentFile = files[0];
-			let cacheFile = files[1];
-			let executor = Editor.getSourceExpander();
+			let preprocessorResultFile = files[1];
+			let executor = Editor.getPreprocessor();
 			if (executor) {
-				executor.setPath(currentFile).exec(cacheFile).then(() => {
-					resolve();
+				executor.setPath(currentFile).exec().then((process) => {
+					let preprocOutput = new File(preprocessorResultFile);
+					preprocOutput.saveBuffer([process.getStdout()], "latin1").then(() => {
+						resolve();
+					});
 				}).catch(() => {
 					reject();
 				});

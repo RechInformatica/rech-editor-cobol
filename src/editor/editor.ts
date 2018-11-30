@@ -14,6 +14,8 @@ export class Editor {
   private editor: TextEditor;
   /** Source expander function */
   private static sourceExpander: GenericExecutor;
+  /** Source preprocessor function */
+  private static preprocessor: GenericExecutor;
   
   constructor() {
     this.editor = <TextEditor>this.getActiveEditor();
@@ -594,12 +596,30 @@ export class Editor {
   }
   
   /**
-   * Define the source expander function
+   * Returns the source expander function
    * 
    * @param sourceExpander 
    */
   public static getSourceExpander() {
     return this.sourceExpander
+  }
+
+  /**
+   * Define the preprocessor function
+   * 
+   * @param preprocessor 
+   */
+  public static setPreprocessor(preprocessor: GenericExecutor) {
+    this.preprocessor = preprocessor
+  }
+  
+  /**
+   * Returns the preprocessor function
+   * 
+   * @param sourceExpander 
+   */
+  public static getPreprocessor() {
+    return this.preprocessor
   }
 
 }

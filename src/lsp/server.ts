@@ -10,6 +10,7 @@ import {
 	ProposedFeatures,
 	DidChangeConfigurationNotification,
 	Location,
+    InitializeParams,
 	TextDocumentPositionParams,
 	Range,
 	Position,
@@ -24,6 +25,7 @@ import { RechPosition } from '../editor/rechposition';
 import { CobolWordFinder } from '../commons/CobolWordFinder';
 import { ParserCobol } from '../cobol/parsercobol';
 import { ParagraphCompletion } from './ParagraphCompletion';
+import { Diagnostician } from '../cobol/diagnostic/diagnostician';
 
 // Cobol column for 'PIC' clause declaration
 const PIC_COLUMN_DECLARATION = 35;
@@ -32,11 +34,14 @@ const PIC_COLUMN_DECLARATION = 35;
 // Also include all preview / proposed LSP features.
 let connection = createConnection(ProposedFeatures.all);
 
-// Create a simple text document manager. The text document manager
-// supports full document sync only
-
+let hasDiagnosticRelatedInformationCapability: boolean|undefined = false;
 let documents: TextDocuments = new TextDocuments();
-connection.onInitialize(() => {
+connection.onInitialize((params: InitializeParams) => {
+	let capabilities = params.capabilities;
+    hasDiagnosticRelatedInformationCapability =
+        capabilities.textDocument &&
+        capabilities.textDocument.publishDiagnostics &&
+		capabilities.textDocument.publishDiagnostics.relatedInformation;
 	return {
 		capabilities: {
 			textDocumentSync: documents.syncKind,
@@ -48,6 +53,47 @@ connection.onInitialize(() => {
 		}
 	};
 });
+
+// The content of a text document has changed. This event is emitted
+// when the text document first opened or when its content has changed.
+documents.onDidChangeContent(change => {
+	validateTextDocument(change.document);
+});
+
+/**
+ * Create diagnostics for all errors or warnings
+ * 
+ * @param textDocument
+ */
+export async function validateTextDocument(textDocument: TextDocument): Promise<void> {
+	new Diagnostician().diagnose(textDocument, returnPreprocessorOutputFileName(), (fileName) => {
+		return sendExternalPreprocessExecution(fileName)
+	}). then((diagnostics) => {
+		//Send the computed diagnostics to VSCode.
+		connection.sendDiagnostics({ uri: textDocument.uri, diagnostics:  diagnostics});
+	});
+}
+
+/**
+ * Sends a request to the client for Cobol preprocessor execution
+ *
+ * @param uri current URI of the file open in editor
+ * @param cacheFileName Cache filename where the declaration is searched before
+ * invoking Cobol preprocessor
+ */
+export function sendExternalPreprocessExecution(uri: string) {
+	var files = [uri, returnPreprocessorOutputFileName()];
+	return connection.sendRequest("custom/runPreprocessor", [files]);
+}
+
+/**
+ * Return the preprocessor output file name
+ *
+ * @param uri current URI of the file open in editor
+ */
+export function returnPreprocessorOutputFileName() {
+	return "C:\\TMP\\preproc\\preprocOutput.txt"
+}
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
@@ -91,7 +137,7 @@ export function isParagraphPerform(line: number, fullDocument: TextDocument): bo
 
 /**
  * Fills the completion items with Cobol paragraphs
- * 
+ *
  * @param items items array
  * @param fullDocument full document information
  */
@@ -108,7 +154,7 @@ export function fillItemsWithParagraphs(items: CompletionItem[], fullDocument: T
  *
  * This regular expression checks if the variable is ready to receive the 'PIC'
  * and 'VALUE IS' clauses.
- * 
+ *
  * @param line target line to test variable declaration
  */
 export function isVariableLevelAndNameDeclared(line: string) {
@@ -121,7 +167,7 @@ export function isVariableLevelAndNameDeclared(line: string) {
 
 /**
  * Creates an IntelliSense entry to generate code-completion for variable declaration
- * 
+ *
  * @param _textDocumentPosition document information
  */
 export function createVarDeclarationItem(_textDocumentPosition: TextDocumentPositionParams): CompletionItem {
@@ -154,7 +200,7 @@ connection.onCompletionResolve(
 /**
  * Fills missing spaces for 'PIC' clause declaration considering the column
  * where the cursor is currently positioned
- * 
+ *
  * @param cursorColumn cursor column
  */
 export function fillPicMissingSpaces(cursorColumn: number): string {
@@ -221,7 +267,7 @@ export function createPromiseForWordDeclaration(documentFullText: string, word: 
 		// Creates a promise to find the word declaration
 		new Find(documentFullText).findDeclaration(word, new Path(uri), cacheFileName, () => {
 			// Runs Cobol preprocessor on client-side
-			return sendExternalPreprocExecution(uri, cacheFileName);
+			return sendExternalPreprocExpanderExecution(uri, cacheFileName);
 		}).then((position: RechPosition) => {
 			// If the delcaration was found on an external file
 			if (position.file) {
@@ -254,9 +300,9 @@ export function buildCacheFileName(uri: string) {
  * @param cacheFileName Cache filename where the declaration is searched before
  * invoking Cobol preprocessor
  */
-export function sendExternalPreprocExecution(uri: string, cacheFileName: string) {
+export function sendExternalPreprocExpanderExecution(uri: string, cacheFileName: string) {
 	var files = [uri, cacheFileName];
-	return connection.sendRequest("custom/runPreproc", [files]);
+	return connection.sendRequest("custom/runPreprocExpander", [files]);
 }
 
 /**
