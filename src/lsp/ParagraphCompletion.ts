@@ -1,4 +1,3 @@
-// import { Executor } from "../commons/executor";
 import { ParserCobol } from "../cobol/parsercobol";
 import { CobolDocParser } from "../cobol/rechdoc/CobolDocParser";
 import { MarkupKind, CompletionItemKind, CompletionItem } from "vscode-languageserver";

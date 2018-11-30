@@ -9,31 +9,32 @@ export class ParserCobol {
    * @param line 
    */
   public isDeclaration(element: string, line: string): boolean {
-      if (this.isComentario(line)) {
-          return false;
-      }
-      if (this.equalsIgnoreReplacing(element, this.getDeclaracaoParagrafo(line))) {
-          return true;
-        }
-        if (this.equalsIgnoreReplacing(element, this.getDeclaracaoVariavel(line))) {
-          return true;
-        }
-        if (this.equalsIgnoreReplacing(element, this.getDeclaracaoSelect(line))) {
-          return true;
-        }
-        if (this.equalsIgnoreReplacing(element, this.getDeclaracaoClasse(line))) {
-          return true;
-        }
-        return false;        
+    if (this.isCommentOrEmptyLine(line)) {
+      return false;
+    }
+    if (this.equalsIgnoreReplacing(element, this.getDeclaracaoParagrafo(line))) {
+      return true;
+    }
+    if (this.equalsIgnoreReplacing(element, this.getDeclaracaoVariavel(line))) {
+      return true;
+    }
+    if (this.equalsIgnoreReplacing(element, this.getDeclaracaoSelect(line))) {
+      return true;
+    }
+    if (this.equalsIgnoreReplacing(element, this.getDeclaracaoClasse(line))) {
+      return true;
+    }
+    return false;
   }
 
   /**
-   * Returns if line is a comment
+   * Returns true if the specified text is a comment line or an empty line
    * 
    * @param line 
    */
-  private isComentario(line: string): boolean {
-      return line.trim().startsWith("*>");
+  public isCommentOrEmptyLine(line: string): boolean {
+    let trimmed = line.trim();
+    return trimmed.startsWith("*>") || trimmed === "";
   }
 
   /**
@@ -67,12 +68,12 @@ export class ParserCobol {
     return match[1];
   }
 
-   /**
-    * Returns the select declared in the line
-    * 
-    * @param line 
-    */
-   private getDeclaracaoSelect(line: string): string | undefined {
+  /**
+   * Returns the select declared in the line
+   * 
+   * @param line 
+   */
+  private getDeclaracaoSelect(line: string): string | undefined {
     var match = /^\s+SELECT ([\w\-]+)\s+ASSIGN.*/i.exec(line);
     if (match == null) {
       return undefined;
@@ -96,7 +97,7 @@ export class ParserCobol {
       }
     }
     return match[1];
-  }  
+  }
 
   /**
    * Compare two terms ignoring replacing
@@ -120,7 +121,7 @@ export class ParserCobol {
       }
     }
     if (termo1.indexOf("(") >= 0) {
-      let pattern = new RegExp(termo1.replace(/\(.*?\)/i, "(.*)"));      
+      let pattern = new RegExp(termo1.replace(/\(.*?\)/i, "(.*)"));
       if (pattern.test(termo1)) {
         return true;
       }

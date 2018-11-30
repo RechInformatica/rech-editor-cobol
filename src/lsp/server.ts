@@ -17,6 +17,7 @@ import {
 	CompletionItemKind,
 	InsertTextFormat,
 	TextDocument,
+	DocumentOnTypeFormattingParams,
 } from 'vscode-languageserver';
 import { Find } from '../editor/Find';
 import { Path } from '../commons/path';
@@ -24,6 +25,8 @@ import { RechPosition } from '../editor/rechposition';
 import { CobolWordFinder } from '../commons/CobolWordFinder';
 import { ParserCobol } from '../cobol/parsercobol';
 import { ParagraphCompletion } from './ParagraphCompletion';
+import { CobolFormatter } from './CobolFormatter';
+import { CompletionUtils } from './CompletionUtils';
 
 // Cobol column for 'PIC' clause declaration
 const PIC_COLUMN_DECLARATION = 35;
@@ -44,6 +47,9 @@ connection.onInitialize(() => {
 			// Tell the client that the server supports code completion
 			completionProvider: {
 				resolveProvider: true
+			},
+			documentOnTypeFormattingProvider: {
+				firstTriggerCharacter: "\n"
 			}
 		}
 	};
@@ -55,7 +61,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
 	let line = _textDocumentPosition.position.line;
 	let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
 	if (fullDocument) {
-		if (shouldSuggestVarDeclaration(line, fullDocument)) {
+		if (isVarDeclaration(line, fullDocument)) {
 			items.push(createVarDeclarationItem(_textDocumentPosition));
 		}
 		if (isParagraphPerform(line, fullDocument)) {
@@ -68,7 +74,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
 /**
  * Returns true if the editor should suggest Cobol variable declaration
  */
-export function shouldSuggestVarDeclaration(line: number, fullDocument: TextDocument): boolean {
+export function isVarDeclaration(line: number, fullDocument: TextDocument): boolean {
 	let fullDocumentText = fullDocument.getText();
 	let currentLine = fullDocumentText.split("\n")[line];
 	if (new ParserCobol().getDeclaracaoVariavel(currentLine)) {
@@ -104,6 +110,19 @@ export function fillItemsWithParagraphs(items: CompletionItem[], fullDocument: T
 }
 
 /**
+ * Document formatter
+ */
+connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) => {
+	let lineNumber = params.position.line;
+	let fullDocument = documents.get(params.textDocument.uri);
+	if (fullDocument) {
+		let lines = fullDocument.getText().split("\r\n");
+		return new CobolFormatter().formatWhenKeyIsPressed(lines, lineNumber);
+	}
+	return [];
+});
+
+/**
  * Returns true if the level and the name of the Cobol variable are declared.
  *
  * This regular expression checks if the variable is ready to receive the 'PIC'
@@ -126,7 +145,7 @@ export function isVariableLevelAndNameDeclared(line: string) {
  */
 export function createVarDeclarationItem(_textDocumentPosition: TextDocumentPositionParams): CompletionItem {
 	let cursorColumn = _textDocumentPosition.position.character;
-	let text = fillPicMissingSpaces(cursorColumn) + "PIC IS $1($2)    VALUE IS $3     ${4:COMP-X}.";
+	let text = CompletionUtils.fillMissingSpaces(PIC_COLUMN_DECLARATION, cursorColumn) + "PIC IS $1($2)    VALUE IS $3     ${4:COMP-X}.";
 	return {
 		label: 'Completar declaração de variável',
 		detail: 'Completa a declaração da variável.',
@@ -150,21 +169,6 @@ connection.onCompletionResolve(
 		return item;
 	}
 );
-
-/**
- * Fills missing spaces for 'PIC' clause declaration considering the column
- * where the cursor is currently positioned
- * 
- * @param cursorColumn cursor column
- */
-export function fillPicMissingSpaces(cursorColumn: number): string {
-	let missingSpaces = PIC_COLUMN_DECLARATION - cursorColumn;
-	let text = '';
-	for (var i = 1; i < missingSpaces; i++) {
-		text = text.concat(" ");
-	}
-	return text;
-}
 
 connection.onInitialized(() => {
 	// Register for all configuration changes.
