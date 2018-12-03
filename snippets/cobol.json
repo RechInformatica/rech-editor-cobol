@@ -349,637 +349,612 @@
 	},
 	"REC DEFAULT" : {
 		"prefix": "REC DEFAULT",
-		"body": "*>(( REC DEFAULT ))\n",
+		"body": "*>(( REC DEFAULT ))",
 		"description": "Indica qual enumerado é default"
 	},
 	"REC REC AJUSTAR_TIPO_REGISTRO" : {
 		"prefix": "REC REC AJUSTAR_TIPO_REGISTRO",
-		"body": "*>(( REC AJUSTAR_TIPO_REGISTRO ))\n",
+		"body": "*>(( REC AJUSTAR_TIPO_REGISTRO ))",
 		"description": "Indica que esta tabela está com as chaves de tipo de registro inválidas"
 	},
 	"REC BROWSE" : {
 		"prefix": "REC BROWSE",
-		"body": "*>(( REC BROWSE=$1 ))\n",
+		"body": "*>(( REC BROWSE=${0:XXXX-XXX} ))",
 		"description": "Nome do campo de retorno do browse"
 	},
 	"REC CHAVE_ID" : {
 		"prefix": "REC CHAVE_ID",
-		"body": "*>(( REC CHAVE_ID ))\n",
+		"body": "*>(( REC CHAVE_ID ))",
 		"description": "Indica que a chave do registro é ID"
 	},
 	"REC ARQUIVO_VIRTUAL" : {
 		"prefix": "REC ARQUIVO_VIRTUAL",
-		"body": "*>(( REC ARQUIVO_VIRTUAL ))\n",
+		"body": "*>(( REC ARQUIVO_VIRTUAL ))",
 		"description": "Indica que essa tabela é uma FD virtual"
 	},
 	"REC TIPO_TABELA" : {
 		"prefix": "REC TIPO_TABELA",
-		"body": "*>(( REC TIPO_TABELA=$1 ))\n",
+		"body": "*>(( REC TIPO_TABELA=${0:MOVIMENTO|CADASTRO} ))",
 		"description": "Indica se a tabela é CADASTRO ou MOVIMENTO"
 	},
 	"REC CHAVE_NAO_SUGERE_ORDEM" : {
 		"prefix": "REC CHAVE_NAO_SUGERE_ORDEM",
-		"body": "*>(( REC CHAVE_NAO_SUGERE_ORDEM ))\n",
+		"body": "*>(( REC CHAVE_NAO_SUGERE_ORDEM ))",
 		"description": "Indica que chave não pode ser sugerida na rotina de melhor ordem"
 	},
 	"REC CHAVE_EDITADA" : {
 		"prefix": "REC CHAVE_EDITADA",
-		"body": "*>(( REC CHAVE_EDITADA=$1 ))\n",
+		"body": "*>(( REC CHAVE_EDITADA=${0:XXXX-CHA} ))",
 		"description": "Indica que a chave será usada na rotina de edição de chave no lugar da chave original"
 	},
 	"REC COMPLEMENTARES" : {
 		"prefix": "REC COMPLEMENTARES",
-		"body": "*>(( REC COMPLEMENTARES ))\n",
+		"body": "*>(( REC COMPLEMENTARES ))",
 		"description": "Indica que campos abaixo são complementares"
 	},
 	"REC COPY" : {
 		"prefix": "REC COPY",
-		"body": "*>(( REC COPY XXX1 XXX2 ))\n",
+		"body": "*>(( REC COPY ${1:@} ${0:X} ))",
 		"description": "Indica que próxima linha é copy"
 	},
 	"REC DATE_TIME" : {
 		"prefix": "REC DATE_TIME",
-		"body": "*>(( REC DATE_TIME ))\n",
+		"body": "*>(( REC DATE_TIME ))",
 		"description": "Indica que data e hora são usadas em conjunto"
 	},
 	"REC DEFAULT2" : {
 		"prefix": "REC DEFAULT",
-		"body": "*>(( REC DEFAULT ))\n",
+		"body": "*>(( REC DEFAULT ))",
 		"description": "Indica qual enumerado é default"
-	},
-	"REC DEFAULT3" : {
-		"prefix": "REC DEFAULT",
-		"body": "*>(( REC DEFAULT=$1 ))\n",
-		"description": "Valor default para o novo campo"
 	},
 	"REC FILLER_MINIMO" : {
 		"prefix": "REC FILLER_MINIMO",
-		"body": "*>(( REC FILLER_MINIMO=$1 ))\n",
-		"description": "Tamanho mï¿½nimo que o filler deve ter"
+		"body": "*>(( REC FILLER_MINIMO=${0:999} ))",
+		"description": "Tamanho mínimo que o filler deve ter"
 	},
 	"REC FILLER_MINIMO2" : {
 		"prefix": "REC FILLER_MINIMO",
-		"body": "*>(( REC FILLER_MINIMO=$1 RNS=99999/9))\n",
-		"description": "Tamanho mï¿½nimo que o filler deve ter, com RNS de conversão"
+		"body": "*>(( REC FILLER_MINIMO=${1:999} RNS=${2:999999}/${0:9} ))",
+		"description": "Tamanho mínimo que o filler deve ter, com RNS de conversão"
 	},
 	"REC FILLER" : {
 		"prefix": "REC FILLER",
-		"body": "*>(( REC FILLER ))\n",
+		"body": "*>(( REC FILLER ))",
 		"description": "Filler do arquivo"
 	},
 	"REC MAIUSCULO" : {
 		"prefix": "REC MAIUSCULO",
-		"body": "*>(( REC MAIUSCULO ))\n",
+		"body": "*>(( REC MAIUSCULO ))",
 		"description": "Indica que o campo só pode ter conteúdo em maiúsculo"
 	},
 	"REC MAS=ARQUIVO" : {
 		"prefix": "REC MAS=ARQUIVO",
-		"body": "*>(( REC MASCARA=ARQUIVO ))\n",
+		"body": "*>(( REC MASCARA=ARQUIVO ))",
 		"description": "Campo de nome de arquivo"
 	},
 	"REC MAS=BAIRRO" : {
 		"prefix": "REC MAS=BAIRRO",
-		"body": "*>(( REC MASCARA=BAIRRO ))\n",
+		"body": "*>(( REC MASCARA=BAIRRO ))",
 		"description": "Campo de bairro"
 	},
 	"REC MAS=BAIRRO_LONGO" : {
 		"prefix": "REC MAS=BAIRRO_LONGO",
-		"body": "*>(( REC MASCARA=BAIRRO_LONGO ))\n",
+		"body": "*>(( REC MASCARA=BAIRRO_LONGO ))",
 		"description": "Campo de bairro longo"
 	},
 	"REC MAS=CEI" : {
 		"prefix": "REC MAS=CEI",
-		"body": "*>(( REC MASCARA=CEI ))\n",
+		"body": "*>(( REC MASCARA=CEI ))",
 		"description": "Campo de cadastro específico do INSS"
 	},
 	"REC MAS=CEP" : {
 		"prefix": "REC MAS=CEP",
-		"body": "*>(( REC MASCARA=CEP ))\n",
+		"body": "*>(( REC MASCARA=CEP ))",
 		"description": "Campo de CEP"
 	},
 	"REC MAS=CIDADE" : {
 		"prefix": "REC MAS=CIDADE",
-		"body": "*>(( REC MASCARA=CIDADE ))\n",
+		"body": "*>(( REC MASCARA=CIDADE ))",
 		"description": "Campo de descrição da cidade"
 	},
 	"REC MAS=CLIENTE" : {
 		"prefix": "REC MAS=CLIENTE",
-		"body": "*>(( REC MASCARA=CLIENTE ))\n",
+		"body": "*>(( REC MASCARA=CLIENTE ))",
 		"description": "Campo de código de cliente"
 	},
 	"REC MAS=CNPJ" : {
 		"prefix": "REC MAS=CNPJ",
-		"body": "*>(( REC MASCARA=CNPJ ))\n",
+		"body": "*>(( REC MASCARA=CNPJ ))",
 		"description": "Campo de CNPJ"
 	},
 	"REC MAS=COMBINACAO" : {
 		"prefix": "REC MAS=COMBINACAO",
-		"body": "*>(( REC MASCARA=COMBINACAO ))\n",
+		"body": "*>(( REC MASCARA=COMBINACAO ))",
 		"description": "Campo de combinação"
 	},
 	"REC MAS=CONFIGURACAO" : {
 		"prefix": "REC MAS=CONFIGURACAO",
-		"body": "*>(( REC MASCARA=CONFIGURACAO ))\n",
+		"body": "*>(( REC MASCARA=CONFIGURACAO ))",
 		"description": "Campo de configuração do produto"
 	},
 	"REC MAS=CPF" : {
 		"prefix": "REC MAS=CPF",
-		"body": "*>(( REC MASCARA=CPF ))\n",
+		"body": "*>(( REC MASCARA=CPF ))",
 		"description": "Campo de CPF"
 	},
 	"REC MAS=CPF/CNPJ" : {
 		"prefix": "REC MAS=CPF/CNPJ",
-		"body": "*>(( REC MASCARA=CPF/CNPJ ))\n",
+		"body": "*>(( REC MASCARA=CPF/CNPJ ))",
 		"description": "Campo de CPF e CNPJ"
 	},
 	"REC MAS=DIRETORIO" : {
 		"prefix": "REC MAS=DIRETORIO",
-		"body": "*>(( REC MASCARA=DIRETORIO ))\n",
+		"body": "*>(( REC MASCARA=DIRETORIO ))",
 		"description": "Campo de diretório"
 	},
 	"REC MAS=DOM.GRP.TRAB" : {
 		"prefix": "REC MAS=DOM.GRP.TRAB",
-		"body": "*>(( REC MASCARA=DOM.GRP.TRAB ))\n",
+		"body": "*>(( REC MASCARA=DOM.GRP.TRAB ))",
 		"description": "Domínio ou grupo de trabalho"
 	},
 	"REC MAS=DSD.DOC" : {
 		"prefix": "REC MAS=DSD.DOC",
-		"body": "*>(( REC MASCARA=DSD.DOC ))\n",
+		"body": "*>(( REC MASCARA=DSD.DOC ))",
 		"description": "Campo de desdobramento do docto"
 	},
 	"REC MAS=E-MAIL" : {
 		"prefix": "REC MAS=E-MAIL",
-		"body": "*>(( REC MASCARA=E-MAIL ))\n",
+		"body": "*>(( REC MASCARA=E-MAIL ))",
 		"description": "Campo de e-mail"
 	},
 	"REC MAS=ENDERECO" : {
 		"prefix": "REC MAS=ENDERECO",
-		"body": "*>(( REC MASCARA=ENDERECO ))\n",
+		"body": "*>(( REC MASCARA=ENDERECO ))",
 		"description": "Campo de endereço"
 	},
 	"REC MAS=ENDERECO_LONGO" : {
 		"prefix": "REC MAS=ENDERECO_LONGO",
-		"body": "*>(( REC MASCARA=ENDERECO_LONGO ))\n",
+		"body": "*>(( REC MASCARA=ENDERECO_LONGO ))",
 		"description": "Campo de endereço longo"
 	},
 	"REC MAS=FILIAL.FPA" : {
 		"prefix": "REC MAS=FILIAL.FPA",
-		"body": "*>(( REC MASCARA=FILIAL.FPA ))\n",
+		"body": "*>(( REC MASCARA=FILIAL.FPA ))",
 		"description": "Campo de filial da folha de pagamento"
 	},
 	"REC FK_1N=" : {
 		"prefix": "REC FK_1N=",
-		"body": "*>(( REC FK_1N=$1XXX ))\n",
+		"body": "*>(( REC FK_1N=${0:XXX} ))",
 		"description": "Indica a tabela que será feito o filtro 1:N"
 	},
 	"REC MAS=FONE" : {
 		"prefix": "REC MAS=FONE",
-		"body": "*>(( REC MASCARA=FONE ))\n",
+		"body": "*>(( REC MASCARA=FONE ))",
 		"description": "Campo de telefone"
 	},
 	"REC MAS=FORNECEDOR" : {
 		"prefix": "REC MAS=FORNECEDOR",
-		"body": "*>(( REC MASCARA=FORNECEDOR ))\n",
+		"body": "*>(( REC MASCARA=FORNECEDOR ))",
 		"description": "Campo de código de fornecedor"
 	},
 	"REC MAS=INSC.EST" : {
 		"prefix": "REC MAS=INSC.EST",
-		"body": "*>(( REC MASCARA=INSC.EST ))\n",
+		"body": "*>(( REC MASCARA=INSC.EST ))",
 		"description": "Campo de inscrição estadual"
 	},
 	"REC MAS=INSC.MUN" : {
 		"prefix": "REC MAS=INSC.MUN",
-		"body": "*>(( REC MASCARA=INSC.MUN ))\n",
+		"body": "*>(( REC MASCARA=INSC.MUN ))",
 		"description": "Campo de inscrição municipal"
 	},
 	"REC MAS=MEMO" : {
 		"prefix": "REC MAS=MEMO",
-		"body": "*>(( REC MASCARA=MEMO ))\n",
+		"body": "*>(( REC MASCARA=MEMO ))",
 		"description": "Campo MEMO"
 	},
 	"REC MAS=NETBIOS" : {
 		"prefix": "REC MAS=NETBIOS",
-		"body": "*>(( REC MASCARA=NETBIOS ))\n",
+		"body": "*>(( REC MASCARA=NETBIOS ))",
 		"description": "NETBIOS"
 	},
 	"REC MAS=NOME.PESSOA" : {
 		"prefix": "REC MAS=NOME.PESSOA",
-		"body": "*>(( REC MASCARA=NOME.PESSOA ))\n",
+		"body": "*>(( REC MASCARA=NOME.PESSOA ))",
 		"description": "Campo de nome da pessoa"
 	},
 	"REC MAS=NRO.DOC" : {
 		"prefix": "REC MAS=NRO.DOC",
-		"body": "*>(( REC MASCARA=NRO.DOC ))\n",
+		"body": "*>(( REC MASCARA=NRO.DOC ))",
 		"description": "Campo de número do docto"
 	},
 	"REC MAS=NRO.NOTA" : {
 		"prefix": "REC MAS=NRO.NOTA",
-		"body": "*>(( REC MASCARA=NRO.NOTA ))\n",
+		"body": "*>(( REC MASCARA=NRO.NOTA ))",
 		"description": "Campo de número da nota"
 	},
 	"REC MAS=PIS" : {
 		"prefix": "REC MAS=PIS",
-		"body": "*>(( REC MASCARA=PIS ))\n",
+		"body": "*>(( REC MASCARA=PIS ))",
 		"description": "Campo de PIS"
 	},
 	"REC MAS=REFERENCIA" : {
 		"prefix": "REC MAS=REFERENCIA",
-		"body": "*>(( REC MASCARA=REFERENCIA ))\n",
-		"description": "Campo de referï¿½ncia do produto"
+		"body": "*>(( REC MASCARA=REFERENCIA ))",
+		"description": "Campo de referíncia do produto"
 	},
 	"REC MAS=NUM.REG.EST" : {
 		"prefix": "REC MAS=NUM.REG.EST",
-		"body": "*>(( REC MASCARA=NUM.REG.ESTOQUE ))\n",
+		"body": "*>(( REC MASCARA=NUM.REG.ESTOQUE ))",
 		"description": "Campo de número do registro do estoque"
 	},
 	"REC MAS=QTD.GRADE" : {
 		"prefix": "REC MAS=QTD.GRADE",
-		"body": "*>(( REC MASCARA=QTD.GRADE ))\n",
+		"body": "*>(( REC MASCARA=QTD.GRADE ))",
 		"description": "Quantidade da grade"
 	},
 	"REC MAS=SER.ECF" : {
 		"prefix": "REC MAS=SER.ECF",
-		"body": "*>(( REC MASCARA=SER.ECF ))\n",
+		"body": "*>(( REC MASCARA=SER.ECF ))",
 		"description": "Campo de número de série da ECF"
 	},
 	"REC MAS=SER.NOTA" : {
 		"prefix": "REC MAS=SER.NOTA",
-		"body": "*>(( REC MASCARA=SER.NOTA ))\n",
+		"body": "*>(( REC MASCARA=SER.NOTA ))",
 		"description": "Campo de série da nota"
 	},
 	"REC MAS=SKYPE" : {
 		"prefix": "REC MAS=SKYPE",
-		"body": "*>(( REC MASCARA=SKYPE ))\n",
+		"body": "*>(( REC MASCARA=SKYPE ))",
 		"description": "Campo de Skype"
 	},
 	"REC MAS=UF" : {
 		"prefix": "REC MAS=UF",
-		"body": "*>(( REC MASCARA=UF ))\n",
+		"body": "*>(( REC MASCARA=UF ))",
 		"description": "Campo de UF"
 	},
 	"REC MAS=USU.COD" : {
 		"prefix": "REC MAS=USU.COD",
-		"body": "*>(( REC MASCARA=USU.COD ))\n",
+		"body": "*>(( REC MASCARA=USU.COD ))",
 		"description": "código do usuário"
 	},
 	"REC MAS=USU.REDE" : {
 		"prefix": "REC MAS=USU.REDE",
-		"body": "*>(( REC MASCARA=USU.REDE ))\n",
+		"body": "*>(( REC MASCARA=USU.REDE ))",
 		"description": "Usuário da rede"
 	},
 	"REC MAS=WWW" : {
 		"prefix": "REC MAS=WWW",
-		"body": "*>(( REC MASCARA=WWW ))\n",
+		"body": "*>(( REC MASCARA=WWW ))",
 		"description": "Campo de endereço de internet"
 	},
 	"REC MINUSCULO=" : {
 		"prefix": "REC MINUSCULO=",
-		"body": "*>(( REC MINUSCULO ))\n",
+		"body": "*>(( REC MINUSCULO ))",
 		"description": "Indica que o campo só pode ter conteúdo em minúsculo"
 	},
 	"REC NOTBD" : {
 		"prefix": "REC NOTBD",
-		"body": "*>(( REC NOTBD ))\n",
+		"body": "*>(( REC NOTBD ))",
 		"description": "Nível não pode ir para o banco de dados"
 	},
 	"REC NOTCOMPLEMENTARES" : {
 		"prefix": "REC NOTCOMPLEMENTARES",
-		"body": "*>(( REC NOTCOMPLEMENTARES ))\n",
+		"body": "*>(( REC NOTCOMPLEMENTARES ))",
 		"description": "Indica que campos abaixo não são complementares"
 	},
 	"REC NOTCOPY" : {
 		"prefix": "REC NOTCOPY",
-		"body": "*>(( REC NOTCOPY ))\n",
+		"body": "*>(( REC NOTCOPY ))",
 		"description": "Indica que não deve importar o copy"
 	},
 	"REC NOTDIC" : {
 		"prefix": "REC NOTDIC",
-		"body": "*>(( REC NOTDIC ))\n",
+		"body": "*>(( REC NOTDIC ))",
 		"description": "Nível não pode ir para o dicionário de dados"
 	},
 	"REC NOTENUMERADO" : {
 		"prefix": "REC NOTENUMERADO",
-		"body": "*>(( REC NOTENUMERADO ))\n",
+		"body": "*>(( REC NOTENUMERADO ))",
 		"description": "Campo não pode ser enumerado"
 	},
 	"REC NOTGERADOR" : {
 		"prefix": "REC NOTGERADOR",
-		"body": "*>(( REC NOTGERADOR ))\n",
+		"body": "*>(( REC NOTGERADOR ))",
 		"description": "Nível não pode ir para o gerador"
 	},
 	"REC NOTIMPORT" : {
 		"prefix": "REC NOTIMPORT",
-		"body": "*>(( REC NOTIMPORT ))\n",
+		"body": "*>(( REC NOTIMPORT ))",
 		"description": "Tabela não pode ser importada no dicionário"
 	},
 	"REC OVA_FK=" : {
 		"prefix": "REC OVA_FK=",
-		"body": "*>(( REC OVA_FK=$1XXX ))\n",
+		"body": "*>(( REC OVA_FK=${0:XXX} ))",
 		"description": "Indica a tabela pai do campo"
 	},
 	"REC OVA_FK=2" : {
 		"prefix": "REC OVA_FK=",
-		"body": "*>(( REC OVA_FK=$1XXX CAM_FK= ))\n",
+		"body": "*>(( REC OVA_FK=${1:XXX} CAM_FK=${0:XXXX-XXX} ))",
 		"description": "Indica a tabela pai do campo e o campo pai"
 	},
 	"REC PERIODO" : {
 		"prefix": "REC PERIODO",
-		"body": "*>(( REC PERIODO ))\n",
+		"body": "*>(( REC PERIODO ))",
 		"description": "Indica que campo é somente de período"
-	},
-	"REC REGISTRO" : {
-		"prefix": "REC REGISTRO",
-		"body": "*>(( REC REGISTRO=$1999-X---XX---XXXX ))\n",
-		"description": "Indica tipo de registro e a descrição"
 	},
 	"REC SUBSTCAMPOS" : {
 		"prefix": "REC SUBSTCAMPOS",
-		"body": "*>(( REC SUBSTCAMPOS ))\n",
+		"body": "*>(( REC SUBSTCAMPOS ))",
 		"description": "Substitui o campo com a tag pelos campos do redefines pai"
 	},
 	"REC SUGERE_ORDEM" : {
 		"prefix": "REC SUGERE_ORDEM",
-		"body": "*>(( REC SUGERE_ORDEM ))\n",
+		"body": "*>(( REC SUGERE_ORDEM ))",
 		"description": "Indica que sugere melhor ordem no SPD"
 	},
 	"REC TABELAPAI" : {
 		"prefix": "REC TABELAPAI",
-		"body": "*>(( REC TABELAPAI=$1 ))\n",
+		"body": "*>(( REC TABELAPAI=${0:XXXXXX} ))",
 		"description": "Nome da tabela pai (Ex: NPEDID)"
 	},
 	"REC TAMBD" : {
 		"prefix": "REC TAMBD",
-		"body": "*>(( REC TAMBD=$100 ))\n",
+		"body": "*>(( REC TAMBD=${0:999} ))",
 		"description": "Tamanho do campo no banco de dados"
 	},
 	"REC TIME" : {
 		"prefix": "REC TIME",
-		"body": "*>(( REC TIME=HHMMSSCC$1 ))\n",
+		"body": "*>(( REC TIME=HHMMSSCC ))",
 		"description": "Informar a máscara do campo hora"
 	},
 	"REC TAMANHO_VARIAVEL" : {
 		"prefix": "REC TAMANHO_VARIAVEL",
-		"body": "*>(( REC TAMANHO_VARIAVEL ))\n",
+		"body": "*>(( REC TAMANHO_VARIAVEL ))",
 		"description": "Indica que possui arquivo tamanho variável"
 	},
 	"REC CTREE=" : {
 		"prefix": "REC CTREE=",
-		"body": "*>(( REC CTREE=$1XXX ))\n",
+		"body": "*>(( REC CTREE=${1:SIG|PERIODO} ))",
 		"description": "Indica quais campos que devem ser gerados na FD para c-tree"
-	},
-	"RECDOC" : {
-		"prefix": "RECDOC",
-		"body": "      *>/**\n      *> $1\n      *>\n      *> @param  X---X parâmetro\n      *> @return X---X Saída\n      *> @throws X---X Erro\n      *>*/\n",
-		"description": "Documentação RechDoc"
 	},
 	"RECHDOC" : {
 		"prefix": "RECHDOC",
-		"body": "      *>/**\n      *> $1\n      *>\n      *> @param  X---X parâmetro\n      *> @return X---X Saída\n      *> @throws X---X Erro\n      *>*/\n",
+		"body": [
+			"      *>/**",
+			"      *> ${0:Comentário da rotina}",
+			"      *>",
+			"      *> @param  XXXXXX-XXX parâmetro",
+			"      *> @return XXXXXX-XXX Saída",
+			"      *> @throws XXXXXX-XXX Erro",
+			"      *>*/"
+		],
 		"description": "Documentação RechDoc"
 	},
 	"@param" : {
 		"prefix": "@param",
-		"body": "@param $1 <Descriï¿½ï¿½o>\n",
+		"body": "@param  ${1:XXXXXX-XXX} ${0:Descrição do parâmetro}",
 		"description": "ag RechDoc de parâmetro"
 	},
 	"@return" : {
 		"prefix": "@return",
-		"body": "@return $1 <Descriï¿½ï¿½o>\n",
+		"body": "@return ${1:XXXXXX-XXX} ${0:Descrição do retorno}",
 		"description": "ag RechDoc de retorno"
 	},
 	"@throws" : {
 		"prefix": "@throws",
-		"body": "@throws $1 <Descriï¿½ï¿½o>\n",
+		"body": "@throws ${1:XXXXXX-XXX} ${0:Descrição do retorno}",
 		"description": "ag RechDoc de status de retorno"
 	},
 	"@enum" : {
 		"prefix": "@enum",
-		"body": "   @enum $1\n",
+		"body": "   @enum ${1:XXXXXX-XXX} ${0:Descrição do enumerado}",
 		"description": "ag RechDoc de enumerado"
 	},
 	"@optional" : {
 		"prefix": "@optional",
-		"body": "   @optional$1\n",
+		"body": "   @optional",
 		"description": "ag RechDoc de parâmetro opcional"
 	},
 	"@default" : {
 		"prefix": "@default",
-		"body": "   @default $1\n",
+		"body": "   @default",
 		"description": "ag RechDoc de valor default"
 	},
 	"SEARCH" : {
 		"prefix": "SEARCH",
-		"body": "      *>-> Busca ... na tabela de ...\n           SEARCH ALL             <Nome_Tabela>\n      *>-> Se chegou ao fim da busca\n              AT END\n                 ...\n      *>-> Se encontrou\n              WHEN <condiï¿½ï¿½o>\n                 NEXT             SENTENCE,\n           END-SEARCH.\n",
+		"body": [
+			"      *>-> Busca ... na tabela de ...",
+			"           SEARCH ALL             <Nome_Tabela>",
+			"      *>-> Se chegou ao fim da busca",
+			"              AT END",
+			"                 ...",
+			"      *>-> Se encontrou",
+			"              WHEN <condição>",
+			"                 NEXT             SENTENCE,",
+			"           END-SEARCH."
+			],
 		"description": "Busca em uma tabela"
 	},
 	"STRING" : {
 		"prefix": "STRING",
-		"body": "STRING                 $1X---X, X---X,\n   DELIMITED BY SIZE INTO X---X.\n",
-		"description": "STRING DELIMITED BY SIZE (12)"
+		"body": [
+			"STRING                 ${1:<var1>}, ${2:<var2>},",
+			"   DELIMITED BY SIZE INTO ${0:<var>}."
+		],
+		"description": "STRING DELIMITED BY SIZE"
 	},
-	"STRING2" : {
+	"STRING WITH POINTER" : {
 		"prefix": "STRING",
-		"body": "STRING              $1X---X, X---X,\n   DELIMITED BY SIZE INTO X---X,\n",
-		"description": "STRING DELIMITED BY SIZE (15)"
-	},
-	"STRING3" : {
-		"prefix": "STRING",
-		"body": "STRING           $1X---X, X---X,\n   DELIMITED BY SIZE INTO X---X,\n",
-		"description": "STRING DELIMITED BY SIZE (18)"
-	},
-	"STRING4" : {
-		"prefix": "STRING",
-		"body": "STRING                 $1X---X, X---X,\n   DELIMITED BY SIZE INTO X---X\n      WITH POINTER     X---X,\n",
-		"description": "STRING DELIMITED/WITH POINTER (12)"
-	},
-	"STRING5" : {
-		"prefix": "STRING",
-		"body": "STRING              $1X---X, X---X,\n   DELIMITED BY SIZE INTO X---X\n      WITH POINTER  X---X,\n",
-		"description": "STRING DELIMITED/WITH POINTER (15)"
-	},
-	"STRING6" : {
-		"prefix": "STRING",
-		"body": "STRING           $1X---X, X---X,\n   DELIMITED BY SIZE INTO X---X.\n      WITH POINTER X---X,\n",
-		"description": "STRING DELIMITED/WITH POINTER (18)"
+		"body": [
+			"STRING                 ${1:<var1>}, ${2:<var2>},",
+			"   DELIMITED BY SIZE INTO ${2:<var>}",
+			"      WITH POINTER     ${0:<ponteiro>.}"
+		],
+		"description": "STRING DELIMITED/WITH POINTER"
 	},
 	"INITIALIZE1" : {
 		"prefix": "INITIALIZE",
-		"body": "INITIALIZE             $1X---X\n   REPLACING           ALPHANUMERIC DATA BY SPACES.\n",
-		"description": "INITIALIZE ... REPLACING ALPHANUMERIC (12)"
-	},
-	"INITIALIZE2" : {
-		"prefix": "INITIALIZE",
-		"body": "INITIALIZE          $1X---X\n   REPLACING        ALPHANUMERIC DATA BY SPACES,\n",
-		"description": "INITIALIZE ... REPLACING ALPHANUMERIC (15)"
-	},
-	"INITIALIZE3" : {
-		"prefix": "INITIALIZE",
-		"body": "INITIALIZE       $1X---X\n   REPLACING     ALPHANUMERIC DATA BY SPACES,\n",
-		"description": "INITIALIZE ... REPLACING ALPHANUMERIC (18)"
-	},
-	"MOVE LOWVAL" : {
-		"prefix": "MOVE LOWVAL",
-		"body": "MOVE    LOW-VALUES TO  $1X---X.\n",
-		"description": "MOVE LOW-VALUES TO ... (12)"
-	},
-	"MOVE LOWVAL2" : {
-		"prefix": "MOVE LOWVAL",
-		"body": "MOVE LOW-VALUES TO  $1X---X,\n",
-		"description": "MOVE LOW-VALUES TO ... (15)"
-	},
-	"MOVE LOWVAL3" : {
-		"prefix": "MOVE LOWVAL",
-		"body": "MOVE LOW-VALUES  TO $1X---X,\n",
-		"description": "MOVE LOW-VALUES TO ... (18)"
+		"body": [
+			"INITIALIZE             ${1:<var>}",
+			"   REPLACING           ALPHANUMERIC DATA BY SPACES."
+			],
+		"description": "INITIALIZE ... REPLACING ALPHANUMERIC"
 	},
 	"FUN LENGTH" : {
 		"prefix": "FUN LENGTH",
-		"body": "FUNCTION LENGTH ($1)\n",
+		"body": "FUNCTION LENGTH (${0:<var>})",
 		"description": "Retorna um inteiro igual ao comprimento da variável em argument-1"
 	},
 	"FUN DATE" : {
 		"prefix": "FUN DATE",
-		"body": "FUNCTION CURRENT-DATE $1\n",
+		"body": "FUNCTION CURRENT-DATE",
 		"description": "Retorna em um inteiro 9(12) a data atual. Formato AAAAMMDDHHMM"
 	},
 	"FUN UPPER" : {
 		"prefix": "FUN UPPER",
-		"body": "FUNCTION UPPER-CASE ($1)\n",
+		"body": "FUNCTION UPPER-CASE (${0:<var>})",
 		"description": "Retorna o alfanuméricos de argument-1 em maiúsculas"
 	},
 	"FUN LOWER" : {
 		"prefix": "FUN LOWER",
-		"body": "FUNCTION LOWER-CASE ($1)\n",
+		"body": "FUNCTION LOWER-CASE (${0:<var>})",
 		"description": "Retorna o alfanuméricos de argument-1 em minúsculas"
 	},
 	"FUN MOD" : {
 		"prefix": "FUN MOD",
-		"body": "FUNCTION MOD ($1)\n",
+		"body": "FUNCTION MOD (${0:<var>})",
 		"description": "Retorna o resto da divisão entre argument-1 e argument-2"
 	},
 	"FUN INTEGER" : {
 		"prefix": "FUN INTEGER",
-		"body": "FUNCTION INTEGER ($1)\n",
+		"body": "FUNCTION INTEGER (${0:<var>})",
 		"description": "Retorna o maior valor inteiro antes de argument-1"
 	},
 	"FUN COMP" : {
 		"prefix": "FUN COMP",
-		"body": "FUNCTION WHEN-COMPILED\n",
+		"body": "FUNCTION WHEN-COMPILED",
 		"description": "Retorna data e hora que o programa foi compilado. Formato YYYYMMDDHHMMSSCC-FUSO"
 	},
 	"FUN NUMVAL" : {
 		"prefix": "FUN NUMVAL",
-		"body": "FUNCTION NUMVAL ($1)\n",
+		"body": "FUNCTION NUMVAL (${0:<var>})",
 		"description": "Retorna um valor numérico para o valor alfanuméricos de argument-1"
 	},
 	"FUN LOG10" : {
 		"prefix": "FUN LOG10",
-		"body": "FUNCTION LOG10 ($1)\n",
+		"body": "FUNCTION LOG10 (${0:<var>})",
 		"description": "Retorna um valor numérico aproximado para o logaritmo de base 10 de argument-1"
 	},
 	"FUN REM" : {
 		"prefix": "FUN REM",
-		"body": "FUNCTION REM ($1)\n",
+		"body": "FUNCTION REM (${0:<var>})",
 		"description": "Retorna o resto da divisão entre argument-1 e argument-2"
 	},
 	"FUN ABS" : {
 		"prefix": "FUN ABS",
-		"body": "FUNCTION ABS ($1)\n",
+		"body": "FUNCTION ABS (${0:<var>})",
 		"description": "Retorna o valor absoluto (inteiro) de argument-1"
 	},
 	"FUN SQRT" : {
 		"prefix": "FUN SQRT",
-		"body": "FUNCTION SQRT ($1)\n",
+		"body": "FUNCTION SQRT (${0:<var>})",
 		"description": "Retorna a raiz de argument-1"
 	},
 	"XFD ALPHA" : {
 		"prefix": "XFD ALPHA",
-		"body": "*>(( XFD ALPHA ))\n",
+		"body": "*>(( XFD ALPHA ))",
 		"description": "Item tratado como alfanuméricos no banco de dados"
 	},
 	"XFD BINARY" : {
 		"prefix": "XFD BINARY",
-		"body": "*>(( XFD BINARY ))\n",
+		"body": "*>(( XFD BINARY ))",
 		"description": "Item tratado como dados binários no banco de dados"
-	},
-	"XFD COBTRG" : {
-		"prefix": "XFD COBTRG",
-		"body": "*>(( XFD COBOL-TRIGGER=$1 ))\n",
-		"description": "Programa cobol trigger a executar"
-	},
-	"XFD CMT" : {
-		"prefix": "XFD CMT",
-		"body": "*>(( XFD COMMENT $1))\n",
-		"description": "Insere um comentï¿½rio na XFD"
 	},
 	"XFD DATE USE GROUP" : {
 		"prefix": "XFD DATE USE GROUP",
-		"body": "*>(( XFD DATE, USE GROUP ))\n",
+		"body": "*>(( XFD DATE, USE GROUP ))",
 		"description": "Formato de data usando item de grupo"
 	},
 	"XFD DATE" : {
 		"prefix": "XFD DATE",
-		"body": "*>(( XFD DATE=YYYYYYMMDD$1 ))\n",
+		"body": "*>(( XFD DATE=YYYYYYMMDD ))",
 		"description": "Formato de data e hora no banco de dados (YYYY MM DD)"
 	},
 	"XFD FILE" : {
 		"prefix": "XFD FILE",
-		"body": "*>(( XFD FILE=$1 ))\n",
-		"description": "Nome do arquivo fï¿½sico"
+		"body": "*>(( XFD FILE=${0:XXXXXX} ))",
+		"description": "Nome do arquivo físico"
 	},
 	"XFD HIDDEN" : {
 		"prefix": "XFD HIDDEN",
-		"body": "*>(( XFD HIDDEN $1))\n",
+		"body": "*>(( XFD HIDDEN ))",
 		"description": "Campo não é utilizado na XFD"
 	},
 	"XFD NAME" : {
 		"prefix": "XFD NAME",
-		"body": "*>(( XFD NAME=\"$1\" ))\n",
+		"body": "*>(( XFD NAME=\"$0\" ))",
 		"description": "Nome do campo no banco de dados"
 	},
 	"XFD NUM" : {
 		"prefix": "XFD NUM",
-		"body": "*>(( XFD NUMERIC ))\n",
+		"body": "*>(( XFD NUMERIC ))",
 		"description": "Item tratado como numérico no banco de dados"
 	},
 	"XFD SEC" : {
 		"prefix": "XFD SEC",
-		"body": "*>(( XFD SECONDARY TABLE ))\n",
+		"body": "*>(( XFD SECONDARY TABLE ))",
 		"description": "Grava em uma tabela secundária (1:1) no banco de dados"
 	},
 	"XFD SUB" : {
 		"prefix": "XFD SUB",
-		"body": "*>(( XFD SUBTABLE=\"$1\" ))\n",
+		"body": "*>(( XFD SUBTABLE=\"$0\" ))",
 		"description": "Grava em uma subtabela (1:n) no banco de dados"
 	},
 	"XFD USE" : {
 		"prefix": "XFD USE",
-		"body": "*>(( XFD USE GROUP ))\n",
+		"body": "*>(( XFD USE GROUP ))",
 		"description": "Usa o item de grupo para criar campo no banco de dados"
 	},
 	"XFD VAR" : {
 		"prefix": "XFD VAR",
-		"body": "*>(( XFD VAR-LENGTH ))\n",
+		"body": "*>(( XFD VAR-LENGTH ))",
 		"description": "Usa o campo como VARCHAR no banco de dados"
 	},
 	"XFD WHEN" : {
 		"prefix": "XFD WHEN",
-		"body": "*>(( XFD WHEN XXX---X=\"$1\" TABLENAME=\"_XXX\" ))\n",
+		"body": "*>(( XFD WHEN XXXX-REG=\"${1:99}\" TABLENAME=\"${0:XXXXXX_XXX}\" ))",
 		"description": "Indica a subtabela"
 	},
-	"VSTART GRT" : {
-		"prefix": "VSTART GRT",
-		"body": "      *>-> Varre o virtual de %desarq%\n           MOVE    LOW-VALUES TO  W-%sigarq%-CHA.\n           PERFORM                %sigarq%-START-GREATER.\n           PERFORM                UNTIL EXIT\n              PERFORM             %sigarq%-READ-NEXT,\n              IF NOT %sigarq%-FS-OK\n                 EXIT             PERFORM,\n              END-IF,\n           END-PERFORM.\n",
-		"description": "Loop de leitura em virtual - START GREATER"
+	"VSTART NEXT" : {
+		"prefix": "VSTART NEXT",
+		"body": [
+			"      *>-> Varre o virtual de ${1:<descrição do virtual>}",
+			"           MOVE    LOW-VALUES TO  W-${2:XXX}-REG.",
+			"           PERFORM                ${2:XXX}-START-NLESS.",
+			"           PERFORM                UNTIL EXIT",
+			"              PERFORM             ${2:XXX}-READ-NEXT,",
+			"              IF NOT ${2:XXX}-FS-OK",
+			"                 EXIT             PERFORM,",
+			"              END-IF,",
+			"              $0",
+			"           END-PERFORM."
+		],
+		"description": "Loop de leitura em virtual - NEXT"
 	},
-	"VSTART NLS" : {
-		"prefix": "VSTART NLS",
-		"body": "      *>-> Varre o virtual de %desarq%\n           MOVE    LOW-VALUES TO  W-%sigarq%-CHA.\n           PERFORM                %sigarq%-START-NLESS.\n           PERFORM                UNTIL EXIT\n              PERFORM             %sigarq%-READ-NEXT,\n              IF NOT %sigarq%-FS-OK\n                 EXIT             PERFORM,\n              END-IF,\n           END-PERFORM.\n",
-		"description": "Loop de leitura em virtual - START NOT LESS"
-	},
-	"VSTART LES" : {
-		"prefix": "VSTART LES",
-		"body": "      *>-> Varre o virtual de %desarq%\n           MOVE    HIGH-VALUES TO W-%sigarq%-CHA.\n           PERFORM                %sigarq%-START-LESS.\n           PERFORM                UNTIL EXIT\n              PERFORM             %sigarq%-READ-NEXT,\n              IF NOT %sigarq%-FS-OK\n                 EXIT             PERFORM,\n              END-IF,\n           END-PERFORM.\n",
-		"description": "Loop de leitura em virtual - START LESS"
+	"VSTART PREVIOUS" : {
+		"prefix": "VSTART PREVIOUS",
+		"body": [
+			"      *>-> Varre o virtual de ${1:<descrição do virtual>}",
+			"           MOVE    HIGH-VALUES TO W-${2:XXX}-REG.",
+			"           PERFORM                ${2:XXX}-START-NGREATER.",
+			"           PERFORM                UNTIL EXIT",
+			"              PERFORM             ${2:XXX}-READ-PREVIOUS,",
+			"              IF NOT ${2:XXX}-FS-OK",
+			"                 EXIT             PERFORM,",
+			"              END-IF,",
+			"              $0",
+			"           END-PERFORM."
+		],
+		"description": "Loop de leitura em virtual - PREVIOUS"
 	}
 }
