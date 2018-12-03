@@ -17,9 +17,9 @@ export class Diagnostician {
      * @param preprocessorResultFileName 
      * @param PreprocessCallback 
      */
-    public diagnose(textDocument: TextDocument, preprocessorResultFileName: string, PreprocessCallback: (uri: string) => Thenable<{}>): Promise<Diagnostic[]> {
+    public diagnose(textDocument: TextDocument, PreprocessCallback: (uri: string) => Thenable<string>): Promise<Diagnostic[]> {
         return new Promise((resolve, reject) => {
-            this.findErrorsAndWarnings(textDocument, preprocessorResultFileName, PreprocessCallback).then((cobolDiagnostic) => {
+            this.findErrorsAndWarnings(textDocument, PreprocessCallback).then((cobolDiagnostic) => {
                 this.extractDiagnostics(cobolDiagnostic).then((diagnostics) => {
                     resolve(diagnostics);
                 }).catch(() => {
@@ -38,17 +38,13 @@ export class Diagnostician {
      * @param preprocessorResultFileName 
      * @param PreprocessCallback 
      */
-    private findErrorsAndWarnings(textDocument: TextDocument, preprocessorResultFileName: string, PreprocessCallback: (uri: string) => Thenable<{}>) {
+    private findErrorsAndWarnings(textDocument: TextDocument, PreprocessCallback: (uri: string) => Thenable<string>) {
         return new Promise<CobolDiagnostic>((resolve, reject) => {
             let tmpFile = new File("C:\\TMP\\" + new Path(textDocument.uri).fileName());
             tmpFile.saveBuffer([textDocument.getText()]).then( () => {
-                PreprocessCallback(tmpFile.fileName).then(() => {
-                    new File(preprocessorResultFileName).loadBuffer("latin1").then((buffer) => {
-                        let fileName = new Path(textDocument.uri).fileName();
-                        resolve(new CobolDiagnosticParser().parser(buffer.toString(), fileName));
-                    }).catch(() => {
-                        reject();
-                    });
+                PreprocessCallback(tmpFile.fileName).then((buffer) => {
+                    let fileName = new Path(textDocument.uri).fileName();
+                    resolve(new CobolDiagnosticParser().parser(buffer, fileName));
                 });
             }).catch(() => {
                 reject();

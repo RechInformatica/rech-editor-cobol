@@ -72,11 +72,15 @@ documents.onDidChangeContent(change => {
  * @param textDocument
  */
 export async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-	new Diagnostician().diagnose(textDocument, returnPreprocessorOutputFileName(), (fileName) => {
-		return sendExternalPreprocessExecution(fileName)
-	}). then((diagnostics) => {
-		//Send the computed diagnostics to VSCode.
-		connection.sendDiagnostics({ uri: textDocument.uri, diagnostics:  diagnostics});
+	getConfig<Boolean>("autodiagnostic").then((autodiagnostic) => {
+		if (autodiagnostic) {
+			new Diagnostician().diagnose(textDocument, (fileName) => {
+				return sendExternalPreprocessExecution(fileName)
+			}). then((diagnostics) => {
+				//Send the computed diagnostics to VSCode.
+				connection.sendDiagnostics({ uri: textDocument.uri, diagnostics:  diagnostics});
+			});
+		}
 	});
 }
 
@@ -84,21 +88,19 @@ export async function validateTextDocument(textDocument: TextDocument): Promise<
  * Sends a request to the client for Cobol preprocessor execution
  *
  * @param uri current URI of the file open in editor
- * @param cacheFileName Cache filename where the declaration is searched before
- * invoking Cobol preprocessor
  */
 export function sendExternalPreprocessExecution(uri: string) {
-	var files = [uri, returnPreprocessorOutputFileName()];
-	return connection.sendRequest("custom/runPreprocessor", [files]);
+	var files = [uri];
+	return connection.sendRequest<string>("custom/runPreprocessor", [files]);
 }
 
 /**
- * Return the preprocessor output file name
+ * Sends a request to the client for get a specific setting
  *
- * @param uri current URI of the file open in editor
+ * @param section
  */
-export function returnPreprocessorOutputFileName() {
-	return "C:\\TMP\\preproc\\preprocOutput.txt"
+export function getConfig<T>(section: string) {
+	return connection.sendRequest<T>("custom/configPreproc", section);
 }
 
 // This handler provides the initial list of the completion items.

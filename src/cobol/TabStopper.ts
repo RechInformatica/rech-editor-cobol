@@ -1,6 +1,7 @@
 'use strict';
 
-import { Position, Range, TextDocument, TextEditor, TextEditorEdit, Selection, window, workspace } from 'vscode';
+import { Position, Range, TextDocument, TextEditor, TextEditorEdit, Selection, window } from 'vscode';
+import { configuration } from '../helpers/configuration'
 
 /**
  * Class used to modify the Tab Stop tipically used with Cobol files.
@@ -30,12 +31,7 @@ export class TabStopper {
      * Returns the configured tabstops or default values if no tabstop is configured
      */
     private getTabs(): number[] {
-        let editorConfig = workspace.getConfiguration('rech.editor.vscode');
-        let tabStops = editorConfig.get<number[]>('tabstops');
-        if (!tabStops || (tabStops !== null && tabStops.length === 0)) {
-            tabStops = [0, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 75, 79];
-        }
-        return tabStops;
+        return configuration.get<number[]>('tabstops', [0, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 75, 79]);
     }
 
     /**

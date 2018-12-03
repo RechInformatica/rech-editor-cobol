@@ -5,6 +5,7 @@ import * as path from 'path';
 import { configure } from 'vscode/lib/testrunner';
 import { File } from '../extension';
 import { Process } from '../commons/Process';
+import { configuration } from '../helpers/configuration';
 
 /**
  * Language Server Provider client
@@ -65,13 +66,17 @@ export class Client {
 			Client.client.onRequest("custom/runPreprocessor", (files: string[]) => {
 				return Client.createPreprocessorExecutionPromise(files);
 			});
+			Client.client.onRequest("custom/configPreproc", (section: string) => {
+				// Workaround to fix parameter passing problems when a parameter is false boolean
+				return Client.getConfig(section);
+			});
 		}
 	}
 
 	/**
 	 * Creates a promise for Cobol Preprocessor expander execution
-	 * 
-	 * @param files file array with necessary files 
+	 *
+	 * @param files file array with necessary files
 	 */
 	private static createPreprocExpanderExecutionPromise(files: string[]) {
 		return new Promise<string>((resolve, reject) => {
@@ -92,20 +97,16 @@ export class Client {
 
 	/**
 	 * Creates a promise for Cobol Preprocessor execution
-	 * 
-	 * @param files file array with necessary files 
+	 *
+	 * @param files file array with necessary files
 	 */
-	private static createPreprocessorExecutionPromise(files: string[]) {
+	private static createPreprocessorExecutionPromise(files: string[]): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
 			let currentFile = files[0];
-			let preprocessorResultFile = files[1];
 			let executor = Editor.getPreprocessor();
 			if (executor) {
 				executor.setPath(currentFile).exec().then((process) => {
-					let preprocOutput = new File(preprocessorResultFile);
-					preprocOutput.saveBuffer([process.getStdout()], "latin1").then(() => {
-						resolve();
-					});
+					resolve(process.getStdout());
 				}).catch(() => {
 					reject();
 				});
@@ -114,6 +115,18 @@ export class Client {
 			}
 		});
 	}
+
+	/**
+	 * Returns specific setting
+	 *
+	 * @param section
+	 */
+	private static getConfig(section: string, defaultValue?: any): Promise<any> {
+		return new Promise<any>((resolve) => {
+			resolve(configuration.get(section, defaultValue));
+		});
+	}
+
 
 	/**
 	 * Stops the LSP client if it has ben previously started

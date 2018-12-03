@@ -68,6 +68,11 @@
                     ],
                     "description": "COBOL tabstops"
                 },
+                "rech.editor.vscode.autodiagnostic": {
+                    "type": "boolean",
+                    "description": "Whether auto diagnosis is enabled",
+                    "default": false
+                },
                 "comments-highlight.tags": {
                     "type": "array",
                     "description": "Tags which are used to color the comments. Changes require a restart of VS Code to take effect",
