@@ -21,8 +21,12 @@ export class CobolFormatter {
      * @param lineNumber current line where curson is positioned
      */
     public formatWhenKeyIsPressed(lines: string[], lineNumber: number): TextEdit[] {
-        if (this.isIfCondition(lineNumber - 1, lines)) {
+        let currentText = lines[lineNumber - 1];
+        if (this.isIfCondition(currentText)) {
             return this.formatIfClause(lineNumber, lines);
+        }
+        if (this.isWhenCondition(currentText)) {
+            return [CompletionUtils.createIndentTextEdit(lineNumber, 0)];
         }
         return [];
     }
@@ -30,9 +34,18 @@ export class CobolFormatter {
     /**
      * Returns true if the current line represents an 'if' condition
      */
-    private isIfCondition(line: number, lines: string[]): boolean {
-        let currentLine = lines[line];
-        if (/\s+IF.*/.exec(currentLine)) {
+    private isIfCondition(currentText: string): boolean {
+        if (/\s+IF.*/.exec(currentText)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the current line represents a 'when' condition
+     */
+    private isWhenCondition(currentText: string): boolean {
+        if (/\s+WHEN.*/.exec(currentText)) {
             return true;
         }
         return false;
@@ -84,23 +97,6 @@ export class CobolFormatter {
         }
         return true;
     }
-
-    /**
-     * Returns true if the line text starts with at least one of the specified tokens
-     * 
-     * @param text line text
-     * @param tokens tokens to be tested
-     */
-    // private startsWithToken(lineText: string, tokens: string[]): boolean {
-    //     let trimmed = lineText.trim();
-    //     for (let index = 0; index < tokens.length; index++) {
-    //         const currentToken = tokens[index];
-    //         if (trimmed.startsWith(currentToken)) {
-    //             return true;
-    //         }
-    //     };
-    //     return false;
-    // }
 
     /**
      * Creates a TextEdit with the 'end-if' clause already formatted
