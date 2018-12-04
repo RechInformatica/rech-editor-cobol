@@ -73,6 +73,14 @@
                     "description": "Whether auto diagnosis is enabled",
                     "default": false
                 },
+                "rech.editor.vscode.diagnosticfilter": {
+                    "type": "array",
+                    "description": "Filter of warnings that should not be considered in diagnostic",
+                    "default": [
+                        "[W002]",
+                        "[W003]"
+                    ]
+                },
                 "comments-highlight.tags": {
                     "type": "array",
                     "description": "Tags which are used to color the comments. Changes require a restart of VS Code to take effect",
