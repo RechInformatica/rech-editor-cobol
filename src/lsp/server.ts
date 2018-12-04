@@ -267,6 +267,11 @@ export function createPromiseForWordDeclaration(documentFullText: string, word: 
 	// Creates an external promise so the reject function can be called when no definition
 	// is found for the specified word
 	return new Promise<Location>((resolve) => {
+		// If the word is too small
+		if (word.length < 3) {
+			resolve(undefined);
+			return;
+		}
 		// Cache filename where the declaration is searched before
 		// invoking Cobol preprocessor
 		let cacheFileName = buildCacheFileName(uri);
