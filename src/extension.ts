@@ -127,6 +127,12 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos08', () => {
         new Editor().setColumn(AREA_A - 1);
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.editorScrollUp', () => {
+        commands.executeCommand('editorScroll', { to: 'up', by: 'line', value: 1, revealCursor: true });
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.editorScrollDown', () => {
+        commands.executeCommand('editorScroll', { to: 'down', by: 'line', value: 1, revealCursor: true });
+    }));
 }
 
 // this method is called when your extension is deactivated
