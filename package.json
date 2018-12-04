@@ -131,7 +131,8 @@
                 "editor.tabSize": 3,
                 "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
                 "editor.trimAutoWhitespace": false,
-                "editor.useTabStops": false
+                "editor.useTabStops": false,
+                "editor.renderIndentGuides": false
             }
         },
         "languages": [
@@ -437,6 +438,14 @@
                 "command": "rech.editor.vscode.cobolInvertMoveOperators",
                 "key": "ctrl+alt+d",
                 "when": "editorLangId == COBOL"
+            },
+            {
+                "command": "rech.editor.vscode.editorScrollUp",
+                "key": "ctrl+up"
+            },
+            {
+                "command": "rech.editor.vscode.editorScrollDown",
+                "key": "ctrl+down"
             }
         ]
     },
