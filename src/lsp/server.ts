@@ -65,6 +65,11 @@ connection.onInitialize((params: InitializeParams) => {
 documents.onDidChangeContent(change => {
 	validateTextDocument(change.document);
 });
+// If the document closed
+documents.onDidClose((textDocument) => {
+	//Clear the computed diagnostics to VSCode.
+	connection.sendDiagnostics({ uri: textDocument.document.uri, diagnostics: []});
+});
 
 /**
  * Create diagnostics for all errors or warnings
@@ -72,20 +77,23 @@ documents.onDidChangeContent(change => {
  * @param textDocument
  */
 export async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-	getConfig<Boolean>("autodiagnostic").then((autodiagnostic) => {
-		if (autodiagnostic) {
-			new Diagnostician().diagnose(textDocument,
-				(fileName) => {
-					return sendExternalPreprocessExecution(fileName)
-				},
-				(message) => {
-					return externalDiagnosticFilter(message);
-				}).then((diagnostics) => {
-					//Send the computed diagnostics to VSCode.
-					connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics });
-				});
-		}
-	});
+  getConfig<Boolean>("autodiagnostic").then(autodiagnostic => {
+    if (autodiagnostic) {
+      new Diagnostician().diagnose(
+          textDocument,
+          fileName => {
+            return sendExternalPreprocessExecution(fileName);
+          },
+          message => {
+            return externalDiagnosticFilter(message);
+          }
+        ).then(diagnostics => {
+          //Send the computed diagnostics to VSCode.
+		  connection.sendDiagnostics({uri: textDocument.uri, diagnostics: diagnostics});
+		  
+        });
+    }
+  });
 }
 
 /**
@@ -282,6 +290,7 @@ export function createPromiseForWordDeclaration(documentFullText: string, word: 
 	return new Promise<Location>((resolve) => {
 		// If the word is too small
 		if (word.length < 3) {
+			connection.window.showWarningMessage(`Select at least three characters!`);
 			resolve(undefined);
 			return;
 		}
