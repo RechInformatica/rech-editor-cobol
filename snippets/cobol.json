@@ -123,10 +123,6 @@
 		"prefix": "MZ",
 		"body": "MOVE ZEROS TO ${0:<var1>},"
 	},
-	"PERFORM": {
-		"prefix": "PE",
-		"body": "PERFORM ${0:<paragraph>},"
-	},
 	"GO TO": {
 		"prefix": "GO",
 		"body": "GO TO ${0:<paragraph>},"

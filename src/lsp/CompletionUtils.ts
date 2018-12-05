@@ -33,6 +33,9 @@ export class CompletionUtils {
         for (var i = 1; i < missingSpaces; i++) {
             text = text.concat(" ");
         }
+        if (text.length === 0) {
+            text = ' ';
+        }
         return text;
     }
 

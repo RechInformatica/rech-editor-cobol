@@ -10,7 +10,7 @@ import {
 	ProposedFeatures,
 	DidChangeConfigurationNotification,
 	Location,
-    InitializeParams,
+	InitializeParams,
 	TextDocumentPositionParams,
 	Range,
 	Position,
@@ -18,7 +18,7 @@ import {
 	CompletionItemKind,
 	InsertTextFormat,
 	TextDocument,
-	DocumentOnTypeFormattingParams,
+	DocumentOnTypeFormattingParams
 } from 'vscode-languageserver';
 import { Find } from '../editor/Find';
 import { Path } from '../commons/path';
@@ -37,13 +37,13 @@ const PIC_COLUMN_DECLARATION = 35;
 // Also include all preview / proposed LSP features.
 let connection = createConnection(ProposedFeatures.all);
 
-let hasDiagnosticRelatedInformationCapability: boolean|undefined = false;
+let hasDiagnosticRelatedInformationCapability: boolean | undefined = false;
 let documents: TextDocuments = new TextDocuments();
 connection.onInitialize((params: InitializeParams) => {
 	let capabilities = params.capabilities;
-    hasDiagnosticRelatedInformationCapability =
-        capabilities.textDocument &&
-        capabilities.textDocument.publishDiagnostics &&
+	hasDiagnosticRelatedInformationCapability =
+		capabilities.textDocument &&
+		capabilities.textDocument.publishDiagnostics &&
 		capabilities.textDocument.publishDiagnostics.relatedInformation;
 	return {
 		capabilities: {
@@ -76,9 +76,9 @@ export async function validateTextDocument(textDocument: TextDocument): Promise<
 		if (autodiagnostic) {
 			new Diagnostician().diagnose(textDocument, (fileName) => {
 				return sendExternalPreprocessExecution(fileName)
-			}). then((diagnostics) => {
+			}).then((diagnostics) => {
 				//Send the computed diagnostics to VSCode.
-				connection.sendDiagnostics({ uri: textDocument.uri, diagnostics:  diagnostics});
+				connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics });
 			});
 		}
 	});
@@ -109,15 +109,41 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
 	let line = _textDocumentPosition.position.line;
 	let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
 	if (fullDocument) {
-		if (isVarDeclaration(line, fullDocument)) {
-			items.push(createVarDeclarationItem(_textDocumentPosition));
-		}
-		if (isParagraphPerform(line, fullDocument)) {
-			fillItemsWithParagraphs(items, fullDocument);
+		switch (true) {
+			case isCommentLine(line, fullDocument): {
+				break;
+			}
+			case isVarDeclaration(line, fullDocument): {
+				items.push(createVarDeclarationItem(_textDocumentPosition));
+				break;
+			}
+			case isParagraphPerform(line, fullDocument): {
+				fillItemsWithParagraphs(items, fullDocument);
+				break;
+			}
+			default: {
+				items.push(createPerformSnippet(_textDocumentPosition));
+				break;
+			}
 		}
 	}
 	return items;
 });
+
+/**
+ * Returns true if the curson is on a comment line
+ * 
+ * @param line current line number
+ * @param fullDocument full document
+ */
+export function isCommentLine(line: number, fullDocument: TextDocument) {
+	let fullDocumentText = fullDocument.getText();
+	let currentLine = fullDocumentText.split("\n")[line];
+	if (currentLine.trim().startsWith("*>")) {
+		return true;
+	}
+	return false;
+}
 
 /**
  * Returns true if the editor should suggest Cobol variable declaration
@@ -207,12 +233,36 @@ export function createVarDeclarationItem(_textDocumentPosition: TextDocumentPosi
 	};
 }
 
+/**
+ * Creates a dynamic perform snippet
+ *
+ * @param _textDocumentPosition document information
+ */
+export function createPerformSnippet(_textDocumentPosition: TextDocumentPositionParams): CompletionItem {
+	let cursorColumn = _textDocumentPosition.position.character;
+	let text = "PERFORM" + CompletionUtils.fillMissingSpaces(35, cursorColumn + 6) + "${0}" + CompletionUtils.separatorForColumn(cursorColumn);
+	return {
+		label: 'Completar chamada de parágrafo',
+		detail: 'Completa a chamada do parágrafo.',
+		insertText: text,
+		insertTextFormat: InsertTextFormat.Snippet,
+		filterText: "PE",
+		preselect: true,
+		kind: CompletionItemKind.Keyword,
+		data: 2
+	};
+}
+
+
 // This handler resolve additional information for the item selected in
 // the completion list.
 connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
 		if (item.data === 1) {
 			(item.documentation = 'Serão inseridas cláusulas PIC e VALUE IS nos lugares apropriados.');
+		}
+		if (item.data === 2) {
+			(item.documentation = 'Será gerado PERFORM para execução do parágrafo especificado.');
 		}
 		return item;
 	}
