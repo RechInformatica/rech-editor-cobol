@@ -43,7 +43,7 @@ export class ParserCobol {
    * @param line 
    */
   public getDeclaracaoParagrafo(line: string): string | undefined {
-    var match = /^\s\s\s\s\s\s\s([\w\-]+)\.(\s*\*\>.*)?$/g.exec(line);
+    var match = /^\s\s\s\s\s\s\s([\w\-]+)\.(\s*\*\>.*)?/g.exec(line);
     if (match == null) {
       return undefined;
     }

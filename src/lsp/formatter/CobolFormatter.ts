@@ -26,6 +26,9 @@ export class CobolFormatter {
         if (this.isIfCondition(currentText)) {
             return this.formatIfClause(lineNumber, lines);
         }
+        if (this.isEvaluateCondition(currentText)) {
+            return this.formatEvaluateClause(lineNumber, lines);
+        }
         if (this.isWhenCondition(currentText)) {
             return [CompletionUtils.createIndentTextEdit(lineNumber, 0)];
         }
@@ -42,7 +45,7 @@ export class CobolFormatter {
      * Returns true if the current line represents an 'if' condition
      */
     private isIfCondition(currentText: string): boolean {
-        if (/\s+IF.*/.exec(currentText)) {
+        if (/\s+(IF|if).*/.exec(currentText)) {
             return true;
         }
         return false;
@@ -52,7 +55,17 @@ export class CobolFormatter {
      * Returns true if the current line represents a 'when' condition
      */
     private isWhenCondition(currentText: string): boolean {
-        if (/\s+WHEN.*/.exec(currentText)) {
+        if (/\s+(WHEN|when).*/.exec(currentText)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the current line represents a 'evaluate' condition
+     */
+    private isEvaluateCondition(currentText: string): boolean {
+        if (/\s+(EVALUATE|evaluate).*/.exec(currentText)) {
             return true;
         }
         return false;
@@ -97,7 +110,7 @@ export class CobolFormatter {
                     return true;
                 }
                 if (!(lineText.charAt(column) === " ")) {
-                    return !(lineText.startsWith(endIfText) || lineText.startsWith(elseText));
+                    return !(lineText.startsWith(endIfText.toUpperCase()) || lineText.startsWith(elseText.toUpperCase()));
                 }
             }
         }
@@ -186,5 +199,100 @@ export class CobolFormatter {
             newText: targetChar + "\n" + CompletionUtils.fillMissingSpaces(CompletionUtils.countSpacesAtBeginning(_previousText) + 1, 0)
         };
    }
+
+    /**
+     * Formats Cobol 'evaluate' clause when Enter is pressed
+     * 
+     * @param lineNumber number of the current line
+     * @param lines document lines
+     */
+    private formatEvaluateClause(lineNumber: number, lines: string[]): TextEdit[] {
+        let lineText = lines[lineNumber];
+        let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(lineText);
+        const edits: TextEdit[] = [this.createWhenTextEdit(lineNumber, evaluateStartColumn)];
+        if (this.isEndEvaluateMissing(lineNumber, evaluateStartColumn, lines)) {
+            edits.push(this.createEndEvaluateTextEdit(lineNumber + 1, evaluateStartColumn + 1));
+        }
+        return edits;
+    }
+
+    /**
+     * Returns true if the 'end-evaluate' clause is missing for the current paragraph
+     * 
+     * @param lineNumber current line number
+     */
+    private isEndEvaluateMissing(lineNumber: number, column: number, lines: string[]): boolean {
+        let endEvaluateText = CompletionUtils.fillMissingSpaces(column, 0) + " END-EVALUATE";
+        for (let index = lineNumber; index < lines.length; index++) {
+            let lineText = lines[index];
+            if (!this.parser.isCommentOrEmptyLine(lineText)) {
+                // If it's a new paragraph declaration then the 'evaluate' clause was not closed on the current
+                // paragraph and the 'end-evaluate' needs to be inserted
+                if (this.parser.getDeclaracaoParagrafo(lineText)) {
+                    return true;
+                }
+                // If it's a command at the same identation/column as 'evaluate' clause
+                // (the command is probably not nested inside the 'evaluate')
+                if (lineText.length < column) {
+                    return true;
+                }
+                if (!(lineText.charAt(column) === " ")) {
+                    return !(lineText.startsWith(endEvaluateText.toUpperCase()));
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Creates a TextEdit with the 'end-evaluate' clause already formatted
+     * 
+     * @param line line where the 'end-evaluate' clause will be inserted
+     * @param column column where the 'end-evaluate' clause will be inserted
+     */
+    private createEndEvaluateTextEdit(line: number, column: number): TextEdit {
+        let endEvaluateText = "";
+        endEvaluateText = CompletionUtils.fillMissingSpaces(column, 0) + "END-EVALUATE";
+        endEvaluateText = endEvaluateText.concat(CompletionUtils.separatorForColumn(column));
+        endEvaluateText = endEvaluateText.concat("\n");
+        return {
+            range: {
+                start: {
+                    line: line,
+                    character: 0
+                },
+                end: {
+                    line: line,
+                    character: 0
+                }
+            },
+            newText: endEvaluateText
+        };
+    }    
+
+    /**
+     * Creates a TextEdit with the 'when' clause already formatted
+     * 
+     * @param line line where the 'when' clause will be inserted
+     * @param column column where the 'when' clause will be inserted
+     */
+    private createWhenTextEdit(line: number, column: number): TextEdit {
+        let textToInsert = "WHEN ";
+        let endEvaluateText = "";
+        endEvaluateText = CompletionUtils.fillMissingSpaces(column + 4, column) + textToInsert;
+        return {
+            range: {
+                start: {
+                    line: line,
+                    character: column
+                },
+                end: {
+                    line: line,
+                    character: column
+                }
+            },
+            newText: endEvaluateText
+        };
+    }    
 
 }
