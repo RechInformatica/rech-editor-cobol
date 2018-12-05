@@ -230,17 +230,6 @@
 			"END-PERFORM."
 		]
 	},
-	"EVALUATE": {
-		"prefix": "EV",
-		"body": [
-			"EVALUATE               ${1:TRUE},",
-			"   WHEN ${2:<condition>}",
-			"      ${3:<body>}",
-			"   WHEN OTHER",
-			"      ${0:<body>}",
-		 	"END-EVALUATE."
-		]
-	},
 	"EXIBE-MENSAGEM": {
 		"prefix": "EXIBE-MENSAGEM",
 		"body": [

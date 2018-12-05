@@ -193,6 +193,10 @@ connection.onCompletionResolve(
 				item.documentation = 'Será gerado TO com o cursor na posição da segunda variável.';
 				break;
 			}
+			case 5: {
+				item.documentation = 'Será gerado o comando EVALUATE com o cursor na posição da variável.';
+				break;
+			}
 		}
 		return item;
 	}
