@@ -19,8 +19,9 @@ export class CobolFormatter {
      * 
      * @param lines all lines of the document source code
      * @param lineNumber current line where curson is positioned
+     * @param colNumber current column where curson is positioned
      */
-    public formatWhenKeyIsPressed(lines: string[], lineNumber: number): TextEdit[] {
+    public formatWhenKeyIsPressed(lines: string[], lineNumber: number, colNumber: number): TextEdit[] {
         let currentText = lines[lineNumber - 1];
         if (this.isIfCondition(currentText)) {
             return this.formatIfClause(lineNumber, lines);
@@ -30,6 +31,9 @@ export class CobolFormatter {
         }
         if (this.parser.getDeclaracaoParagrafo(currentText)) {
             return [CompletionUtils.createIndentTextEdit(lineNumber, 0, 4)];
+        }
+        if (this.shouldKeepDotOrComma(lines[lineNumber], colNumber)) {
+            return this.createKeepDotOrCommaEdit(lines[lineNumber - 1], lineNumber - 1, lines[lineNumber - 1].length, lines[lineNumber]);
         }
         return [];
     }
@@ -125,5 +129,62 @@ export class CobolFormatter {
             newText: endIfText
         };
     }
+    
+    /**
+     * Returns true if the editor should keep dot/comma at the end of the line
+     * 
+     * @param currentText current line text
+     * @param column column where the cursor is positioned
+     */
+    private shouldKeepDotOrComma(currentText: string, column: number): boolean {
+        return this.endsWithDotOrComma(currentText) && column == (currentText.length - 1);
+        
+    }
+    
+    /**
+     * Returns true if the current line ends with dot or comma
+     * 
+     * @param currentText current line text
+     */
+    private endsWithDotOrComma(currentText: string): boolean {
+        return currentText.endsWith(".") || currentText.endsWith(",");
+    }
+    
+    /**
+     * Creates a text edit to prevent editor from removing dot/comma from the end of the line
+     * @param previousText current line text
+     * @param line line where the cursor is positioned
+     * @param column column where the cursor is positioned
+     * @param currentText text of the current line
+     */
+    private createKeepDotOrCommaEdit(_previousText: string, line: number, _column: number, currentText: string): TextEdit[] {
+        const edits: TextEdit[] = [];
+        edits.push(this.createDotEdit(_previousText, line, _column, currentText));
+        // edits.push(this.removeRemainingLine(_previousText, line, _column, currentText));
+        return edits;
+    }
+    
+    /**
+     * Returns a text edit for dot or comma
+     */
+    private createDotEdit(_previousText: string, line: number, _column: number, currentText: string): TextEdit {
+        let targetChar = ",";
+        if (currentText.trim().endsWith(".")) {
+            targetChar = ".";
+        }
+        return {
+            range: {
+                start: {
+                    line: line,
+                    character: _column
+                },
+                end: {
+                    line: line + 1,
+                    character: _column
+                }
+            },
+            newText: targetChar + "\n" + CompletionUtils.fillMissingSpaces(CompletionUtils.countSpacesAtBeginning(_previousText) + 1, 0)
+        };
+   }
 
 }
