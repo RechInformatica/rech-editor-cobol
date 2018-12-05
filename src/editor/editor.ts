@@ -549,6 +549,23 @@ export class Editor {
   }
 
   /**
+   * Returns the basename of the file currently open in editor without the extension
+   */
+  getCurrentFileBaseNameWithoutExtension(){
+    let fileName = this.getCurrentFileBaseName();
+    return fileName.substr(0, fileName.length - 4);
+  }
+  
+  /**
+   * Returns the extension of the file currently open in editor 
+   */
+  getCurrentFileBaseNameExtension(){
+    let fileName = this.getCurrentFileBaseName();
+    return fileName.substr(fileName.length - 3, fileName.length);
+  }
+
+
+  /**
    * Close the active editor
    */
   closeActiveEditor() {
