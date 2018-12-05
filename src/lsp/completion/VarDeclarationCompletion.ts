@@ -10,7 +10,7 @@ const PIC_COLUMN_DECLARATION = 35;
 export class VarDeclarationCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = CompletionUtils.fillMissingSpaces(PIC_COLUMN_DECLARATION, column) + "PIC IS $1($2)    VALUE IS $3     ${4:COMP-X}.";
+        let text = CompletionUtils.fillMissingSpaces(PIC_COLUMN_DECLARATION, column - 1) + "PIC IS $1($2)$3    VALUE IS $4     ${5:COMP-X}.";
         return [{
             label: 'Completar declaração de variável',
             detail: 'Completa a declaração da variável.',
