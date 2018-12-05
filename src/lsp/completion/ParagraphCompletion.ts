@@ -1,11 +1,12 @@
-import { ParserCobol } from "../cobol/parsercobol";
-import { CobolDocParser } from "../cobol/rechdoc/CobolDocParser";
+import { ParserCobol } from "../../cobol/parsercobol";
+import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
 import { MarkupKind, CompletionItemKind, CompletionItem } from "vscode-languageserver";
+import { CompletionInterface } from "./CompletionInterface";
 
 /**
  * Class to generate LSP Completion Items for Cobol paragraphs declarations
  */
-export class ParagraphCompletion {
+export class ParagraphCompletion implements CompletionInterface {
 
     /** Cobol parser */
     private parserCobol: ParserCobol;
@@ -17,12 +18,7 @@ export class ParagraphCompletion {
         this.cobolDocParser = new CobolDocParser();
     }
 
-    /**
-     * Generates completion items for Cobol paragraphs
-     * 
-     * @param lines Cobol source code lines
-     */
-    public generateCompletionItems(lines: string[]): CompletionItem[] {
+    public generate(_line: number, _column: number, lines: string[]): CompletionItem[] {
         let items: CompletionItem[] = [];
         for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
             let currentLineText = lines[lineIndex];

@@ -1,6 +1,6 @@
-import { ParserCobol } from "../cobol/parsercobol";
+import { ParserCobol } from "../../cobol/parsercobol";
 import { TextEdit } from "vscode-languageserver";
-import { CompletionUtils } from "./CompletionUtils";
+import { CompletionUtils } from "../commons/CompletionUtils";
 
 /**
  * Class to format Cobol source code
