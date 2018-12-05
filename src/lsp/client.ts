@@ -6,6 +6,7 @@ import { configure } from 'vscode/lib/testrunner';
 import { File } from '../extension';
 import { Process } from '../commons/Process';
 import { configuration } from '../helpers/configuration';
+import { cobolDiagnosticFilter } from '../cobol/diagnostic/cobolDiagnosticFilter';
 
 /**
  * Language Server Provider client
@@ -67,8 +68,13 @@ export class Client {
 				return Client.createPreprocessorExecutionPromise(files);
 			});
 			Client.client.onRequest("custom/configPreproc", (section: string) => {
-				// Workaround to fix parameter passing problems when a parameter is false boolean
 				return Client.getConfig(section);
+			});
+			Client.client.onRequest("custom/diagnosticFilter", (diagnosticMessage: string) => {
+				return new Promise<Boolean>((resolve) => {
+					let result = cobolDiagnosticFilter.isDiagnosticValid(diagnosticMessage);
+					resolve(result);
+				})
 			});
 		}
 	}

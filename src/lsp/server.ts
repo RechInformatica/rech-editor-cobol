@@ -74,12 +74,16 @@ documents.onDidChangeContent(change => {
 export async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	getConfig<Boolean>("autodiagnostic").then((autodiagnostic) => {
 		if (autodiagnostic) {
-			new Diagnostician().diagnose(textDocument, (fileName) => {
-				return sendExternalPreprocessExecution(fileName)
-			}).then((diagnostics) => {
-				//Send the computed diagnostics to VSCode.
-				connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics });
-			});
+			new Diagnostician().diagnose(textDocument,
+				(fileName) => {
+					return sendExternalPreprocessExecution(fileName)
+				},
+				(message) => {
+					return externalDiagnosticFilter(message);
+				}).then((diagnostics) => {
+					//Send the computed diagnostics to VSCode.
+					connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: diagnostics });
+				});
 		}
 	});
 }
@@ -101,6 +105,15 @@ export function sendExternalPreprocessExecution(uri: string) {
  */
 export function getConfig<T>(section: string) {
 	return connection.sendRequest<T>("custom/configPreproc", section);
+}
+
+/**
+ * Sends a request to the client for get a specific setting
+ *
+ * @param section
+ */
+export function externalDiagnosticFilter(diagnosticMessage: string) {
+	return connection.sendRequest<boolean>("custom/diagnosticFilter", diagnosticMessage);
 }
 
 // This handler provides the initial list of the completion items.

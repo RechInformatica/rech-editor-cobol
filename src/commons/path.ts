@@ -42,10 +42,17 @@ export class Path {
   }
 
   /**
-   * Return the Windows fullPath
+   * Return the fullPath in Windows format
    */
   fullPathWin() {
     return this.path.replace(/\//g, "\\").replace("file:\\\\\\", "").replace("%3A", ":").replace(/%5C/gi, "\\");
+  }
+  
+  /**
+   * Return the fullPath in Vscode format
+   */
+  fullPathVscode() {
+    return "file:///" + this.path.replace(/\\/g, "\/").replace(/:/g, "%3A").replace("%3A", ":").replace(/\\/gi, "%5C");
   }
 
   /**
