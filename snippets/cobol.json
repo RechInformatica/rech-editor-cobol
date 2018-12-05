@@ -103,10 +103,6 @@
 		"prefix": "SET WARQ-TSTSTA-NAO",
 		"body": "SET WARQ-TSTSTA-NAO TO TRUE,"
 	},
-	"MOVE TO": {
-		"prefix": "MV",
-		"body": "MOVE ${1:<var1>} TO ${0:<var2>},"
-	},
 	"MOVE LOW-VALUES TO": {
 		"prefix": "ML",
 		"body": "MOVE LOW-VALUES TO ${0:<var1>},"

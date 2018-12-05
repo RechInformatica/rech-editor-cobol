@@ -32,6 +32,8 @@ import { CompletionUtils } from './CompletionUtils';
 
 // Cobol column for 'PIC' clause declaration
 const PIC_COLUMN_DECLARATION = 35;
+// Cobol column for 'TO' clause declaration
+const TO_COLUMN_DECLARATION = 30;
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -135,7 +137,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
 				break;
 			}
 			default: {
-				items.push(createPerformSnippet(_textDocumentPosition));
+				fillItemsWithCobolCommands(items, _textDocumentPosition, fullDocument);
 				break;
 			}
 		}
@@ -197,6 +199,18 @@ export function fillItemsWithParagraphs(items: CompletionItem[], fullDocument: T
 }
 
 /**
+ * Fills the completion items with Cobol commands
+ * 
+ * @param items items array
+ * @param fullDocument full document information
+ */
+export function fillItemsWithCobolCommands(items: CompletionItem[], _textDocumentPosition: TextDocumentPositionParams, fullDocument: TextDocument) {
+	items.push(createPerformSnippet(_textDocumentPosition));
+	items.push(createMoveSnippet(_textDocumentPosition));
+	items.push(createToSnippet(_textDocumentPosition, fullDocument));
+}
+
+/**
  * Document formatter
  */
 connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) => {
@@ -247,7 +261,7 @@ export function createVarDeclarationItem(_textDocumentPosition: TextDocumentPosi
 }
 
 /**
- * Creates a dynamic perform snippet
+ * Creates a dynamic 'perform' snippet
  *
  * @param _textDocumentPosition document information
  */
@@ -266,16 +280,98 @@ export function createPerformSnippet(_textDocumentPosition: TextDocumentPosition
 	};
 }
 
+/**
+ * Creates a dynamic 'move' snippet
+ *
+ * @param _textDocumentPosition document information
+ */
+export function createMoveSnippet(_textDocumentPosition: TextDocumentPositionParams): CompletionItem {
+	let cursorColumn = _textDocumentPosition.position.character;
+	let text = "MOVE" + CompletionUtils.fillMissingSpaces(20, cursorColumn + 3) + "${0}";
+	return {
+		label: 'Gera comando MOVE',
+		detail: 'Gera o comando MOVE colocando o cursor na posição da primeira variável',
+		insertText: text,
+		insertTextFormat: InsertTextFormat.Snippet,
+		filterText: "MV",
+		preselect: true,
+		kind: CompletionItemKind.Keyword,
+		data: 3
+	};
+}
+
+/**
+ * Creates a dynamic 'to' snippet
+ *
+ * @param _textDocumentPosition document information
+ */
+export function createToSnippet(_textDocumentPosition: TextDocumentPositionParams, fullDocument: TextDocument): CompletionItem {
+	let text = buildToText(_textDocumentPosition, fullDocument);
+	return {
+		label: 'Gera comando TO',
+		detail: 'Gera o comando TO colocando o cursor na posição da primeira variável',
+		insertText: text,
+		insertTextFormat: InsertTextFormat.Snippet,
+		filterText: "TO",
+		preselect: true,
+		kind: CompletionItemKind.Keyword,
+		data: 4
+	};
+}
+
+/**
+ * Builds and returns the 'to' text snippet
+ *
+ * @param _textDocumentPosition document information
+ */
+export function buildToText(_textDocumentPosition: TextDocumentPositionParams, fullDocument: TextDocument): string {
+	let lines = fullDocument.getText().split("\r\n");
+	let currentText = lines[_textDocumentPosition.position.line - 1];
+	let cursorColumn = _textDocumentPosition.position.character;
+	let text = "";
+	if (cursorColumn < TO_COLUMN_DECLARATION) {
+		text = text.concat(CompletionUtils.fillMissingSpaces(TO_COLUMN_DECLARATION, cursorColumn - 1));
+	}
+	text = text.concat("TO");
+	text = text.concat(CompletionUtils.fillMissingSpaces(35, cursorColumn + text.length - 1));
+	text = text.concat("${0}");
+	text = text.concat(CompletionUtils.separatorForColumn(getFirstCharacterColumn(currentText)));
+	return text;
+}
+
+/**
+ * Returns the number of the first character on the specified line
+ */
+export function getFirstCharacterColumn(lineText: string): number {
+	for (let i = 0; i < lineText.length; i++) {
+		if (lineText.charAt(i) !== " ") {
+			return i;
+		}
+	}
+	return 0;
+}
 
 // This handler resolve additional information for the item selected in
 // the completion list.
 connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
-		if (item.data === 1) {
-			(item.documentation = 'Serão inseridas cláusulas PIC e VALUE IS nos lugares apropriados.');
-		}
-		if (item.data === 2) {
-			(item.documentation = 'Será gerado PERFORM para execução do parágrafo especificado.');
+		switch (item.data) {
+			case 1: {
+				item.documentation = 'Serão inseridas cláusulas PIC e VALUE IS nos lugares apropriados.';
+				break;
+			}
+			case 2: {
+				item.documentation = 'Será gerado PERFORM para execução do parágrafo especificado.';
+				break;
+			}
+			case 3: {
+				item.documentation = 'Será gerado MOVE com o cursor na posição da primeira variável.';
+				break;
+			}
+			case 4: {
+				item.documentation = 'Será gerado TO com o cursor na posição da segunda variável.';
+				break;
+			}
 		}
 		return item;
 	}
