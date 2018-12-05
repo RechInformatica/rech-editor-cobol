@@ -56,8 +56,13 @@ export class CompletionUtils {
      * 
      * @param line line number
      * @param column column number
+     * @param size indentation size (number of spaces to be inserted)
      */
-    public static createIndentTextEdit(line: number, column: number): TextEdit {
+    public static createIndentTextEdit(line: number, column: number, size: number = 3): TextEdit {
+        let indentSpaces = "";
+        for (let i = 0; i < size; i++) {
+            indentSpaces = indentSpaces.concat(" ");
+        }
         return {
             range: {
                 start: {
@@ -69,11 +74,8 @@ export class CompletionUtils {
                     character: column
                 }
             },
-            newText: "   "
+            newText: indentSpaces
         };
     }
-
-
-
 
 }

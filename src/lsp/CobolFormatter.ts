@@ -8,10 +8,10 @@ import { CompletionUtils } from "./CompletionUtils";
 export class CobolFormatter {
 
     /** Cobol parser */
-    private parserCobol: ParserCobol;
+    private parser: ParserCobol;
 
     constructor() {
-        this.parserCobol = new ParserCobol();
+        this.parser = new ParserCobol();
     }
 
     /**
@@ -27,6 +27,9 @@ export class CobolFormatter {
         }
         if (this.isWhenCondition(currentText)) {
             return [CompletionUtils.createIndentTextEdit(lineNumber, 0)];
+        }
+        if (this.parser.getDeclaracaoParagrafo(currentText)) {
+            return [CompletionUtils.createIndentTextEdit(lineNumber, 0, 4)];
         }
         return [];
     }
@@ -73,15 +76,14 @@ export class CobolFormatter {
      * @param lineNumber current line number
      */
     private isEndIfMissing(lineNumber: number, column: number, lines: string[]): boolean {
-        let parser = new ParserCobol();
         let endIfText = CompletionUtils.fillMissingSpaces(column, 0) + " END-IF";
         let elseText = CompletionUtils.fillMissingSpaces(column, 0) + " ELSE";
         for (let index = lineNumber; index < lines.length; index++) {
             let lineText = lines[index];
-            if (!parser.isCommentOrEmptyLine(lineText)) {
+            if (!this.parser.isCommentOrEmptyLine(lineText)) {
                 // If it's a new paragraph declaration then the 'if' clause was not closed on the current
                 // paragraph and the 'end-if' needs to be inserted
-                if (parser.getDeclaracaoParagrafo(lineText)) {
+                if (this.parser.getDeclaracaoParagrafo(lineText)) {
                     return true;
                 }
                 // If it's a command at the same identation/column as 'if' clause
