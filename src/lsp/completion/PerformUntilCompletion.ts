@@ -21,7 +21,7 @@ export class PerformUntilCompletion implements CompletionInterface {
             filterText: "PU",
             preselect: true,
             kind: CompletionItemKind.Keyword,
-            data: 6
+            data: 7
         }];
     }
 
