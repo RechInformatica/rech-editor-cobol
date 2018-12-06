@@ -10,6 +10,7 @@ import { MoveCompletion } from "./MoveCompletion";
 import { ToCompletion } from "./ToCompletion";
 import { CompletionInterface } from "./CompletionInterface";
 import { EvaluateCompletion } from "./EvaluateCompletion";
+import { PerformUntilCompletion } from "./PerformUntilCompletion";
 import { SetCompletion } from "./SetCompletion";
 import { AddCompletion } from "./AddCompletion";
 
@@ -117,6 +118,7 @@ export class CobolCompletionItemFactory {
         items = items.concat(this.generate(new AddCompletion()));
         items = items.concat(this.generate(new ToCompletion()));
         items = items.concat(this.generate(new EvaluateCompletion()));
+        items = items.concat(this.generate(new PerformUntilCompletion()));
         return items;
     }
 

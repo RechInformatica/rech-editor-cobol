@@ -193,14 +193,6 @@
 		"prefix": "BWZ",
 		"body": "BLANK WHEN ZEROS"
 	},
-	"PERFORM UNTIL": {
-		"prefix": "PU",
-		"body": [
-			"PERFORM                UNTIL EXIT",
-			"   ${0:<body>}",
-			"END-PERFORM."
-		]
-	},
 	"PERFORM VARYING": {
 		"prefix": "PB",
 		"body": [
