@@ -8,6 +8,8 @@ import { FormatterUtils } from "./FormatterUtils";
 import { WhenFormatter } from "./WhenFormatter";
 import { PerformUntilFormatter } from "./PerformUntilFormatter";
 import { ElseFormatter } from "./ElseFormatter";
+import { CompletionItem } from "vscode";
+import { CompletionUtils } from "../commons/CompletionUtils";
 
 /**
  * Class to format Cobol source code
@@ -164,6 +166,23 @@ export class CobolFormatter {
    * @param completion implementation used to generate completion items
    */
   private generate(completion: FormatterInterface): TextEdit[] {
-    return completion.generate(this.line, this.column, this.lines);
+    let result = completion.generate(this.line, this.column, this.lines);
+    if (CompletionUtils.isLowerCaseSource(this.lines)) {
+      return this.toLowerCase(result);
+    }
+    return result;
   }
+
+/**
+   * Convert the result to lower case
+   * 
+   * @param result 
+   */
+  private toLowerCase(result: TextEdit[]): TextEdit[] {
+    result.forEach(textEdit => {
+      textEdit.newText = textEdit.newText.toLowerCase();
+    });
+    return result;
+  }
+
 }
