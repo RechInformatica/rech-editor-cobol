@@ -51,31 +51,4 @@ export class CompletionUtils {
         return ",";
     }
 
-    /**
-     * Creates an indent text edit for the specified line and column
-     * 
-     * @param line line number
-     * @param column column number
-     * @param size indentation size (number of spaces to be inserted)
-     */
-    public static createIndentTextEdit(line: number, column: number, size: number = 3): TextEdit {
-        let indentSpaces = "";
-        for (let i = 0; i < size; i++) {
-            indentSpaces = indentSpaces.concat(" ");
-        }
-        return {
-            range: {
-                start: {
-                    line: line,
-                    character: column
-                },
-                end: {
-                    line: line,
-                    character: column
-                }
-            },
-            newText: indentSpaces
-        };
-    }
-
 }

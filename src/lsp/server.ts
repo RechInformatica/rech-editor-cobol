@@ -136,12 +136,12 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
  * Document formatter
  */
 connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) => {
-	let lineNumber = params.position.line;
-	let colNumber = params.position.character;
+	let line = params.position.line;
+	let column = params.position.character;
 	let fullDocument = documents.get(params.textDocument.uri);
 	if (fullDocument) {
 		let lines = fullDocument.getText().split("\r\n");
-		return new CobolFormatter().formatWhenKeyIsPressed(lines, lineNumber, colNumber);
+		return new CobolFormatter(line, column, fullDocument).formatWhenKeyIsPressed();
 	}
 	return [];
 });
