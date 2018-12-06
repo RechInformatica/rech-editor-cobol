@@ -12,6 +12,7 @@ import { CompletionInterface } from "./CompletionInterface";
 import { EvaluateCompletion } from "./EvaluateCompletion";
 import { PerformUntilCompletion } from "./PerformUntilCompletion";
 import { SetCompletion } from "./SetCompletion";
+import { PerformTestBeforeCompletion } from "./PerformTestBeforeCompletion";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -117,6 +118,7 @@ export class CobolCompletionItemFactory {
         items = items.concat(this.generate(new ToCompletion()));
         items = items.concat(this.generate(new EvaluateCompletion()));
         items = items.concat(this.generate(new PerformUntilCompletion()));
+        items = items.concat(this.generate(new PerformTestBeforeCompletion()));
         return items;
     }
 
