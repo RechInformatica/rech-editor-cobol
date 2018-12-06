@@ -47,7 +47,8 @@ connection.onInitialize((params: InitializeParams) => {
 				resolveProvider: true
 			},
 			documentOnTypeFormattingProvider: {
-				firstTriggerCharacter: "\n"
+				firstTriggerCharacter: "\n",
+				moreTriggerCharacter: [" "]
 			}
 		}
 	};
@@ -140,7 +141,7 @@ connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) =
 	let fullDocument = documents.get(params.textDocument.uri);
 	if (fullDocument) {
 		let lines = fullDocument.getText().split("\r\n");
-		return new CobolFormatter().formatWhenKeyIsPressed(lines, lineNumber);
+		return new CobolFormatter().formatWhenKeyIsPressed(lines, lineNumber, params.ch);
 	}
 	return [];
 });
