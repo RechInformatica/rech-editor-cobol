@@ -22,15 +22,6 @@ export function activate(_context: any) {
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     //
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolMove', () => {
-        new GeradorCobol().move();
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolTo', () => {
-        new GeradorCobol().to();
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolElse', () => {
-        new GeradorCobol().else();
-    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolLineEndDot', () => {
         new GeradorCobol().endLineToggle('.');
     }));

@@ -7,6 +7,7 @@ import { EvaluateFormatter } from "./EvaluateFormatter";
 import { FormatterUtils } from "./FormatterUtils";
 import { WhenFormatter } from "./WhenFormatter";
 import { PerformUntilFormatter } from "./PerformUntilFormatter";
+import { ElseFormatter } from "./ElseFormatter";
 
 /**
  * Class to format Cobol source code
@@ -43,6 +44,9 @@ export class CobolFormatter {
     if (this.isIfCondition(currentText)) {
       return this.generate(new IfFormatter());
     }
+    if (this.isElseCondition(currentText)) {
+      return [FormatterUtils.createIndentTextEdit(this.line, 0)];
+    }
     if (this.isEvaluateCondition(currentText)) {
       return this.generate(new EvaluateFormatter());
     }
@@ -57,6 +61,17 @@ export class CobolFormatter {
     }
     if (this.shouldKeepDotOrComma(this.lines[this.line], this.column)) {
       return this.generate(new CommandSeparatorFormatter());
+    }
+    return [];
+  }
+
+  /**
+   * Formats the Cobol source when the 'E' letter is pressed
+   */
+  public formatWhenEIsPressed(): TextEdit[] {
+    let currentText = this.lines[this.line];
+    if (this.isElseCondition(currentText)) {
+      return this.generate(new ElseFormatter());
     }
     return [];
   }
@@ -77,6 +92,16 @@ export class CobolFormatter {
    */
   private isIfCondition(currentText: string): boolean {
     if (IfFormatter.IF_REGEXP.exec(currentText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents an 'if' condition
+   */
+  private isElseCondition(currentText: string): boolean {
+    if (ElseFormatter.ELSE_REGEXP.exec(currentText)) {
       return true;
     }
     return false;

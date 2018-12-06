@@ -48,7 +48,7 @@ connection.onInitialize((params: InitializeParams) => {
       },
       documentOnTypeFormattingProvider: {
         firstTriggerCharacter: "\n",
-        moreTriggerCharacter: [" "]
+        moreTriggerCharacter: [" ", 'E', 'e'],
       }
     }
   };
@@ -158,10 +158,13 @@ connection.onDocumentOnTypeFormatting(
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
       let formatter = new CobolFormatter(line, column, fullDocument);
-      if (hasTypedEnter(params.ch)) {
-        return formatter.formatWhenEnterIsPressed();
-      } else {
-        return formatter.formatWhenSpaceIsPressed();
+      switch (true) {
+        case hasTypedEnter(params.ch):
+          return formatter.formatWhenEnterIsPressed();
+        case params.ch.toUpperCase() == "E":
+          return formatter.formatWhenEIsPressed();
+        default:
+          return formatter.formatWhenSpaceIsPressed();
       }
     }
     return [];
@@ -246,7 +249,12 @@ connection.onCompletionResolve(
       }
       case 6: {
         item.documentation =
-          "Será gerado o comando PERFORM UNTIL EXIT conforme o contexto atual.";
+        "Será gerado SET com o cursor na posição da primeira variável.";
+        break;
+      }
+      case 7: {
+        item.documentation =
+        "Será gerado o comando PERFORM UNTIL EXIT conforme o contexto atual.";
         break;
       }
     }

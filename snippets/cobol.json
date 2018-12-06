@@ -46,7 +46,7 @@
 			"   ${0:<body>}",
 			"END-IF."
 		]
-	},    
+	},
 	"IF GREATER THAN": {
 		"prefix": "IFG",
 		"body": [
@@ -95,14 +95,6 @@
 			"END-IF."
 		]
 	},
-	"SET TO": {
-		"prefix": "SE",
-		"body": "SET ${0:<var1>} TO TRUE,"
-	},
-	"SET WARQ-TSTSTA-NAO": {
-		"prefix": "SET WARQ-TSTSTA-NAO",
-		"body": "SET WARQ-TSTSTA-NAO TO TRUE,"
-	},
 	"MOVE LOW-VALUES TO": {
 		"prefix": "ML",
 		"body": "MOVE LOW-VALUES TO ${0:<var1>},"
@@ -146,13 +138,6 @@
 	"COMPUTE ROUNDED =": {
 		"prefix": "CR",
 		"body": "COMPUTE ${1:<var>} ROUNDED = ${0:<formula>},"
-	},
-	"ELSE,": {
-		"prefix": "EL",
-		"body": [
-			"ELSE,",
-			"   "
-		]
 	},
 	"EXIT PERFORM CYCLE": {
 		"prefix": "XC",

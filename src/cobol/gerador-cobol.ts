@@ -12,54 +12,6 @@ export class GeradorCobol {
   }
 
   /**
-   * Insert a command "MOVE"
-   */
-  async move() {
-    await this.editor.type("MOVE");
-    await this.gotoCol(Colunas.COLUNA_A);
-  }
-
-  /**
-   * Insert a command "SPACES"
-   */
-  spaces() {
-    this.editor.type("SPACES");
-  }
-
-  /**
-   * Insert a command "ZEROS"
-   */
-  zeros() {
-    this.editor.type("ZEROS");
-  }
-
-  /**
-   * Insert a command "LOW-VALUES"
-   */
-  lowvalues() {
-    this.editor.type("LOW-VALUES");
-  }
-
-  /**
-   * Insert a command "To"
-   */
-  async to() {
-    await this.gotoColTo();
-    await this.editor.type("TO");
-    await this.gotoCol(Colunas.COLUNA_C);
-  }
-
-  /**
-   * Insert a command "Else" in a new line below
-   */
-  async else() {
-    let indentColumn = this.currentIndentLevel();
-    await this.editor.cursorLineEnd();
-    // Mount text to insert, filling with spaces to reach correct indent level before and after ELSE statement
-    await this.editor.type("\n" + " ".repeat(indentColumn - 3) + "ELSE,\n" + " ".repeat(indentColumn));
-  }
-
-  /**
    * Insert/toggle terminators dot/comma at end of line
    */
   endLineToggle(char: string) {
@@ -85,7 +37,7 @@ export class GeradorCobol {
     this.editor.selectWholeLines();
     let selectedBuffer = this.editor.getSelectionBuffer();
     /**
-     * Regex to find all COBOL MOVE commands in current selection. There are 4 elements between () used to replace 
+     * Regex to find all COBOL MOVE commands in current selection. There are 4 elements between () used to replace
      *    1º - Spaces starting line. These keep the current indent level
      *    2º - 1st MOVE's operator. Used to invert with the 2nd MOVE's operator
      *    3º - 2nd MOVE's operator. Used to invert with the 1st MOVE's operator
@@ -309,7 +261,7 @@ export class GeradorCobol {
     return vardeclaration;
   }
   /**
-   * 
+   *
    */
   private async firstWordColumn() {
     // Get the line in focous
