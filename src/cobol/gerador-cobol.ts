@@ -12,35 +12,6 @@ export class GeradorCobol {
   }
 
   /**
-   * Insert a command "MOVE"
-   */
-  async move() {
-    await this.editor.type("MOVE");
-    await this.gotoCol(Colunas.COLUNA_A);
-  }
-
-  /**
-   * Insert a command "SPACES"
-   */
-  spaces() {
-    this.editor.type("SPACES");
-  }
-
-  /**
-   * Insert a command "ZEROS"
-   */
-  zeros() {
-    this.editor.type("ZEROS");
-  }
-
-  /**
-   * Insert a command "LOW-VALUES"
-   */
-  lowvalues() {
-    this.editor.type("LOW-VALUES");
-  }
-
-  /**
    * Insert a command "To"
    */
   async to() {

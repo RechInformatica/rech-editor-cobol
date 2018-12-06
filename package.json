@@ -174,10 +174,6 @@
         ],
         "commands": [
             {
-                "command": "rech.editor.vscode.cobolMove",
-                "title": "MOVE"
-            },
-            {
                 "command": "rech.editor.vscode.cobolTo",
                 "title": "TO"
             },
@@ -216,11 +212,6 @@
         ],
         "menus": {
             "editor/context": [
-                {
-                    "command": "rech.editor.vscode.cobolMove",
-                    "group": "cobolplugin",
-                    "when": "editorTextFocus && editorLangId == COBOL"
-                },
                 {
                     "command": "rech.editor.vscode.cobolTo",
                     "group": "cobolplugin",
@@ -279,11 +270,6 @@
             {
                 "command": "rech.editor.vscode.newLineAbove",
                 "key": "ctrl+shift+enter"
-            },
-            {
-                "command": "rech.editor.vscode.cobolMove",
-                "key": "ctrl+shift+m",
-                "when": "editorLangId == COBOL"
             },
             {
                 "command": "rech.editor.vscode.cobolElse",
