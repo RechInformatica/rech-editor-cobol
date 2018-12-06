@@ -6,6 +6,7 @@ import { CommandSeparatorFormatter } from "./CommandSeparatorFormatter";
 import { EvaluateFormatter } from "./EvaluateFormatter";
 import { FormatterUtils } from "./FormatterUtils";
 import { WhenFormatter } from "./WhenFormatter";
+import { PerformUntilFormatter } from "./PerformUntilFormatter";
 
 /**
  * Class to format Cobol source code
@@ -44,6 +45,9 @@ export class CobolFormatter {
     }
     if (this.isEvaluateCondition(currentText)) {
       return this.generate(new EvaluateFormatter());
+    }
+    if (this.isPerformUntil(currentText)) {
+      return this.generate(new PerformUntilFormatter());
     }
     if (this.isWhenCondition(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0)];
@@ -97,7 +101,17 @@ export class CobolFormatter {
     }
     return false;
   }
-
+  
+  /**
+   * Returns true if the current line represents a 'perform until' condition
+   */
+  private isPerformUntil(currentText: string) {
+    if (PerformUntilFormatter.PERFORM_UNTIL_REGEXP.exec(currentText)) {
+      return true;
+    }
+    return false;
+  }
+  
   /**
    * Returns true if the editor should keep dot/comma at the end of the line
    *
