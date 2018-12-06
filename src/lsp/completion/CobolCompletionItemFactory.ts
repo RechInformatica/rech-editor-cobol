@@ -57,6 +57,12 @@ export class CobolCompletionItemFactory {
             case this.isVarDeclaration(): {
                 return this.generate(new VarDeclarationCompletion());
             }
+            case this.isMove() || this.isAdd() || this.isSet() : {
+                return this.generate(new ToCompletion());
+            }
+            case this.isSubtract(): {
+                return this.generate(new FromCompletion());
+            }
             case this.isParagraphPerform(): {
                 return this.generate(new ParagraphCompletion());
             }
@@ -100,10 +106,50 @@ export class CobolCompletionItemFactory {
     }
 
     /**
+     * Returns true if the current line represents a 'move'
+     */
+    private isMove(): boolean {
+        if (/\s+(MOVE|move).*/.exec(this.lineText)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the current line represents a 'add'
+     */
+    private isAdd(): boolean {
+        if (/\s+(ADD|add).*/.exec(this.lineText)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the current line represents a 'set'
+     */
+    private isSet(): boolean {
+        if (/\s+(SET|set).*/.exec(this.lineText)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the current line represents a 'subtract'
+     */
+    private isSubtract(): boolean {
+        if (/\s+(SUBTRACT|subtract).*/.exec(this.lineText)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Returns true if the current line represents a paragraph perform
      */
     private isParagraphPerform(): boolean {
-        if (/\s+PERFORM.*/.exec(this.lineText)) {
+        if (/\s+(PERFORM|perform).*/.exec(this.lineText)) {
             return true;
         }
         return false;
@@ -119,8 +165,6 @@ export class CobolCompletionItemFactory {
         items = items.concat(this.generate(new SetCompletion()));
         items = items.concat(this.generate(new AddCompletion()));
         items = items.concat(this.generate(new SubtractCompletion()));
-        items = items.concat(this.generate(new ToCompletion()));
-        items = items.concat(this.generate(new FromCompletion()));
         items = items.concat(this.generate(new EvaluateCompletion()));
         items = items.concat(this.generate(new PerformUntilCompletion()));
         return items;
