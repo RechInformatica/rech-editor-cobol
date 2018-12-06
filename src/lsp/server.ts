@@ -221,43 +221,6 @@ connection.listen();
 // the completion list.
 connection.onCompletionResolve(
   (item: CompletionItem): CompletionItem => {
-    switch (item.data) {
-      case 1: {
-        item.documentation =
-          "Serão inseridas cláusulas PIC e VALUE IS nos lugares apropriados.";
-        break;
-      }
-      case 2: {
-        item.documentation =
-          "Será gerado PERFORM para execução do parágrafo especificado.";
-        break;
-      }
-      case 3: {
-        item.documentation =
-          "Será gerado MOVE com o cursor na posição da primeira variável.";
-        break;
-      }
-      case 4: {
-        item.documentation =
-          "Será gerado TO com o cursor na posição da segunda variável.";
-        break;
-      }
-      case 5: {
-        item.documentation =
-          "Será gerado o comando EVALUATE com o cursor na posição da variável.";
-        break;
-      }
-      case 6: {
-        item.documentation =
-        "Será gerado SET com o cursor na posição da primeira variável.";
-        break;
-      }
-      case 7: {
-        item.documentation =
-        "Será gerado o comando PERFORM UNTIL EXIT conforme o contexto atual.";
-        break;
-      }
-    }
     return item;
   }
 );
