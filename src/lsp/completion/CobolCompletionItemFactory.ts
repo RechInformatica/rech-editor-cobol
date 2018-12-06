@@ -116,8 +116,7 @@ export class CobolCompletionItemFactory {
         return items;
     }
 
-
-    /**
+   /**
      * Generates completion items with the specified implementation
      * 
      * @param completion implementation used to generate completion items
