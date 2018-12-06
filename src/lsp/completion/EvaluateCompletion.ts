@@ -19,8 +19,7 @@ export class EvaluateCompletion implements CompletionInterface {
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: "EV",
             preselect: true,
-            kind: CompletionItemKind.Keyword,
-            data: 5
+            kind: CompletionItemKind.Keyword
         }];
     }
 

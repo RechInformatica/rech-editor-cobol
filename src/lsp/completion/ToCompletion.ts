@@ -20,8 +20,7 @@ export class ToCompletion implements CompletionInterface {
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: "TO",
             preselect: true,
-            kind: CompletionItemKind.Keyword,
-            data: 4
+            kind: CompletionItemKind.Keyword
         }];
     }
 

@@ -16,8 +16,7 @@ export class SetCompletion implements CompletionInterface {
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: "SET",
             preselect: true,
-            kind: CompletionItemKind.Keyword,
-            data: 6
+            kind: CompletionItemKind.Keyword
         }];
     }
 

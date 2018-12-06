@@ -11,6 +11,7 @@ import { ToCompletion } from "./ToCompletion";
 import { CompletionInterface } from "./CompletionInterface";
 import { EvaluateCompletion } from "./EvaluateCompletion";
 import { SetCompletion } from "./SetCompletion";
+import { AddCompletion } from "./AddCompletion";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -28,7 +29,7 @@ export class CobolCompletionItemFactory {
 
     /**
      * Creates an instance to generate LSP Completion Items for Cobol language
-     * 
+     *
      * @param line line where the cursor is positioned
      * @param column column where the cursor is positioned
      * @param fullDocument full document information
@@ -42,7 +43,7 @@ export class CobolCompletionItemFactory {
 
     /**
      * Generates completion items for Cobol paragraphs
-     * 
+     *
      * @param lines Cobol source code lines
      */
     public generateCompletionItems(): CompletionItem[] {
@@ -113,6 +114,7 @@ export class CobolCompletionItemFactory {
         items = items.concat(this.generate(new PerformCompletion()));
         items = items.concat(this.generate(new MoveCompletion()));
         items = items.concat(this.generate(new SetCompletion()));
+        items = items.concat(this.generate(new AddCompletion()));
         items = items.concat(this.generate(new ToCompletion()));
         items = items.concat(this.generate(new EvaluateCompletion()));
         return items;
@@ -120,7 +122,7 @@ export class CobolCompletionItemFactory {
 
    /**
      * Generates completion items with the specified implementation
-     * 
+     *
      * @param completion implementation used to generate completion items
      */
     private generate(completion: CompletionInterface): CompletionItem[] {

@@ -16,8 +16,7 @@ export class PerformCompletion implements CompletionInterface {
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: "PE",
             preselect: true,
-            kind: CompletionItemKind.Keyword,
-            data: 2
+            kind: CompletionItemKind.Keyword
         }];
     }
 
