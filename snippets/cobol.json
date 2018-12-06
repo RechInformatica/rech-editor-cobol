@@ -46,7 +46,7 @@
 			"   ${0:<body>}",
 			"END-IF."
 		]
-	},    
+	},
 	"IF GREATER THAN": {
 		"prefix": "IFG",
 		"body": [
@@ -138,13 +138,6 @@
 	"COMPUTE ROUNDED =": {
 		"prefix": "CR",
 		"body": "COMPUTE ${1:<var>} ROUNDED = ${0:<formula>},"
-	},
-	"ELSE,": {
-		"prefix": "EL",
-		"body": [
-			"ELSE,",
-			"   "
-		]
 	},
 	"EXIT PERFORM CYCLE": {
 		"prefix": "XC",

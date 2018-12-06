@@ -259,11 +259,6 @@
                 "key": "ctrl+shift+enter"
             },
             {
-                "command": "rech.editor.vscode.cobolElse",
-                "key": "ctrl+e",
-                "when": "editorLangId == COBOL"
-            },
-            {
                 "command": "rech.editor.vscode.CobolFlagGenerator",
                 "key": "ctrl+alt+b",
                 "when": "editorLangId == COBOL"
