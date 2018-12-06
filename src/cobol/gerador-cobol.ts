@@ -12,15 +12,6 @@ export class GeradorCobol {
   }
 
   /**
-   * Insert a command "To"
-   */
-  async to() {
-    await this.gotoColTo();
-    await this.editor.type("TO");
-    await this.gotoCol(Colunas.COLUNA_C);
-  }
-
-  /**
    * Insert a command "Else" in a new line below
    */
   async else() {

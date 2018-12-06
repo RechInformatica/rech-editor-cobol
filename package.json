@@ -174,10 +174,6 @@
         ],
         "commands": [
             {
-                "command": "rech.editor.vscode.cobolTo",
-                "title": "TO"
-            },
-            {
                 "command": "rech.editor.vscode.CobolFlagGenerator",
                 "title": "flagGenerator"
             },
@@ -210,15 +206,6 @@
                 "title": "findPreviousBlankLine"
             }
         ],
-        "menus": {
-            "editor/context": [
-                {
-                    "command": "rech.editor.vscode.cobolTo",
-                    "group": "cobolplugin",
-                    "when": "editorTextFocus && editorLangId == COBOL"
-                }
-            ]
-        },
         "keybindings": [
             {
                 "comment": "Ainda não é a rotina ideal... Mas por enquanto quebra um galho",
@@ -274,11 +261,6 @@
             {
                 "command": "rech.editor.vscode.cobolElse",
                 "key": "ctrl+e",
-                "when": "editorLangId == COBOL"
-            },
-            {
-                "command": "rech.editor.vscode.cobolTo",
-                "key": "ctrl+t",
                 "when": "editorLangId == COBOL"
             },
             {
