@@ -14,7 +14,7 @@ export class PerformUntilCompletion implements CompletionInterface {
         text = text.concat("PERFORM");
         text = text.concat(CompletionUtils.fillMissingSpaces(UNTIL_COLUMN_DECLARATION, column + text.length - 1) + "UNTIL EXIT");
         return [{
-            label: 'Gera a declaração de laço até sair (until exit).',
+            label: 'Gerar declaração de laço até sair (until exit).',
             detail: 'Gera a declaração de laço até sair (until exit).',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,

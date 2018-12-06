@@ -10,7 +10,7 @@ export class SetCompletion implements CompletionInterface {
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
         let text = "SET" + CompletionUtils.fillMissingSpaces(20, column + 2) + "${0}";
         return [{
-            label: 'Gera comando SET',
+            label: 'Gerar comando SET',
             detail: 'Gera o comando SET colocando o cursor na posição da primeira variável',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,

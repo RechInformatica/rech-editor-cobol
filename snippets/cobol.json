@@ -119,11 +119,7 @@
 		"prefix": "AD1",
 		"body": "ADD 1 TO ${0:<var>},"
 	},
-	"SUBTRACT TO": {
-		"prefix": "SU",
-		"body": "SUBTRACT ${1:<var>} FROM ${0:<var2>},"
-	},
-	"SUBTRACT 1 TO": {
+	"SUBTRACT 1 FROM": {
 		"prefix": "SU1",
 		"body": "SUBTRACT 1 FROM ${0:<var>},"
 	},

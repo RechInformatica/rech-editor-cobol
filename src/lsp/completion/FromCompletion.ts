@@ -2,23 +2,23 @@ import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-lan
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 
-// Cobol column for 'TO' clause declaration
-const TO_COLUMN_DECLARATION = 30;
+// Cobol column for 'FROM' clause declaration
+const FROM_COLUMN_DECLARATION = 30;
 
 /**
- * Class to generate LSP Completion Items for Cobol 'to' clause
+ * Class to generate LSP Completion Items for Cobol 'from' clause
  */
-export class ToCompletion implements CompletionInterface {
+export class FromCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): CompletionItem[] {
         let currentText = lines[line];
         let text = this.buildToText(currentText, column);
         return [{
-            label: 'Gerar comando TO',
-            detail: 'Gera o comando TO colocando o cursor na posição da primeira variável',
+            label: 'Gerar comando FROM',
+            detail: 'Gera o comando FROM colocando o cursor na posição da primeira variável',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "TO",
+            filterText: "FROM",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];
@@ -29,10 +29,10 @@ export class ToCompletion implements CompletionInterface {
      */
     private buildToText(currentText: string, column: number): string {
         let text = "";
-        if (column < TO_COLUMN_DECLARATION) {
-            text = text.concat(CompletionUtils.fillMissingSpaces(TO_COLUMN_DECLARATION, column - 1));
+        if (column < FROM_COLUMN_DECLARATION) {
+            text = text.concat(CompletionUtils.fillMissingSpaces(FROM_COLUMN_DECLARATION, column - 1));
         }
-        text = text.concat("TO");
+        text = text.concat("FROM");
         text = text.concat(CompletionUtils.fillMissingSpaces(35, column + text.length - 1));
         text = text.concat("${0}");
         text = text.concat(CompletionUtils.separatorForColumn(this.getFirstCharacterColumn(currentText)));
