@@ -244,6 +244,11 @@ connection.onCompletionResolve(
           "Será gerado o comando EVALUATE com o cursor na posição da variável.";
         break;
       }
+      case 6: {
+        item.documentation =
+          "Será gerado SET com o cursor na posição da primeira variável.";
+        break;
+      }
     }
     return item;
   }
