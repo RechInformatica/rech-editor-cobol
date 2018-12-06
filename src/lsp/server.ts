@@ -228,7 +228,6 @@ export function createPromiseForWordDeclaration(documentFullText: string, word: 
 	return new Promise<Location>((resolve) => {
 		// If the word is too small
 		if (word.length < 3) {
-			connection.window.showWarningMessage(`Select at least three characters!`);
 			resolve(undefined);
 			return;
 		}
