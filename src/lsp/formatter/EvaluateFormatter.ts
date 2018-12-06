@@ -2,11 +2,15 @@ import { TextEdit } from "vscode-languageserver";
 import { FormatterInterface } from "./FormatterInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { FormatterUtils } from "./FormatterUtils";
+import { WhenFormatter } from "./WhenFormatter";
 
 /**
  * Class to format Cobol 'evaluate'
  */
 export class EvaluateFormatter implements FormatterInterface {
+
+    /** RegExp that identifies if it is the EVALUATE clause */
+    public static EVALUATE_REGEXP = /\s+(EVALUATE|evaluate).*/;
 
     /**
      * Generates an array of Text Edits for source code formatting
@@ -18,7 +22,7 @@ export class EvaluateFormatter implements FormatterInterface {
     public generate(line: number, _column: number, lines: string[]): TextEdit[] {
         let lineText = lines[line];
         let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(lineText);
-        const edits: TextEdit[] = [this.createWhenTextEdit(line, evaluateStartColumn)];
+        const edits: TextEdit[] = [new WhenFormatter().createWhenTextEdit(line, evaluateStartColumn + 3)];
         if (FormatterUtils.isClauseMissing(line, evaluateStartColumn, lines, ["END-EVALUATE"])) {
             edits.push(this.createEndEvaluateTextEdit(line + 1, evaluateStartColumn + 1));
         }
@@ -50,31 +54,5 @@ export class EvaluateFormatter implements FormatterInterface {
             newText: endEvaluateText
         };
     }
-
-    /**
-     * Creates a TextEdit with the 'when' clause already formatted
-     * 
-     * @param line line where the 'when' clause will be inserted
-     * @param column column where the 'when' clause will be inserted
-     */
-    private createWhenTextEdit(line: number, column: number): TextEdit {
-        let textToInsert = "WHEN ";
-        let endEvaluateText = "";
-        endEvaluateText = CompletionUtils.fillMissingSpaces(column + 4, column) + textToInsert;
-        return {
-            range: {
-                start: {
-                    line: line,
-                    character: column
-                },
-                end: {
-                    line: line,
-                    character: column
-                }
-            },
-            newText: endEvaluateText
-        };
-    }
-    
     
 }

@@ -7,6 +7,9 @@ import { FormatterUtils } from "./FormatterUtils";
  * Class to format Cobol 'if'
  */
 export class IfFormatter implements FormatterInterface {
+    
+    /** RegExp that identifies if it is the IF clause*/
+    public static IF_REGEXP = /\s+(IF|if).*/;
 
     /**
      * Generates an array of Text Edits for source code formatting

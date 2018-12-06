@@ -12,6 +12,7 @@ export interface FormatterInterface {
      * @param line line number where cursor is positioned
      * @param column column number where cursor is positioned
      * @param lineText document lines
+     * @param ch typed character
      */
     generate(line: number, column: number, lines: string[]): TextEdit[];
 }
