@@ -48,7 +48,7 @@ connection.onInitialize((params: InitializeParams) => {
       },
       documentOnTypeFormattingProvider: {
         firstTriggerCharacter: "\n",
-        moreTriggerCharacter: [" ", 'E', 'e'],
+        moreTriggerCharacter: ["N", 'n', 'E', 'e'],
       }
     }
   };
@@ -162,9 +162,9 @@ connection.onDocumentOnTypeFormatting(
         case hasTypedEnter(params.ch):
           return formatter.formatWhenEnterIsPressed();
         case params.ch.toUpperCase() == "E":
-          return formatter.formatWhenEIsPressed();
-        default:
-          return formatter.formatWhenSpaceIsPressed();
+        return formatter.formatWhenEIsPressed();
+        case params.ch.toUpperCase() == "N":
+          return formatter.formatWhenNIsPressed();
       }
     }
     return [];

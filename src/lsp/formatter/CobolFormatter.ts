@@ -83,9 +83,9 @@ export class CobolFormatter {
   }
 
   /**
-   * Formats the Cobol source when Space is pressed
+   * Formats the Cobol source when 'N' is pressed
    */
-  public formatWhenSpaceIsPressed(): TextEdit[] {
+  public formatWhenNIsPressed(): TextEdit[] {
     let currentText = this.lines[this.line];
     if (this.isWhenCondition(currentText)) {
       return this.generate(new WhenFormatter());
