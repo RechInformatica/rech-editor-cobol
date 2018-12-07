@@ -67,7 +67,7 @@ export class Client {
 			Client.client.onRequest("custom/runPreprocessor", (files: string[]) => {
 				return Client.createPreprocessorExecutionPromise(files);
 			});
-			Client.client.onRequest("custom/configPreproc", (section: string) => {
+			Client.client.onRequest("custom/getConfig", (section: string) => {
 				return Client.getConfig(section);
 			});
 			Client.client.onRequest("custom/diagnosticFilter", (diagnosticMessage: string) => {

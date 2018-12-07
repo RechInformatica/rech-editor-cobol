@@ -25,6 +25,7 @@ import { CobolWordFinder } from "../commons/CobolWordFinder";
 import { Diagnostician } from "../cobol/diagnostic/diagnostician";
 import { CobolFormatter } from "./formatter/CobolFormatter";
 import { CobolCompletionItemFactory } from "./completion/CobolCompletionItemFactory";
+import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -110,12 +111,12 @@ export function sendExternalPreprocessExecution(uri: string) {
 }
 
 /**
- * Sends a request to the client for get a specific setting
+ * Sends a request to the client to get a specific setting
  *
  * @param section
  */
 export function getConfig<T>(section: string) {
-  return connection.sendRequest<T>("custom/configPreproc", section);
+  return connection.sendRequest<T>("custom/getConfig", section);
 }
 
 /**
@@ -131,22 +132,24 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
 }
 
 // This handler provides the initial list of the completion items.
-connection.onCompletion(
-  (_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
+  return getConfig<string[]>("snippetsRepositories").then(repositories => {
     let items: CompletionItem[] = [];
     let line = _textDocumentPosition.position.line;
     let column = _textDocumentPosition.position.character;
-    let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
+    let uri = _textDocumentPosition.textDocument.uri;
+    let fullDocument = documents.get(uri);
     if (fullDocument) {
       new CobolCompletionItemFactory(line, column, fullDocument)
+        .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
         .generateCompletionItems()
         .forEach(element => {
           items.push(element);
         });
-    }
+    };
     return items;
-  }
-);
+  });
+});
 
 /**
  * Document formatter
@@ -162,7 +165,7 @@ connection.onDocumentOnTypeFormatting(
         case hasTypedEnter(params.ch):
           return formatter.formatWhenEnterIsPressed();
         case params.ch.toUpperCase() == "E":
-        return formatter.formatWhenEIsPressed();
+          return formatter.formatWhenEIsPressed();
         case params.ch.toUpperCase() == "N":
           return formatter.formatWhenNIsPressed();
       }

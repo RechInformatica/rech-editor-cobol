@@ -81,6 +81,10 @@
                         "[W003]"
                     ]
                 },
+                "rech.editor.vscode.snippetsRepositories": {
+                    "type": "array",
+                    "description": "Repositories where JSON snippets are located"
+                },
                 "comments-highlight.tags": {
                     "type": "array",
                     "description": "Tags which are used to color the comments. Changes require a restart of VS Code to take effect",

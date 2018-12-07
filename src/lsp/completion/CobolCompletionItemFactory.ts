@@ -14,6 +14,7 @@ import { AddCompletion } from "./AddCompletion";
 import { SubtractCompletion } from "./SubtractCompletion";
 import { FromCompletion } from "./FromCompletion";
 import { CompletionUtils } from "../commons/CompletionUtils";
+import { DynamicJsonCompletion } from "./DynamicJsonCompletion";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -27,6 +28,8 @@ export class CobolCompletionItemFactory {
   private lines: string[];
   /** Text of the current line */
   private lineText: string;
+  /** Additional implementations for generating Completion Items */
+  private additionalCompletions: CompletionInterface[];
 
   /**
    * Creates an instance to generate LSP Completion Items for Cobol language
@@ -40,6 +43,17 @@ export class CobolCompletionItemFactory {
     this.column = column;
     this.lines = fullDocument.getText().split("\n");
     this.lineText = this.lines[line];
+    this.additionalCompletions = [];
+  }
+
+  /**
+   * Adds a implementations for generating Completion Items
+   *
+   * @param impl implementation to be inserted
+   */
+  public addCompletionImplementation(impl: CompletionInterface): CobolCompletionItemFactory {
+    this.additionalCompletions.push(impl);
+    return this;
   }
 
   /**
@@ -166,6 +180,9 @@ export class CobolCompletionItemFactory {
     items = items.concat(this.generate(new EvaluateCompletion()));
     items = items.concat(this.generate(new PerformUntilCompletion()));
     items = items.concat(this.generate(new PerformTestBeforeCompletion()));
+    this.additionalCompletions.forEach(impl => {
+      items = items.concat(this.generate(impl));
+    });
     return items;
   }
 
@@ -184,8 +201,8 @@ export class CobolCompletionItemFactory {
 
   /**
    * Convert the result to lower case
-   * 
-   * @param result 
+   *
+   * @param result
    */
   private toLowerCase(result: CompletionItem[]): CompletionItem[] {
     result.forEach(completionItem => {
