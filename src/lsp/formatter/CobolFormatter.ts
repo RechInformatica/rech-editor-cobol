@@ -10,6 +10,7 @@ import { PerformUntilFormatter } from "./PerformUntilFormatter";
 import { ElseFormatter } from "./ElseFormatter";
 import { CompletionItem } from "vscode";
 import { CompletionUtils } from "../commons/CompletionUtils";
+import { PerformTestBeforeFormatter } from "./PerformTestBeforeFormatter";
 
 /**
  * Class to format Cobol source code
@@ -54,6 +55,9 @@ export class CobolFormatter {
     }
     if (this.isPerformUntil(currentText)) {
       return this.generate(new PerformUntilFormatter());
+    }
+    if (this.isPerformTestBefore(currentText)) {
+      return this.generate(new PerformTestBeforeFormatter());
     }
     if (this.isWhenCondition(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0)];
@@ -138,7 +142,17 @@ export class CobolFormatter {
     }
     return false;
   }
-  
+
+  /**
+   * Returns true if the current line represents a 'perform until' condition
+   */
+  private isPerformTestBefore(currentText: string) {
+    if (PerformTestBeforeFormatter.UNTIL_REGEXP.exec(currentText)) {
+      return true;
+    }
+    return false;
+  }
+
   /**
    * Returns true if the editor should keep dot/comma at the end of the line
    *

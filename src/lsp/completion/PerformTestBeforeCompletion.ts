@@ -1,7 +1,6 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat, TextEdit } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
-import { FormatterUtils } from "../formatter/FormatterUtils";
 
 // Cobol column for declare the parameters of perform
 const PARAM_COLUMN_DECLARATION = 35;
@@ -18,12 +17,10 @@ export class PerformTestBeforeCompletion implements CompletionInterface {
         text = text.concat(performClause);
         text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + performClause.length - 1) + "WITH TEST BEFORE\n");
         text = text.concat(CompletionUtils.fillMissingSpaces(column + 4, column) + varyingClause);
-        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + varyingClause.length + 2) + "${1:_index_} FROM ${2:_start_} BY ${3:_increment_}\n");
+        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + varyingClause.length + 2) + "${1:_index_} FROM ${2:_start_} BY ${3:1}\n");
         text = text.concat(CompletionUtils.fillMissingSpaces(column + 7, column) + untilClause);
-        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + untilClause.length + 5) + "${1:_index_} ${4:_stop_condition_}\n");
-        text = text.concat(CompletionUtils.fillMissingSpaces(column + 4, column));
-        let endPerform: TextEdit[] = [FormatterUtils.createIndentTextEdit(_line + 1, 0)];
-        endPerform.push(this.createEndPerformTextEdit(_line + 1, column));
+        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + untilClause.length + 5) + "${1:_index_} ${4:_stop_condition_}");
+        let endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, column)];
         return [{
             label: 'Gera a declaração de laço com teste antes (with test before).',
             detail: 'Gera a declaração de laço com teste antes (with test before).',
@@ -44,7 +41,7 @@ export class PerformTestBeforeCompletion implements CompletionInterface {
      * @param column column where the 'end-perform' clause will be inserted
      */
     private createEndPerformTextEdit(line: number, column: number): TextEdit {
-        let text = CompletionUtils.fillMissingSpaces(column - 3, 0) + "END-PERFORM";
+        let text = CompletionUtils.fillMissingSpaces(column, 0) + "END-PERFORM";
         text = text.concat(CompletionUtils.separatorForColumn(column));
         text = text.concat("\n");
         return {
