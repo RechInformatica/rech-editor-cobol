@@ -195,34 +195,6 @@
 			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
 		]
 	},
-	"READ NEXT ARQ-COMANDO": {
-		"prefix": "READ NEXT",
-		"body": [
-			"MOVE \"READ ${1:XTABEL} NEXT IGNORE LOCK\" TO WARQ-CMD,",
-			"PERFORM ARQ-COMANDO-${2:MK-CHA},"
-		]
-	},
-	"READ PREVIOUS ARQ-COMANDO": {
-		"prefix": "READ PREVIOUS",
-		"body": [
-			"MOVE \"READ ${1:XTABEL} PREVIOUS IGNORE LOCK\" TO WARQ-CMD,",
-			"PERFORM ARQ-COMANDO-${2:MK-CHA},"
-		]
-	},
-	"START NOT LESS ARQ-COMANDO": {
-		"prefix": "START NOT LESS",
-		"body": [
-			"MOVE \"START ${1:XTABEL} NOT LESS ${2:XXXX-CHA}\" TO WARQ-CMD,",
-			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
-		]
-	},
-	"START NOT GREATER ARQ-COMANDO": {
-		"prefix": "START NOT GREATER",
-		"body": [
-			"MOVE \"START ${1:XTABEL} NOT GREATER ${2:XXXX-CHA}\" TO WARQ-CMD,",
-			"PERFORM ARQ-COMANDO-${3:MK-CHA},"
-		]
-	},
 	"INIPRE ARQ-COMANDO": {
 		"prefix": "INIPRE",
 		"body": [
