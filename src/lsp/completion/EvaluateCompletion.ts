@@ -17,7 +17,7 @@ export class EvaluateCompletion implements CompletionInterface {
             detail: 'Gera a declaração do comando evaluate.',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "EV",
+            filterText: "EVALUATE",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];
