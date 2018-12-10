@@ -15,6 +15,7 @@ import { SubtractCompletion } from "./SubtractCompletion";
 import { FromCompletion } from "./FromCompletion";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { DynamicJsonCompletion } from "./DynamicJsonCompletion";
+import { timingSafeEqual } from "crypto";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -63,7 +64,7 @@ export class CobolCompletionItemFactory {
    */
   public generateCompletionItems(): CompletionItem[] {
     switch (true) {
-      case this.isCommentLine(): {
+      case this.isCommentLine() || this.isIf() || this.isWhen(): {
         return [];
       }
       case this.isVarDeclaration(): {
@@ -97,6 +98,26 @@ export class CobolCompletionItemFactory {
   private isVarDeclaration(): boolean {
     if (new ParserCobol().getDeclaracaoVariavel(this.lineText)) {
       return this.isVariableLevelAndNameDeclared();
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'if'
+   */
+  private isIf(): boolean {
+    if (/\s+(IF|if).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'when'
+   */
+  private isWhen(): boolean {
+    if (/\s+(WHEN|when).*/.exec(this.lineText)) {
+      return true;
     }
     return false;
   }

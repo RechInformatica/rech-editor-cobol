@@ -22,7 +22,7 @@ export class PerformTestBeforeCompletion implements CompletionInterface {
         text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + untilClause.length + 5) + "${1:_index_} ${4:_stop_condition_}");
         let endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, column)];
         return [{
-            label: 'Gera a declaração de laço com teste antes (with test before).',
+            label: 'Gerar declaração de laço com teste antes (with test before).',
             detail: 'Gera a declaração de laço com teste antes (with test before).',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
@@ -36,7 +36,7 @@ export class PerformTestBeforeCompletion implements CompletionInterface {
 
     /**
      * Creates a TextEdit with the 'end-perform' clause already formatted
-     * 
+     *
      * @param line line where the 'end-perform' clause will be inserted
      * @param column column where the 'end-perform' clause will be inserted
      */
