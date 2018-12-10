@@ -7,7 +7,7 @@ import { FormatterUtils } from "./FormatterUtils";
  * Class to format Cobol 'if'
  */
 export class PerformUntilFormatter implements FormatterInterface {
-    
+
     /** RegExp that identifies if it is the PERFORM UNTIL clause*/
     public static PERFORM_UNTIL_REGEXP = /\s+(PERFORM|perform)\s+(UNTIL|until)/;
 
@@ -23,14 +23,12 @@ export class PerformUntilFormatter implements FormatterInterface {
         let performUntilStartColumn = CompletionUtils.countSpacesAtBeginning(lineText);
         const edits: TextEdit[] = [FormatterUtils.createIndentTextEdit(line, 0)];
         edits.push(this.createEndPerformTextEdit(line + 1, performUntilStartColumn + 1));
-        // if (FormatterUtils.isClauseMissing(line, performUntilStartColumn, lines, ["END-PERFORM"])) {
-        // }
         return edits;
     }
 
     /**
      * Creates a TextEdit with the 'end-perform' clause already formatted
-     * 
+     *
      * @param line line where the 'end-perform' clause will be inserted
      * @param column column where the 'end-perform' clause will be inserted
      */

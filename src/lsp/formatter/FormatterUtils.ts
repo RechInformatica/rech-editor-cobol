@@ -9,7 +9,7 @@ export class FormatterUtils {
 
     /**
      * Creates an indent text edit for the specified line and column
-     * 
+     *
      * @param line line number
      * @param column column number
      * @param size indentation size (number of spaces to be inserted)
@@ -33,10 +33,10 @@ export class FormatterUtils {
             newText: indentSpaces
         };
     }
-    
+
     /**
      * Returns true if at least one of the specified clauses is missing
-     * 
+     *
      * @param line line number
      * @param column column number
      * @param lines editor lines
@@ -63,7 +63,7 @@ export class FormatterUtils {
                     return true;
                 }
                 if (!(lineText.charAt(column) === " ")) {
-                    return !(this.startsWithClause(lineText, indentedClauses));
+                    return !(this.startsWithClause(lineText.toUpperCase(), indentedClauses));
                 }
             }
         }
@@ -72,7 +72,7 @@ export class FormatterUtils {
 
     /**
      * Returns true if the line text starts with at least one of the specified indented clauses
-     * 
+     *
      * @param lineText line text
      * @param indentedClauses indented clauses
      */
