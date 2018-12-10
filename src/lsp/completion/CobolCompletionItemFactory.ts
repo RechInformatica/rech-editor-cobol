@@ -30,6 +30,8 @@ export class CobolCompletionItemFactory {
   private lineText: string;
   /** Additional implementations for generating Completion Items */
   private additionalCompletions: CompletionInterface[];
+  /** Completion class to generate the CompletionItem for paragraphs */
+  private paragraphCompletion: CompletionInterface | undefined;
 
   /**
    * Creates an instance to generate LSP Completion Items for Cobol language
@@ -57,6 +59,16 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Completion class to generate the CompletionItem for paragraphs
+   * 
+   * @param paragraphCompletion 
+   */
+  public setParagraphCompletion(paragraphCompletion: CompletionInterface): CobolCompletionItemFactory {
+    this.paragraphCompletion = paragraphCompletion;
+    return this;
+  }
+
+  /**
    * Generates completion items for Cobol paragraphs
    *
    * @param lines Cobol source code lines
@@ -76,7 +88,10 @@ export class CobolCompletionItemFactory {
         return this.generate(new FromCompletion());
       }
       case this.isParagraphPerform(): {
-        return this.generate(new ParagraphCompletion());
+        if (this.paragraphCompletion) {
+          return this.generate(this.paragraphCompletion);
+        }
+        return [];
       }
       default: {
         return this.createDefaultCompletions();
@@ -181,6 +196,7 @@ export class CobolCompletionItemFactory {
     items = items.concat(this.generate(new PerformUntilCompletion()));
     items = items.concat(this.generate(new PerformTestBeforeCompletion()));
     this.additionalCompletions.forEach(impl => {
+      
       items = items.concat(this.generate(impl));
     });
     return items;

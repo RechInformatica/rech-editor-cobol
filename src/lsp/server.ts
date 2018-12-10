@@ -26,6 +26,7 @@ import { Diagnostician } from "../cobol/diagnostic/diagnostician";
 import { CobolFormatter } from "./formatter/CobolFormatter";
 import { CobolCompletionItemFactory } from "./completion/CobolCompletionItemFactory";
 import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
+import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -138,10 +139,15 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
     let line = _textDocumentPosition.position.line;
     let column = _textDocumentPosition.position.character;
     let uri = _textDocumentPosition.textDocument.uri;
+    let cacheFileName = buildCacheFileName(uri);
     let fullDocument = documents.get(uri);
     if (fullDocument) {
       new CobolCompletionItemFactory(line, column, fullDocument)
         .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
+        .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
+          // Runs Cobol preprocessor on client-side
+          return sendExternalPreprocExpanderExecution(uri, cacheFileName);
+        }))
         .generateCompletionItems()
         .forEach(element => {
           items.push(element);

@@ -46,9 +46,6 @@ export class PerformTestBeforeFormatter implements FormatterInterface {
             },
             newText: text
         };
-
-        
-
     }
 
 }

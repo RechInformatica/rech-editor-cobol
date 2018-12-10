@@ -57,7 +57,7 @@ export class CobolDocParser {
                         if (currentComment.length == 0) {
                             comment.concat("\n\n");
                         } else {
-                            comment = comment.concat(currentComment).concat(" ");
+                            comment = comment.concat(this.removeLineCommentIfNeed(currentComment)).concat(" ");
                         }
                     }
 
@@ -89,13 +89,28 @@ export class CobolDocParser {
         let docElementRegex = /\s+\*>\s+(@param|@return|@throws)\s([\w-]+)\s?(.*)?/.exec(currentLine);
         if (docElementRegex) {
             if (docElementRegex[3]) {
-                return new DocElement(docElementRegex[2], docElementRegex[3]);
+                docElementRegex[3]
+                return new DocElement(docElementRegex[2], this.removeLineCommentIfNeed(docElementRegex[3]));
             }
             if (docElementRegex[2]) {
                 return new DocElement(docElementRegex[2], "");
             }
         }
         return undefined;
+    }
+
+    /**
+     * Remove comment of line if need
+     * 
+     * @param line 
+     */
+    private removeLineCommentIfNeed(line: string): string {
+        let match = /(.*)(\*>.*)/.exec(line);
+        if (match) {
+            return match[1];
+        } else {
+            return line;
+        }
     }
 
     /**
@@ -120,7 +135,7 @@ export class CobolDocParser {
                 let currentComment = "";
                 currentComment = currentLine.replace("*>->", "").replace("<-<*", "").trim();
                 currentComment = this.removeDots(currentComment);
-                comment = comment.concat(currentComment).concat(" ");
+                comment = comment.concat(this.removeLineCommentIfNeed(currentComment)).concat(" ");
             }
         });
         return new CobolDoc(comment, [], [], []);

@@ -14,7 +14,7 @@ export class PerformCompletion implements CompletionInterface {
             detail: 'Gera o comando PERFORM para chamada do parágrafo.',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "PE",
+            filterText: "PE PERFORM",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];
