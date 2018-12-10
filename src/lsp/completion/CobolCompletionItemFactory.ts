@@ -16,6 +16,9 @@ import { FromCompletion } from "./FromCompletion";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { DynamicJsonCompletion } from "./DynamicJsonCompletion";
 import { timingSafeEqual } from "crypto";
+import { ExitParagraphCompletion } from "./ExitParagraphCompletion";
+import { ExitPerformCompletion } from "./ExitPerformCompletion";
+import { ExitCycleCompletion } from "./ExitCycleCompletion";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -197,6 +200,9 @@ export class CobolCompletionItemFactory {
     items = items.concat(this.generate(new MoveCompletion()));
     items = items.concat(this.generate(new SetCompletion()));
     items = items.concat(this.generate(new AddCompletion()));
+    items = items.concat(this.generate(new ExitParagraphCompletion()));
+    items = items.concat(this.generate(new ExitPerformCompletion()));
+    items = items.concat(this.generate(new ExitCycleCompletion()));
     items = items.concat(this.generate(new SubtractCompletion()));
     items = items.concat(this.generate(new EvaluateCompletion()));
     items = items.concat(this.generate(new PerformUntilCompletion()));

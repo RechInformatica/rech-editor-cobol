@@ -3,18 +3,18 @@ import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 
 /**
- * Class to generate LSP Completion Items for Cobol 'move' clause
+ * Class to generate LSP Completion Items for Cobol 'exit cycle' clause
  */
-export class MoveCompletion implements CompletionInterface {
+export class ExitCycleCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = "MOVE" + CompletionUtils.fillMissingSpaces(20, column + 3) + "${0}";
+        let text = "EXIT" + CompletionUtils.fillMissingSpaces(35, column + 3) + "PERFORM CYCLE" + CompletionUtils.separatorForColumn(column);
         return [{
-            label: 'Gerar comando MOVE',
-            detail: 'Gera o comando MOVE colocando o cursor na posição da primeira variável',
+            label: 'Gerar comando EXIT PERFORM CYCLE',
+            detail: 'Gera o comando EXIT PERFORM CYCLE para reiniciar a iteração do laço',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "MOVE MV",
+            filterText: "EXIT PERFORM CYCLE XC",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];
