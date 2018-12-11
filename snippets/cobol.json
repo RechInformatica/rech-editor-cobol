@@ -31,70 +31,6 @@
 		"prefix": "NGR",
 		"body": "IS NOT GREATER THAN ${0:<var>}"
 	},
-	"IF LESS THAN": {
-		"prefix": "IFL",
-		"body": [
-			"IF ${1:<var1>} IS LESS THAN ${2:<var2>}",
-			"   ${0:<body>}",
-			"END-IF."
-		]
-    },
-	"IF BOOLEAN": {
-		"prefix": "IFB",
-		"body": [
-			"IF ${1:<tst1>}",
-			"   ${0:<body>}",
-			"END-IF."
-		]
-	},
-	"IF GREATER THAN": {
-		"prefix": "IFG",
-		"body": [
-			"IF ${1:<var1>} IS GREATER THAN ${2:<var2>}",
-			"   ${0:<body>}",
-			"END-IF."
-		]
-	},
-	"IF EQUAL TO": {
-		"prefix": "IFE",
-		"body": [
-			"IF ${1:<var1>} IS EQUAL TO ${2:<var2>}",
-			"   ${0:<body>}",
-			"END-IF."
-		]
-	},
-	"IF NOT EQUAL TO": {
-		"prefix": "IFN",
-		"body": [
-			"IF ${1:<var1>} IS NOT EQUAL TO ${2:<var2>}",
-			"   ${0:<body>}",
-			"END-IF."
-		]
-	},
-	"IF EQUAL TO LOW-VALUES": {
-		"prefix": "IFW",
-		"body": [
-			"IF ${1:<var>} IS EQUAL TO LOW-VALUES",
-			"   ${0:<body>}",
-			"END-IF."
-		]
-	},
-	"IF EQUAL TO SPACES": {
-		"prefix": "IFS",
-		"body": [
-			"IF ${1:<var>} IS EQUAL TO SPACES",
-			"   ${0:<body>}",
-			"END-IF."
-		]
-	},
-	"IF EQUAL TO ZEROS": {
-		"prefix": "IFZ",
-		"body": [
-			"IF ${1:<var>} IS EQUAL TO ZEROS",
-			"   ${0:<body>}",
-			"END-IF."
-		]
-	},
 	"MOVE LOW-VALUES TO": {
 		"prefix": "ML",
 		"body": "MOVE LOW-VALUES TO ${0:<var1>},"
@@ -110,10 +46,6 @@
 	"MOVE ZEROS TO": {
 		"prefix": "MZ",
 		"body": "MOVE ZEROS TO ${0:<var1>},"
-	},
-	"GO TO": {
-		"prefix": "GO",
-		"body": "GO TO ${0:<paragraph>},"
 	},
 	"ADD 1 TO": {
 		"prefix": "AD1",
@@ -167,19 +99,9 @@
 		"prefix": "HI",
 		"body": "HIGH-VALUES"
 	},
-	"BLANK WHEN ZERO": {
+	"BLANK WHEN ZEROS": {
 		"prefix": "BWZ",
 		"body": "BLANK WHEN ZEROS"
-	},
-	"PERFORM VARYING": {
-		"prefix": "PB",
-		"body": [
-			"PERFORM                WITH TEST BEFORE",
-			"   VARYING             ${1:<index>} FROM ${2:<start>} BY ${3:increment}",
-			"      UNTIL            ${1:<index>} ${4:<stop_condition>}",
-			"   ${0:<body>}",
-			"END-PERFORM."
-		]
 	},
 	"EXIBE-MENSAGEM": {
 		"prefix": "EXIBE-MENSAGEM",
@@ -326,7 +248,7 @@
 		],
 		"description": "STRING DELIMITED/WITH POINTER"
 	},
-	"INITIALIZE1" : {
+	"INITIALIZE ALPHA" : {
 		"prefix": "INITIALIZE",
 		"body": [
 			"INITIALIZE             ${1:<var>}",
