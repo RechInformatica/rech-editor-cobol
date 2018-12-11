@@ -8,7 +8,6 @@ import { FormatterUtils } from "./FormatterUtils";
 import { WhenFormatter } from "./WhenFormatter";
 import { PerformUntilFormatter } from "./PerformUntilFormatter";
 import { ElseFormatter } from "./ElseFormatter";
-import { CompletionItem } from "vscode";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { PerformTestBeforeFormatter } from "./PerformTestBeforeFormatter";
 
@@ -64,7 +63,7 @@ export class CobolFormatter {
     }
     if (this.parser.getDeclaracaoParagrafo(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0, 4)];
-    }
+    }    
     if (this.shouldKeepDotOrComma(this.lines[this.line], this.column)) {
       return this.generate(new CommandSeparatorFormatter());
     }
