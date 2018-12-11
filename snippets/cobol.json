@@ -267,32 +267,32 @@
 	"@param" : {
 		"prefix": "@param",
 		"body": "@param  ${1:XXXXXX-XXX} ${0:Descrição do parâmetro}",
-		"description": "ag RechDoc de parâmetro"
+		"description": "RechDoc de parâmetro"
 	},
 	"@return" : {
 		"prefix": "@return",
 		"body": "@return ${1:XXXXXX-XXX} ${0:Descrição do retorno}",
-		"description": "ag RechDoc de retorno"
+		"description": "RechDoc de retorno"
 	},
 	"@throws" : {
 		"prefix": "@throws",
 		"body": "@throws ${1:XXXXXX-XXX} ${0:Descrição do retorno}",
-		"description": "ag RechDoc de status de retorno"
+		"description": "RechDoc de status de retorno"
 	},
 	"@enum" : {
 		"prefix": "@enum",
 		"body": "   @enum ${1:XXXXXX-XXX} ${0:Descrição do enumerado}",
-		"description": "ag RechDoc de enumerado"
+		"description": "RechDoc de enumerado"
 	},
 	"@optional" : {
 		"prefix": "@optional",
 		"body": "   @optional",
-		"description": "ag RechDoc de parâmetro opcional"
+		"description": "RechDoc de parâmetro opcional"
 	},
 	"@default" : {
 		"prefix": "@default",
 		"body": "   @default",
-		"description": "ag RechDoc de valor default"
+		"description": "RechDoc de valor default"
 	},
 	"SEARCH" : {
 		"prefix": "SEARCH",

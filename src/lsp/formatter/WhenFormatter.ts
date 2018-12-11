@@ -10,7 +10,7 @@ const END_COBOL_COLUMN = 120;
  * Class to format Cobol 'evaluate'
  */
 export class WhenFormatter implements FormatterInterface {
-    
+
   /** RegExp that identifies if it is the WHEN clause*/
   public static WHEN_REGEXP = /\s+(WHEN|when).*/;
   /** RegExp that identifies if it is the WHEN clause with parameters*/
