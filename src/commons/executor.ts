@@ -1,17 +1,17 @@
 import * as cp from "child_process";
 import { Process } from "./Process";
 import * as vscode from "vscode";
-import stream = require("stream");
+import * as stream from "stream";
 import * as iconv_lite from 'iconv-lite';
 
 // Map of created channels by name
-let channels = new Map<string, vscode.OutputChannel>(); 
+let channels = new Map<string, vscode.OutputChannel>();
 
 /**
  * Class to run external processes
  */
 export class Executor {
-  
+
   /**
    * Creates OutputChannel
    *
@@ -29,18 +29,18 @@ export class Executor {
 
   /**
    * Append output stream process buffer to outputChannell, converting chartset to Windows-1252
-   * 
-   * @param stream StreamReader child process object 
+   *
+   * @param stream StreamReader child process object
    * @param channel OutputChannel vscode object
    */
-  private streamToChannel(stream: stream.Readable, channel: vscode.OutputChannel) {    
+  private streamToChannel(stream: stream.Readable, channel: vscode.OutputChannel) {
     stream.setEncoding("binary");
     stream.on("data", data => channel.append(iconv_lite.decode(<Buffer> data, "WINDOWS-1252")));
   }
 
   /**
    * Runs process and sends intercepted output to a channel
-   * 
+   *
    * @param channel OutputChannel vscode object
    * @param command System operational command to be executed
    * @param options Child process options
@@ -54,7 +54,7 @@ export class Executor {
           if (error) {
             reject({ error, stdout, stderr });
           }
-          resolve({ stdout, stderr });        
+          resolve({ stdout, stderr });
         });
         this.streamToChannel(proc.stdout, channel);
         this.streamToChannel(proc.stderr, channel);
@@ -106,10 +106,10 @@ export class Executor {
 
   /**
    * Executes asynchronously a new process using the specified command-line and return the Process result formatted as encoding
-   * 
-   * @param command 
-   * @param encoding 
-   * @param callback 
+   *
+   * @param command
+   * @param encoding
+   * @param callback
    */
   private runAsyncAndReturnFormattedProcess(command: string, encoding: string, callback?: (process: Process) => any) {
     cp.exec(command, {encoding: "buffer"}, (err, stdout, stderr) => {
