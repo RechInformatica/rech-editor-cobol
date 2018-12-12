@@ -609,7 +609,7 @@ export class Editor {
    * @param sourceExpander
    */
   public static setSourceExpander(sourceExpander: GenericExecutor) {
-    this.sourceExpander = sourceExpander
+    Editor.sourceExpander = sourceExpander
   }
 
   /**
@@ -618,7 +618,7 @@ export class Editor {
    * @param sourceExpander
    */
   public static getSourceExpander() {
-    return this.sourceExpander
+    return Editor.sourceExpander
   }
 
   /**
@@ -632,8 +632,6 @@ export class Editor {
 
   /**
    * Returns the preprocessor function
-   *
-   * @param sourceExpander
    */
   public static getPreprocessor() {
     return this.preprocessor
