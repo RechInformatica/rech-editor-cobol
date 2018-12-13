@@ -31,9 +31,6 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInvertMoveOperators', () => {
         new GeradorCobol().invertMoveOperators();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.CobolFlagGenerator', () => {
-        new GeradorCobol().flagGenerator();
-    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.pullWord', () => {
         new CobolWordPuller().pullNextWord();
     }));

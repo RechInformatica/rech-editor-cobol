@@ -1,6 +1,5 @@
 import { CompletionItem, TextDocument } from "vscode-languageserver";
 import { ParserCobol } from "../../cobol/parsercobol";
-import { ParagraphCompletion } from "./ParagraphCompletion";
 import { VarDeclarationCompletion } from "./VarDeclarationCompletion";
 import { PerformCompletion } from "./PerformCompletion";
 import { MoveCompletion } from "./MoveCompletion";
@@ -14,11 +13,10 @@ import { AddCompletion } from "./AddCompletion";
 import { SubtractCompletion } from "./SubtractCompletion";
 import { FromCompletion } from "./FromCompletion";
 import { CompletionUtils } from "../commons/CompletionUtils";
-import { DynamicJsonCompletion } from "./DynamicJsonCompletion";
-import { timingSafeEqual } from "crypto";
 import { ExitParagraphCompletion } from "./ExitParagraphCompletion";
 import { ExitPerformCompletion } from "./ExitPerformCompletion";
 import { ExitCycleCompletion } from "./ExitCycleCompletion";
+import { FlagCompletion } from "./FlagCompletion";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -64,8 +62,8 @@ export class CobolCompletionItemFactory {
 
   /**
    * Completion class to generate the CompletionItem for paragraphs
-   * 
-   * @param paragraphCompletion 
+   *
+   * @param paragraphCompletion
    */
   public setParagraphCompletion(paragraphCompletion: CompletionInterface): CobolCompletionItemFactory {
     this.paragraphCompletion = paragraphCompletion;
@@ -82,8 +80,11 @@ export class CobolCompletionItemFactory {
       case this.isCommentLine() || this.isIf() || this.isWhen(): {
         return [];
       }
-      case this.isVarDeclaration(): {
+      case this.isVarDeclaration() && !this.isVarPictureDeclared(): {
         return this.generate(new VarDeclarationCompletion());
+      }
+      case this.isVarDeclaration() && this.isVarPictureDeclared(): {
+        return this.generate(new FlagCompletion());
       }
       case this.isMove() || this.isAdd() || this.isSet(): {
         return this.generate(new ToCompletion());
@@ -111,13 +112,20 @@ export class CobolCompletionItemFactory {
   }
 
   /**
-   * Returns true if the editor should suggest Cobol variable declaration
+   * Returns true if the current line is a variable declaration
    */
   private isVarDeclaration(): boolean {
     if (new ParserCobol().getDeclaracaoVariavel(this.lineText)) {
       return this.isVariableLevelAndNameDeclared();
     }
     return false;
+  }
+
+  /**
+   * Returns true if the var Picture is declared on the current line
+   */
+  private isVarPictureDeclared(): boolean {
+    return this.lineText.toUpperCase().includes(" PIC ");
   }
 
   /**
@@ -145,8 +153,6 @@ export class CobolCompletionItemFactory {
    *
    * This regular expression checks if the variable is ready to receive the 'PIC'
    * and 'VALUE IS' clauses.
-   *
-   * @param line target line to test variable declaration
    */
   private isVariableLevelAndNameDeclared() {
     let result = /(\d+\w.+\s)([^\s].*)/.exec(this.lineText);
@@ -223,7 +229,6 @@ export class CobolCompletionItemFactory {
     items = items.concat(this.generate(new PerformUntilCompletion()));
     items = items.concat(this.generate(new PerformTestBeforeCompletion()));
     this.additionalCompletions.forEach(impl => {
-      
       items = items.concat(this.generate(impl));
     });
     return items;

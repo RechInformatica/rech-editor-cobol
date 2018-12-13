@@ -17,9 +17,9 @@ export class PerformTestBeforeCompletion implements CompletionInterface {
         text = text.concat(performClause);
         text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + performClause.length - 1) + "WITH TEST BEFORE\n");
         text = text.concat(CompletionUtils.fillMissingSpaces(column + 4, column) + varyingClause);
-        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + varyingClause.length + 2) + "${1:_index_} FROM ${2:_start_} BY ${3:1}\n");
+        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + varyingClause.length + 2) + "${1} FROM ${2:} BY ${3:1}\n");
         text = text.concat(CompletionUtils.fillMissingSpaces(column + 7, column) + untilClause);
-        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + untilClause.length + 5) + "${1:_index_} ${4:_stop_condition_}");
+        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + untilClause.length + 5) + "${1} ${4}");
         let endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, column)];
         return [{
             label: 'Gerar declaração de laço com teste antes (with test before).',

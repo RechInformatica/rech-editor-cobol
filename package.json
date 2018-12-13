@@ -178,10 +178,6 @@
         ],
         "commands": [
             {
-                "command": "rech.editor.vscode.CobolFlagGenerator",
-                "title": "flagGenerator"
-            },
-            {
                 "command": "rech.editor.vscode.pullWord",
                 "title": "pullWord"
             },
@@ -261,11 +257,6 @@
             {
                 "command": "rech.editor.vscode.newLineAbove",
                 "key": "ctrl+shift+enter"
-            },
-            {
-                "command": "rech.editor.vscode.CobolFlagGenerator",
-                "key": "ctrl+alt+b",
-                "when": "editorLangId == COBOL"
             },
             {
                 "command": "rech.editor.vscode.pullWord",
