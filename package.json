@@ -204,6 +204,11 @@
             {
                 "command": "rech.editor.vscode.findPreviousBlankLine",
                 "title": "findPreviousBlankLine"
+            },
+            {
+                "comment": "Centraliza o comentário",
+                "command": "rech.editor.vscode.centralizeComment",
+                "title": "Centraliza o comentário"
             }
         ],
         "keybindings": [

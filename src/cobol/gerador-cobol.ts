@@ -3,6 +3,7 @@ import { Editor } from '../editor/editor';
 import { RechPosition } from '../editor/rechposition';
 import * as Colunas from './colunas';
 import * as os from 'os';
+import { isNull, isUndefined } from 'util';
 
 export class GeradorCobol {
   editor: Editor;
@@ -47,7 +48,7 @@ export class GeradorCobol {
     this.editor.selectWholeLines();
     let selectedBuffer = this.editor.getSelectionBuffer();
     /**
-     * Regex to find all COBOL MOVE commands in current selection. There are 4 elements between () used to replace 
+     * Regex to find all COBOL MOVE commands in current selection. There are 4 elements between () used to replace
      *    1º - Spaces starting line. These keep the current indent level
      *    2º - 1st MOVE's operator. Used to invert with the 2nd MOVE's operator
      *    3º - 2nd MOVE's operator. Used to invert with the 1st MOVE's operator
@@ -64,9 +65,9 @@ export class GeradorCobol {
    */
   async flagGenerator() {
     // Verify if the current line is a variable declaration
-    if (!await this.isVariableDeclaration()){
-        this.editor.showInformationMessage("Isso não é uma declaração de variável!");
-        return;
+    if (!await this.isVariableDeclaration()) {
+      this.editor.showInformationMessage("Isso não é uma declaração de variável!");
+      return;
     }
     // Save original position
     let originalCursors: RechPosition[] = this.editor.getCursors();
@@ -77,27 +78,27 @@ export class GeradorCobol {
     // Remove left whitespace
     line = line.trimLeft();
     // Remove duplicate whitespaces
-    line = line.replace(/\s+/g,' ');
+    line = line.replace(/\s+/g, ' ');
     // Create a array with each word from the line
     let linesplitted = line.split(" ");
     // The variable name, the suffix of SIM value and the suffix of NAO value
     let varname, varsim, varnao = '';
     // Verify if is a FD file
     let regex = /.*(WREG)+.*/g;
-    if(regex.test(this.editor.getCurrentFileBaseName())){
-        // Return the variable name with the prefix
-        varname = linesplitted[1];
-        // Indicate that between value name and sufix has not a hyphen
-        varsim = 'SIM';
-        varnao = 'NAO';
+    if (regex.test(this.editor.getCurrentFileBaseName())) {
+      // Return the variable name with the prefix
+      varname = linesplitted[1];
+      // Indicate that between value name and sufix has not a hyphen
+      varsim = 'SIM';
+      varnao = 'NAO';
     } else {
-        // Find where the prefix
-        let posprefixo = linesplitted[1].indexOf("-");
-        // Return the variable name without the prefix
-        varname = linesplitted[1].substring(posprefixo + 1);
-        // Indicate that between value name and sufix has a hyphen
-        varsim = '-SIM';
-        varnao = '-NAO';
+      // Find where the prefix
+      let posprefixo = linesplitted[1].indexOf("-");
+      // Return the variable name without the prefix
+      varname = linesplitted[1].substring(posprefixo + 1);
+      // Indicate that between value name and sufix has a hyphen
+      varsim = '-SIM';
+      varnao = '-NAO';
     }
     // Insert 88 SIM value
     await this.editor.insertLineBelow();
@@ -177,6 +178,79 @@ export class GeradorCobol {
     await this.editor.insertLineAbove();
     await this.editor.type("      *>--------------------------------------------------------------------------------------------------------------<*");
     await this.editor.setCursorPosition(new RechPosition(position.line + 1, position.column));
+  }
+
+
+  /**
+   * Centralize a cobol comment
+   */
+  async centralizeComment() {
+    let lineText = this.editor.getCurrentLine();
+    // Get the comment content
+    let regexComment = /^\s*\*>.*/;
+    let commentContent = lineText.match(regexComment);
+    // Get the comment type (Ex.: *>, *>->)
+    let regexCommentType = /\*>(->)*/;
+    let startComment = lineText.match(regexCommentType);
+    // Find if is a valid comment
+    if (isNull(commentContent) || isNull(startComment)) return;
+    // Get the comment delimiters
+    let startCommentDelimiter = startComment[0];
+    let endCommentDelimiter = startCommentDelimiter.split("").reverse().join("").replace(/>/g, "<");
+    // Remove the end delimiter
+    let regexCommentContent = /[^\>]*\b.*(\b|\B)/;
+    commentContent = regexCommentContent.exec(commentContent[0].toString().replace(endCommentDelimiter, ""));
+    // If not have any comment left
+    if (isNull(commentContent)) return;
+    // Remove trailing spaces
+    let comment = commentContent[0].toString().trim();
+    // Calculate the size of comment area
+    let commentSizeMax = (Colunas.COLUNA_FIM - Colunas.AREA_A - startCommentDelimiter.length - endCommentDelimiter.length + 2);
+    // Verify if need to apply highlight to comment
+    if (!/[a-z]/.exec(commentContent.toString())) {
+      comment = this.removeHighlight(comment);
+      comment = this.addHighlight(comment, commentSizeMax);
+    }
+    // Mount the final comment
+    comment = `      ${startCommentDelimiter}${" ".repeat((commentSizeMax - comment.length) / 2)}${comment}${" ".repeat(Math.ceil((commentSizeMax - comment.length) / 2))}${endCommentDelimiter}`;
+    await this.editor.setCurrentLine(comment);
+  }
+
+
+  /**
+    * Add Highlight from text
+    */
+  private addHighlight(comment: string, commentSizeMax: number): string {
+    // Percent of comment size to limit the size of highlight
+    const commentRatio = 0.7;
+    let commentArea = commentSizeMax * commentRatio;
+    // Try to apply the first highlight
+    let commentUpper = comment.split('').join(' ').toUpperCase();
+    if (commentUpper.length > commentArea) return comment;
+    // Try to apply the second highlight
+    comment = commentUpper;
+    commentUpper = comment.split('').join(' ').toUpperCase();
+    if (commentUpper.length < commentArea) comment = commentUpper;
+    return comment;
+  }
+
+  /**
+    * Remove Highlight from text
+    */
+  private removeHighlight(comment: string): string {
+    let spaces = /\s+/.exec(comment);
+    // Se a string não contem espaços
+    if (isNull(spaces)) return comment;
+    // Get greater space length
+    let spaceLengthGreater = spaces.reduce((p, v) => (p.length > v.length ? v : p)).length;
+    let spaceLengthLesser = spaces.reduce((p, v) => (p.length < v.length ? v : p)).length;
+    // If comment don't have highlight
+    if (spaceLengthGreater === 1) return comment;
+    // Remove spaces from previous highlight
+    let spaceLength = spaceLengthGreater === spaceLengthLesser ? spaceLengthGreater : spaceLengthGreater - 1;
+    let spaceRegex = new RegExp(`\\s{${spaceLength}}`, "g");
+    comment = comment.replace(spaceRegex, "");
+    return comment;
   }
 
   /**
@@ -264,14 +338,14 @@ export class GeradorCobol {
     // Find if the line is a variable declaration
     let vardeclaration = false;
     linesplitted.forEach(element => {
-        if (element.toUpperCase() === "PIC"){
-            vardeclaration = true;
-        }
+      if (element.toUpperCase() === "PIC") {
+        vardeclaration = true;
+      }
     });
     return vardeclaration;
   }
   /**
-   * 
+   *
    */
   private async firstWordColumn() {
     // Get the line in focous
