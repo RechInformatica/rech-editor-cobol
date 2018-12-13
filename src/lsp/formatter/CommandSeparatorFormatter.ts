@@ -29,7 +29,7 @@ export class CommandSeparatorFormatter implements FormatterInterface {
      * @param previousLineNumber line where the cursor is positioned
      * @param currentLineText text of the current line
      */
-    private createKeepDotOrCommaTextEdit(previousLineText: string, previousLineNumber: number, currentLineText: string): TextEdit {
+    public createKeepDotOrCommaTextEdit(previousLineText: string, previousLineNumber: number, currentLineText: string): TextEdit {
         let targetChar = this.getCommandDelimiter(currentLineText);
         return {
             range: {

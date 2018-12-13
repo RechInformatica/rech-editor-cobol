@@ -17,10 +17,10 @@ export class File {
 
   /** File name */
   private _fileName: string;
-  
+
   /**
    * Create a new file
-   * 
+   *
    */
   constructor(path: string) {
     this._fileName = path;
@@ -36,9 +36,9 @@ export class File {
 
   /**
    * Save a buffer in file
-   * 
-   * @param buffer 
-   * @param encoding 
+   *
+   * @param buffer
+   * @param encoding
    */
   public saveBuffer(buffer: string[], encoding?: string): Q.Promise<{}> {
     return writeFile(this.fileName, buffer, { encoding: encoding });
@@ -46,9 +46,9 @@ export class File {
 
   /**
    * Synchronously save a buffer in file
-   * 
-   * @param buffer 
-   * @param encoding 
+   *
+   * @param buffer
+   * @param encoding
    */
   public saveBufferSync(buffer: string[], encoding?: string): void {
     fs.writeFileSync(this.fileName, buffer, { encoding: encoding });
@@ -72,14 +72,14 @@ export class File {
    * Load the file content synchronously
    */
   public loadBufferSync(encoding: string): string {
-    return fs.readFileSync(this.fileName, {encoding: encoding});
+    return fs.readFileSync(this.fileName, { encoding: encoding });
   }
 
   /**
    * Tests whether the file exists
    */
   public exists(): boolean {
-      return fs.existsSync(this.fileName);
+    return fs.existsSync(this.fileName);
   }
 
   /**
@@ -105,10 +105,29 @@ export class File {
   public delete() {
     fs.unlinkSync(this.fileName);
   }
-  
+
+  /**
+   * Returns a list of files on the current diretory considering the specified extension
+   *
+   * @param extensionFilter file extension to be filtered
+   */
+  public dirFiles(extensionFilter?: string): string[] {
+    let files = fs.readdirSync(this._fileName);
+    if (!extensionFilter) {
+      return files;
+    }
+    let filtered: string[] = [];
+    files.forEach(currentFile => {
+      if (currentFile.endsWith(extensionFilter)) {
+        filtered.push(currentFile);
+      }
+    });
+    return filtered;
+  }
+
   /**
    * Returns the file last modification date
-   * 
+   *
    * @returns Date
    */
   public lastModified(): Date {

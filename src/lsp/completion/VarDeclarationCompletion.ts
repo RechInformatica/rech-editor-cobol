@@ -13,14 +13,13 @@ export class VarDeclarationCompletion implements CompletionInterface {
         let text = CompletionUtils.fillMissingSpaces(PIC_COLUMN_DECLARATION, column - 1) + "PIC IS $1($2)$3    VALUE IS $4     ${5:COMP-X}.";
         return [{
             label: 'Completar declaração de variável',
-            detail: 'Completa a declaração da variável.',
+            detail: 'Serão inseridas cláusulas PIC e VALUE IS nos lugares apropriados.',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: "PIC",
             preselect: true,
             commitCharacters: ['X', '9', 'Z', 'B', ' '],
-            kind: CompletionItemKind.Variable,
-            data: 1
+            kind: CompletionItemKind.Variable
         }];
     }
 

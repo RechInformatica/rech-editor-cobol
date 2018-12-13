@@ -16,7 +16,7 @@ export class Editor {
   private static sourceExpander: GenericExecutor;
   /** Source preprocessor function */
   private static preprocessor: GenericExecutor;
-  
+
   constructor() {
     this.editor = <TextEditor>this.getActiveEditor();
   }
@@ -342,7 +342,7 @@ export class Editor {
       viewColumn: ViewColumn.Active,
       preview: false
     }
-    window.showTextDocument(Uri.file(file), options).then(() => {
+    commands.executeCommand('vscode.open',  Uri.file(file), options).then(() => {
       if (callback) {
         callback()
       }
@@ -555,9 +555,9 @@ export class Editor {
     let fileName = this.getCurrentFileBaseName();
     return fileName.substr(0, fileName.length - 4);
   }
-  
+
   /**
-   * Returns the extension of the file currently open in editor 
+   * Returns the extension of the file currently open in editor
    */
   getCurrentFileBaseNameExtension(){
     let fileName = this.getCurrentFileBaseName();
@@ -602,38 +602,36 @@ export class Editor {
     return window.activeTextEditor;
   }
 
-  
+
   /**
    * Define the source expander function
-   * 
-   * @param sourceExpander 
+   *
+   * @param sourceExpander
    */
   public static setSourceExpander(sourceExpander: GenericExecutor) {
-    this.sourceExpander = sourceExpander
+    Editor.sourceExpander = sourceExpander
   }
-  
+
   /**
    * Returns the source expander function
-   * 
-   * @param sourceExpander 
+   *
+   * @param sourceExpander
    */
   public static getSourceExpander() {
-    return this.sourceExpander
+    return Editor.sourceExpander
   }
 
   /**
    * Define the preprocessor function
-   * 
-   * @param preprocessor 
+   *
+   * @param preprocessor
    */
   public static setPreprocessor(preprocessor: GenericExecutor) {
     this.preprocessor = preprocessor
   }
-  
+
   /**
    * Returns the preprocessor function
-   * 
-   * @param sourceExpander 
    */
   public static getPreprocessor() {
     return this.preprocessor

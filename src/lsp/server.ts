@@ -25,6 +25,8 @@ import { CobolWordFinder } from "../commons/CobolWordFinder";
 import { Diagnostician } from "../cobol/diagnostic/diagnostician";
 import { CobolFormatter } from "./formatter/CobolFormatter";
 import { CobolCompletionItemFactory } from "./completion/CobolCompletionItemFactory";
+import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
+import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -48,7 +50,7 @@ connection.onInitialize((params: InitializeParams) => {
       },
       documentOnTypeFormattingProvider: {
         firstTriggerCharacter: "\n",
-        moreTriggerCharacter: [" "]
+        moreTriggerCharacter: ["N", 'n', 'E', 'e'],
       }
     }
   };
@@ -110,12 +112,12 @@ export function sendExternalPreprocessExecution(uri: string) {
 }
 
 /**
- * Sends a request to the client for get a specific setting
+ * Sends a request to the client to get a specific setting
  *
  * @param section
  */
 export function getConfig<T>(section: string) {
-  return connection.sendRequest<T>("custom/configPreproc", section);
+  return connection.sendRequest<T>("custom/getConfig", section);
 }
 
 /**
@@ -131,22 +133,29 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
 }
 
 // This handler provides the initial list of the completion items.
-connection.onCompletion(
-  (_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
+  return getConfig<string[]>("snippetsRepositories").then(repositories => {
     let items: CompletionItem[] = [];
     let line = _textDocumentPosition.position.line;
     let column = _textDocumentPosition.position.character;
-    let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
+    let uri = _textDocumentPosition.textDocument.uri;
+    let cacheFileName = buildCacheFileName(uri);
+    let fullDocument = documents.get(uri);
     if (fullDocument) {
       new CobolCompletionItemFactory(line, column, fullDocument)
+        .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
+        .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
+          // Runs Cobol preprocessor on client-side
+          return sendExternalPreprocExpanderExecution(uri, cacheFileName);
+        }))
         .generateCompletionItems()
         .forEach(element => {
           items.push(element);
         });
-    }
+    };
     return items;
-  }
-);
+  });
+});
 
 /**
  * Document formatter
@@ -158,10 +167,13 @@ connection.onDocumentOnTypeFormatting(
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
       let formatter = new CobolFormatter(line, column, fullDocument);
-      if (hasTypedEnter(params.ch)) {
-        return formatter.formatWhenEnterIsPressed();
-      } else {
-        return formatter.formatWhenSpaceIsPressed();
+      switch (true) {
+        case hasTypedEnter(params.ch):
+          return formatter.formatWhenEnterIsPressed();
+        case params.ch.toUpperCase() == "E":
+          return formatter.formatWhenEIsPressed();
+        case params.ch.toUpperCase() == "N":
+          return formatter.formatWhenNIsPressed();
       }
     }
     return [];
@@ -218,38 +230,6 @@ connection.listen();
 // the completion list.
 connection.onCompletionResolve(
   (item: CompletionItem): CompletionItem => {
-    switch (item.data) {
-      case 1: {
-        item.documentation =
-          "Serão inseridas cláusulas PIC e VALUE IS nos lugares apropriados.";
-        break;
-      }
-      case 2: {
-        item.documentation =
-          "Será gerado PERFORM para execução do parágrafo especificado.";
-        break;
-      }
-      case 3: {
-        item.documentation =
-          "Será gerado MOVE com o cursor na posição da primeira variável.";
-        break;
-      }
-      case 4: {
-        item.documentation =
-          "Será gerado TO com o cursor na posição da segunda variável.";
-        break;
-      }
-      case 5: {
-        item.documentation =
-          "Será gerado o comando EVALUATE com o cursor na posição da variável.";
-        break;
-      }
-      case 6: {
-        item.documentation =
-          "Será gerado SET com o cursor na posição da primeira variável.";
-        break;
-      }
-    }
     return item;
   }
 );

@@ -3,6 +3,7 @@ import { FormatterInterface } from "./FormatterInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { FormatterUtils } from "./FormatterUtils";
 import { WhenFormatter } from "./WhenFormatter";
+import { CommandSeparatorFormatter } from "./CommandSeparatorFormatter";
 
 /**
  * Class to format Cobol 'evaluate'
@@ -22,11 +23,40 @@ export class EvaluateFormatter implements FormatterInterface {
     public generate(line: number, _column: number, lines: string[]): TextEdit[] {
         let lineText = lines[line];
         let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(lineText);
-        const edits: TextEdit[] = [new WhenFormatter().createWhenTextEdit(line, evaluateStartColumn + 3)];
+        const edits: TextEdit[] = this.completeTextEditWithComma(line, lines);
+        edits.push(this.createWhenTextEdit(line, evaluateStartColumn + 3));
         if (FormatterUtils.isClauseMissing(line, evaluateStartColumn, lines, ["END-EVALUATE"])) {
             edits.push(this.createEndEvaluateTextEdit(line + 1, evaluateStartColumn + 1));
         }
         return edits;
+    }
+
+    /**
+     * Complete the TextEdit with comma if need
+     * 
+     * @param line 
+     * @param lines 
+     */
+    private completeTextEditWithComma(line: number, lines: string[]): TextEdit[] {
+        let currentLineText = lines[line];
+        let previousLineText = lines[line - 1];
+        let previousLineNumber = line - 1;
+        if (previousLineText.endsWith(",")) {
+            return [];
+        }
+        return [new CommandSeparatorFormatter().createKeepDotOrCommaTextEdit(previousLineText, previousLineNumber, currentLineText)];
+    }
+
+    /**
+     * Creates a TextEdit with the 'WHEN' clause already formatted
+     * 
+     * @param line 
+     * @param whenColumn 
+     */
+    private createWhenTextEdit(line: number, whenColumn: number): TextEdit {
+        let result = new WhenFormatter().createWhenTextEdit(line, whenColumn);
+        result.newText += " ";
+        return result;
     }
 
     /**

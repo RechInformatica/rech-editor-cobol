@@ -13,16 +13,6 @@ export class GeradorCobol {
   }
 
   /**
-   * Insert a command "Else" in a new line below
-   */
-  async else() {
-    let indentColumn = this.currentIndentLevel();
-    await this.editor.cursorLineEnd();
-    // Mount text to insert, filling with spaces to reach correct indent level before and after ELSE statement
-    await this.editor.type("\n" + " ".repeat(indentColumn - 3) + "ELSE,\n" + " ".repeat(indentColumn));
-  }
-
-  /**
    * Insert/toggle terminators dot/comma at end of line
    */
   endLineToggle(char: string) {
@@ -58,62 +48,6 @@ export class GeradorCobol {
     let replacedBuffer = selectedBuffer[0].replace(regex, "$1MOVE $3 TO $2$4");
     await this.editor.replaceSelection(replacedBuffer);
     await this.editor.indent("N");
-  }
-
-  /**
-   * Generate the SIM and NAO flag declaration
-   */
-  async flagGenerator() {
-    // Verify if the current line is a variable declaration
-    if (!await this.isVariableDeclaration()) {
-      this.editor.showInformationMessage("Isso não é uma declaração de variável!");
-      return;
-    }
-    // Save original position
-    let originalCursors: RechPosition[] = this.editor.getCursors();
-    // Find the first word column
-    let wordcolumn = await this.firstWordColumn();
-    // Get the line in focous
-    let line = await this.editor.getCurrentLine();
-    // Remove left whitespace
-    line = line.trimLeft();
-    // Remove duplicate whitespaces
-    line = line.replace(/\s+/g, ' ');
-    // Create a array with each word from the line
-    let linesplitted = line.split(" ");
-    // The variable name, the suffix of SIM value and the suffix of NAO value
-    let varname, varsim, varnao = '';
-    // Verify if is a FD file
-    let regex = /.*(WREG)+.*/g;
-    if (regex.test(this.editor.getCurrentFileBaseName())) {
-      // Return the variable name with the prefix
-      varname = linesplitted[1];
-      // Indicate that between value name and sufix has not a hyphen
-      varsim = 'SIM';
-      varnao = 'NAO';
-    } else {
-      // Find where the prefix
-      let posprefixo = linesplitted[1].indexOf("-");
-      // Return the variable name without the prefix
-      varname = linesplitted[1].substring(posprefixo + 1);
-      // Indicate that between value name and sufix has a hyphen
-      varsim = '-SIM';
-      varnao = '-NAO';
-    }
-    // Insert 88 SIM value
-    await this.editor.insertLineBelow();
-    await this.gotoCol(wordcolumn + 3);
-    await this.editor.type("88 " + varname + varsim);
-    await this.gotoCol(Colunas.COLUNA_VALUE);
-    await this.editor.type("VALUE IS 1.");
-    // Insert 88 NAO value
-    await this.editor.insertLineBelow();
-    await this.gotoCol(wordcolumn + 3);
-    await this.editor.type("88 " + varname + varnao);
-    await this.gotoCol(Colunas.COLUNA_VALUE);
-    await this.editor.type("VALUE IS 2.");
-    // Return to original position
-    this.editor.setCursors(originalCursors);
   }
 
   /**
@@ -291,68 +225,6 @@ export class GeradorCobol {
       }
       await this.editor.setCurrentLine(lineText + dots);
     }
-  }
-
-  /**
-   * Vai para a coluna do TO
-   */
-  private gotoColTo() {
-    if (this.editor.getCurrentLineSize() < Colunas.COLUNA_B) {
-      return this.gotoCol(Colunas.COLUNA_B);
-    } else {
-      if (this.editor.getCurrentLineSize() >= 31) {
-        return this.gotoCol(Colunas.COLUNA_C);
-      } else {
-        return this.editor.type(" ");
-      }
-    }
-  }
-
-  /**
-   * Vai para uma coluna
-   */
-  private gotoCol(coluna: number) {
-    if (this.editor.getCurrentLineSize() < coluna - 1) {
-      return this.editor.setColumn(coluna - 1);
-    } else {
-      return this.editor.type(" ");
-    }
-  }
-
-  /**
-   * Return indentation level (column) of current line
-   */
-  private currentIndentLevel() {
-    // Get the line in focous
-    return this.editor.getCurrentLine().search(/\S|$/);
-  }
-
-  /**
-   * Validate if the current line is a cobol variable declaration
-   */
-  private async isVariableDeclaration() {
-    // Get the line in focous
-    let line = await this.editor.getCurrentLine();
-    // Create a array with each word from the line
-    let linesplitted = line.split(" ");
-    // Find if the line is a variable declaration
-    let vardeclaration = false;
-    linesplitted.forEach(element => {
-      if (element.toUpperCase() === "PIC") {
-        vardeclaration = true;
-      }
-    });
-    return vardeclaration;
-  }
-  /**
-   *
-   */
-  private async firstWordColumn() {
-    // Get the line in focous
-    let line = await this.editor.getCurrentLine();
-    // Find the first word column
-    let firstWordColumn: number = line.search(/\S|$/) + 1;
-    return firstWordColumn;
   }
 
 };

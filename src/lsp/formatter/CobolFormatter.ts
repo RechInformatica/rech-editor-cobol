@@ -6,6 +6,10 @@ import { CommandSeparatorFormatter } from "./CommandSeparatorFormatter";
 import { EvaluateFormatter } from "./EvaluateFormatter";
 import { FormatterUtils } from "./FormatterUtils";
 import { WhenFormatter } from "./WhenFormatter";
+import { PerformUntilFormatter } from "./PerformUntilFormatter";
+import { ElseFormatter } from "./ElseFormatter";
+import { CompletionUtils } from "../commons/CompletionUtils";
+import { PerformTestBeforeFormatter } from "./PerformTestBeforeFormatter";
 
 /**
  * Class to format Cobol source code
@@ -42,15 +46,24 @@ export class CobolFormatter {
     if (this.isIfCondition(currentText)) {
       return this.generate(new IfFormatter());
     }
+    if (this.isElseCondition(currentText)) {
+      return [FormatterUtils.createIndentTextEdit(this.line, 0)];
+    }
     if (this.isEvaluateCondition(currentText)) {
       return this.generate(new EvaluateFormatter());
+    }
+    if (this.isPerformUntil(currentText)) {
+      return this.generate(new PerformUntilFormatter());
+    }
+    if (this.isPerformTestBefore(currentText)) {
+      return this.generate(new PerformTestBeforeFormatter());
     }
     if (this.isWhenCondition(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0)];
     }
     if (this.parser.getDeclaracaoParagrafo(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0, 4)];
-    }
+    }    
     if (this.shouldKeepDotOrComma(this.lines[this.line], this.column)) {
       return this.generate(new CommandSeparatorFormatter());
     }
@@ -58,9 +71,20 @@ export class CobolFormatter {
   }
 
   /**
-   * Formats the Cobol source when Space is pressed
+   * Formats the Cobol source when the 'E' letter is pressed
    */
-  public formatWhenSpaceIsPressed(): TextEdit[] {
+  public formatWhenEIsPressed(): TextEdit[] {
+    let currentText = this.lines[this.line];
+    if (this.isElseCondition(currentText)) {
+      return this.generate(new ElseFormatter());
+    }
+    return [];
+  }
+
+  /**
+   * Formats the Cobol source when 'N' is pressed
+   */
+  public formatWhenNIsPressed(): TextEdit[] {
     let currentText = this.lines[this.line];
     if (this.isWhenCondition(currentText)) {
       return this.generate(new WhenFormatter());
@@ -73,6 +97,16 @@ export class CobolFormatter {
    */
   private isIfCondition(currentText: string): boolean {
     if (IfFormatter.IF_REGEXP.exec(currentText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents an 'if' condition
+   */
+  private isElseCondition(currentText: string): boolean {
+    if (ElseFormatter.ELSE_REGEXP.exec(currentText)) {
       return true;
     }
     return false;
@@ -93,6 +127,26 @@ export class CobolFormatter {
    */
   private isEvaluateCondition(currentText: string): boolean {
     if (EvaluateFormatter.EVALUATE_REGEXP.exec(currentText)) {
+      return true;
+    }
+    return false;
+  }
+  
+  /**
+   * Returns true if the current line represents a 'perform until' condition
+   */
+  private isPerformUntil(currentText: string) {
+    if (PerformUntilFormatter.PERFORM_UNTIL_REGEXP.exec(currentText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'perform until' condition
+   */
+  private isPerformTestBefore(currentText: string) {
+    if (PerformTestBeforeFormatter.UNTIL_REGEXP.exec(currentText)) {
       return true;
     }
     return false;
@@ -125,6 +179,23 @@ export class CobolFormatter {
    * @param completion implementation used to generate completion items
    */
   private generate(completion: FormatterInterface): TextEdit[] {
-    return completion.generate(this.line, this.column, this.lines);
+    let result = completion.generate(this.line, this.column, this.lines);
+    if (CompletionUtils.isLowerCaseSource(this.lines)) {
+      return this.toLowerCase(result);
+    }
+    return result;
   }
+
+/**
+   * Convert the result to lower case
+   * 
+   * @param result 
+   */
+  private toLowerCase(result: TextEdit[]): TextEdit[] {
+    result.forEach(textEdit => {
+      textEdit.newText = textEdit.newText.toLowerCase();
+    });
+    return result;
+  }
+
 }

@@ -3,18 +3,18 @@ import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 
 /**
- * Class to generate LSP Completion Items for Cobol 'set' clause
+ * Class to generate LSP Completion Items for Cobol 'exit perform' clause
  */
-export class SetCompletion implements CompletionInterface {
+export class ExitPerformCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = "SET" + CompletionUtils.fillMissingSpaces(20, column + 2) + "${0}";
+        let text = "EXIT" + CompletionUtils.fillMissingSpaces(35, column + 3) + "PERFORM" + CompletionUtils.separatorForColumn(column);
         return [{
-            label: 'Gerar comando SET',
-            detail: 'Gera o comando SET colocando o cursor na posição da primeira variável',
+            label: 'Gerar comando EXIT PERFORM',
+            detail: 'Gera o comando EXIT PERFORM para sair do laço atual',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "SET",
+            filterText: "EXIT PERFORM XP",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];

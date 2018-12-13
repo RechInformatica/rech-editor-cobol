@@ -10,7 +10,7 @@ const END_COBOL_COLUMN = 120;
  * Class to format Cobol 'evaluate'
  */
 export class WhenFormatter implements FormatterInterface {
-    
+
   /** RegExp that identifies if it is the WHEN clause*/
   public static WHEN_REGEXP = /\s+(WHEN|when).*/;
   /** RegExp that identifies if it is the WHEN clause with parameters*/
@@ -56,7 +56,7 @@ export class WhenFormatter implements FormatterInterface {
    * @param column column where the 'when' clause will be inserted
    */
   public createWhenTextEdit(line: number, column: number): TextEdit {
-    let textToInsert = " WHEN ";
+    let textToInsert = " WHEN";
     let whenText = "";
     whenText = CompletionUtils.fillMissingSpaces(column, 0) + textToInsert;
     return {
