@@ -2,7 +2,7 @@
     "name": "rech-editor-vscode",
     "displayName": "rech-editor-vscode",
     "description": "Package for using Rech's Cobol extensions with Visual Studio Code.",
-    "version": "0.0.10",
+    "version": "0.0.1",
     "publisher": "rechinformatica",
     "engines": {
         "vscode": "^1.26.0"
@@ -409,7 +409,7 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "package": "vsce package",
+        "package": "vsce package --out f:/div/VSCode/extension/rech-editor-vscode/rech-editor-vscode.vsix",
         "compile": "tsc -p ./",
         "compile:client": "tsc -p ./",
         "compile:server": "tsc -p ./",
@@ -422,19 +422,18 @@
         "@types/iconv-lite": "0.0.1",
         "@types/q": "^1.0.0",
         "iconv-lite": "^0.4.24",
-        "q": "^1.4.1"
-    },
-    "devDependencies": {
-        "@types/chai": "^4.1.6",
         "@types/mocha": "^2.2.48",
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.21",
+        "q": "^1.4.1",
+        "@types/chai": "^4.1.6",
         "@types/node": "^8.10.25",
         "chai": "^4.2.0",
         "mocha": "^5.2.0",
         "ts-node": "^7.0.1",
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.21",
         "vsce": "^1.53.0",
         "vscode-languageclient": "^4.1.4",
         "vscode-languageserver": "^4.1.3"
-    }
+    },
+    "devDependencies": {}
 }
