@@ -44,8 +44,8 @@ export class GeradorCobol {
      *    3º - 2nd MOVE's operator. Used to invert with the 1st MOVE's operator
      *    4º - Other elements endind line (dot/comma, inline comments and line break character)
      */
-    let regex = /^( +)MOVE +([a-zA-Z0-9_\-\(\)]+) +TO +([a-zA-Z0-9_\-\(\)]+)(.*$)/gmi;
-    let replacedBuffer = selectedBuffer[0].replace(regex, "$1MOVE $3 TO $2$4");
+    let regex = /^( +)move +([a-zA-Z0-9_\-\(\)]+) +to +([a-zA-Z0-9_\-\(\)]+)(.*$)/gmi;
+    let replacedBuffer = selectedBuffer[0].replace(regex, "$1move $3 to $2$4");
     await this.editor.replaceSelection(replacedBuffer);
     await this.editor.indent("N");
   }

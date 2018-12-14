@@ -6,9 +6,9 @@ import { MoveCompletion } from "./MoveCompletion";
 import { ToCompletion } from "./ToCompletion";
 import { CompletionInterface } from "./CompletionInterface";
 import { EvaluateCompletion } from "./EvaluateCompletion";
-import { PerformUntilCompletion } from "./PerformUntilCompletion";
+import { PerformUntilExitCompletion } from "./PerformUntilExitCompletion";
 import { SetCompletion } from "./SetCompletion";
-import { PerformTestBeforeCompletion } from "./PerformTestBeforeCompletion";
+import { PerformVaryingCompletion } from "./PerformVaryingCompletion";
 import { AddCompletion } from "./AddCompletion";
 import { SubtractCompletion } from "./SubtractCompletion";
 import { FromCompletion } from "./FromCompletion";
@@ -226,8 +226,8 @@ export class CobolCompletionItemFactory {
     items = items.concat(this.generate(new ExitCycleCompletion()));
     items = items.concat(this.generate(new SubtractCompletion()));
     items = items.concat(this.generate(new EvaluateCompletion()));
-    items = items.concat(this.generate(new PerformUntilCompletion()));
-    items = items.concat(this.generate(new PerformTestBeforeCompletion()));
+    items = items.concat(this.generate(new PerformUntilExitCompletion()));
+    items = items.concat(this.generate(new PerformVaryingCompletion()));
     this.additionalCompletions.forEach(impl => {
       items = items.concat(this.generate(impl));
     });

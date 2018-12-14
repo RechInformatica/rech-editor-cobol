@@ -7,23 +7,22 @@ const PARAM_COLUMN_DECLARATION = 35;
 /**
  * Class to generate LSP Completion Items for Cobol evaluate declarations
  */
-export class PerformTestBeforeCompletion implements CompletionInterface {
+export class PerformVaryingCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
         const performClause = "PERFORM";
         const varyingClause = "VARYING";
         const untilClause = "UNTIL";
         let text = "";
-        text = text.concat(performClause);
-        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + performClause.length - 1) + "WITH TEST BEFORE\n");
+        text = text.concat(performClause).concat("\n");
         text = text.concat(CompletionUtils.fillMissingSpaces(column + 4, column) + varyingClause);
         text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + varyingClause.length + 2) + "${1} FROM ${2:} BY ${3:1}\n");
         text = text.concat(CompletionUtils.fillMissingSpaces(column + 7, column) + untilClause);
         text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + untilClause.length + 5) + "${1} ${4}");
         let endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, column)];
         return [{
-            label: 'Gerar declaração de laço com teste antes (with test before).',
-            detail: 'Gera a declaração de laço com teste antes (with test before).',
+            label: 'Gerar declaração de laço variando o índice (perform varying).',
+            detail: 'Gera a declaração de laço variando o índice (perform varying).',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
             additionalTextEdits: endPerform,
