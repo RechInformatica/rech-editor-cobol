@@ -178,10 +178,6 @@
         ],
         "commands": [
             {
-                "command": "rech.editor.vscode.pullWord",
-                "title": "pullWord"
-            },
-            {
                 "command": "rech.editor.vscode.tab",
                 "title": "tab"
             },
@@ -264,8 +260,9 @@
                 "key": "ctrl+shift+enter"
             },
             {
-                "command": "rech.editor.vscode.pullWord",
-                "key": "alt+w"
+                "command": "deleteWordRight",
+                "key": "alt+w",
+                "when": "textInputFocus && !editorReadonly"
             },
             {
                 "command": "rech.editor.vscode.cobolInsertStartComment",

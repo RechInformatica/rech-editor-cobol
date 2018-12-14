@@ -7,7 +7,6 @@ import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './co
 import { TabStopper } from './cobol/TabStopper';
 import { Client } from './lsp/client';
 import { CustomDecorator } from './decoration/CustomDecorator';
-import { CobolWordPuller } from './commons/CobolWordPuller';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -30,9 +29,6 @@ export function activate(_context: any) {
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInvertMoveOperators', () => {
         new GeradorCobol().invertMoveOperators();
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.pullWord', () => {
-        new CobolWordPuller().pullNextWord();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyLine', () => {
         commands.executeCommand("editor.action.clipboardCopyAction");
