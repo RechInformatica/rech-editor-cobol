@@ -8,13 +8,13 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 export class AddCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = "ADD" + CompletionUtils.fillMissingSpaces(20, column + 2) + "${0}";
+        let text = "add" + CompletionUtils.fillMissingSpaces(20, column + 2) + "${0}";
         return [{
             label: 'Gerar comando ADD',
             detail: 'Gera o comando ADD colocando o cursor na posição da primeira variável',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "ADD",
+            filterText: "add",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];

@@ -11,14 +11,14 @@ const VAR_COLUMN_DECLARATION = 35;
 export class EvaluateCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = "EVALUATE";
-        text += CompletionUtils.fillMissingSpaces(VAR_COLUMN_DECLARATION, column + text.length - 1) + "TRUE";
+        let text = "evaluate";
+        text += CompletionUtils.fillMissingSpaces(VAR_COLUMN_DECLARATION, column + text.length - 1) + "true";
         return [{
             label: 'Gerar comando EVALUATE',
             detail: 'Gera a declaração do comando evaluate.',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "EVALUATE",
+            filterText: "evaluate",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];

@@ -7,7 +7,7 @@ import { FormatterUtils } from "./FormatterUtils";
  * Class to format Cobol 'if'
  */
 export class IfFormatter implements FormatterInterface {
-    
+
     /** RegExp that identifies if it is the IF clause*/
     public static IF_REGEXP = /\s+(IF|if).*/;
 
@@ -22,7 +22,7 @@ export class IfFormatter implements FormatterInterface {
         let lineText = lines[line];
         let ifStartColumn = CompletionUtils.countSpacesAtBeginning(lineText);
         const edits: TextEdit[] = [FormatterUtils.createIndentTextEdit(line, 0)];
-        if (FormatterUtils.isClauseMissing(line, ifStartColumn, lines, ["END-IF", "ELSE"])) {
+        if (FormatterUtils.isClauseMissing(line, ifStartColumn, lines, ["end-if", "else"])) {
             edits.push(this.createEndIfTextEdit(line + 1, ifStartColumn + 1));
         }
         return edits;
@@ -30,13 +30,13 @@ export class IfFormatter implements FormatterInterface {
 
     /**
      * Creates a TextEdit with the 'end-if' clause already formatted
-     * 
+     *
      * @param line line where the 'end-if' clause will be inserted
      * @param column column where the 'end-if' clause will be inserted
      */
     private createEndIfTextEdit(line: number, column: number): TextEdit {
         let endIfText = "";
-        endIfText = CompletionUtils.fillMissingSpaces(column, 0) + "END-IF";
+        endIfText = CompletionUtils.fillMissingSpaces(column, 0) + "end-if";
         endIfText = endIfText.concat(CompletionUtils.separatorForColumn(column));
         endIfText = endIfText.concat("\n");
         return {

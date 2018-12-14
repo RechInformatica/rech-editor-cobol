@@ -241,36 +241,36 @@ export class CobolCompletionItemFactory {
    */
   private generate(completion: CompletionInterface): CompletionItem[] {
     let result = completion.generate(this.line, this.column, this.lines);
-    if (CompletionUtils.isLowerCaseSource(this.lines)) {
-        return this.toLowerCase(result);
+    if (!CompletionUtils.isLowerCaseSource(this.lines)) {
+        return this.toUpperCase(result);
     }
     return result;
   }
 
   /**
-   * Convert the result to lower case
+   * Convert the result to upper case
    *
    * @param result
    */
-  private toLowerCase(result: CompletionItem[]): CompletionItem[] {
+  private toUpperCase(result: CompletionItem[]): CompletionItem[] {
     result.forEach(completionItem => {
       if (completionItem.commitCharacters) {
         completionItem.commitCharacters.forEach((commitCharacter) => {
-            commitCharacter = commitCharacter.toLowerCase();
+            commitCharacter = commitCharacter.toUpperCase();
         })
       }
       if (completionItem.filterText) {
-        completionItem.filterText = completionItem.filterText.toLowerCase();
+        completionItem.filterText = completionItem.filterText.toUpperCase();
       }
       if (completionItem.insertText) {
-        completionItem.insertText = completionItem.insertText.toLowerCase();
+        completionItem.insertText = completionItem.insertText.toUpperCase();
       }
       if (completionItem.textEdit) {
-        completionItem.textEdit.newText = completionItem.textEdit.newText.toLowerCase();
+        completionItem.textEdit.newText = completionItem.textEdit.newText.toUpperCase();
       }
       if (completionItem.additionalTextEdits) {
         completionItem.additionalTextEdits.forEach((additionalTextEdit) => {
-            additionalTextEdit.newText = additionalTextEdit.newText.toLowerCase();
+            additionalTextEdit.newText = additionalTextEdit.newText.toUpperCase();
         })
       }
     });

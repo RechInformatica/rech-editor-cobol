@@ -18,7 +18,7 @@ export class FromCompletion implements CompletionInterface {
             detail: 'Gera o comando FROM colocando o cursor na posição da primeira variável',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "FROM",
+            filterText: "from",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];
@@ -32,7 +32,7 @@ export class FromCompletion implements CompletionInterface {
         if (column < FROM_COLUMN_DECLARATION) {
             text = text.concat(CompletionUtils.fillMissingSpaces(FROM_COLUMN_DECLARATION, column - 1));
         }
-        text = text.concat("FROM");
+        text = text.concat("from");
         text = text.concat(CompletionUtils.fillMissingSpaces(35, column + text.length - 1));
         text = text.concat("${0}");
         text = text.concat(CompletionUtils.separatorForColumn(this.getFirstCharacterColumn(currentText)));

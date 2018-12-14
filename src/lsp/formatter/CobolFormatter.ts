@@ -6,10 +6,10 @@ import { CommandSeparatorFormatter } from "./CommandSeparatorFormatter";
 import { EvaluateFormatter } from "./EvaluateFormatter";
 import { FormatterUtils } from "./FormatterUtils";
 import { WhenFormatter } from "./WhenFormatter";
-import { PerformUntilFormatter } from "./PerformUntilFormatter";
+import { PerformUntilExitFormatter } from "./PerformUntilExitFormatter";
 import { ElseFormatter } from "./ElseFormatter";
 import { CompletionUtils } from "../commons/CompletionUtils";
-import { PerformTestBeforeFormatter } from "./PerformTestBeforeFormatter";
+import { PerformVaryingFormatter } from "./PerformVaryingFormatter";
 
 /**
  * Class to format Cobol source code
@@ -53,17 +53,17 @@ export class CobolFormatter {
       return this.generate(new EvaluateFormatter());
     }
     if (this.isPerformUntil(currentText)) {
-      return this.generate(new PerformUntilFormatter());
+      return this.generate(new PerformUntilExitFormatter());
     }
     if (this.isPerformTestBefore(currentText)) {
-      return this.generate(new PerformTestBeforeFormatter());
+      return this.generate(new PerformVaryingFormatter());
     }
     if (this.isWhenCondition(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0)];
     }
     if (this.parser.getDeclaracaoParagrafo(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0, 4)];
-    }    
+    }
     if (this.shouldKeepDotOrComma(this.lines[this.line], this.column)) {
       return this.generate(new CommandSeparatorFormatter());
     }
@@ -131,12 +131,12 @@ export class CobolFormatter {
     }
     return false;
   }
-  
+
   /**
    * Returns true if the current line represents a 'perform until' condition
    */
   private isPerformUntil(currentText: string) {
-    if (PerformUntilFormatter.PERFORM_UNTIL_REGEXP.exec(currentText)) {
+    if (PerformUntilExitFormatter.PERFORM_UNTIL_REGEXP.exec(currentText)) {
       return true;
     }
     return false;
@@ -146,7 +146,7 @@ export class CobolFormatter {
    * Returns true if the current line represents a 'perform until' condition
    */
   private isPerformTestBefore(currentText: string) {
-    if (PerformTestBeforeFormatter.UNTIL_REGEXP.exec(currentText)) {
+    if (PerformVaryingFormatter.UNTIL_REGEXP.exec(currentText)) {
       return true;
     }
     return false;
@@ -180,20 +180,20 @@ export class CobolFormatter {
    */
   private generate(completion: FormatterInterface): TextEdit[] {
     let result = completion.generate(this.line, this.column, this.lines);
-    if (CompletionUtils.isLowerCaseSource(this.lines)) {
-      return this.toLowerCase(result);
+    if (!CompletionUtils.isLowerCaseSource(this.lines)) {
+      return this.toUpperCase(result);
     }
     return result;
   }
 
-/**
-   * Convert the result to lower case
-   * 
-   * @param result 
+  /**
+   * Convert the result to upper case
+   *
+   * @param result
    */
-  private toLowerCase(result: TextEdit[]): TextEdit[] {
+  private toUpperCase(result: TextEdit[]): TextEdit[] {
     result.forEach(textEdit => {
-      textEdit.newText = textEdit.newText.toLowerCase();
+      textEdit.newText = textEdit.newText.toUpperCase();
     });
     return result;
   }

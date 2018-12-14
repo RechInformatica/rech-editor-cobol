@@ -16,11 +16,11 @@ export class FlagCompletion implements CompletionInterface {
         let posprefixo = splittedParent[1].indexOf("-");
         variableName = splittedParent[1].substring(posprefixo + 1);
         if (variableName.length == 3) {
-            varsim = 'SIM';
-            varnao = 'NAO';
+            varsim = 'sim';
+            varnao = 'nao';
         } else {
-            varsim = '-SIM';
-            varnao = '-NAO';
+            varsim = '-sim';
+            varnao = '-nao';
         }
         let firstWordColumn = this.firstWordColumn(lines[line]);
         let flagsText = this.buildFlagsText(firstWordColumn, variableName, varsim, varnao);
@@ -86,7 +86,7 @@ export class FlagCompletion implements CompletionInterface {
         let text = "";
         text = text.concat(CompletionUtils.fillMissingSpaces(firstWordColumn, - 3) + "88 " + variableName + suffix);
         text = text.concat(CompletionUtils.fillMissingSpaces(VALUE_COLUMN, text.length));
-        text = text.concat("VALUE IS " + value + ".");
+        text = text.concat("value is " + value + ".");
         return text;
     }
 

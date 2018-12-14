@@ -46,7 +46,7 @@ export class FormatterUtils {
         let parser = new ParserCobol();
         let indentedClauses: string[] = [];
         clauses.forEach(currentClause => {
-            indentedClauses.push(CompletionUtils.fillMissingSpaces(column, 0) + " " + currentClause.toUpperCase());
+            indentedClauses.push(CompletionUtils.fillMissingSpaces(column, 0) + " " + currentClause.toLowerCase());
         });
         for (let index = line; index < lines.length; index++) {
             let lineText = lines[index];
@@ -63,7 +63,7 @@ export class FormatterUtils {
                     return true;
                 }
                 if (!(lineText.charAt(column) === " ")) {
-                    return !(this.startsWithClause(lineText.toUpperCase(), indentedClauses));
+                    return !(this.startsWithClause(lineText.toLowerCase(), indentedClauses));
                 }
             }
         }

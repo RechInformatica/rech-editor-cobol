@@ -4,9 +4,9 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 import { FormatterUtils } from "./FormatterUtils";
 
 /**
- * Class to format Cobol 'if'
+ * Class to format Cobol 'perform until'
  */
-export class PerformUntilFormatter implements FormatterInterface {
+export class PerformUntilExitFormatter implements FormatterInterface {
 
     /** RegExp that identifies if it is the PERFORM UNTIL clause*/
     public static PERFORM_UNTIL_REGEXP = /\s+(PERFORM|perform)\s+(UNTIL|until)/;
@@ -34,7 +34,7 @@ export class PerformUntilFormatter implements FormatterInterface {
      */
     private createEndPerformTextEdit(line: number, column: number): TextEdit {
         let endIfText = "";
-        endIfText = CompletionUtils.fillMissingSpaces(column, 0) + "END-PERFORM";
+        endIfText = CompletionUtils.fillMissingSpaces(column, 0) + "end-perform";
         endIfText = endIfText.concat(CompletionUtils.separatorForColumn(column));
         endIfText = endIfText.concat("\n");
         return {

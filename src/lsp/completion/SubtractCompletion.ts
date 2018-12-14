@@ -8,13 +8,13 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 export class SubtractCompletion implements CompletionInterface {
 
     public generate(_line: number, _column: number, _lines: string[]): CompletionItem[] {
-        let text = "SUBTRACT ${0}";
+        let text = "subtract ${0}";
         return [{
             label: 'Gerar comando SUBTRACT',
             detail: 'Gera o comando SUBTRACT colocando o cursor na posição da primeira variável',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "SUBTRACT",
+            filterText: "subtract",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];

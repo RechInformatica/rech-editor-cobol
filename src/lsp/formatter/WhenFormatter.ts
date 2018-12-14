@@ -56,7 +56,7 @@ export class WhenFormatter implements FormatterInterface {
    * @param column column where the 'when' clause will be inserted
    */
   public createWhenTextEdit(line: number, column: number): TextEdit {
-    let textToInsert = " WHEN";
+    let textToInsert = " when";
     let whenText = "";
     whenText = CompletionUtils.fillMissingSpaces(column, 0) + textToInsert;
     return {

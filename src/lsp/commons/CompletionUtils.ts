@@ -1,5 +1,3 @@
-import { TextEdit } from "vscode-languageserver";
-
 /** Maximum number of interpreted lines */
 const MAX_INTERPRETED_LINES = 20;
 

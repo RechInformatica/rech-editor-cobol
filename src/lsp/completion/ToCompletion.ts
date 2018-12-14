@@ -18,7 +18,7 @@ export class ToCompletion implements CompletionInterface {
             detail: 'Gera o comando TO colocando o cursor na posição da primeira variável',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "TO",
+            filterText: "to",
             preselect: true,
             kind: CompletionItemKind.Keyword
         }];
@@ -32,7 +32,7 @@ export class ToCompletion implements CompletionInterface {
         if (column < TO_COLUMN_DECLARATION) {
             text = text.concat(CompletionUtils.fillMissingSpaces(TO_COLUMN_DECLARATION, column - 1));
         }
-        text = text.concat("TO");
+        text = text.concat("to");
         text = text.concat(CompletionUtils.fillMissingSpaces(35, column + text.length - 1));
         text = text.concat("${0}");
         text = text.concat(CompletionUtils.separatorForColumn(this.getFirstCharacterColumn(currentText)));

@@ -25,7 +25,7 @@ export class EvaluateFormatter implements FormatterInterface {
         let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(lineText);
         const edits: TextEdit[] = this.completeTextEditWithComma(line, lines);
         edits.push(this.createWhenTextEdit(line, evaluateStartColumn + 3));
-        if (FormatterUtils.isClauseMissing(line, evaluateStartColumn, lines, ["END-EVALUATE"])) {
+        if (FormatterUtils.isClauseMissing(line, evaluateStartColumn, lines, ["end-evaluate"])) {
             edits.push(this.createEndEvaluateTextEdit(line + 1, evaluateStartColumn + 1));
         }
         return edits;
@@ -33,9 +33,9 @@ export class EvaluateFormatter implements FormatterInterface {
 
     /**
      * Complete the TextEdit with comma if need
-     * 
-     * @param line 
-     * @param lines 
+     *
+     * @param line
+     * @param lines
      */
     private completeTextEditWithComma(line: number, lines: string[]): TextEdit[] {
         let currentLineText = lines[line];
@@ -49,9 +49,9 @@ export class EvaluateFormatter implements FormatterInterface {
 
     /**
      * Creates a TextEdit with the 'WHEN' clause already formatted
-     * 
-     * @param line 
-     * @param whenColumn 
+     *
+     * @param line
+     * @param whenColumn
      */
     private createWhenTextEdit(line: number, whenColumn: number): TextEdit {
         let result = new WhenFormatter().createWhenTextEdit(line, whenColumn);
@@ -61,13 +61,13 @@ export class EvaluateFormatter implements FormatterInterface {
 
     /**
      * Creates a TextEdit with the 'end-evaluate' clause already formatted
-     * 
+     *
      * @param line line where the 'end-evaluate' clause will be inserted
      * @param column column where the 'end-evaluate' clause will be inserted
      */
     private createEndEvaluateTextEdit(line: number, column: number): TextEdit {
         let endEvaluateText = "";
-        endEvaluateText = CompletionUtils.fillMissingSpaces(column, 0) + "END-EVALUATE";
+        endEvaluateText = CompletionUtils.fillMissingSpaces(column, 0) + "end-evaluate";
         endEvaluateText = endEvaluateText.concat(CompletionUtils.separatorForColumn(column));
         endEvaluateText = endEvaluateText.concat("\n");
         return {
@@ -84,5 +84,5 @@ export class EvaluateFormatter implements FormatterInterface {
             newText: endEvaluateText
         };
     }
-    
+
 }

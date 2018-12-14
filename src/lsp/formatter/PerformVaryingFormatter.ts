@@ -1,14 +1,13 @@
 import { TextEdit } from "vscode-languageserver";
 import { FormatterInterface } from "./FormatterInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
-import { FormatterUtils } from "./FormatterUtils";
 
 /**
- * Class to format Cobol 'Perform with test before'
+ * Class to format Cobol 'Perform varying'
  */
-export class PerformTestBeforeFormatter implements FormatterInterface {
-    
-    /** RegExp that identifies if it is the until of Perform with test before clause*/
+export class PerformVaryingFormatter implements FormatterInterface {
+
+    /** RegExp that identifies if it is the until of Perform varying clause*/
     public static UNTIL_REGEXP = /\s+UNTIL\s+.*/;
 
     /**
@@ -25,8 +24,8 @@ export class PerformTestBeforeFormatter implements FormatterInterface {
     }
 
     /**
-     * Creates a TextEdit with the identation of 'Perform with test before' clause
-     * 
+     * Creates a TextEdit with the identation of 'Perform varying' clause
+     *
      * @param line line where the 'until' clause will be inserted
      * @param column column where the 'until' clause will be inserted
      */
