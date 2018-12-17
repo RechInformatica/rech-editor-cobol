@@ -9,6 +9,10 @@
     },
     "icon": "images/cobol.png",
     "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/RechInformatica/rech-editor-vscode/issues",
+        "email": "smcbreen@microsoft.com"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/RechInformatica/rech-editor-vscode.git"
