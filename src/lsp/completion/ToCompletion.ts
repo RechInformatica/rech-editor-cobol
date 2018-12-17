@@ -12,7 +12,7 @@ export class ToCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): CompletionItem[] {
         let currentText = lines[line];
-        let text = this.buildToText(currentText, column);
+        let text = this.buildToTextWithTabStop(currentText, column);
         return [{
             label: 'Gerar comando TO',
             detail: 'Gera o comando TO colocando o cursor na posição da primeira variável',
@@ -25,30 +25,31 @@ export class ToCompletion implements CompletionInterface {
     }
 
     /**
-     * Builds and returns the 'to' text snippet
+     * Builds and returns the 'to' text snippet with tabstop
+     *
+     * @param currentText current line text
+     * @param column current cursor column
      */
-    private buildToText(currentText: string, column: number): string {
+    private buildToTextWithTabStop(currentText: string, column: number): string {
+        let text = this.buildToTextWithIndent(column);
+        text = text.concat("${0}");
+        text = text.concat(CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentText)));
+        return text;
+    }
+
+    /**
+     * Builds and returns the 'to' text snippet witn indent and without tabstop
+     *
+     * @param column current cursor column
+     */
+    public buildToTextWithIndent(column: number): string {
         let text = "";
         if (column < TO_COLUMN_DECLARATION) {
             text = text.concat(CompletionUtils.fillMissingSpaces(TO_COLUMN_DECLARATION, column - 1));
         }
         text = text.concat("to");
         text = text.concat(CompletionUtils.fillMissingSpaces(35, column + text.length - 1));
-        text = text.concat("${0}");
-        text = text.concat(CompletionUtils.separatorForColumn(this.getFirstCharacterColumn(currentText)));
         return text;
-    }
-
-    /**
-     * Returns the number of the first character on the specified line
-     */
-    private getFirstCharacterColumn(lineText: string): number {
-        for (let i = 0; i < lineText.length; i++) {
-            if (lineText.charAt(i) !== " ") {
-                return i;
-            }
-        }
-        return 0;
     }
 
 }

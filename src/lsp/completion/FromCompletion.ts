@@ -35,20 +35,8 @@ export class FromCompletion implements CompletionInterface {
         text = text.concat("from");
         text = text.concat(CompletionUtils.fillMissingSpaces(35, column + text.length - 1));
         text = text.concat("${0}");
-        text = text.concat(CompletionUtils.separatorForColumn(this.getFirstCharacterColumn(currentText)));
+        text = text.concat(CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentText)));
         return text;
-    }
-
-    /**
-     * Returns the number of the first character on the specified line
-     */
-    private getFirstCharacterColumn(lineText: string): number {
-        for (let i = 0; i < lineText.length; i++) {
-            if (lineText.charAt(i) !== " ") {
-                return i;
-            }
-        }
-        return 0;
     }
 
 }
