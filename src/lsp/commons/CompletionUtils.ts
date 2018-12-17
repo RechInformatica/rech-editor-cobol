@@ -26,10 +26,7 @@ export class CompletionUtils {
    * @param startColumn initial column
    * @param initialColumn cursor column
    */
-  public static fillMissingSpaces(
-    startColumn: number,
-    initialColumn: number
-  ): string {
+  public static fillMissingSpaces(startColumn: number, initialColumn: number): string {
     let missingSpaces = startColumn - initialColumn;
     let text = "";
     for (var i = 1; i < missingSpaces; i++) {
@@ -75,4 +72,17 @@ export class CompletionUtils {
     }
     return false;
   }
+
+  /**
+   * Returns the number of the first character on the specified line
+   */
+  public static getFirstCharacterColumn(lineText: string): number {
+    for (let i = 0; i < lineText.length; i++) {
+      if (lineText.charAt(i) !== " ") {
+        return i;
+      }
+    }
+    return 0;
+  }
+
 }

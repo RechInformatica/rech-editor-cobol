@@ -17,6 +17,7 @@ import { ExitParagraphCompletion } from "./ExitParagraphCompletion";
 import { ExitPerformCompletion } from "./ExitPerformCompletion";
 import { ExitCycleCompletion } from "./ExitCycleCompletion";
 import { FlagCompletion } from "./FlagCompletion";
+import { ToTrueCompletion } from "./ToTrueCompletion";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -87,7 +88,7 @@ export class CobolCompletionItemFactory {
         return this.generate(new FlagCompletion());
       }
       case this.isMove() || this.isAdd() || this.isSet(): {
-        return this.generate(new ToCompletion());
+        return this.createToCompletions();
       }
       case this.isSubtract(): {
         return this.generate(new FromCompletion());
@@ -213,6 +214,19 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Fills the completion items with 'To' Cobol commands
+   */
+  private createToCompletions() {
+    let items: CompletionItem[] = [];
+    items = items.concat(this.generate(new ToCompletion()));
+    if (this.isSet()) {
+      items = items.concat(this.generate(new ToTrueCompletion()));
+    }
+    return items;
+  }
+
+
+  /**
    * Fills the completion items with default Cobol commands
    */
   private createDefaultCompletions() {
@@ -242,7 +256,7 @@ export class CobolCompletionItemFactory {
   private generate(completion: CompletionInterface): CompletionItem[] {
     let result = completion.generate(this.line, this.column, this.lines);
     if (!CompletionUtils.isLowerCaseSource(this.lines)) {
-        return this.toUpperCase(result);
+      return this.toUpperCase(result);
     }
     return result;
   }
@@ -256,7 +270,7 @@ export class CobolCompletionItemFactory {
     result.forEach(completionItem => {
       if (completionItem.commitCharacters) {
         completionItem.commitCharacters.forEach((commitCharacter) => {
-            commitCharacter = commitCharacter.toUpperCase();
+          commitCharacter = commitCharacter.toUpperCase();
         })
       }
       if (completionItem.filterText) {
@@ -270,7 +284,7 @@ export class CobolCompletionItemFactory {
       }
       if (completionItem.additionalTextEdits) {
         completionItem.additionalTextEdits.forEach((additionalTextEdit) => {
-            additionalTextEdit.newText = additionalTextEdit.newText.toUpperCase();
+          additionalTextEdit.newText = additionalTextEdit.newText.toUpperCase();
         })
       }
     });
