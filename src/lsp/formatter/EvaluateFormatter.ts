@@ -21,11 +21,11 @@ export class EvaluateFormatter implements FormatterInterface {
      * @param lines document lines
      */
     public generate(line: number, _column: number, lines: string[]): TextEdit[] {
-        let lineText = lines[line];
-        let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(lineText);
+        let evaluateLineText = lines[line - 1];
+        let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(evaluateLineText);
         const edits: TextEdit[] = this.completeTextEditWithComma(line, lines);
         edits.push(this.createWhenTextEdit(line, evaluateStartColumn + 3));
-        if (FormatterUtils.isClauseMissing(line, evaluateStartColumn, lines, ["end-evaluate"])) {
+        if (FormatterUtils.isClauseMissing(line + 1, evaluateStartColumn, lines, ["end-evaluate"])) {
             edits.push(this.createEndEvaluateTextEdit(line + 1, evaluateStartColumn + 1));
         }
         return edits;
