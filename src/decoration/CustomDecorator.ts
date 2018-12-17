@@ -1,6 +1,6 @@
 import { ExtensionContext } from 'vscode';
 import * as vscode from 'vscode';
-import { Parser } from './parser';
+import { Parser } from './Parser';
 
 export class CustomDecorator {
 
