@@ -88,7 +88,7 @@ export class Client {
 		return new Promise<string>((resolve, reject) => {
 			let currentFile = files[0];
 			let cacheFile = files[1];
-			let executor = Editor.getPreprocessor();
+			let executor = Editor.getSourceExpander();
 			if (executor) {
 				executor.setPath(currentFile).exec(cacheFile).then(() => {
 					resolve();
