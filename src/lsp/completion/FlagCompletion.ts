@@ -1,6 +1,7 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat, TextEdit } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
+import { CobolVariable } from "./CobolVariable";
 
 // Cobol column for 'VALUE' clause declaration
 const VALUE_COLUMN = 51;
@@ -11,11 +12,12 @@ const VALUE_COLUMN = 51;
 export class FlagCompletion implements CompletionInterface {
 
     public generate(line: number, _column: number, lines: string[]): CompletionItem[] {
-        let splittedParent = this.splitParentVariableInfo(lines[line]);
+        let currentLineText = lines[line];
+        let variable = CobolVariable.parseLine(currentLineText);
         let variableName, varsim, varnao = '';
-        let posprefixo = splittedParent[1].indexOf("-");
-        let prefixoName = splittedParent[1].substring(0, posprefixo + 1);
-        variableName = splittedParent[1].substring(posprefixo + 1);
+        let posprefixo = variable.getName().indexOf("-");
+        let prefixoName = variable.getName().substring(0, posprefixo + 1);
+        variableName = variable.getName().substring(posprefixo + 1);
         if (variableName.length == 3) {
             varsim = 'sim';
             varnao = 'nao';
@@ -24,33 +26,13 @@ export class FlagCompletion implements CompletionInterface {
             varnao = '-nao';
         }
         if (prefixoName.toLowerCase() != "w-") {
-            variableName = splittedParent[1];
+            variableName = variable.getName();
         }
         let firstWordColumn = this.firstWordColumn(lines[line]);
         let flagsText = this.buildFlagsText(firstWordColumn, variableName, varsim, varnao);
         let snippetText = lines[line] + "\n" + flagsText;
         let item = this.createFlagsCompletionItem(line, _column, lines, variableName, snippetText);
         return [item];
-    }
-
-    /**
-     * Split parent variable information into an array
-     *
-     * @param parentVariable parent variable line text
-     */
-    private splitParentVariableInfo(parentVariable: string): string[] {
-        let parentVariableLineText = this.removeDuplicateWhitespaces(parentVariable);
-        let splittedParent = parentVariableLineText.split(" ");
-        return splittedParent;
-    }
-
-    /**
-     * Removes duplicate whitespaces from the target string
-     *
-     * @param currentText
-     */
-    private removeDuplicateWhitespaces(currentText: string): string {
-        return currentText.trimLeft().replace(/\s+/g, ' ');
     }
 
     /**
