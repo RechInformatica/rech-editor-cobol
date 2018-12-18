@@ -81,11 +81,8 @@ export class CobolCompletionItemFactory {
       case this.isCommentLine() || this.isIf() || this.isWhen(): {
         return [];
       }
-      case this.isVarDeclaration() && !this.isVarPictureDeclared(): {
-        return this.generate(new VarDeclarationCompletion());
-      }
-      case this.isVarDeclaration() && this.isVarPictureDeclared(): {
-        return this.generate(new FlagCompletion());
+      case this.isVarDeclaration(): {
+        return this.createVariableCompletions();
       }
       case this.isMove() || this.isAdd() || this.isSet(): {
         return this.createToCompletions();
@@ -110,6 +107,30 @@ export class CobolCompletionItemFactory {
    */
   private isCommentLine() {
     return this.lineText.trim().startsWith("*>");
+  }
+
+  /**
+   * Creates completion items for Cobol variables
+   */
+  private createVariableCompletions(): CompletionItem[] {
+    if (!this.isVarPictureDeclared()) {
+      return this.generate(new VarDeclarationCompletion());
+    }
+    if (this.isFlagParent()) {
+      return this.generate(new FlagCompletion());
+    }
+    return [];
+  }
+
+  /**
+   * Returns true if the variable on the current line represents a parent
+   * variable of SIM and NAO flags (88).
+   *
+   * The parent variable needs to be PIC 9(01) because it doesn't make sense
+   * to generate flags for other pictures.
+   */
+  private isFlagParent(): boolean {
+    return this.lineText.toUpperCase().includes("9(01)");
   }
 
   /**
