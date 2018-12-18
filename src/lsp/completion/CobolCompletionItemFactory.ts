@@ -114,16 +114,26 @@ export class CobolCompletionItemFactory {
    * Creates completion items for Cobol variables
    */
   private createVariableCompletions(): CompletionItem[] {
-    if (!this.isPictureDeclared()) {
-      return this.generate(new PictureCompletion());
-    }
-    if (!this.isValueDeclared() && !this.lineText.trim().endsWith(".")) {
-      return this.generate(new ValueCompletion());
+    if (!this.isVariableDeclarationFinalized()) {
+      if (!this.isPictureDeclared()) {
+        return this.generate(new PictureCompletion());
+      }
+      if (!this.isValueDeclared()) {
+        return this.generate(new ValueCompletion());
+      }
     }
     if (this.isFlagParent()) {
       return this.generate(new FlagCompletion());
     }
     return [];
+  }
+
+  /**
+   * Returns true if the variable declaration has been finalized
+   * and the variable is completely set
+   */
+  private isVariableDeclarationFinalized(): boolean {
+    return this.lineText.trim().endsWith(".");
   }
 
   /**

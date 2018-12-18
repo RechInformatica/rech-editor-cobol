@@ -134,19 +134,37 @@ export class CobolVariable {
         return picture.includes("S") || picture.includes("-");
     }
 
+    /**
+     * Returns the variable level
+     */
     public getLevel(): number {
         return this.level;
     }
+
+    /**
+     * Returns the variable name
+     */
     public getName(): string {
         return this.name;
     }
+
+    /**
+     * Returns the variable type
+     */
     public getType(): Type {
         return this.type;
     }
 
+    /**
+     * Returns if the variable is display
+     */
     public isDisplay(): boolean {
         return this.display;
     }
+
+    /**
+     * Returns if the variable allows negative values
+     */
     public isAllowNegative(): boolean {
         return this.allowNegative;
     }
