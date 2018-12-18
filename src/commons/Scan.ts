@@ -2,7 +2,7 @@
  * Class to Scan buffers
  */
 export class Scan {
-    
+
   /** Buffer */
   private buffer: string;
   /** last line */
@@ -11,8 +11,8 @@ export class Scan {
 
   /**
    * Constructor of Scan
-   * 
-   * @param buffer 
+   *
+   * @param buffer
    */
   public constructor(buffer: string) {
     this.buffer = buffer;
@@ -21,7 +21,7 @@ export class Scan {
       index: 0
     };
   }
-  
+
   /**
    * Scan the buffer
    */
@@ -42,7 +42,7 @@ export class Scan {
       match = regexp.exec(this.buffer);
     }
   }
-  
+
   /**
    * Count lines to the specified index
    */
@@ -62,5 +62,5 @@ export class Scan {
     this.lastLine.index = lastIndex;
     return this.lastLine.row;
   }
-  
+
 }

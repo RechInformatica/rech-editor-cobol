@@ -34,27 +34,68 @@ export class ParagraphCompletion implements CompletionInterface {
 
     public generate(_line: number, _column: number, lines: string[]): CompletionItem[] {
         this.currentLines = lines;
-        if (this.callbackSourceExpander && ParagraphCompletion.cacheSourceFileName != this.cacheFileName) {
-            ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
-            ParagraphCompletion.cache = undefined;
-            this.callbackSourceExpander().then(() => {
-                new File(this.cacheFileName).loadBuffer("latin1").then((buffer) => {
-                    ParagraphCompletion.cache = this.generateParagraphCompletion(_line, _column, buffer.toString().split("\n"), true);
-                    ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
-                    return;
-                });
-            });
-        }
+        this.loadCache();
         let items: CompletionItem[] = [];
         if (ParagraphCompletion.cache && ParagraphCompletion.cacheSourceFileName == this.cacheFileName) {
             for (let value of ParagraphCompletion.cache.values()){
                 items.push(value);
             }
-        }
-        for (let value of this.generateParagraphCompletion(_line, _column, this.currentLines, false).values()) {
-            items.push(value);
+        } else {
+            for (let value of this.generateParagraphCompletion(this.currentLines, false).values()) {
+                items.push(value);
+            }
         }
         return items;
+    }
+
+    /**
+     * Load the cache
+     *
+     * @param _line
+     * @param _column
+     */
+    private loadCache() {
+        return new Promise((resolve, reject) => {
+            let file = new File(this.cacheFileName);
+            if (file.exists()) {
+                this.loadCacheFromPreprocessedFile(file).then((items) => {
+                    ParagraphCompletion.cache = items;
+                    resolve();
+                }).catch(() => {
+                    reject()
+                })
+            }
+            if (this.callbackSourceExpander && ParagraphCompletion.cacheSourceFileName != this.cacheFileName) {
+                ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
+                ParagraphCompletion.cache = undefined;
+                this.callbackSourceExpander().then(() => {
+                    this.loadCacheFromPreprocessedFile(file).then((items) => {
+                        ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
+                        ParagraphCompletion.cache = items;
+                        resolve();
+                    }).catch(() => {
+                        reject();
+                    })
+                });
+            }
+        });
+    }
+
+    /**
+     * Load the cache with the preprocessed file
+     *
+     * @param file
+     * @param _line
+     * @param _column
+     */
+    private loadCacheFromPreprocessedFile(file: File): Promise<Map<string, CompletionItem>> {
+        return new Promise((resolve, reject) => {
+            file.loadBuffer("latin1").then((buffer) => {
+                resolve(this.generateParagraphCompletion(buffer.toString().split("\n"), true));
+            }).catch(() => {
+                reject();
+            });
+        });
     }
 
     /**
@@ -65,42 +106,26 @@ export class ParagraphCompletion implements CompletionInterface {
      * @param lines
      * @param useCache
      */
-    private generateParagraphCompletion(_line: number, _column: number, lines: string[], useCache: boolean): Map<string, CompletionItem> {
+    private generateParagraphCompletion(lines: string[], useCache: boolean): Map<string, CompletionItem> {
         let items: Map<string, CompletionItem> = new Map;
-        let currentLine = lines[_line];
         let buffer = lines.join("\n");
-        new Scan(buffer).scan(this.buildRegExpToFindDeclaration(currentLine), (iterator: any) => {
+        new Scan(buffer).scan(/^\s\s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm, (iterator: any) => {
             let paragraphName = this.parserCobol.getDeclaracaoParagrafo(iterator.lineContent.toString());
             let docArray = this.getParagraphDocumentation(lines, iterator.row);
-            if (paragraphName && docArray.length > 0) {
+            if (paragraphName) {
                 let paragraphItem = this.createParagraphCompletion(paragraphName, docArray);
                 items.set(paragraphName, paragraphItem);
             }
         });
         // Merge the cache with the local paragraphs
         if (useCache) {
-            this.generateParagraphCompletion(_line, _column, <string[]>this.currentLines, false).forEach((value, key) => {
+            this.generateParagraphCompletion(<string[]>this.currentLines, false).forEach((value, key) => {
                 if (!items.has(key)){
                     items.set(key, value);
                 }
             })
         }
         return items;
-    }
-
-    /**
-     * Builds the regExp to find the declarations considering the term already inserted
-     * 
-     * @param currentLine 
-     */
-    private buildRegExpToFindDeclaration(currentLine: string): RegExp {
-        let match = /\s+PERFORM\s+(.+)/.exec(currentLine);
-        let paragraphInitialName = "";
-        if (match) {
-            paragraphInitialName = match[1];
-        }
-        let ParagraphDeclarationRegexp = `\\s\\s\\s\\s\\s\\s\\s([\\w\-]+)?${paragraphInitialName}([\\w\-]+)\\.(\\s*\\*\\>.*)?`;
-        return new RegExp(ParagraphDeclarationRegexp, "g");
     }
 
     /**
@@ -132,7 +157,7 @@ export class ParagraphCompletion implements CompletionInterface {
         let documentation: string[] = [];
         for (let index = lineIndex - 1; index >= 0; index--) {
             let currentLineText = lines[index];
-            if (currentLineText.trim().startsWith("*>")) {
+            if (currentLineText.startsWith("      *>")) {
                 documentation.push(currentLineText);
             } else {
                 break;
