@@ -18,7 +18,7 @@ export class CobolDocParser {
 
     /**
      * Extracts Cobol documentation in RechDoc format
-     * 
+     *
      * @param documentation unparsed documentation
      */
     private extractRechDoc(documentation: string[]): CobolDoc {
@@ -69,7 +69,7 @@ export class CobolDocParser {
 
     /**
      * Updates the specified elements array creating a document element from the current line
-     * 
+     *
      * @param elements elements array to be updated
      * @param currentLine current line used to create a document element
      */
@@ -82,7 +82,7 @@ export class CobolDocParser {
 
     /**
      * Creates a document element from the specified line
-     * 
+     *
      * @param currentLine current line to create a document element
      */
     private createDocElementFromLine(currentLine: string): DocElement | undefined {
@@ -101,8 +101,8 @@ export class CobolDocParser {
 
     /**
      * Remove comment of line if need
-     * 
-     * @param line 
+     *
+     * @param line
      */
     private removeLineCommentIfNeed(line: string): string {
         let match = /(.*)(\*>.*)/.exec(line);
@@ -115,8 +115,8 @@ export class CobolDocParser {
 
     /**
      * Returns true if the documentation represents a RechDoc
-     * 
-     * @param documentation 
+     *
+     * @param documentation
      */
     private isRechDoc(documentation: string[]): boolean {
         let doc = documentation.toString();
@@ -125,7 +125,7 @@ export class CobolDocParser {
 
     /**
      * Extracts the default documentation
-     * 
+     *
      * @param documentation paragraph default documentation
      */
     private extractDefaultDoc(documentation: string[]): CobolDoc {
@@ -143,10 +143,14 @@ export class CobolDocParser {
 
     /**
      * Removes dots at the end of the comment
-     * 
+     *
      * @param currentLine current line text
      */
     private removeDots(currentLine: string): string {
+        let match = /(.*\.\.+)(?:.*\*\>.*)/.exec(currentLine);
+        if (match) {
+            currentLine = match[1];
+        }
         while (currentLine !== "" && currentLine.endsWith(".")) {
             currentLine = currentLine.slice(0, -1);
         }
