@@ -4,9 +4,9 @@ export class ParserCobol {
 
   /**
    * Returns if line is the element declaration
-   * 
-   * @param element 
-   * @param line 
+   *
+   * @param element
+   * @param line
    */
   public isDeclaration(element: string, line: string): boolean {
     if (this.isCommentOrEmptyLine(line)) {
@@ -29,8 +29,8 @@ export class ParserCobol {
 
   /**
    * Returns true if the specified text is a comment line or an empty line
-   * 
-   * @param line 
+   *
+   * @param line
    */
   public isCommentOrEmptyLine(line: string): boolean {
     let trimmed = line.trim();
@@ -39,8 +39,8 @@ export class ParserCobol {
 
   /**
    * Returns the patagraph declared in the line
-   * 
-   * @param line 
+   *
+   * @param line
    */
   public getDeclaracaoParagrafo(line: string): string | undefined {
     var match = /^\s\s\s\s\s\s\s([\w\-]+)\.(\s*\*\>.*)?/g.exec(line);
@@ -52,15 +52,15 @@ export class ParserCobol {
 
   /**
    * Returns the variable declared in the line
-   * 
-   * @param line 
+   *
+   * @param line
    */
   public getDeclaracaoVariavel(line: string): string | undefined {
     // variable
-    var match = /^\s+\d\d\s+([\w\-]+)(\s+|\.).*/i.exec(line);
+    var match = /^\s+\d\d\s+(?:\(.*\))?([\w\-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
       // $SET CONSTANT
-      match = /^\s+\$SET\s+CONSTANT\s+([\w\-]+)\s+.*/i.exec(line);
+      match = /^\s+\$SET\s+CONSTANT\s+(?:\(.*\))?([\w\-]+)\s+.*/i.exec(line);
       if (match == null) {
         return undefined;
       }
@@ -70,8 +70,8 @@ export class ParserCobol {
 
   /**
    * Returns the select declared in the line
-   * 
-   * @param line 
+   *
+   * @param line
    */
   private getDeclaracaoSelect(line: string): string | undefined {
     var match = /^\s+SELECT ([\w\-]+)\s+ASSIGN.*/i.exec(line);
@@ -83,8 +83,8 @@ export class ParserCobol {
 
   /**
    * Returns the classe declared in the line
-   * 
-   * @param line 
+   *
+   * @param line
    */
   private getDeclaracaoClasse(line: string): string | undefined {
     // IS Format
@@ -101,9 +101,9 @@ export class ParserCobol {
 
   /**
    * Compare two terms ignoring replacing
-   * 
-   * @param termo1 
-   * @param termo2 
+   *
+   * @param termo1
+   * @param termo2
    */
   private equalsIgnoreReplacing(termo1: string, termo2?: string): boolean {
     if (termo1 == undefined || termo2 == undefined) {

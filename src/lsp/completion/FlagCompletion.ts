@@ -14,6 +14,7 @@ export class FlagCompletion implements CompletionInterface {
         let splittedParent = this.splitParentVariableInfo(lines[line]);
         let variableName, varsim, varnao = '';
         let posprefixo = splittedParent[1].indexOf("-");
+        let prefixoName = splittedParent[1].substring(0, posprefixo + 1);
         variableName = splittedParent[1].substring(posprefixo + 1);
         if (variableName.length == 3) {
             varsim = 'sim';
@@ -21,6 +22,9 @@ export class FlagCompletion implements CompletionInterface {
         } else {
             varsim = '-sim';
             varnao = '-nao';
+        }
+        if (prefixoName.toLowerCase() != "w-") {
+            variableName = splittedParent[1];
         }
         let firstWordColumn = this.firstWordColumn(lines[line]);
         let flagsText = this.buildFlagsText(firstWordColumn, variableName, varsim, varnao);
