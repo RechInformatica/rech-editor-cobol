@@ -19,10 +19,10 @@ export class IfFormatter implements FormatterInterface {
      * @param lines document lines
      */
     public generate(line: number, _column: number, lines: string[]): TextEdit[] {
-        let lineText = lines[line];
-        let ifStartColumn = CompletionUtils.countSpacesAtBeginning(lineText);
+        let ifLineText = lines[line - 1];
+        let ifStartColumn = CompletionUtils.countSpacesAtBeginning(ifLineText);
         const edits: TextEdit[] = [FormatterUtils.createIndentTextEdit(line, 0)];
-        if (FormatterUtils.isClauseMissing(line, ifStartColumn, lines, ["end-if", "else"])) {
+        if (FormatterUtils.isClauseMissing(line + 1, ifStartColumn, lines, ["end-if", "else"])) {
             edits.push(this.createEndIfTextEdit(line + 1, ifStartColumn + 1));
         }
         return edits;
