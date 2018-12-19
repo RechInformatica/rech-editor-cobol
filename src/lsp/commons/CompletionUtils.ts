@@ -20,14 +20,25 @@ export class CompletionUtils {
   }
 
   /**
-   * Fills missing spaces for clauses declaration considering the column
-   * where the cursor is currently positioned
+   * Fills missing spaces between the current cursor column and the target final
+   * column.
    *
-   * @param startColumn initial column
-   * @param initialColumn cursor column
+   * Example:
+   * CompletionUtils.fillMissingSpaces(10, 5) -> generates "    " (four spaces)
+   * CompletionUtils.fillMissingSpaces(5, 1) -> generates "   " (three spaces)
+   *
+   * If the cursor column is equal or greater than the target final column, a single
+   * space is added so the completion will not be attached to previous text in the line.
+   *
+   * Example:
+   * CompletionUtils.fillMissingSpaces(10, 10) -> generates " " (single space)
+   * CompletionUtils.fillMissingSpaces(10, 12) -> generates " " (single space)
+   *
+   * @param targetFinalColumn final column until where spaces should be inserted
+   * @param currentCursorColumn column where cursor is currently positioned
    */
-  public static fillMissingSpaces(startColumn: number, initialColumn: number): string {
-    let missingSpaces = startColumn - initialColumn;
+  public static fillMissingSpaces(targetFinalColumn: number, currentCursorColumn: number): string {
+    let missingSpaces = targetFinalColumn - currentCursorColumn;
     let text = "";
     for (var i = 1; i < missingSpaces; i++) {
       text = text.concat(" ");

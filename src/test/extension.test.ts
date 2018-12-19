@@ -2,6 +2,7 @@
 import { expect } from 'chai';
 import 'mocha';
 import { CobolVariable, Type } from '../lsp/completion/CobolVariable';
+import { CompletionUtils } from '../lsp/commons/CompletionUtils';
 
 
 
@@ -116,5 +117,19 @@ describe('Cobol variable test', () => {
     expect(false).to.equal(variable.isAllowNegative());
     expect(true).to.equal(variable.isDisplay());
   });
+
+  describe('Fill missing spaces test', () => {
+
+    it('Check filling missing spaces', () => {
+      expect("    ").to.equal(CompletionUtils.fillMissingSpaces(10, 5));
+      expect("         ").to.equal(CompletionUtils.fillMissingSpaces(15, 5));
+      expect("   ").to.equal(CompletionUtils.fillMissingSpaces(5, 1));
+      expect(" ").to.equal(CompletionUtils.fillMissingSpaces(10, 10));
+      expect(" ").to.equal(CompletionUtils.fillMissingSpaces(10, 12));
+    });
+
+  });
+
+
 
 });
