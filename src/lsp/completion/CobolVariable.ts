@@ -122,7 +122,7 @@ export class CobolVariable {
      * @param picture variable picture
      */
     private static isDisplay(picture: string): boolean {
-        return picture.includes(".") || picture.includes("Z") || picture.includes("B") || picture.includes("-") || picture.includes("X");
+        return picture.includes(".") || picture.includes("Z") || picture.includes("B") || picture.includes("-") || picture.includes(",") || picture.includes("X");
     }
 
     /**

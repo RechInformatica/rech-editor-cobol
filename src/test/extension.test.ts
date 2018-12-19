@@ -108,6 +108,13 @@ describe('Cobol variable test', () => {
     expect(Type.Alphanumeric).to.equal(variable.getType());
     expect(false).to.equal(variable.isAllowNegative());
     expect(true).to.equal(variable.isDisplay());
+    //
+    variable = CobolVariable.parseLine("05 w-var               pic is 999,99 ");
+    expect(5).to.equal(variable.getLevel());
+    expect("w-var").to.equal(variable.getName());
+    expect(Type.Decimal).to.equal(variable.getType());
+    expect(false).to.equal(variable.isAllowNegative());
+    expect(true).to.equal(variable.isDisplay());
   });
 
 });
