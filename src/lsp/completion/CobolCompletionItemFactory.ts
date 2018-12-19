@@ -1,6 +1,5 @@
 import { CompletionItem, TextDocument } from "vscode-languageserver";
 import { ParserCobol } from "../../cobol/parsercobol";
-import { VarDeclarationCompletion } from "./VarDeclarationCompletion";
 import { PerformCompletion } from "./PerformCompletion";
 import { MoveCompletion } from "./MoveCompletion";
 import { ToCompletion } from "./ToCompletion";
@@ -18,6 +17,8 @@ import { ExitPerformCompletion } from "./ExitPerformCompletion";
 import { ExitCycleCompletion } from "./ExitCycleCompletion";
 import { FlagCompletion } from "./FlagCompletion";
 import { ToTrueCompletion } from "./ToTrueCompletion";
+import { PictureCompletion } from "./PictureCompletion";
+import { ValueCompletion } from "./ValueCompletion";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -113,13 +114,26 @@ export class CobolCompletionItemFactory {
    * Creates completion items for Cobol variables
    */
   private createVariableCompletions(): CompletionItem[] {
-    if (!this.isVarPictureDeclared()) {
-      return this.generate(new VarDeclarationCompletion());
+    if (!this.isVariableDeclarationFinalized()) {
+      if (!this.isPictureDeclared()) {
+        return this.generate(new PictureCompletion());
+      }
+      if (!this.isValueDeclared()) {
+        return this.generate(new ValueCompletion());
+      }
     }
     if (this.isFlagParent()) {
       return this.generate(new FlagCompletion());
     }
     return [];
+  }
+
+  /**
+   * Returns true if the variable declaration has been finalized
+   * and the variable is completely set
+   */
+  private isVariableDeclarationFinalized(): boolean {
+    return this.lineText.trim().endsWith(".");
   }
 
   /**
@@ -146,8 +160,15 @@ export class CobolCompletionItemFactory {
   /**
    * Returns true if the var Picture is declared on the current line
    */
-  private isVarPictureDeclared(): boolean {
+  private isPictureDeclared(): boolean {
     return this.lineText.toUpperCase().includes(" PIC ");
+  }
+
+  /**
+   * Returns true if the var Value is declared on the current line
+   */
+  private isValueDeclared(): boolean {
+    return this.lineText.toUpperCase().includes(" VALUE ");
   }
 
   /**

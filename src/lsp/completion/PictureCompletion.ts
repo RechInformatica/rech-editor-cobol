@@ -5,15 +5,15 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 // Cobol column for 'PIC' clause declaration
 const PIC_COLUMN_DECLARATION = 35;
 /**
- * Class to generate LSP Completion Items for Cobol variable declarations
+ * Class to generate LSP Completion Items for Cobol picture
  */
-export class VarDeclarationCompletion implements CompletionInterface {
+export class PictureCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = CompletionUtils.fillMissingSpaces(PIC_COLUMN_DECLARATION, column - 1) + "pic is $1($2)$3    value is $4     ${5:comp-x}.";
+        let text = CompletionUtils.fillMissingSpaces(PIC_COLUMN_DECLARATION, column - 1) + "pic is $1($2)";
         return [{
-            label: 'Completar declaração de variável',
-            detail: 'Serão inseridas cláusulas PIC e VALUE IS nos lugares apropriados.',
+            label: 'Completar declaração de PIC',
+            detail: 'Será inserida cláusula PIC no lugar apropriado.',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: "pic",
