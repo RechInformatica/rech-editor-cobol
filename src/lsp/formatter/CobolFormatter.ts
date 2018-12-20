@@ -10,6 +10,7 @@ import { PerformUntilExitFormatter } from "./PerformUntilExitFormatter";
 import { ElseFormatter } from "./ElseFormatter";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { PerformVaryingFormatter } from "./PerformVaryingFormatter";
+import { CommentaryFormatter } from "./CommentaryFormatter";
 
 /**
  * Class to format Cobol source code
@@ -43,6 +44,9 @@ export class CobolFormatter {
    */
   public formatWhenEnterIsPressed(): TextEdit[] {
     let currentText = this.lines[this.line - 1];
+    if (this.isCommentary(currentText)) {
+      return this.generate(new CommentaryFormatter());
+    }
     if (this.isIfCondition(currentText)) {
       return this.generate(new IfFormatter());
     }
@@ -90,6 +94,14 @@ export class CobolFormatter {
       return this.generate(new WhenFormatter());
     }
     return [];
+  }
+
+  /**
+   *
+   * @param currentText
+   */
+  private isCommentary(currentText: string): boolean {
+      return currentText.trim().startsWith("*>");
   }
 
   /**
