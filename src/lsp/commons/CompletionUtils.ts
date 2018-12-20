@@ -1,5 +1,5 @@
 /** Maximum number of interpreted lines */
-const MAX_INTERPRETED_LINES = 20;
+const MAX_INTERPRETED_LINES = 50;
 
 /**
  * Utili class for Cobol code completion and formatting
@@ -68,16 +68,20 @@ export class CompletionUtils {
    */
   public static isLowerCaseSource(sourceBuffer: string[]) {
     for (let i = 0; i < sourceBuffer.length && i < MAX_INTERPRETED_LINES; i++) {
+      // Dismiss comments
+      if (sourceBuffer[i].trim().startsWith("*>")) {
+        continue;
+      }
       // Test header clauses
-      if (/\s+(identification|program-id|copy|working-storage|procedure)\s/g.exec(sourceBuffer[i])) {
+      if (/\s+(identification|program-id|copy|working-storage|procedure)(\s|.|,)/g.exec(sourceBuffer[i])) {
         return true;
       }
       // Test procedure clauses
-      if (/\s+(perform|exit|evaluate|move)\s/g.exec(sourceBuffer[i])) {
+      if (/\s+(perform|exit|evaluate|move)(\s|.|,)/g.exec(sourceBuffer[i])) {
         return true;
       }
       // Test working-storage clauses
-      if (/.*\s(pic|value|values|class)\s/g.exec(sourceBuffer[i])) {
+      if (/.*\s(pic|value|values|class)(\s|.|,)/g.exec(sourceBuffer[i])) {
         return true;
       }
     }
