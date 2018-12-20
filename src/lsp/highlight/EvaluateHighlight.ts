@@ -3,39 +3,60 @@ import { HighlightInterface } from "./HighlightInterface";
 import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
 
 /** Terms of block */
-const BEGINBLOCKTERM = "if"
-const ENDBLOCKTERM = "end-if"
-const ELSETERM = "else"
+const BEGINBLOCKTERM = "evaluate"
+const ENDBLOCKTERM = "end-evaluate"
+const WHENTERM = "when"
 
 /**
  * Class to return the behavior of highlight when is a 'if' term
  */
-export class IfHighlight implements HighlightInterface {
+export class EvaluateHighlight implements HighlightInterface {
 
     isABlockTerm(word: string): boolean {
-        let match = /(if|else|end-if)/i.exec(word);
+        let match = /(evaluate|when|end-evaluate)/i.exec(word);
         if (match) {
             return true
         }
         return false
     }
 
-    positions(text: TextDocument, _word: string, currentLine: number, _currentCharacter: number): DocumentHighlight[]{
+    positions(text: TextDocument, word: string, currentLine: number, _currentCharacter: number): DocumentHighlight[]{
         let results: DocumentHighlight[] = []
-        let buffer = text.getText().split("\n");
-        let currentLineContent = buffer[currentLine];
-        let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
+        let commandColumn = this.findTheCommandColumn(text, word, currentLine)
         let beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
         let endLine = this.findTheEndOfBlock(text, currentLine, commandColumn);
         if (beginLine && endLine) {
-            let elseLine = this.findLineOfBlockTerm(text, beginLine, ELSETERM, commandColumn, true)
-            if (elseLine && elseLine < endLine) {
-                results.push(this.buildDocumentHighlight(elseLine, commandColumn, ELSETERM))
+            for (let whenLine = beginLine; whenLine < endLine;) {
+                whenLine = this.findLineOfBlockTerm(text, whenLine, WHENTERM, commandColumn + 3, true)!
+                if (whenLine) {
+                    results.push(this.buildDocumentHighlight(whenLine, commandColumn + 3, WHENTERM))
+                    whenLine++;
+                } else {
+                    break;
+                }
             }
             results.push(this.buildDocumentHighlight(beginLine, commandColumn, BEGINBLOCKTERM))
             results.push(this.buildDocumentHighlight(endLine, commandColumn, ENDBLOCKTERM))
         }
         return results;
+    }
+
+    /**
+     * Returns the command column
+     *
+     * @param text
+     * @param word
+     * @param currentLine
+     */
+    private findTheCommandColumn(text: TextDocument, word: string, currentLine: number,) {
+        let buffer = text.getText().split("\n");
+        let currentLineContent = buffer[currentLine];
+        let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
+        // Considers indentation of term
+        if (word == WHENTERM) {
+            commandColumn -= 3;
+        }
+        return commandColumn
     }
 
     /**

@@ -1,6 +1,7 @@
 import { TextDocument, DocumentHighlight } from "vscode-languageserver";
 import { DefaultHighlight } from "./DefaultHighlight";
 import { IfHighlight } from "./IfHighlight";
+import { EvaluateHighlight } from "./EvaluateHighlight";
 
 /**
  * Classe to provide the Highlight
@@ -19,6 +20,9 @@ export class HighlightFactory {
         switch (true) {
             case new IfHighlight().isABlockTerm(word): {
                 return new IfHighlight().positions(text, word, currentLine, currentCharacter);
+            }
+            case new EvaluateHighlight().isABlockTerm(word): {
+                return new EvaluateHighlight().positions(text, word, currentLine, currentCharacter);
             }
             default: {
                 return new DefaultHighlight().positions(text, word, currentLine, currentCharacter);
