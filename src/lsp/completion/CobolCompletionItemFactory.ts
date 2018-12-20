@@ -98,9 +98,6 @@ export class CobolCompletionItemFactory {
         }
         return [];
       }
-      case this.isInIfBlock(): {
-        return this.generate(new ElseCompletion());
-      }
       default: {
         return this.createDefaultCompletions();
       }
@@ -263,21 +260,21 @@ export class CobolCompletionItemFactory {
    * Returns true if the current line is in a if block
    */
   private isInIfBlock(): boolean {
-    let ifIsopen = false;
-    for (let i = this.line; i > 0; i--) {
+    let openBlocks = 0;
+    let closeBlocks = 0;
+    for (let i = this.line - 1; i > 0; i--) {
       if (/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g.exec(this.lines[i])) {
         break;
       }
       let currentLine = this.lines[i].toLowerCase().trim();
       if (currentLine.startsWith("if ")) {
-        ifIsopen = true;
+        openBlocks++;
       }
       if (currentLine.startsWith("end-if")) {
-        ifIsopen = false;
+        closeBlocks++;
       }
     }
-    ifIsopen = ifIsopen;
-    return false;
+    return openBlocks != closeBlocks;
   }
 
   /**
@@ -312,6 +309,9 @@ export class CobolCompletionItemFactory {
     this.additionalCompletions.forEach(impl => {
       items = items.concat(this.generate(impl));
     });
+    if (this.isInIfBlock()) {
+      items = items.concat(this.generate(new ElseCompletion()));
+    }
     return items;
   }
 
