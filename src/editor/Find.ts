@@ -28,14 +28,21 @@ export class Find {
    * @param path
    * @param term
    */
-  public findDeclaration(term: string, path: Path, cacheFileName: string, callbackSourceExpander?: (cacheFileName: string) => Thenable<any>): Promise<RechPosition> {
+  public findDeclaration(term: string, sourceFileName: string, callbackSourceExpander?: (cacheFileName: string) => Thenable<any>): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
+      let path = new Path(sourceFileName);
+      // If the word is too small
+      if (term.length < 3) {
+        reject();
+        return;
+      }
       // Busca declaração no próprio documento
       let result = this.findDeclarationInBuffer(term, this.text);
       if (result) {
         resolve(result);
         return;
       }
+      let cacheFileName = this.buildCacheFileName(sourceFileName);
       this.findDeclarationWithPreproc(term, path, cacheFileName, true, callbackSourceExpander).then((result) => {
         resolve(result);
       }).catch(() => {
@@ -60,6 +67,16 @@ export class Find {
       }
     });
     return result;
+  }
+
+  /**
+   * Builds Cobol preprocessor cache filename
+   *
+   * @param uri current URI of the file open in editor
+   */
+  private buildCacheFileName(uri: string) {
+    var path = new Path(uri).fullPathWin();
+    return "c:\\tmp\\PREPROC\\" + new Path(path).fileName();
   }
 
   /**

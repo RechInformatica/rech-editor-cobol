@@ -141,7 +141,6 @@ export * from "./indent/indent";
 export * from "./cobol/parsercobol";
 export * from "./cobol/gerador-cobol";
 export * from "./cobol/compiler";
-export * from "./cobol/declaration/CobolDeclarationResolver";
 export * from "./cobol/rechdoc/ParagraphDocumentationExtractor"
 export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./editor/Find";
