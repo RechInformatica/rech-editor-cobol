@@ -19,6 +19,7 @@ import { FlagCompletion } from "./FlagCompletion";
 import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
 import { ValueCompletion } from "./ValueCompletion";
+import { ElseCompletion } from "./ElseCompletion";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -96,6 +97,9 @@ export class CobolCompletionItemFactory {
           return this.generate(this.paragraphCompletion);
         }
         return [];
+      }
+      case this.isInIfBlock(): {
+        return this.generate(new ElseCompletion());
       }
       default: {
         return this.createDefaultCompletions();
@@ -253,6 +257,26 @@ export class CobolCompletionItemFactory {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Returns true if the current line is in a if block
+   */
+  private isInIfBlock(): boolean {
+    let ifIsopen = false;
+    for (let i = this.line; i > 0; i--) {
+      if (/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g.exec(this.lines[i])) {
+        break;
+      }
+      let currentLine = this.lines[i].toLowerCase().trim();
+      if (currentLine.startsWith("if ")) {
+        ifIsopen = true;
+      }
+      if (currentLine.startsWith("end-if")) {
+        ifIsopen = false;
+      }
+    }
+    return ifIsopen;
   }
 
   /**
