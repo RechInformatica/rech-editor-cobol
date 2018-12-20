@@ -16,7 +16,8 @@ import {
   Position,
   CompletionItem,
   TextDocument,
-  DocumentOnTypeFormattingParams
+  DocumentOnTypeFormattingParams,
+  DocumentHighlight
 } from "vscode-languageserver";
 import { Find } from "../editor/Find";
 import { Path } from "../commons/path";
@@ -27,6 +28,7 @@ import { CobolFormatter } from "./formatter/CobolFormatter";
 import { CobolCompletionItemFactory } from "./completion/CobolCompletionItemFactory";
 import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
 import { ParagraphCompletion } from "./completion/ParagraphCompletion";
+import { HighlightFactory } from "./highlight/HighlightFactory";
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -44,6 +46,7 @@ connection.onInitialize((params: InitializeParams) => {
     capabilities: {
       textDocumentSync: documents.syncKind,
       definitionProvider: true,
+      documentHighlightProvider: true,
       // Tell the client that the server supports code completion
       completionProvider: {
         resolveProvider: true
@@ -131,6 +134,24 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
     diagnosticMessage
   );
 }
+
+/**
+ * Provide the document highlight positions
+ */
+connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParams): Thenable<DocumentHighlight[]> => {
+  return new Promise((resolve) => {
+    let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
+    let text = fullDocument!.getText();
+    let line = _textDocumentPosition.position.line;
+    let character = _textDocumentPosition.position.character
+    let word = getLineText(
+      text,
+      line,
+      character
+    );
+    resolve(new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character))
+  })
+})
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
