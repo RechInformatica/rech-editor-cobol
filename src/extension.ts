@@ -128,14 +128,20 @@ export function deactivate() {
 }
 
 export * from "./commons/executor";
+export * from "./commons/CobolWordFinder";
 export * from "./commons/file";
 export * from "./commons/path";
 export * from "./commons/Process";
 export * from "./commons/Scan";
 export * from "./editor/editor";
+export * from "./editor/SourceExpander";
 export * from "./editor/rechposition";
 export * from "./commons/genericexecutor";
 export * from "./indent/indent";
 export * from "./cobol/parsercobol";
+export * from "./cobol/gerador-cobol";
 export * from "./cobol/compiler";
+export * from "./cobol/declaration/CobolDeclarationResolver";
+export * from "./cobol/rechdoc/ParagraphDocumentationExtractor"
+export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./editor/Find";

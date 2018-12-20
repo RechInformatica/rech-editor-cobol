@@ -7,6 +7,7 @@ import { File } from '../extension';
 import { Process } from '../commons/Process';
 import { configuration } from '../helpers/configuration';
 import { cobolDiagnosticFilter } from '../cobol/diagnostic/cobolDiagnosticFilter';
+import { SourceExpander } from '../editor/SourceExpander';
 
 /**
  * Language Server Provider client
@@ -62,7 +63,7 @@ export class Client {
 	private static configureClientWhenReady() {
 		if (Client.client) {
 			Client.client.onRequest("custom/runPreprocExpander", (files: string[]) => {
-				return Client.createPreprocExpanderExecutionPromise(files);
+				return new SourceExpander().createExpanderExecutionPromise(files);
 			});
 			Client.client.onRequest("custom/runPreprocessor", (files: string[]) => {
 				return Client.createPreprocessorExecutionPromise(files);
@@ -77,28 +78,6 @@ export class Client {
 				})
 			});
 		}
-	}
-
-	/**
-	 * Creates a promise for Cobol Preprocessor expander execution
-	 *
-	 * @param files file array with necessary files
-	 */
-	private static createPreprocExpanderExecutionPromise(files: string[]) {
-		return new Promise<string>((resolve, reject) => {
-			let currentFile = files[0];
-			let cacheFile = files[1];
-			let executor = Editor.getSourceExpander();
-			if (executor) {
-				executor.setPath(currentFile).exec(cacheFile).then(() => {
-					resolve();
-				}).catch(() => {
-					reject();
-				});
-			} else {
-				reject();
-			}
-		});
 	}
 
 	/**

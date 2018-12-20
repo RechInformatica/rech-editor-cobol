@@ -14,8 +14,8 @@ export class Find {
 
   /**
    * Constructor of Find
-   * 
-   * @param editor 
+   *
+   * @param editor
    */
   constructor(text: string) {
     this.text = text;
@@ -24,11 +24,11 @@ export class Find {
 
   /**
    * Find the declaration of the term
-   * 
-   * @param path 
-   * @param term 
+   *
+   * @param path
+   * @param term
    */
-  public findDeclaration(term: string, path: Path, cacheFileName: string, callbackSourceExpander?: () => Thenable<any>): Promise<RechPosition> {
+  public findDeclaration(term: string, path: Path, cacheFileName: string, callbackSourceExpander?: (cacheFileName: string) => Thenable<any>): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       // Busca declaração no próprio documento
       let result = this.findDeclarationInBuffer(term, this.text);
@@ -46,9 +46,9 @@ export class Find {
 
   /**
    * Find the declaration in atual buffer
-   * 
-   * @param term 
-   * @param buffer 
+   *
+   * @param term
+   * @param buffer
    */
   private findDeclarationInBuffer(term: string, buffer: string): RechPosition | undefined {
     let parser = new ParserCobol();
@@ -64,12 +64,12 @@ export class Find {
 
   /**
    * Find the declaration of term with preprocessed source
-   * 
+   *
    * @param term
-   * @param path 
-   * @param cache 
+   * @param path
+   * @param cache
    */
-  private findDeclarationWithPreproc(term: string, path: Path, cacheFileName: string, cache: boolean, callbackSourceExpander?: () => Thenable<any>): Promise<RechPosition> {
+  private findDeclarationWithPreproc(term: string, path: Path, cacheFileName: string, cache: boolean, callbackSourceExpander?: (cacheFileName: string) => Thenable<any>): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       let processou = false;
       // Se o arquivo de cache não existe, não tenta ler dele
@@ -90,7 +90,7 @@ export class Find {
         });
       } else {
         if (callbackSourceExpander && !processou) {
-          callbackSourceExpander().then(() => {
+          callbackSourceExpander(cacheFileName).then(() => {
             processou = true;
             this.findDeclarationWithPreproc(term, path, cacheFileName, true).then((result) => {
               resolve(result);
@@ -109,10 +109,10 @@ export class Find {
 
   /**
    * Find the declaration in the preprocessed source
-   * 
+   *
    * @param term
-   * @param path 
-   * @param tmpFile 
+   * @param path
+   * @param tmpFile
    */
   private findDeclarationInPreprocessedSource(term: string, path: Path, tmpFile: string): Promise<RechPosition> {
     let parser = new ParserCobol();
