@@ -12,10 +12,10 @@ export class RechPosition {
 
     /**
      * Constructor of RechPosition
-     * 
-     * @param line 
-     * @param column 
-     * @param file 
+     *
+     * @param line
+     * @param column
+     * @param file
      */
     public constructor (line: number, column: number, file?: string) {
         this._line = line;

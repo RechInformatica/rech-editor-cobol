@@ -1,5 +1,5 @@
 import { TextEditor, TextLine, TextDocument } from 'vscode';
-import { RechPosition } from './rechposition'
+import { RechPosition } from '../commons/rechposition'
 
 /**
  * Class to scan and find thing in editor
@@ -15,8 +15,8 @@ export class PositionFinder {
 
   /**
    * Constructor of Find
-   * 
-   * @param editor 
+   *
+   * @param editor
    */
   constructor(editor: TextEditor) {
     this.editor = editor;
@@ -24,9 +24,9 @@ export class PositionFinder {
 
   /**
    * Find the line positions of the regex
-   * 
-   * @param regex 
-   * @param startLineToFind 
+   *
+   * @param regex
+   * @param startLineToFind
    */
   public findPositions(regex: RegExp, direction: number, startLineToFind?: TextLine, returnFrst?: boolean): RechPosition[] | undefined {
     let startLine = 0;
@@ -45,11 +45,11 @@ export class PositionFinder {
 
   /**
    * Find the next positions
-   * 
-   * @param regex 
-   * @param startLine 
-   * @param document 
-   * @param returnFrst 
+   *
+   * @param regex
+   * @param startLine
+   * @param document
+   * @param returnFrst
    */
   private findNextPositions(regex: RegExp, startLine: number, document: TextDocument, returnFrst?: boolean): RechPosition[] | undefined {
     let positionsToReturn = new Array<RechPosition>();
@@ -73,11 +73,11 @@ export class PositionFinder {
 
   /**
    * * Find the previous positions
-   * 
-   * @param regex 
-   * @param startLine 
-   * @param document 
-   * @param returnFrst 
+   *
+   * @param regex
+   * @param startLine
+   * @param document
+   * @param returnFrst
    */
   private findPreviousPositions(regex: RegExp, startLine: number, document: TextDocument, returnFrst?: boolean): RechPosition[] | undefined {
     let positionsToReturn = new Array<RechPosition>();
@@ -97,10 +97,10 @@ export class PositionFinder {
 
   /**
    * Find the macher position at line
-   * 
-   * @param regex 
-   * @param lineNumber 
-   * @param document 
+   *
+   * @param regex
+   * @param lineNumber
+   * @param document
    */
   private findMacherAtLine(regex: RegExp, lineNumber: number, document: TextDocument): RechPosition | undefined {
     let lineText = document.lineAt(lineNumber);
