@@ -7,7 +7,17 @@ import { DocElement } from "./DocElement";
 export class CobolDocParser {
 
     /**
+     * Parses the specified single line documentation
+     *
+     * @param documentation single line documentation
+     */
+    public parseSingleLineCobolDoc(documentation: string): CobolDoc {
+        return this.parseCobolDoc([documentation]);
+    }
+    /**
      * Parses the specified documentation
+     *
+     * @param documentation multi line documentation
      */
     public parseCobolDoc(documentation: string[]): CobolDoc {
         if (this.isRechDoc(documentation)) {
@@ -63,7 +73,8 @@ export class CobolDocParser {
 
                 }
             }
-        })
+        });
+        comment = comment.trim();
         return new CobolDoc(comment, params, returns, throws);
     }
 
@@ -138,6 +149,7 @@ export class CobolDocParser {
                 comment = comment.concat(this.removeLineCommentIfNeed(currentComment)).concat(" ");
             }
         });
+        comment = comment.trim();
         return new CobolDoc(comment, [], [], []);
     }
 

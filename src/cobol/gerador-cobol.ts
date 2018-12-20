@@ -76,8 +76,17 @@ export class GeradorCobol {
    * Insert a comment line above
    */
   async insertCommentLine() {
+    await this.insertCommentLineWithText("");
+  }
+
+  /**
+   * Insert a comment line above with the specified text
+   *
+   * @param commentText comment text to be inserted
+   */
+  async insertCommentLineWithText(commentText: string) {
     await this.editor.insertLineAbove();
-    await this.editor.type("      *>-> ");
+    await this.editor.type("      *>-> " + commentText);
   }
 
   /**
