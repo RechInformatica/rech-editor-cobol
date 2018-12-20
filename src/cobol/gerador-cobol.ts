@@ -1,9 +1,9 @@
 'use babel';
 import { Editor } from '../editor/editor';
-import { RechPosition } from '../editor/rechposition';
+import { RechPosition } from '../commons/rechposition';
 import * as Colunas from './colunas';
 import * as os from 'os';
-import { isNull, isUndefined } from 'util';
+import { isNull } from 'util';
 
 export class GeradorCobol {
   editor: Editor;

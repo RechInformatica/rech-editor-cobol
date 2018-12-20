@@ -19,9 +19,9 @@ import {
   DocumentOnTypeFormattingParams,
   DocumentHighlight
 } from "vscode-languageserver";
-import { Find } from "../editor/Find";
+import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
-import { RechPosition } from "../editor/rechposition";
+import { RechPosition } from "../commons/rechposition";
 import { CobolWordFinder } from "../commons/CobolWordFinder";
 import { Diagnostician } from "../cobol/diagnostic/diagnostician";
 import { CobolFormatter } from "./formatter/CobolFormatter";
@@ -287,7 +287,7 @@ export function createPromiseForWordDeclaration(
   // is found for the specified word
   return new Promise<Location>(resolve => {
     // Creates a promise to find the word declaration
-    new Find(documentFullText)
+    new CobolDeclarationFinder(documentFullText)
       .findDeclaration(word, uri, (cacheFileName) => {
         // Runs Cobol preprocessor on client-side
         return sendExternalPreprocExpanderExecution(uri, cacheFileName);

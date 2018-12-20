@@ -7,8 +7,8 @@ export class SourceExpander {
 
 	/**
 	 * Creates a promise for Cobol Preprocessor expander execution
-     *
-     * This method should always be called on the client-side
+   *
+   * This method should always be called on the client-side
 	 *
 	 * @param files file array with necessary files
 	 */

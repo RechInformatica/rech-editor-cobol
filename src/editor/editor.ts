@@ -1,6 +1,6 @@
 import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
-import { RechPosition } from './rechposition';
+import { RechPosition } from '../commons/rechposition';
 import { Indenta } from '../indent/indent';
 import { GenericExecutor } from '../commons/genericexecutor';
 import * as path from 'path';

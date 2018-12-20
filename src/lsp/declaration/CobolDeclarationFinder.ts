@@ -1,13 +1,13 @@
-import { Path } from '../commons/path';
-import { File } from '../commons/file';
-import { Scan } from '../commons/Scan';
-import { ParserCobol } from '../cobol/parsercobol'
-import { RechPosition } from './rechposition'
+import { Path } from '../../commons/path';
+import { File } from '../../commons/file';
+import { Scan } from '../../commons/Scan';
+import { ParserCobol } from '../../cobol/parsercobol'
+import { RechPosition } from '../../commons/rechposition'
 
 /**
- * Class to scan and find thing in editor
+ * Class to find Cobol declarations
  */
-export class Find {
+export class CobolDeclarationFinder {
 
   /** Editor text*/
   private text: string;
