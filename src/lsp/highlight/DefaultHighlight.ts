@@ -14,7 +14,7 @@ export class DefaultHighlight implements HighlightInterface {
 
     positions(text: TextDocument, word: string, _currentLine: number, _currentCharacter: number): DocumentHighlight[]{
         let results: DocumentHighlight[] = []
-        let regexp = new RegExp(word, "g");
+        let regexp = new RegExp("(?:\\s|\\(|\\)|\\,|\\.|\\>|\\\"|=|^)" + word + "(?:\\s|\\)|\\(|\\,|\\.|\\\"|==|\\:|$)", "g");
         new Scan(text.getText()).scan(regexp, (iterator: any) => {
             results.push(this.buildDocumentHighlight(iterator, word))
         });
@@ -30,8 +30,8 @@ export class DefaultHighlight implements HighlightInterface {
     private buildDocumentHighlight(iterator: any, word: string): DocumentHighlight {
         return {
             range:  Range.create(
-                Position.create(iterator.row, iterator.column),
-                Position.create(iterator.row, iterator.column + word.length)
+                Position.create(iterator.row, iterator.column + 1),
+                Position.create(iterator.row, iterator.column + word.length + 1)
             )
         }
     }
