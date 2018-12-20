@@ -276,7 +276,8 @@ export class CobolCompletionItemFactory {
         ifIsopen = false;
       }
     }
-    return ifIsopen;
+    ifIsopen = ifIsopen;
+    return false;
   }
 
   /**
