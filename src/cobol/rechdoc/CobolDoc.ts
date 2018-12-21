@@ -6,7 +6,7 @@ import { DocElement } from "./DocElement";
 export class CobolDoc {
 
     /** Documentation comment */
-    private _comment: string;
+    private _comment: string[];
     /** Parameters */
     private _params: DocElement[];
     /** Returned variables */
@@ -16,13 +16,13 @@ export class CobolDoc {
 
     /**
      * Creates an object with Cobol documentation information
-     * 
-     * @param comment 
-     * @param params 
-     * @param returns 
-     * @param throws 
+     *
+     * @param comment
+     * @param params
+     * @param returns
+     * @param throws
      */
-    constructor(comment: string, params: DocElement[], returns: DocElement[], throws: DocElement[]) {
+    constructor(comment: string[], params: DocElement[], returns: DocElement[], throws: DocElement[]) {
         this._comment = comment;
         this._params = params;
         this._returns = returns;
@@ -32,7 +32,7 @@ export class CobolDoc {
     /**
      * Returns the documentation comment
      */
-    public get comment(): string {
+    public get comment(): string[] {
         return this._comment;
     }
 
@@ -56,17 +56,17 @@ export class CobolDoc {
     public get throws(): DocElement[] {
         return this._throws;
     }
-    
+
     /**
      * Returns the current documentation in the Markdown format
      */
     public asMarkdown(): string {
         let markdown = "";
-        markdown = markdown.concat(this._comment).concat("\n\n\n");
+        markdown = markdown.concat(this._comment.join(" ")).concat("\n\n\n");
         markdown = this.elementsAsMarkdown();
         return markdown;
     }
-    
+
     /**
      * Returns the current elements in the Markdown format
      */
@@ -77,10 +77,10 @@ export class CobolDoc {
         markdown = markdown.concat(this.elementArrayAsMarkdown(this.throws, "@throws"));
         return markdown;
     }
-    
+
     /**
      * Converts the specified documentation element array to Markdown format
-     * 
+     *
      * @param elements element array to be converted
      * @param metaName meta name of the target documentation elements
      */

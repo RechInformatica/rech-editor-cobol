@@ -32,7 +32,7 @@ export class CobolDocParser {
      * @param documentation unparsed documentation
      */
     private extractRechDoc(documentation: string[]): CobolDoc {
-        let comment = "";
+        let comment: string[] = [];
         let params: DocElement[] = [];
         let returns: DocElement[] = [];
         let throws: DocElement[] = [];
@@ -67,14 +67,13 @@ export class CobolDocParser {
                         if (currentComment.length == 0) {
                             comment.concat("\n\n");
                         } else {
-                            comment = comment.concat(this.removeLineCommentIfNeed(currentComment)).concat(" ");
+                            comment = comment.concat(this.removeLineCommentIfNeed(currentComment));
                         }
                     }
 
                 }
             }
         });
-        comment = comment.trim();
         return new CobolDoc(comment, params, returns, throws);
     }
 
@@ -140,16 +139,15 @@ export class CobolDocParser {
      * @param documentation paragraph default documentation
      */
     private extractDefaultDoc(documentation: string[]): CobolDoc {
-        let comment = "";
+        let comment: string[] = [];
         documentation.forEach((currentLine) => {
             if (currentLine.trim().startsWith("*>->")) {
                 let currentComment = "";
                 currentComment = currentLine.replace("*>->", "").replace("<-<*", "").trim();
                 currentComment = this.removeDots(currentComment);
-                comment = comment.concat(this.removeLineCommentIfNeed(currentComment)).concat(" ");
+                comment = comment.concat(this.removeLineCommentIfNeed(currentComment));
             }
         });
-        comment = comment.trim();
         return new CobolDoc(comment, [], [], []);
     }
 
