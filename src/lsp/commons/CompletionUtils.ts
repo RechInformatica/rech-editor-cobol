@@ -11,6 +11,8 @@ export class CompletionUtils {
    * @param lineText line text
    */
   public static countSpacesAtBeginning(lineText: string) {
+
+    //return lineText.length - lineText.trimLeft().length
     for (let index = 0; index < lineText.length; index++) {
       if (lineText.charAt(index) !== " ") {
         return index;
