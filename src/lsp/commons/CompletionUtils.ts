@@ -1,5 +1,5 @@
 /** Maximum number of interpreted lines */
-const MAX_INTERPRETED_LINES = 50;
+const MAX_INTERPRETED_LINES = 100;
 
 /**
  * Utili class for Cobol code completion and formatting
