@@ -13,6 +13,15 @@
            END-IF.
       *>-> Lista os cadastros
            PERFORM                PRCL-LISCAD.
+
+      *>-> Teste de laço
+           PERFORM
+              VARYING             W-IDV FROM 1 BY 1
+                 UNTIL            W-IDV > 10 AND
+                                  W-IDV < 30
+      *>-> Teste
+              PERFORM            PLIS-ACESEL,
+           END-PERFORM.
       *>--------------------------------------------------------------------------------------------------------------<*
       *>-> Aceita seleção para a listagem detalhada.....................................................................
        PLIS-ACESEL.
