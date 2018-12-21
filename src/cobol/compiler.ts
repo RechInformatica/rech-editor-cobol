@@ -11,7 +11,7 @@ export class Compiler {
     /**
      * Compiles the file currently open on editor
      */
-    compileCurrentFile() {
+    async compileCurrentFile() {
         let editor = new Editor();
         editor.saveActiveEditor();
         let path = new Path(editor.getCurrentFileName());
@@ -19,7 +19,7 @@ export class Compiler {
         let extension = path.extension();
         let directory = path.directory();
         editor.showInformationMessage(`Compilando ${path.fileName()}...`);
-        commands.executeCommand('workbench.output.action.clearOutput');
+        await commands.executeCommand('workbench.output.action.clearOutput');
         let commandLine = "cmd.exe /c F:\\BAT\\VSCodeComp.bat " + baseName + " " + extension + " " + directory;
         new Executor().runAsyncOutputChannel("co", commandLine, (errorLevel: number) => {
             if (errorLevel == 0) {
