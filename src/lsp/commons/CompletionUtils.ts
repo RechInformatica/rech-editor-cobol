@@ -100,4 +100,16 @@ export class CompletionUtils {
     return 0;
   }
 
+  /**
+   * Returns true if the lineText is the paragraph declaration
+   *
+   * @param lineText
+   */
+  public static isTheParagraphDeclaration(lineText: string): boolean {
+    if (/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g.exec(lineText)) {
+      return true;
+    }
+    return false;
+  }
+
 }

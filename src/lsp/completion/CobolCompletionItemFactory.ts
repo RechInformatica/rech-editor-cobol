@@ -263,7 +263,7 @@ export class CobolCompletionItemFactory {
     let openBlocks = 0;
     let closeBlocks = 0;
     for (let i = this.line - 1; i > 0; i--) {
-      if (/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g.exec(this.lines[i])) {
+      if (CompletionUtils.isTheParagraphDeclaration(this.lines[i])) {
         break;
       }
       let currentLine = this.lines[i].toLowerCase().trim();

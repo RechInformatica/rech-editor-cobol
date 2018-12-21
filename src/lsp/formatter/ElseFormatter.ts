@@ -33,7 +33,19 @@ export class ElseFormatter implements FormatterInterface {
    * @param lines document lines
    */
   private findStartColumn(line: number, lines: string[]) {
+    let isClose = false;
     for (let i = line; i > 0; i--) {
+      if (CompletionUtils.isTheParagraphDeclaration(lines[i])) {
+        break
+      }
+      if (lines[i].trim().toLowerCase().startsWith("end-if")) {
+        isClose = true;
+        continue;
+      }
+      if (isClose && lines[i].trim().toLowerCase().startsWith("if ")) {
+        isClose = false;
+        continue;
+      }
       if (IfFormatter.IF_REGEXP.exec(lines[i])) {
         return CompletionUtils.countSpacesAtBeginning(lines[i]);
       }
