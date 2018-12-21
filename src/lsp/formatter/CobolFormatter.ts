@@ -161,7 +161,14 @@ export class CobolFormatter {
     if (PerformVaryingFormatter.UNTIL_REGEXP.exec(currentText)) {
       return true;
     }
-    return false;
+    let currentStartColumn = CompletionUtils.countSpacesAtBeginning(currentText);
+    let untilLine = PerformVaryingFormatter.LineOfUntilClause(this.line, this.lines);
+    if (untilLine) {
+      let conditionStartColum = CompletionUtils.countSpacesAtBeginning(this.lines[untilLine].replace("until", "     "))
+      return currentStartColumn == conditionStartColum;
+    } else {
+      return false
+    }
   }
 
   /**
