@@ -138,7 +138,7 @@ export class ParagraphCompletion implements CompletionInterface {
         let cobolDoc = this.cobolDocParser.parseCobolDoc(docArray);
         return {
             label: paragraph,
-            detail: cobolDoc.comment,
+            detail: cobolDoc.comment.join(" "),
             documentation: {
                 kind: MarkupKind.Markdown,
                 value: cobolDoc.elementsAsMarkdown()
