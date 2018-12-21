@@ -39,6 +39,11 @@
 		"prefix": "in",
 		"body": "initialize ${0:<var>},"
 	},
+	"filler" : {
+		"prefix": "filler",
+		"body": "filler",
+		"description": "Insere o termo filler"
+	},
 	"zeros": {
 		"prefix": "ze",
 		"body": "zeros"
