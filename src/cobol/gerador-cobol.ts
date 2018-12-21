@@ -201,21 +201,42 @@ export class GeradorCobol {
    */
   async updateLineDots() {
     let originalPosotion = this.editor.getCursors()[0];
-    let lineText = this.editor.getCurrentLine();
-    if (lineText.length == Colunas.COLUNA_FIM && lineText.endsWith(".")) {
-      this.removeDotsAtEnd();
-    } else {
-      this.fillLineWithDots();
+    let lineText = this.editor.getCurrentLine().trimRight();
+    switch (true) {
+      case lineText.length > Colunas.COLUNA_FIM: {
+        this.removeExceedingDots(lineText);
+        break;
+      }
+      case lineText.length == Colunas.COLUNA_FIM: {
+        this.removeDotsAtEnd(lineText);
+        break;
+      }
+      default: {
+        this.fillLineWithDots(lineText);
+      }
     }
     await this.editor.setCursorPosition(originalPosotion);
   }
 
   /**
-   * Removes dots in the end of the current line
+   * Removes exceeding dots at the end of the line
+   *
+   * @param lineText line text
    */
-  private async removeDotsAtEnd() {
-    let lineText = this.editor.getCurrentLine();
-    while (lineText !== "" && lineText.endsWith(".")) {
+  private async removeExceedingDots(lineText: string) {
+    while (lineText.endsWith(".") && lineText.length > Colunas.COLUNA_FIM) {
+      lineText = lineText.slice(0, -1);
+    }
+    await this.editor.setCurrentLine(lineText);
+  }
+
+  /**
+   * Removes dots in the end of the current line
+   *
+   * @param lineText line text
+   */
+  private async removeDotsAtEnd(lineText: string) {
+    while (lineText.endsWith(".")) {
       lineText = lineText.slice(0, -1);
     }
     await this.editor.setCurrentLine(lineText);
@@ -223,11 +244,12 @@ export class GeradorCobol {
 
   /**
    * Fills the end of the current line with dots
+   *
+   * @param lineText line text
    */
-  private async fillLineWithDots() {
-    let lineText = this.editor.getCurrentLine().replace(/\s+$/, ''); // Removes trailling spaces
-    var dots: string = "";
-    var missingDotsNumber = Colunas.COLUNA_FIM - lineText.length;
+  private async fillLineWithDots(lineText: string) {
+    let dots = "";
+    let missingDotsNumber = Colunas.COLUNA_FIM - lineText.length;
     if (missingDotsNumber > 0) {
       for (var i = 1; i <= missingDotsNumber; i++) {
         dots = dots.concat(".");
