@@ -158,8 +158,7 @@
                     ".cob",
                     ".cpy",
                     ".cpb",
-                    ".tpl",
-                    ".lsr"
+                    ".tpl"
                 ],
                 "configuration": "./cobol.configuration.json"
             }
