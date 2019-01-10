@@ -1,6 +1,6 @@
 {
-    "name": "rech-editor-vscode",
-    "displayName": "rech-editor-vscode",
+    "name": "rech-editor-cobol",
+    "displayName": "rech-editor-cobol",
     "description": "Rech Informática extension for editing Cobol files with Visual Studio Code.",
     "version": "0.0.1",
     "publisher": "rechinformatica",
@@ -10,12 +10,12 @@
     "icon": "images/cobol.png",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/RechInformatica/rech-editor-vscode/issues",
+        "url": "https://github.com/RechInformatica/rech-editor-cobol/issues",
         "email": "smcbreen@microsoft.com"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/RechInformatica/rech-editor-vscode.git"
+        "url": "https://github.com/RechInformatica/rech-editor-cobol.git"
     },
     "categories": [
         "Programming Languages",
@@ -182,24 +182,24 @@
         ],
         "commands": [
             {
-                "command": "rech.editor.vscode.tab",
+                "command": "rech.editor.cobol.tab",
                 "title": "tab"
             },
             {
-                "command": "rech.editor.vscode.revtab",
+                "command": "rech.editor.cobol.revtab",
                 "title": "revtab"
             },
             {
-                "command": "rech.editor.vscode.findNextParagraph",
+                "command": "rech.editor.cobol.findNextParagraph",
                 "title": "findNextParagraph"
             },
             {
-                "command": "rech.editor.vscode.findPreviousParagraph",
+                "command": "rech.editor.cobol.findPreviousParagraph",
                 "title": "findPreviousParagraph"
             },
             {
                 "comment": "Centraliza o comentário",
-                "command": "rech.editor.vscode.centralizeComment",
+                "command": "rech.editor.cobol.centralizeComment",
                 "title": "Centraliza o comentário"
             }
         ],
@@ -211,92 +211,92 @@
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cobolInsertStartComment",
+                "command": "rech.editor.cobol.cobolInsertStartComment",
                 "key": "alt+numpad_multiply",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cobolInsertEndComment",
+                "command": "rech.editor.cobol.cobolInsertEndComment",
                 "key": "ctrl+shift+numpad_multiply",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cobolInsertCommentLine",
+                "command": "rech.editor.cobol.cobolInsertCommentLine",
                 "key": "alt+n",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cobolInsertLineSeparator",
+                "command": "rech.editor.cobol.cobolInsertLineSeparator",
                 "key": "alt+numpad_subtract",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.tab",
+                "command": "rech.editor.cobol.tab",
                 "key": "tab",
                 "when": "editorLangId == COBOL && !inSnippetMode"
             },
             {
-                "command": "rech.editor.vscode.revtab",
+                "command": "rech.editor.cobol.revtab",
                 "key": "shift+tab",
                 "when": "editorLangId == COBOL && !inSnippetMode"
             },
             {
-                "command": "rech.editor.vscode.findNextParagraph",
+                "command": "rech.editor.cobol.findNextParagraph",
                 "key": "alt+k",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.findPreviousParagraph",
+                "command": "rech.editor.cobol.findPreviousParagraph",
                 "key": "alt+shift+k",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cursorPos51",
+                "command": "rech.editor.cobol.cursorPos51",
                 "key": "ctrl+1",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cursorPos12",
+                "command": "rech.editor.cobol.cursorPos12",
                 "key": "ctrl+2",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cursorPos30",
+                "command": "rech.editor.cobol.cursorPos30",
                 "key": "ctrl+3",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cursorPos20",
+                "command": "rech.editor.cobol.cursorPos20",
                 "key": "ctrl+4",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cursorPos35",
+                "command": "rech.editor.cobol.cursorPos35",
                 "key": "ctrl+5",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cursorPos08",
+                "command": "rech.editor.cobol.cursorPos08",
                 "key": "ctrl+8",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.insertTodo",
+                "command": "rech.editor.cobol.insertTodo",
                 "key": "ctrl+shift+d",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cobolLineEndDot",
+                "command": "rech.editor.cobol.cobolLineEndDot",
                 "key": "alt+oem_period",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cobolLineEndComma",
+                "command": "rech.editor.cobol.cobolLineEndComma",
                 "key": "alt+oem_comma",
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cobolInvertMoveOperators",
+                "command": "rech.editor.cobol.cobolInvertMoveOperators",
                 "key": "ctrl+alt+d",
                 "when": "editorLangId == COBOL"
             }
@@ -304,7 +304,7 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "package": "vsce package --out f:/div/VSCode/extension/rech-editor-vscode/rech-editor-vscode.vsix",
+        "package": "vsce package --out f:/div/VSCode/extension/rech-editor-cobol/rech-editor-cobol.vsix",
         "compile": "tsc -p ./",
         "compile:client": "tsc -p ./",
         "compile:server": "tsc -p ./",

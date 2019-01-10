@@ -21,61 +21,61 @@ export function activate(_context: any) {
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     //
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolLineEndDot', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolLineEndDot', () => {
         new GeradorCobol().endLineToggle('.');
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolLineEndComma', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolLineEndComma', () => {
         new GeradorCobol().endLineToggle(',');
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInvertMoveOperators', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInvertMoveOperators', () => {
         new GeradorCobol().invertMoveOperators();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertStartComment', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInsertStartComment', () => {
         new GeradorCobol().insertStartComment();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertEndComment', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInsertEndComment', () => {
         new GeradorCobol().insertStartEndComment();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertCommentLine', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInsertCommentLine', () => {
         new GeradorCobol().insertCommentLine();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.insertTodo', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.insertTodo', () => {
         new GeradorCobol().insertCommentLineTodo();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.centralizeComment', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.centralizeComment', () => {
         new GeradorCobol().centralizeComment();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertLineSeparator', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInsertLineSeparator', () => {
         new GeradorCobol().insertLineSeparator();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findNextParagraph', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.findNextParagraph', () => {
         new Editor().findNextParagraph();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findPreviousParagraph', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.findPreviousParagraph', () => {
         new Editor().findPreviousParagraph();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.tab', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.tab', () => {
         new TabStopper().processTabKey(true);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.revtab', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.revtab', () => {
         new TabStopper().processTabKey(false);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos51', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos51', () => {
         new Editor().setColumn(COLUNA_VALUE - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos12', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos12', () => {
         new Editor().setColumn(AREA_B - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos30', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos30', () => {
         new Editor().setColumn(COLUNA_B - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos20', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos20', () => {
         new Editor().setColumn(COLUNA_A - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos35', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos35', () => {
         new Editor().setColumn(COLUNA_C - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos08', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos08', () => {
         new Editor().setColumn(AREA_A - 1);
     }));
 }
