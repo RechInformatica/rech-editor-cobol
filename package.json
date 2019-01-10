@@ -1,7 +1,7 @@
 {
     "name": "rech-editor-vscode",
     "displayName": "rech-editor-vscode",
-    "description": "Rech Informática extension for editing Batch files with Visual Studio Code.",
+    "description": "Rech Informática extension for editing Cobol files with Visual Studio Code.",
     "version": "0.0.1",
     "publisher": "rechinformatica",
     "engines": {
