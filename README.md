@@ -26,8 +26,6 @@ The Language Server provides automatic formatting for several Cobol clauses as s
 
 !['evaluate' formatter](doc/formatter/evaluate-formatter.gif)
 
-!['evaluate' formatter](doc/formatter/evaluate-formatter.gif)
-
 !['loog' completion](doc/intellisense/loop-intellisense.gif)
 
 ## Code highlight
