@@ -1,4 +1,4 @@
-# Rech's VSCode extension for Cobol language
+# Rech Informática extension for editing Cobol files with Visual Studio Code.
 
 ## IntelliSense for Cobol variable declaration
 The variable declaration is done in two steps so that the editor parses the picture and generates the most approprivate VALUE in the VALUE clause:
