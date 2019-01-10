@@ -19,17 +19,17 @@ The variable declaration is done in two steps so that the editor parses the pict
 
 ![Computing variable declaration](doc/variable/compute-var-declaration.gif)
 
-
-## Formatter
-The Language Server Provider provides automatic formatting for several Cobol clauses as shown below:
+## Formatter and loop completion
+The Language Server provides automatic formatting for several Cobol clauses as shown below:
 
 !['if' formatter](doc/formatter/if-formatter.gif)
 
 !['evaluate' formatter](doc/formatter/evaluate-formatter.gif)
 
+!['evaluate' formatter](doc/formatter/evaluate-formatter.gif)
+
+!['loog' completion](doc/intellisense/loop-intellisense.gif)
+
 ## Code highlight
 
-## Code diagnosis
-
 ## Paragraph suggestion
-
