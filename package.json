@@ -279,7 +279,8 @@
             },
             {
                 "command": "rech.editor.vscode.cobolInsertCommentLine",
-                "key": "alt+n"
+                "key": "alt+n",
+                "when": "editorLangId == COBOL"
             },
             {
                 "command": "rech.editor.vscode.cobolInsertLineSeparator",
@@ -386,7 +387,8 @@
             },
             {
                 "command": "rech.editor.vscode.insertTodo",
-                "key": "ctrl+shift+d"
+                "key": "ctrl+shift+d",
+                "when": "editorLangId == COBOL"
             },
             {
                 "command": "rech.editor.vscode.cobolLineEndDot",
