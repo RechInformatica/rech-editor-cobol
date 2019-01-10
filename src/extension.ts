@@ -30,16 +30,6 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInvertMoveOperators', () => {
         new GeradorCobol().invertMoveOperators();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyLine', () => {
-        commands.executeCommand("editor.action.clipboardCopyAction");
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.pasteLine', () => {
-        new GeradorCobol().pasteLine();
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.replaceLine', () => {
-        commands.executeCommand("editor.action.deleteLines");
-        new GeradorCobol().pasteLine();
-    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertStartComment', () => {
         new GeradorCobol().insertStartComment();
     }));
@@ -58,43 +48,17 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolInsertLineSeparator', () => {
         new GeradorCobol().insertLineSeparator();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cobolUpdateLineDots', () => {
-        new GeradorCobol().updateLineDots();
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.newLineAbove', () => {
-        new GeradorCobol().newLineAbove();
-    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findNextParagraph', () => {
         new Editor().findNextParagraph();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findPreviousParagraph', () => {
         new Editor().findPreviousParagraph();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findNextBlankLine', () => {
-        new Editor().findNextBlankLine();
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findPreviousBlankLine', () => {
-        new Editor().findPreviousBlankLine();
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findWordForward', () => {
-        commands.executeCommand("editor.action.addSelectionToNextFindMatch");
-        commands.executeCommand("editor.action.nextMatchFindAction");
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.findWordBackward', () => {
-        commands.executeCommand("editor.action.addSelectionToNextFindMatch");
-        commands.executeCommand("editor.action.previousMatchFindAction");
-    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.tab', () => {
         new TabStopper().processTabKey(true);
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.revtab', () => {
         new TabStopper().processTabKey(false);
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.copyWordUnderCursor', () => {
-        new Editor().clipboardCopyWord();
-    }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.vscode.replaceWordUnderCursor', () => {
-        new Editor().clipboardReplaceWord();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.vscode.cursorPos51', () => {
         new Editor().setColumn(COLUNA_VALUE - 1);

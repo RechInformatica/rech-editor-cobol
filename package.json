@@ -198,14 +198,6 @@
                 "title": "findPreviousParagraph"
             },
             {
-                "command": "rech.editor.vscode.findNextBlankLine",
-                "title": "findNextBlankLine"
-            },
-            {
-                "command": "rech.editor.vscode.findPreviousBlankLine",
-                "title": "findPreviousBlankLine"
-            },
-            {
                 "comment": "Centraliza o comentário",
                 "command": "rech.editor.vscode.centralizeComment",
                 "title": "Centraliza o comentário"
@@ -219,58 +211,9 @@
                 "when": "editorLangId == COBOL"
             },
             {
-                "key": "ctrl+right",
-                "command": "cursorWordStartRight",
-                "when": "editorTextFocus"
-            },
-            {
-                "command": "editor.action.nextMatchFindAction",
-                "key": "F3"
-            },
-            {
-                "command": "editor.action.previousMatchFindAction",
-                "key": "F4"
-            },
-            {
-                "command": "editor.action.previousMatchFindAction",
-                "key": "shift+F3"
-            },
-            {
-                "command": "deleteAllRight",
-                "key": "alt+l"
-            },
-            {
-                "command": "editor.action.deleteLines",
-                "key": "ctrl+F12"
-            },
-            {
-                "command": "rech.editor.vscode.findWordForward",
-                "key": "alt+0"
-            },
-            {
-                "command": "rech.editor.vscode.findWordBackward",
-                "key": "alt+9"
-            },
-            {
-                "command": "rech.editor.vscode.copyWordUnderCursor",
-                "key": "ctrl+abnt_c1"
-            },
-            {
-                "command": "rech.editor.vscode.replaceWordUnderCursor",
-                "key": "shift+ctrl+abnt_c1"
-            },
-            {
-                "command": "rech.editor.vscode.newLineAbove",
-                "key": "ctrl+shift+enter"
-            },
-            {
-                "command": "deleteWordRight",
-                "key": "alt+w",
-                "when": "textInputFocus && !editorReadonly"
-            },
-            {
                 "command": "rech.editor.vscode.cobolInsertStartComment",
-                "key": "alt+numpad_multiply"
+                "key": "alt+numpad_multiply",
+                "when": "editorLangId == COBOL"
             },
             {
                 "command": "rech.editor.vscode.cobolInsertEndComment",
@@ -288,10 +231,6 @@
                 "when": "editorLangId == COBOL"
             },
             {
-                "command": "rech.editor.vscode.cobolUpdateLineDots",
-                "key": "alt+abnt_c1"
-            },
-            {
                 "command": "rech.editor.vscode.tab",
                 "key": "tab",
                 "when": "editorLangId == COBOL && !inSnippetMode"
@@ -302,18 +241,6 @@
                 "when": "editorLangId == COBOL && !inSnippetMode"
             },
             {
-                "command": "rech.editor.vscode.copyLine",
-                "key": "F10"
-            },
-            {
-                "command": "rech.editor.vscode.pasteLine",
-                "key": "F11"
-            },
-            {
-                "command": "rech.editor.vscode.replaceLine",
-                "key": "shift+F11"
-            },
-            {
                 "command": "rech.editor.vscode.findNextParagraph",
                 "key": "alt+k",
                 "when": "editorLangId == COBOL"
@@ -322,14 +249,6 @@
                 "command": "rech.editor.vscode.findPreviousParagraph",
                 "key": "alt+shift+k",
                 "when": "editorLangId == COBOL"
-            },
-            {
-                "command": "rech.editor.vscode.findNextBlankLine",
-                "key": "alt+p"
-            },
-            {
-                "command": "rech.editor.vscode.findPreviousBlankLine",
-                "key": "alt+shift+p"
             },
             {
                 "command": "rech.editor.vscode.cursorPos51",
@@ -360,30 +279,6 @@
                 "command": "rech.editor.vscode.cursorPos08",
                 "key": "ctrl+8",
                 "when": "editorLangId == COBOL"
-            },
-            {
-                "command": "editor.action.copyLinesUpAction",
-                "key": "ctrl+shift+up"
-            },
-            {
-                "command": "editor.action.copyLinesDownAction",
-                "key": "ctrl+shift+down"
-            },
-            {
-                "command": "editor.action.moveLinesDownAction",
-                "key": "alt+shift+down"
-            },
-            {
-                "command": "editor.action.moveLinesUpAction",
-                "key": "alt+shift+up"
-            },
-            {
-                "command": "editor.action.transformToLowercase",
-                "key": "ctrl+alt+l"
-            },
-            {
-                "command": "editor.action.transformToUppercase",
-                "key": "ctrl+alt+u"
             },
             {
                 "command": "rech.editor.vscode.insertTodo",
