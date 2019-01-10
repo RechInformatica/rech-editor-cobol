@@ -31,7 +31,7 @@ The Language Server provides automatic formatting for several Cobol clauses as s
 ## Peek definition
 You can peek Cobol variable and paragraph definitions!
 
-!['peek'](doc/peek-definition.gif)
+!['peek' peek](doc/peek-definition.gif)
 
 ## Code highlight
 
