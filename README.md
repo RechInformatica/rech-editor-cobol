@@ -28,6 +28,11 @@ The Language Server provides automatic formatting for several Cobol clauses as s
 
 !['loog' completion](doc/intellisense/loop-intellisense.gif)
 
+## Peek definition
+You can peek Cobol variable and paragraph definitions!
+
+!['peek'](doc/peek-definition.gif)
+
 ## Code highlight
 
 ## Paragraph suggestion
