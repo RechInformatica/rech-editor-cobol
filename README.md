@@ -1,7 +1,7 @@
 # Rech Informática extension for editing Cobol files with Visual Studio Code.
 
 ## Paragraph suggestion and documentation
-This extension suggests paragraphs based on what is typed on _perform_ clause. Notice that it also parses a *_java-like_* documentation for paragraphs, as follows.
+This extension suggests paragraphs based on what is typed on _perform_ clause. Notice that it also parses a _*java-like*_ documentation for paragraphs, as follows.
 
 !['paragraph-suggestion' paragraph-suggestion](doc/suggestion/paragraph-suggestion.gif)
 
