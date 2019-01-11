@@ -1,4 +1,4 @@
-# Rech Informática extension for editing Cobol files with Visual Studio Code.
+# Edit Cobol files with Visual Studio Code.
 
 ## Paragraph suggestion and documentation
 This extension suggests paragraphs based on what is typed on _perform_ clause. Notice that it also parses a **java-like** documentation for paragraphs, as follows.
@@ -53,7 +53,7 @@ First of all, configure the directory where specific JSON snippets are located:
         "F:\\MySnippets"
     ]
 
-Second, create one or more JSON files following the example below, which adds two snippets for files with name containing _WREG_
+Second, create one or more JSON files following the example below. This example adds two snippets for files with name containing **WREG**.
 ```json  
 {
     "conditions": {
