@@ -161,7 +161,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: snippet.prefix,
             preselect: true,
-            kind: CompletionItemKind.Keyword
+            kind: CompletionItemKind.Snippet
         };
     }
 }
