@@ -1,7 +1,7 @@
 # Rech Informática extension for editing Cobol files with Visual Studio Code.
 
 ## IntelliSense for variable declaration
-The variable declaration is done in two steps so that the editor parses the picture and generates the most approprivate VALUE in the VALUE clause:
+The variable declaration is done in two steps so that the extension parses the picture and generates the most approprivate VALUE in the VALUE clause:
 
 * If it's a numeric display variable (picture contains **.**, **z**, **b**, **-** or **,**) inserts **VALUE IS ZEROS**.
 
