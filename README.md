@@ -43,3 +43,35 @@ The variable declaration is done in two steps so that the extension parses the p
 
 ![Computing variable declaration](doc/variable/compute-var-declaration.gif)
 
+## Snippets
+This extension provides by default several snippets related to Cobol instrinsic functions to make typing easier and faster.
+Besides, user can add personal snippets and even filter the filename with a RegEx, making them only appear to specific groups of files.
+
+First of all, configure the directory where specific JSON snippets are located:
+
+    "rech.editor.cobol.snippetsRepositories": [
+        "F:\\MySnippets"
+    ]
+
+Second, create one or more JSON files following the example below, which adds two snippets for files with name containing _WREG_
+{
+    "conditions": {
+        "sourceFileNameRegex": ".*WREG.*"
+    },
+    "snippets": [
+        {
+            "prefix": "My first snippet",
+            "body": "This will appear in editor when snippet is selected",
+            "description": "Description of my snippet"
+        },
+        {
+            "prefix": "My second snippet",
+            "body": "This is the body with ${0:placeholder}",
+            "description": "Description of second snippet"
+        }
+   ]
+}
+
+![Personal snippets](doc/suggestion/snippet.gif)
+
+Snippet _placeholders_ are also supported.
