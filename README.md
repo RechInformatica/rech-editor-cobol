@@ -1,17 +1,17 @@
 # Rech Informática extension for editing Cobol files with Visual Studio Code.
 
 ## Paragraph suggestion and documentation
-This extension suggests paragraphs based on what is typed on _perform_ clause. Notice that it also parses a _*java-like*_ documentation for paragraphs, as follows.
+This extension suggests paragraphs based on what is typed on _perform_ clause. Notice that it also parses a **java-like** documentation for paragraphs, as follows.
 
 !['paragraph-suggestion' paragraph-suggestion](doc/suggestion/paragraph-suggestion.gif)
 
 ## Code highlight
-When mouse is over some Cobol keywords, the *related keywords* are *highlighted* for better *understanding*.
+When mouse is over some Cobol keywords, the **related keywords** are **highlighted** for better **understanding**.
 
 !['highlight' highlight](doc/highlight/highlight.gif)
 
 ## Peek definition
-You can also peek Cobol *variable* and *paragraph* definitions!
+You can also peek Cobol **variable** and **paragraph** definitions!
 
 !['peek' peek](doc/peek-definition.gif)
 
@@ -44,8 +44,8 @@ The variable declaration is done in two steps so that the extension parses the p
 ![Computing variable declaration](doc/variable/compute-var-declaration.gif)
 
 ## Snippets
-This extension provides by default *several snippets* related to Cobol functions/commands to make typing easier and faster.
-Besides, user can add *personal snippets* and even *filter the filename* with a RegEx, making them *only appear* to specific *groups of files*.
+This extension provides by default **several snippets** related to Cobol functions/commands to make typing easier and faster.
+Besides, user can add **personal snippets** and even *filter the filename* with a RegEx, making them **only appear** to specific **groups of files**.
 
 First of all, configure the directory where specific JSON snippets are located:
 
@@ -76,4 +76,4 @@ Second, create one or more JSON files following the example below, which adds tw
 
 ![Personal snippets](doc/suggestion/snippet.gif)
 
-Snippet *placeholders* are also *supported*.
+Snippet **placeholders** are also **supported**.
