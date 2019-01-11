@@ -29,17 +29,17 @@ The Language Server provides automatic formatting for several Cobol clauses as s
 !['loog' completion](doc/intellisense/loop-intellisense.gif)
 
 ## Peek definition
-You can peek Cobol variable and paragraph definitions!
+You can peek Cobol *variable* and *paragraph* definitions!
 
 !['peek' peek](doc/peek-definition.gif)
 
 ## Code highlight
-When mouse is over some Cobol keywords, the related keywords are highlighted for better understanding.
+When mouse is over some Cobol keywords, the *related keywords* are *highlighted* for better *understanding*.
 
 !['highlight' highlight](doc/highlight/highlight.gif)
 
 ## Paragraph suggestion and documentation
-This extension suggests paragraphs based on what is typed on 'perform' clause. Notice that it also parses a _java-like_ documentation for paragraphs, as follows.
+This extension suggests paragraphs based on what is typed on _perform_ clause. Notice that it also parses a *_java-like_* documentation for paragraphs, as follows.
 
 !['paragraph-suggestion' paragraph-suggestion](doc/suggestion/paragraph-suggestion.gif)
 
