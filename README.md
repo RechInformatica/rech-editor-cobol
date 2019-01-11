@@ -67,7 +67,7 @@ Second, create one or more JSON files following the example below. This example 
         },
         {
             "prefix": "My second snippet",
-            "body": "This is the body with ${0:placeholder}",
+            "body": "This is the body of my second snippet with ${0:placeholder}",
             "description": "Description of second snippet"
         }
    ]
