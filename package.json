@@ -1,7 +1,7 @@
 {
     "name": "rech-editor-cobol",
     "displayName": "rech-editor-cobol",
-    "description": "Rech Informática extension for editing Cobol files with Visual Studio Code.",
+    "description": "Edit Cobol files with Visual Studio Code.",
     "version": "0.0.2",
     "publisher": "rechinformatica",
     "engines": {
@@ -40,7 +40,7 @@
                 "properties": {
                     "source": {
                         "type": "string",
-                        "description": "Fonte a ser compilado"
+                        "description": "Source to be compiled"
                     }
                 },
                 "required": []
@@ -179,24 +179,23 @@
         "commands": [
             {
                 "command": "rech.editor.cobol.tab",
-                "title": "tab"
+                "title": "Performs a tab and sets the cursor on the most appropriate Cobol column"
             },
             {
                 "command": "rech.editor.cobol.revtab",
-                "title": "revtab"
+                "title": "Performs a reverse-tab and sets the cursor on the most appropriate Cobol column"
             },
             {
                 "command": "rech.editor.cobol.findNextParagraph",
-                "title": "findNextParagraph"
+                "title": "Sets cursor on the previous paragraph declaration"
             },
             {
                 "command": "rech.editor.cobol.findPreviousParagraph",
-                "title": "findPreviousParagraph"
+                "title": "Sets cursor on the next paragraph declaration"
             },
             {
-                "comment": "Centraliza o comentário",
                 "command": "rech.editor.cobol.centralizeComment",
-                "title": "Centraliza o comentário"
+                "title": "Centers the Cobol comment"
             }
         ],
         "keybindings": [
