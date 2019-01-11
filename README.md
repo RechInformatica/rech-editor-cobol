@@ -34,5 +34,8 @@ You can peek Cobol variable and paragraph definitions!
 !['peek' peek](doc/peek-definition.gif)
 
 ## Code highlight
+When mouse is over some Cobol keywords, the related keywords are highlighted for better understanding.
+
+!['highlight' highlight](doc/highlight/highlight.gif)
 
 ## Paragraph suggestion
