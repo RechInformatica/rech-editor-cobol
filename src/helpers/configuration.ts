@@ -5,10 +5,7 @@ import {
   WorkspaceConfiguration
 } from "vscode";
 
-// This constant is still 'rech.editor.vscode' to prevent
-// problems with settings.json which already contains
-// specific configurations for this package
-const RECHEDITORVSCODE = "rech.editor.vscode";
+const CONFIG_GROUP = "rech.editor.cobol";
 
 /**
  * Class to manipulate extension settings
@@ -21,7 +18,7 @@ class Configuration {
    * extension settings
    */
   constructor() {
-    this.configuration = workspace.getConfiguration(RECHEDITORVSCODE);
+    this.configuration = workspace.getConfiguration(CONFIG_GROUP);
   }
 
   /**
