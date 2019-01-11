@@ -38,4 +38,8 @@ When mouse is over some Cobol keywords, the related keywords are highlighted for
 
 !['highlight' highlight](doc/highlight/highlight.gif)
 
-## Paragraph suggestion
+## Paragraph suggestion and documentation
+This extension suggests paragraphs based on what is typed on 'perform' clause. Notice that it also parses a _java-like_ documentation for paragraphs, as follows.
+
+!['paragraph-suggestion' paragraph-suggestion](doc/suggestion/paragraph-suggestion.gif)
+
