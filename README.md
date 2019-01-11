@@ -1,4 +1,4 @@
-# Edit Cobol files with Visual Studio Code.
+# Edit Cobol files with Visual Studio Code
 
 ## Paragraph suggestion and documentation
 This extension suggests paragraphs based on what is typed on _perform_ clause. Notice that it also parses a **java-like** documentation for paragraphs, as follows.
