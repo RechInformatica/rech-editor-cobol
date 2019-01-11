@@ -50,7 +50,7 @@
             "type": "object",
             "title": "COBOL configuration",
             "properties": {
-                "rech.editor.vscode.tabstops": {
+                "rech.editor.cobol.tabstops": {
                     "type": "array",
                     "items": {
                         "type": "number",
@@ -73,12 +73,12 @@
                     ],
                     "description": "COBOL tabstops"
                 },
-                "rech.editor.vscode.autodiagnostic": {
+                "rech.editor.cobol.autodiagnostic": {
                     "type": "boolean",
                     "description": "Whether auto diagnosis is enabled",
                     "default": false
                 },
-                "rech.editor.vscode.diagnosticfilter": {
+                "rech.editor.cobol.diagnosticfilter": {
                     "type": "array",
                     "description": "Filter of warnings that should not be considered in diagnostic",
                     "default": [
@@ -86,7 +86,7 @@
                         "[W003]"
                     ]
                 },
-                "rech.editor.vscode.snippetsRepositories": {
+                "rech.editor.cobol.snippetsRepositories": {
                     "type": "array",
                     "description": "Repositories where JSON snippets are located"
                 },
