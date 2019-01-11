@@ -200,12 +200,6 @@
         ],
         "keybindings": [
             {
-                "comment": "Ainda não é a rotina ideal... Mas por enquanto quebra um galho",
-                "command": "editor.action.commentLine",
-                "key": "alt+=",
-                "when": "editorLangId == COBOL"
-            },
-            {
                 "command": "rech.editor.cobol.cobolInsertStartComment",
                 "key": "alt+numpad_multiply",
                 "when": "editorLangId == COBOL"
