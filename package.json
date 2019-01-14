@@ -2,7 +2,7 @@
     "name": "rech-editor-cobol",
     "displayName": "rech-editor-cobol",
     "description": "Edit Cobol files with Visual Studio Code.",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "publisher": "rechinformatica",
     "engines": {
         "vscode": "^1.26.0"
@@ -80,11 +80,7 @@
                 },
                 "rech.editor.cobol.diagnosticfilter": {
                     "type": "array",
-                    "description": "Filter of warnings that should not be considered in diagnostic",
-                    "default": [
-                        "[W002]",
-                        "[W003]"
-                    ]
+                    "description": "Filter of warnings that should not be considered in diagnostic"
                 },
                 "rech.editor.cobol.snippetsRepositories": {
                     "type": "array",
