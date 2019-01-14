@@ -71,6 +71,11 @@ export class Client {
 			Client.client.onRequest("custom/getConfig", (section: string) => {
 				return Client.getConfig(section);
 			});
+			Client.client.onRequest("custom/getAutoDiagnostic", () => {
+				return new Promise<any>((resolve) => {
+					resolve(cobolDiagnosticFilter.getAutoDiagnostic());
+				});
+			});
 			Client.client.onRequest("custom/diagnosticFilter", (diagnosticMessage: string) => {
 				return new Promise<Boolean>((resolve) => {
 					let result = cobolDiagnosticFilter.isDiagnosticValid(diagnosticMessage);

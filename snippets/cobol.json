@@ -41,8 +41,7 @@
 	},
 	"filler" : {
 		"prefix": "filler",
-		"body": "filler",
-		"description": "Insere o termo filler"
+		"body": "filler"
 	},
 	"zeros": {
 		"prefix": "ze",
@@ -75,76 +74,6 @@
 	"blank when zeros": {
 		"prefix": "bwz",
 		"body": "blank when zeros"
-	},
-	"exibe-mensagem": {
-		"prefix": "exibe-mensagem",
-		"body": [
-			"move \"${0:<text>}\" to wme-lit,",
-			"perform exibe-mensagem,"
-		]
-	},
-	"read key arq-comando": {
-		"prefix": "read key",
-		"body": [
-			"move \"read ${1:xtabel} key ${2:xxxx-cha} ignore lock\" to warq-cmd,",
-			"perform arq-comando-${3:mk-cha},"
-		]
-	},
-	"inipre arq-comando": {
-		"prefix": "inipre",
-		"body": [
-			"move \"inipre ${1:xtabel}\" to warq-cmd,",
-			"perform arq-comando-${2:mk-cha},"
-		]
-	},
-	"prepare arq-comando": {
-		"prefix": "prepare",
-		"body": [
-			"move \"prepare ${1:xtabel} ${2:xxxx-cha}\" to warq-cmd,",
-			"perform arq-comando-${3:mk-cha},"
-		]
-	},
-	"fetch arq-comando": {
-		"prefix": "fetch",
-		"body": [
-			"move \"fetch ${1:xtabel} ignore lock\" to warq-cmd,",
-			"perform arq-comando-${2:mk-cha},"
-		]
-	},
-	"write arq-comando": {
-		"prefix": "write",
-		"body": [
-			"move \"write ${1:xtabel} ${2:xreg-xxx}\" to warq-cmd,",
-			"perform arq-comando-${3:mk-cha},"
-		]
-	},
-	"rewrite arq-comando": {
-		"prefix": "rewrite",
-		"body": [
-			"move \"rewrite ${1:xtabel} ${2:xreg-xxx}\" to warq-cmd,",
-			"perform arq-comando-${3:mk-cha},"
-		]
-	},
-	"re/write arq-comando": {
-		"prefix": "re/write",
-		"body": [
-			"move \"re/write ${1:xtabel} ${2:xreg-xxx}\" to warq-cmd,",
-			"perform arq-comando-${3:mk-cha},"
-		]
-	},
-	"delete arq-comando": {
-		"prefix": "delete",
-		"body": [
-			"move \"delete ${1:xtabel} record\" to warq-cmd,",
-			"perform arq-comando-${2:mk-cha},"
-		]
-	},
-	"unlock arq-comando": {
-		"prefix": "unlock",
-		"body": [
-			"move \"unlock ${1:xtabel}\" to warq-cmd,",
-			"perform arq-comando-${2:mk-cha},"
-		]
 	},
 	"rechdoc" : {
 		"prefix": "rechdoc",
@@ -192,17 +121,14 @@
 	"search" : {
 		"prefix": "search",
 		"body": [
-			"      *>-> Busca ... na tabela de ...",
-			"           search all             <Nome_Tabela>",
-			"      *>-> Se chegou ao fim da busca",
+			"           search all             <Table_name>",
 			"              at end",
 			"                 ...",
-			"      *>-> Se encontrou",
-			"              when <condição>",
+			"              when <condition>",
 			"                 next             sentence,",
 			"           end-search."
 			],
-		"description": "Busca em uma tabela"
+		"description": "Search table"
 	},
 	"string" : {
 		"prefix": "string",
@@ -288,37 +214,5 @@
 		"prefix": "fun sqrt",
 		"body": "function sqrt (${0:<var>})",
 		"description": "Retorna a raiz de argument-1"
-	},
-	"vstart next" : {
-		"prefix": "vstart next",
-		"body": [
-			"      *>-> Varre o virtual de ${1:<descrição do virtual>}",
-			"           move    low-values to  w-${2:xxx}-reg.",
-			"           perform                ${2:xxx}-start-nless.",
-			"           perform                until exit",
-			"              perform             ${2:xxx}-read-next,",
-			"              if not ${2:xxx}-fs-ok",
-			"                 exit             perform,",
-			"              end-if,",
-			"              $0",
-			"           end-perform."
-		],
-		"description": "Loop de leitura em virtual - next"
-	},
-	"vstart previous" : {
-		"prefix": "vstart previous",
-		"body": [
-			"      *>-> Varre o virtual de ${1:<descrição do virtual>}",
-			"           move    high-values to w-${2:xxx}-reg.",
-			"           perform                ${2:xxx}-start-ngreater.",
-			"           perform                until exit",
-			"              perform             ${2:xxx}-read-previous,",
-			"              if not ${2:xxx}-fs-ok",
-			"                 exit             perform,",
-			"              end-if,",
-			"              $0",
-			"           end-perform."
-		],
-		"description": "Loop de leitura em virtual - previous"
 	}
 }

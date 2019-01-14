@@ -81,7 +81,7 @@ documents.onDidClose(textDocument => {
 export async function validateTextDocument(
   textDocument: TextDocument
 ): Promise<void> {
-  getConfig<Boolean>("autodiagnostic").then(autodiagnostic => {
+  getAutoDiagnostic<Boolean>().then(autodiagnostic => {
     if (autodiagnostic) {
       new Diagnostician()
         .diagnose(
@@ -121,6 +121,13 @@ export function sendExternalPreprocessExecution(uri: string) {
  */
 export function getConfig<T>(section: string) {
   return connection.sendRequest<T>("custom/getConfig", section);
+}
+
+/**
+ * Sends a request to the client to identify if should activate auto diagnostic
+ */
+export function getAutoDiagnostic<Boolean>() {
+  return connection.sendRequest<Boolean>("custom/getAutoDiagnostic");
 }
 
 /**

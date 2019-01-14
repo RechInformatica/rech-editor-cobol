@@ -1,8 +1,8 @@
 {
     "name": "rech-editor-cobol",
-    "displayName": "rech-editor-cobol",
-    "description": "Rech Informática extension for editing Cobol files with Visual Studio Code.",
-    "version": "0.0.1",
+    "displayName": "Rech COBOL",
+    "description": "Edit Cobol files with Visual Studio Code",
+    "version": "1.0.6",
     "publisher": "rechinformatica",
     "engines": {
         "vscode": "^1.26.0"
@@ -40,7 +40,7 @@
                 "properties": {
                     "source": {
                         "type": "string",
-                        "description": "Fonte a ser compilado"
+                        "description": "Source to be compiled"
                     }
                 },
                 "required": []
@@ -48,9 +48,9 @@
         ],
         "configuration": {
             "type": "object",
-            "title": "COBOL configuration",
+            "title": "Rech COBOL configurations",
             "properties": {
-                "rech.editor.vscode.tabstops": {
+                "rech.editor.cobol.tabstops": {
                     "type": "array",
                     "items": {
                         "type": "number",
@@ -73,20 +73,7 @@
                     ],
                     "description": "COBOL tabstops"
                 },
-                "rech.editor.vscode.autodiagnostic": {
-                    "type": "boolean",
-                    "description": "Whether auto diagnosis is enabled",
-                    "default": false
-                },
-                "rech.editor.vscode.diagnosticfilter": {
-                    "type": "array",
-                    "description": "Filter of warnings that should not be considered in diagnostic",
-                    "default": [
-                        "[W002]",
-                        "[W003]"
-                    ]
-                },
-                "rech.editor.vscode.snippetsRepositories": {
+                "rech.editor.cobol.snippetsRepositories": {
                     "type": "array",
                     "description": "Repositories where JSON snippets are located"
                 },
@@ -178,34 +165,83 @@
         ],
         "commands": [
             {
+                "command": "rech.editor.cobol.cobolInsertStartComment",
+                "title": "Inserts a '*>->' comment at the begginig of the current line"
+            },
+            {
+                "command": "rech.editor.cobol.cobolInsertEndComment",
+                "title": "Inserts a '<-<*' comment at the end of the current line"
+            },
+            {
+                "command": "rech.editor.cobol.cobolInsertCommentLine",
+                "title": "Inserts a new comment line starting with '*>->'"
+            },
+            {
+                "command": "rech.editor.cobol.cobolInsertLineSeparator",
+                "title": "Inserts Cobol-separator line comment"
+            },
+            {
                 "command": "rech.editor.cobol.tab",
-                "title": "tab"
+                "title": "Performs a tab and sets the cursor on the most appropriate Cobol column"
             },
             {
                 "command": "rech.editor.cobol.revtab",
-                "title": "revtab"
+                "title": "Performs a reverse-tab and sets the cursor on the most appropriate Cobol column"
             },
             {
                 "command": "rech.editor.cobol.findNextParagraph",
-                "title": "findNextParagraph"
+                "title": "Sets cursor on the previous paragraph declaration"
             },
             {
                 "command": "rech.editor.cobol.findPreviousParagraph",
-                "title": "findPreviousParagraph"
+                "title": "Sets cursor on the next paragraph declaration"
             },
             {
-                "comment": "Centraliza o comentário",
+                "command": "rech.editor.cobol.cursorPos51",
+                "title": "Sets cursor at position 51"
+            },
+            {
+                "command": "rech.editor.cobol.cursorPos12",
+                "title": "Sets cursor at position 12"
+            },
+            {
+                "command": "rech.editor.cobol.cursorPos30",
+                "title": "Sets cursor at position 30"
+            },
+            {
+                "command": "rech.editor.cobol.cursorPos20",
+                "title": "Sets cursor at position 20"
+            },
+            {
+                "command": "rech.editor.cobol.cursorPos35",
+                "title": "Sets cursor at position 35"
+            },
+            {
+                "command": "rech.editor.cobol.cursorPos08",
+                "title": "Sets cursor at position 08"
+            },
+            {
+                "command": "rech.editor.cobol.insertTodo",
+                "title": "Inserts a Cobol 'TODO' comment line"
+            },
+            {
+                "command": "rech.editor.cobol.cobolLineEndDot",
+                "title": "Inserts a '.' at the end of the line if missing"
+            },
+            {
+                "command": "rech.editor.cobol.cobolLineEndComma",
+                "title": "Inserts a ',' at the end of the line if missing"
+            },
+            {
+                "command": "rech.editor.cobol.cobolInvertMoveOperators",
+                "title": "Invert variables on the 'move' command"
+            },
+            {
                 "command": "rech.editor.cobol.centralizeComment",
-                "title": "Centraliza o comentário"
+                "title": "Centers the Cobol comment"
             }
         ],
         "keybindings": [
-            {
-                "comment": "Ainda não é a rotina ideal... Mas por enquanto quebra um galho",
-                "command": "editor.action.commentLine",
-                "key": "alt+=",
-                "when": "editorLangId == COBOL"
-            },
             {
                 "command": "rech.editor.cobol.cobolInsertStartComment",
                 "key": "alt+numpad_multiply",
@@ -313,18 +349,19 @@
         "@types/iconv-lite": "0.0.1",
         "@types/q": "^1.0.0",
         "iconv-lite": "^0.4.24",
-        "@types/mocha": "^2.2.48",
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.21",
         "q": "^1.4.1",
         "@types/chai": "^4.1.6",
-        "@types/node": "^8.10.25",
         "chai": "^4.2.0",
-        "mocha": "^5.2.0",
         "ts-node": "^7.0.1",
-        "vsce": "^1.53.0",
         "vscode-languageclient": "^4.1.4",
         "vscode-languageserver": "^4.1.3"
     },
-    "devDependencies": {}
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.21",
+        "@types/mocha": "^2.2.48",
+        "@types/node": "^8.10.25",
+        "mocha": "^5.2.0",
+        "vsce": "^1.53.0"
+    }
 }

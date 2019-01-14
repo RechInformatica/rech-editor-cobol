@@ -102,3 +102,4 @@ export * from "./cobol/compiler";
 export * from "./cobol/rechdoc/ParagraphDocumentationExtractor"
 export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./lsp/declaration/CobolDeclarationFinder";
+export * from "./cobol/diagnostic/cobolDiagnosticFilter";
