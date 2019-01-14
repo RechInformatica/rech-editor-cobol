@@ -25,7 +25,7 @@ export class PerformHighlight implements HighlightInterface {
         let buffer = text.getText().split("\n");
         let currentLineContent = buffer[currentLine];
         // If is pharagraph perform
-        if (/\s*perform\s*([\w\-]+)(\sthru\s.*)?[\.|\,]/.exec(currentLineContent.toLowerCase())) {
+        if (/\s*perform\s*([\w\-]*)((?:\sthru\s.*)|(?:.+\stimes))?[\.|\,]/.exec(currentLineContent.toLowerCase())) {
             return new DefaultHighlight().positions(text, word, currentLine, currentCharacter)
         }
         let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
