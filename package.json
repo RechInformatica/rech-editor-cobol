@@ -48,7 +48,7 @@
         ],
         "configuration": {
             "type": "object",
-            "title": "COBOL configuration",
+            "title": "Rech COBOL configurations",
             "properties": {
                 "rech.editor.cobol.tabstops": {
                     "type": "array",
@@ -72,15 +72,6 @@
                         50
                     ],
                     "description": "COBOL tabstops"
-                },
-                "rech.editor.cobol.autodiagnostic": {
-                    "type": "boolean",
-                    "description": "Whether auto diagnosis is enabled",
-                    "default": false
-                },
-                "rech.editor.cobol.diagnosticfilter": {
-                    "type": "array",
-                    "description": "Filter of warnings that should not be considered in diagnostic"
                 },
                 "rech.editor.cobol.snippetsRepositories": {
                     "type": "array",
