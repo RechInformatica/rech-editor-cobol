@@ -27,7 +27,7 @@ export class Client {
 		);
 		// The debug options for the server
 		// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
-		let debugOptions = { execArgv: ['--nolazy', '--inspect=10998'] };
+		let debugOptions = { execArgv: ['--nolazy', '--inspect=10999'] };
 		// If the extension is launched in debug mode then the debug server options are used
 		// Otherwise the run options are used
 		let serverOptions: ServerOptions = {

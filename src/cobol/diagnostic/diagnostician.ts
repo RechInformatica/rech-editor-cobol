@@ -4,9 +4,7 @@ import { CobolDiagnostic } from "./cobolDiagnostic";
 import { Path } from "../../commons/path";
 import { File } from "../../commons/file";
 import { CobolDiagnosticParser } from "./cobolDiagnosticParser";
-
-/* Time in millis representing an old file */
-const OLD_FILE_IN_MILLIS: number = 7000;
+import { CobolDiagnosticPreprocManager } from "./CobolDiagnosticPreprocManager";
 
 /**
  * Class to diagnose sources
@@ -29,17 +27,21 @@ export class Diagnostician {
         textDocument,
         PreprocessCallback,
         externalDiagnosticFilter
-      ).then(cobolDiagnostic => {
+      )
+        .then(cobolDiagnostic => {
           if (!cobolDiagnostic) {
             reject();
-            return
+            return;
           }
-          this.extractDiagnostics(cobolDiagnostic).then(diagnostics => {
+          this.extractDiagnostics(cobolDiagnostic)
+            .then(diagnostics => {
               resolve(diagnostics);
-            }).catch(() => {
+            })
+            .catch(() => {
               reject();
             });
-        }).catch(() => {
+        })
+        .catch(() => {
           reject();
         });
     });
@@ -55,7 +57,8 @@ export class Diagnostician {
   private findErrorsAndWarnings(
     textDocument: TextDocument,
     PreprocessCallback: (uri: string) => Thenable<string>,
-    externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<CobolDiagnostic | undefined> {
+    externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>
+  ): Promise<CobolDiagnostic | undefined> {
     return new Promise<CobolDiagnostic>((resolve, reject) => {
       // If not a cobol processable source
       if (new Path(textDocument.uri).extension().toUpperCase() != ".CBL") {
@@ -64,47 +67,34 @@ export class Diagnostician {
       let tmpFile = new File(
         "C:\\TMP\\" + new Path(textDocument.uri).fileName()
       );
-      if (tmpFile.exists()) {
-        if (this.isFileOld(tmpFile)) {
-          tmpFile.delete();
-        }
-        resolve(undefined);
-        return;
-      }
-      tmpFile.saveBuffer([textDocument.getText()]).then(() => {
-          PreprocessCallback(tmpFile.fileName).then(buffer => {
-            let fileName = new Path(textDocument.uri).fullPath();
-            new CobolDiagnosticParser().parser(buffer, fileName, externalDiagnosticFilter).then(cobolDiagnostic => {
-                tmpFile.delete();
-                resolve(cobolDiagnostic);
-              }).catch(() => {
-                tmpFile.delete();
-                reject();
-              })
-          });
-        }).catch(() => {
-          reject();
-        })
+      CobolDiagnosticPreprocManager.runWhenPossible(
+        PreprocessCallback,
+        tmpFile,
+        [textDocument.getText()],
+        (buffer) => {
+          let fileName = new Path(textDocument.uri).fullPath();
+          new CobolDiagnosticParser()
+            .parser(buffer, fileName, externalDiagnosticFilter)
+            .then(cobolDiagnostic => {
+              resolve(cobolDiagnostic);
+            })
+            .catch(() => {
+              reject();
+            });
+        },
+        () => reject()
+      );
     });
   }
 
-  /**
-   * Return {@code true} if is a old file
-   * 
-   * @param file 
-   */
-  private isFileOld(file: File): boolean {
-    let fileLastModified = file.lastModified().getTime();
-      let currentTime = new Date().getTime()
-      let resultTime = currentTime - fileLastModified;
-      return (resultTime > OLD_FILE_IN_MILLIS)
-  }
   /**
    * Returns an array containing the diagnostics
    *
    * @param cobolDiagnostic
    */
-  private extractDiagnostics(cobolDiagnostic: CobolDiagnostic): Promise<Diagnostic[]> {
+  private extractDiagnostics(
+    cobolDiagnostic: CobolDiagnostic
+  ): Promise<Diagnostic[]> {
     return new Promise(resolve => {
       let diagnostics: Diagnostic[] = [];
       cobolDiagnostic.errors.forEach(diagnostic => {
