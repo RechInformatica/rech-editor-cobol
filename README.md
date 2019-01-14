@@ -73,7 +73,6 @@ Second, create one or more JSON files following the example below. This example 
    ]
 }
 ```
+Snippet **placeholders** are also **supported**.
 
 ![Personal snippets](doc/suggestion/snippet.gif)
-
-Snippet **placeholders** are also **supported**.
