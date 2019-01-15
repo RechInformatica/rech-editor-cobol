@@ -293,7 +293,7 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm install && npm run compile && npm prune --production",
+        "vscode:prepublish": "npm run compile",
         "package": "vsce package --out f:/div/VSCode/extension/rech-editor-cobol/rech-editor-cobol.vsix",
         "compile": "tsc -p ./",
         "compile:client": "tsc -p ./",
