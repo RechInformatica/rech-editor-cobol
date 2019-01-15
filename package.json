@@ -2,7 +2,7 @@
     "name": "rech-editor-cobol",
     "displayName": "Rech COBOL",
     "description": "Edit Cobol files with Visual Studio Code",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "publisher": "rechinformatica",
     "engines": {
         "vscode": "^1.26.0"
@@ -300,7 +300,7 @@
         "compile:server": "tsc -p ./",
         "watch:client": "tsc -watch -p ./",
         "watch:server": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
+        "fullinstall": "npm install && node ./node_modules/vscode/bin/install",
         "test": "npm run compile && mocha -r ts-node/register ./src/test/**/*.test.ts"
     },
     "dependencies": {
