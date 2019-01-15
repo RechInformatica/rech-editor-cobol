@@ -20,6 +20,8 @@ import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
+import { resolve } from "q";
+import Q from "q";
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -78,30 +80,39 @@ export class CobolCompletionItemFactory {
    *
    * @param lines Cobol source code lines
    */
-  public generateCompletionItems(): CompletionItem[] {
-    switch (true) {
-      case this.isCommentLine() || this.isIf() || this.isWhen(): {
-        return [];
-      }
-      case this.isVarDeclaration(): {
-        return this.createVariableCompletions();
-      }
-      case this.isMove() || this.isAdd() || this.isSet(): {
-        return this.createToCompletions();
-      }
-      case this.isSubtract(): {
-        return this.generate(new FromCompletion());
-      }
-      case this.isParagraphPerform(): {
-        if (this.paragraphCompletion) {
-          return this.generate(this.paragraphCompletion);
+  public generateCompletionItems(): Promise<CompletionItem[]> {
+    return new Promise((resolve) => {
+      switch (true) {
+        case this.isCommentLine() || this.isIf() || this.isWhen(): {
+          resolve([]);
+          return;
         }
-        return [];
+        case this.isVarDeclaration(): {
+          resolve(this.createVariableCompletions());
+          return;
+        }
+        case this.isMove() || this.isAdd() || this.isSet(): {
+          resolve(this.createToCompletions());
+          return;
+        }
+        case this.isSubtract(): {
+          resolve(this.generate(new FromCompletion()));
+          return;
+        }
+        case this.isParagraphPerform(): {
+          if (this.paragraphCompletion) {
+            resolve(this.generate(this.paragraphCompletion));
+            return;
+          }
+          resolve([]);
+          return;
+        }
+        default: {
+          resolve(this.createDefaultCompletions());
+          return;
+        }
       }
-      default: {
-        return this.createDefaultCompletions();
-      }
-    }
+    })
   }
 
   /**
@@ -114,19 +125,25 @@ export class CobolCompletionItemFactory {
   /**
    * Creates completion items for Cobol variables
    */
-  private createVariableCompletions(): CompletionItem[] {
-    if (!this.isVariableDeclarationFinalized()) {
-      if (!this.isPictureDeclared()) {
-        return this.generate(new PictureCompletion());
+  private createVariableCompletions(): Promise<CompletionItem[]> {
+    return new Promise((resolve) => {
+      if (!this.isVariableDeclarationFinalized()) {
+        if (!this.isPictureDeclared()) {
+          resolve(this.generate(new PictureCompletion()));
+          return;
+        }
+        if (!this.isValueDeclared()) {
+          resolve(this.generate(new ValueCompletion()));
+          return;
+        }
       }
-      if (!this.isValueDeclared()) {
-        return this.generate(new ValueCompletion());
+      if (this.isFlagParent()) {
+        resolve(this.generate(new FlagCompletion()));
+        return;
       }
-    }
-    if (this.isFlagParent()) {
-      return this.generate(new FlagCompletion());
-    }
-    return [];
+      resolve([]);
+      return;
+    })
   }
 
   /**
@@ -280,21 +297,31 @@ export class CobolCompletionItemFactory {
   /**
    * Fills the completion items with 'To' Cobol commands
    */
-  private createToCompletions() {
-    let items: CompletionItem[] = [];
+  private createToCompletions(): Promise<CompletionItem[]> {
+    let items: Promise<CompletionItem[]>[] = [];
     items = items.concat(this.generate(new ToCompletion()));
     if (this.isSet()) {
       items = items.concat(this.generate(new ToTrueCompletion()));
     }
-    return items;
+    return new Promise((resolve, reject) => {
+      Q.all(items).then((result) => {
+        let completions:CompletionItem[] = [];
+        result.forEach((element) => {
+          completions = completions.concat(element);
+        });
+        resolve(completions);
+      }).catch(() => {
+        reject();
+      })
+    });
   }
 
 
   /**
    * Fills the completion items with default Cobol commands
    */
-  private createDefaultCompletions() {
-    let items: CompletionItem[] = [];
+  private createDefaultCompletions(): Promise<CompletionItem[]> {
+    let items: Promise<CompletionItem[]>[] = [];
     items = items.concat(this.generate(new PerformCompletion()));
     items = items.concat(this.generate(new MoveCompletion()));
     items = items.concat(this.generate(new SetCompletion()));
@@ -312,7 +339,17 @@ export class CobolCompletionItemFactory {
     if (this.isInIfBlock()) {
       items = items.concat(this.generate(new ElseCompletion()));
     }
-    return items;
+    return new Promise((resolve, reject) => {
+      Q.all(items).then((result) => {
+        let completions:CompletionItem[] = [];
+        result.forEach((element) => {
+          completions = completions.concat(element);
+        });
+        resolve(completions);
+      }).catch(() => {
+        reject();
+      })
+    });
   }
 
   /**
@@ -320,12 +357,16 @@ export class CobolCompletionItemFactory {
    *
    * @param completion implementation used to generate completion items
    */
-  private generate(completion: CompletionInterface): CompletionItem[] {
-    let result = completion.generate(this.line, this.column, this.lines);
-    if (!CompletionUtils.isLowerCaseSource(this.lines)) {
-      return this.toUpperCase(result);
-    }
-    return result;
+  private generate(completion: CompletionInterface): Promise<CompletionItem[]> {
+    return new Promise((resolve) => {
+      let result = completion.generate(this.line, this.column, this.lines);
+      if (!CompletionUtils.isLowerCaseSource(this.lines)) {
+        resolve(this.toUpperCase(result));
+        return;
+      }
+      resolve(result);
+      return;
+    })
   }
 
   /**

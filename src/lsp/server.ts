@@ -162,26 +162,27 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
-  return getConfig<string[]>("snippetsRepositories").then(repositories => {
-    let items: CompletionItem[] = [];
-    let line = _textDocumentPosition.position.line;
-    let column = _textDocumentPosition.position.character;
-    let uri = _textDocumentPosition.textDocument.uri;
-    let cacheFileName = buildCacheFileName(uri);
-    let fullDocument = documents.get(uri);
-    if (fullDocument) {
-      new CobolCompletionItemFactory(line, column, fullDocument)
-        .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
-        .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
-          // Runs Cobol preprocessor on client-side
-          return sendExternalPreprocExpanderExecution(uri, cacheFileName);
-        }))
-        .generateCompletionItems()
-        .forEach(element => {
-          items.push(element);
-        });
-    };
-    return items;
+  return new Promise((resolve) => {
+    getConfig<string[]>("snippetsRepositories").then(repositories => {
+      let line = _textDocumentPosition.position.line;
+      let column = _textDocumentPosition.position.character;
+      let uri = _textDocumentPosition.textDocument.uri;
+      let cacheFileName = buildCacheFileName(uri);
+      let fullDocument = documents.get(uri);
+      if (fullDocument) {
+        new CobolCompletionItemFactory(line, column, fullDocument)
+          .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
+          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
+            // Runs Cobol preprocessor on client-side
+            return sendExternalPreprocExpanderExecution(uri, cacheFileName);
+          }))
+          .generateCompletionItems().then((items) => {
+            resolve(items);
+          }).catch(() => {
+            resolve([]);
+          })
+      };
+    });
   });
 });
 
