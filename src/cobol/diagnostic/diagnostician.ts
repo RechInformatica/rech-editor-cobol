@@ -65,7 +65,7 @@ export class Diagnostician {
         reject();
       }
       let tmpFile = new File(
-        "C:\\TMP\\" + new Path(textDocument.uri).fileName()
+        "C:\\TMP\\Diagnostic\\" + new Path(textDocument.uri).fileName()
       );
       CobolDiagnosticPreprocManager.runWhenPossible(
         PreprocessCallback,
