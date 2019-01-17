@@ -17,7 +17,7 @@
       "name": "support.function.cobol"
     },
     {
-      "comment": "### PERSONALIZADO: Coloriza o nome do parágrafo na chamada PERFORM thru",      
+      "comment": "### PERSONALIZADO: Coloriza o nome do parágrafo na chamada PERFORM thru",
       "match": "(?i:perform)\\s+([\\w]+?\\-[\\w\\-]+?)\\s(?i:thru)\\s([\\w]+\\-[\\w\\-]+)",
       "captures": {
         "0": {
@@ -32,7 +32,7 @@
       }
     },
     {
-      "comment": "### PERSONALIZADO: Coloriza o nome do parágrafo na chamada via GO TO ou PERFORM",      
+      "comment": "### PERSONALIZADO: Coloriza o nome do parágrafo na chamada via GO TO ou PERFORM",
       "match": "(?i:perform|go\\s+to)\\s+([\\w]+\\-[\\w\\-]+)",
       "captures": {
         "0": {
@@ -73,7 +73,7 @@
       "match": "^\\*.*$",
       "name": "comment.line.cobol.fixed"
     },
-    
+
     {
       "match": "(?:^|\\s+)(?i:\\$\\s*set\\s+)(ilusing.*)$",
       "captures": {
@@ -460,7 +460,7 @@
       "comment": "operator-id ssss "
     },
     {
-      "match": "(?i:self)(\\:\\:)([0-9a-zA-Z_\\-\\.]*)(?=\\.$)",
+      "match": "(?i:self)(\\:\\:|\\:>)([0-9a-zA-Z_\\-\\.]*)(?=\\.$)",
       "captures": {
         "1": {
           "name": "punctuation.accessor.cobol.b3"
@@ -472,7 +472,7 @@
       "comment": " ::.. "
     },
     {
-      "match": "(\\:\\:)([0-9a-zA-Z_\\-\\.]*)",
+      "match": "(\\:\\:|\\:>)([0-9a-zA-Z_\\-\\.]*)",
       "captures": {
         "1": {
           "name": "punctuation.accessor.cobol"
@@ -637,7 +637,7 @@
       "match": "(^[0-9][0-9][0-9][0-9][0-9][0-9])",
       "name": "constant.numeric.integer"
     },
-  
+
     {
       "match": "([0-9a-zA-Z][a-zA-Z\\-0-9]+)",
       "name": "meta.symbol.cobol"
