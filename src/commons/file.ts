@@ -2,6 +2,7 @@
 
 import * as fs from 'fs';
 import { denodeify } from 'q';
+import { throws } from 'assert';
 
 /** constant function to append file */
 const appendFile = denodeify(fs.appendFile);
@@ -86,10 +87,17 @@ export class File {
    * Create a new directory
    */
   public mkdir() {
-    try {
-      fs.mkdirSync(this.fileName);
-    } catch (err) {
-    }
+    let partsOfFileName = this.fileName.split("\\");
+    let directory = "";
+    partsOfFileName.forEach((currentPart) => {
+      directory == "" ? directory = currentPart : directory = directory + "\\" + currentPart;
+      if (!new File(directory).exists()) {
+        try {
+          fs.mkdirSync(directory);
+        } catch (err) {
+        }
+      }
+    });
   }
 
   /**

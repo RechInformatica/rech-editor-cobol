@@ -6,6 +6,9 @@ import { File } from "../../commons/file";
 import { CobolDiagnosticParser } from "./cobolDiagnosticParser";
 import { CobolDiagnosticPreprocManager } from "./CobolDiagnosticPreprocManager";
 
+/** Root directory from diagnostic files */
+const DIAGNOSTIC_ROOT_DIR = "C:\\TMP\\Diagnostic\\";
+
 /**
  * Class to diagnose sources
  */
@@ -64,7 +67,7 @@ export class Diagnostician {
       if (new Path(textDocument.uri).extension().toUpperCase() != ".CBL") {
         reject();
       }
-      let dir = new File("C:\\TMP\\Diagnostic\\" + require("os").userInfo().username + "\\");
+      let dir = new File(DIAGNOSTIC_ROOT_DIR + require("os").userInfo().username + "\\");
       if (!dir.exists()) {
         dir.mkdir();
       }
