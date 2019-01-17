@@ -81,7 +81,7 @@
 			"      *>/**",
 			"      *> ${0:Comentário da rotina}",
 			"      *>",
-			"      *> @param  XXXXXX-XXX parâmetro",
+			"      *> @param XXXXXX-XXX parâmetro",
 			"      *> @return XXXXXX-XXX Saída",
 			"      *> @throws XXXXXX-XXX Erro",
 			"      *>*/"
