@@ -64,8 +64,12 @@ export class Diagnostician {
       if (new Path(textDocument.uri).extension().toUpperCase() != ".CBL") {
         reject();
       }
+      let dir = new File("C:\\TMP\\Diagnostic\\" + require("os").userInfo().username + "\\");
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
       let tmpFile = new File(
-        "C:\\TMP\\Diagnostic\\" + new Path(textDocument.uri).fileName()
+        dir.fileName + new Path(textDocument.uri).fileName()
       );
       CobolDiagnosticPreprocManager.runWhenPossible(
         PreprocessCallback,
