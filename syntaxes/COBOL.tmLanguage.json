@@ -73,7 +73,6 @@
       "match": "^\\*.*$",
       "name": "comment.line.cobol.fixed"
     },
-
     {
       "match": "(?:^|\\s+)(?i:\\$\\s*set\\s+)(ilusing.*)$",
       "captures": {
@@ -103,7 +102,7 @@
       }
     },
     {
-      "match": "(?:^|\\s+)(?i:\\$\\s*set\\s|>>cbl\\s)(.*)$",
+      "match": "(?:^|\\s+)(?i:>>cbl\\s)(.*)$",
       "captures": {
         "0": {
           "name": "comment.line.set.cobol"
@@ -117,7 +116,7 @@
       }
     },
     {
-      "match": "\\$(?i:if|else|then|display|xfd|end)(.*$)",
+      "match": "\\$(?i:if|else|then|display|xfd|end|set)(.*$)",
       "name": "meta.preprocessor"
     },
     {
