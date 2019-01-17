@@ -8,10 +8,10 @@
         "vscode": "^1.26.0"
     },
     "icon": "images/cobol.png",
-    "license": "MIT",
+    "license": "SEE LICENSE IN LICENSE.txt",
     "bugs": {
         "url": "https://github.com/RechInformatica/rech-editor-cobol/issues",
-        "email": "smcbreen@microsoft.com"
+        "email": "infra@rech.com.br"
     },
     "repository": {
         "type": "git",
