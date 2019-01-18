@@ -116,12 +116,12 @@
       }
     },
     {
-      "match": "\\$(?i:if|else|then|display|xfd|end|set)(.*$)",
+      "match": "\\$(?i:if|else|then|display|xfd|end|set|define)(.*$)",
       "name": "meta.preprocessor"
     },
     {
-      "match": "(?:^|\\s+)>>(?i:if|else|elif|end-if)(?:$|\\s.*$)",
-      "name": "invalid.illegal.cobol"
+      "match": "(?:^|\\s+)>>(?i:if|else|elif|end-if|define)(?:$|\\s.*$)",
+      "name": "meta.preprocessor"
     },
     {
       "match": "(\\*>.*$)",
