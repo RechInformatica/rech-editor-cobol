@@ -84,8 +84,8 @@ export class FlagCompletion implements CompletionInterface {
      */
     private createFlagsCompletionItem(_line: number, _column: number, _lines: string[], _variableName: string, text: string): CompletionItem {
         return {
-            label: 'Gerar 88 SIM/NAO para a variável',
-            detail: 'Gera os níveis 88 de SIM/NAO para a variável',
+            label: '88 SIM/NAO variables',
+            detail: 'Generates 88 SIM/NAO variables',
             filterText: _lines[_line],
             textEdit: {
                 range: {

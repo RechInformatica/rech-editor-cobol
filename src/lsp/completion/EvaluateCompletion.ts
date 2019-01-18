@@ -14,8 +14,8 @@ export class EvaluateCompletion implements CompletionInterface {
         let text = "evaluate";
         text += CompletionUtils.fillMissingSpaces(VAR_COLUMN_DECLARATION, column + text.length - 1) + "true";
         return [{
-            label: 'Gerar comando EVALUATE',
-            detail: 'Gera a declaração do comando evaluate.',
+            label: 'EVALUATE command',
+            detail: 'Generates the declaration of EVALUATE command',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: "evaluate",

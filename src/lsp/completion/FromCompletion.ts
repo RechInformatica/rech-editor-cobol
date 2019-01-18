@@ -14,8 +14,8 @@ export class FromCompletion implements CompletionInterface {
         let currentText = lines[line];
         let text = this.buildToText(currentText, column);
         return [{
-            label: 'Gerar comando FROM',
-            detail: 'Gera o comando FROM colocando o cursor na posição da primeira variável',
+            label: 'FROM command',
+            detail: 'Generates FROM command and sets cursor on first variable',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: "from",

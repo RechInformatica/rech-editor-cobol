@@ -12,8 +12,8 @@ export class PictureCompletion implements CompletionInterface {
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
         let text = CompletionUtils.fillMissingSpaces(PIC_COLUMN_DECLARATION, column - 1) + "pic is $1($2)";
         return [{
-            label: 'Completar declaração de PIC',
-            detail: 'Será inserida cláusula PIC no lugar apropriado.',
+            label: 'Complete PIC declaration',
+            detail: 'PIC clause will be inserted on the most appropriate place.',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: "pic",

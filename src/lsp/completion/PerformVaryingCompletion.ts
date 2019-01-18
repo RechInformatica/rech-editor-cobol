@@ -21,8 +21,8 @@ export class PerformVaryingCompletion implements CompletionInterface {
         text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + untilClause.length + 5) + "${1} ${4}");
         let endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, column)];
         return [{
-            label: 'Gerar declaração de laço variando o índice (perform varying).',
-            detail: 'Gera a declaração de laço variando o índice (perform varying).',
+            label: 'PERFORM VARYING loop',
+            detail: 'Generates the declaration of PERFORM VARYING loop',
             insertText: text,
             insertTextFormat: InsertTextFormat.Snippet,
             additionalTextEdits: endPerform,
