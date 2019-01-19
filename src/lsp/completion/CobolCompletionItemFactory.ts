@@ -20,7 +20,6 @@ import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
-import { resolve } from "q";
 import Q from "q";
 
 /**
@@ -92,7 +91,11 @@ export class CobolCompletionItemFactory {
           return;
         }
         case this.isMove() || this.isAdd() || this.isSet(): {
-          resolve(this.createToCompletions());
+          if (this.shouldSuggestTo()) {
+            resolve(this.createToCompletions());
+          } else {
+            resolve([]);
+          }
           return;
         }
         case this.isSubtract(): {
@@ -120,6 +123,14 @@ export class CobolCompletionItemFactory {
    */
   private isCommentLine() {
     return this.lineText.trim().startsWith("*>");
+  }
+
+  /**
+   * Returns true if the Language Server should suggest 'to' completions
+   */
+  private shouldSuggestTo(): boolean {
+    let containsTwoWords = /\s+\w+\s+\w+\s*/g.test(this.lineText);
+    return containsTwoWords && !this.lineContainsTo();
   }
 
   /**
@@ -295,6 +306,13 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if the current line already contains 'to' clause
+   */
+  private lineContainsTo(): boolean {
+    return this.lineText.toUpperCase().includes(" TO ");
+  }
+
+  /**
    * Fills the completion items with 'To' Cobol commands
    */
   private createToCompletions(): Promise<CompletionItem[]> {
@@ -305,7 +323,7 @@ export class CobolCompletionItemFactory {
     }
     return new Promise((resolve, reject) => {
       Q.all(items).then((result) => {
-        let completions:CompletionItem[] = [];
+        let completions: CompletionItem[] = [];
         result.forEach((element) => {
           completions = completions.concat(element);
         });
@@ -341,7 +359,7 @@ export class CobolCompletionItemFactory {
     }
     return new Promise((resolve, reject) => {
       Q.all(items).then((result) => {
-        let completions:CompletionItem[] = [];
+        let completions: CompletionItem[] = [];
         result.forEach((element) => {
           completions = completions.concat(element);
         });
