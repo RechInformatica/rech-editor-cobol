@@ -1,4 +1,4 @@
-import { CompletionItem, TextDocument } from "vscode-languageserver";
+import { CompletionItem } from "vscode-languageserver";
 import { ParserCobol } from "../../cobol/parsercobol";
 import { PerformCompletion } from "./PerformCompletion";
 import { MoveCompletion } from "./MoveCompletion";
@@ -48,12 +48,12 @@ export class CobolCompletionItemFactory {
    *
    * @param line line where the cursor is positioned
    * @param column column where the cursor is positioned
-   * @param fullDocument full document information
+   * @param ilnes document text lines
    */
-  constructor(line: number, column: number, fullDocument: TextDocument) {
+  constructor(line: number, column: number, lines: string[]) {
     this.line = line;
     this.column = column;
-    this.lines = fullDocument.getText().split("\n");
+    this.lines = lines;
     this.lineText = this.lines[line];
     this.additionalCompletions = [];
   }
@@ -315,8 +315,8 @@ export class CobolCompletionItemFactory {
    * 'eval', for example, he or she is typing 'evaluate' and should still suggest EVALUATE completion
    * item.
    */
-  private isUnhandledCommand(): boolean {
-    let unhandledCommand = /\s*\w+[ ]+/.test(this.lineText);
+  public isUnhandledCommand(): boolean {
+    let unhandledCommand = /\s*[^ ]+[ ]+/.test(this.lineText);
     return unhandledCommand;
   }
 

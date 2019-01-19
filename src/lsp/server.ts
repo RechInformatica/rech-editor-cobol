@@ -170,7 +170,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
       let cacheFileName = buildCacheFileName(uri);
       let fullDocument = documents.get(uri);
       if (fullDocument) {
-        new CobolCompletionItemFactory(line, column, fullDocument)
+        new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"))
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
             // Runs Cobol preprocessor on client-side
