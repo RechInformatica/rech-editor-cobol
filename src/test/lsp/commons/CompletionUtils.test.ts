@@ -24,6 +24,18 @@ import { CompletionUtils } from '../../../lsp/commons/CompletionUtils';
       expect("  ").to.equal(CompletionUtils.fillMissingSpaces(35, 32, "           05 w-var             "));
       expect("   ").to.equal(CompletionUtils.fillMissingSpaces(35, 31, "           05 w-var            "));
     });
+
+    it('Checks filling exact missing spaces', () => {
+      expect("") .to.equal(CompletionUtils.fillExactMissingSpaces(35, 34));
+      expect("") .to.equal(CompletionUtils.fillMissingSpaces(35, 35, "           05 w-var                "));
+      expect("") .to.equal(CompletionUtils.fillMissingSpaces(3, 5, "           05 w-var               "));
+      expect("") .to.equal(CompletionUtils.fillMissingSpaces(3, 3, "           05 w-var               "));
+      expect(" ").to.equal(CompletionUtils.fillMissingSpaces(35, 34, "           05 w-var              L"));
+      expect(" ").to.equal(CompletionUtils.fillMissingSpaces(35, 33, "           05 w-var              "));
+      expect("  ").to.equal(CompletionUtils.fillMissingSpaces(35, 32, "           05 w-var             "));
+      expect("   ").to.equal(CompletionUtils.fillMissingSpaces(35, 31, "           05 w-var            "));
+    });
+
   });
 
   describe('Count spaces at beginning test', () => {

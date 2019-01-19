@@ -1,3 +1,5 @@
+import { CobolWordFinder } from "../../commons/CobolWordFinder";
+
 /** Maximum number of interpreted lines */
 const MAX_INTERPRETED_LINES = 100;
 
@@ -39,6 +41,7 @@ export class CompletionUtils {
    * @param targetFinalColumn final column until where spaces should be inserted
    * @param currentCursorColumn column where cursor is currently positioned
    * @param currentLineText current line text
+   * @deprecated fillExactMissingSpaces should be used instead
    */
   public static fillMissingSpaces(targetFinalColumn: number, currentCursorColumn: number, currentLineText?: string): string {
     let missingSpaces = targetFinalColumn - currentCursorColumn;
@@ -55,6 +58,22 @@ export class CompletionUtils {
       } else {
         text = " ";
       }
+    }
+    return text;
+  }
+
+  /**
+   * Fills the exact number of missing spaces between the current cursor column and the target final
+   * column.
+   *
+   * @param targetFinalColumn final column until where spaces should be inserted
+   * @param currentCursorColumn column where cursor is currently positioned
+   */
+  public static fillExactMissingSpaces(targetFinalColumn: number, currentCursorColumn: number): string {
+    let missingSpaces = targetFinalColumn - currentCursorColumn;
+    let text = "";
+    for (var i = 0; i < missingSpaces; i++) {
+      text = text.concat(" ");
     }
     return text;
   }
