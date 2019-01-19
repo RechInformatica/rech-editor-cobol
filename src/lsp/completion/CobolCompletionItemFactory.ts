@@ -118,6 +118,10 @@ export class CobolCompletionItemFactory {
           resolve([]);
           return;
         }
+        case this.isUnhandledCommand(): {
+           resolve([]);
+          return;
+        }
         default: {
           resolve(this.createDefaultCompletions());
           return;
@@ -298,6 +302,22 @@ export class CobolCompletionItemFactory {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Returns true if the current line represents a command currently unhandled by this Language Server.
+   *
+   * In this case, doesn't make sense to suggest default commands like 'evaluate', 'perform', etc, so
+   * Language Server will resolve the promise with an empty array to possibly suggest Words as a
+   * default VSCode behavior.
+   *
+   * This method also checks if the last character is a space because if the programmer has typed
+   * 'eval', for example, he or she is typing 'evaluate' and should still suggest EVALUATE completion
+   * item.
+   */
+  private isUnhandledCommand(): boolean {
+    let unhandledCommand = /\s*\w+[ ]+/.test(this.lineText);
+    return unhandledCommand;
   }
 
   /**
