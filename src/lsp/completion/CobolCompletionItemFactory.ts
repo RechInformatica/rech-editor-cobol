@@ -24,7 +24,7 @@ import Q from "q";
 
 
 /* Regex used to detect if the string contains two words */
-const REGEX_CONTAINS_TWO_WORDS = /\s+\w+\s+\w+\s*/g;
+const REGEX_CONTAINS_TWO_WORDS = /\s+\w+\s+\w+\s*/;
 
 /**
  * Class to generate LSP Completion Items for Cobol language
