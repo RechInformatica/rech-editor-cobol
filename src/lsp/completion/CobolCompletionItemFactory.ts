@@ -22,6 +22,10 @@ import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
 import Q from "q";
 
+
+/* Regex used to detect if the string contains two words */
+const REGEX_CONTAINS_TWO_WORDS = /\s+\w+\s+\w+\s*/g;
+
 /**
  * Class to generate LSP Completion Items for Cobol language
  */
@@ -99,7 +103,11 @@ export class CobolCompletionItemFactory {
           return;
         }
         case this.isSubtract(): {
-          resolve(this.generate(new FromCompletion()));
+          if (this.shouldSuggestFrom()) {
+            resolve(this.generate(new FromCompletion()));
+          } else {
+            resolve([]);
+          }
           return;
         }
         case this.isParagraphPerform(): {
@@ -129,8 +137,16 @@ export class CobolCompletionItemFactory {
    * Returns true if the Language Server should suggest 'to' completions
    */
   private shouldSuggestTo(): boolean {
-    let containsTwoWords = /\s+\w+\s+\w+\s*/g.test(this.lineText);
+    let containsTwoWords = REGEX_CONTAINS_TWO_WORDS.test(this.lineText);
     return containsTwoWords && !this.lineContainsTo();
+  }
+
+  /**
+   * Returns true if the Language Server should suggest 'from' completions
+   */
+  private shouldSuggestFrom(): boolean {
+    let containsTwoWords = REGEX_CONTAINS_TWO_WORDS.test(this.lineText);
+    return containsTwoWords && !this.lineContainsFrom();
   }
 
   /**
@@ -295,10 +311,10 @@ export class CobolCompletionItemFactory {
         break;
       }
       let currentLine = this.lines[i].toLowerCase().trim();
-      if (currentLine.startsWith("if ")) {
+      if (currentLine.toUpperCase().startsWith("IF ")) {
         openBlocks++;
       }
-      if (currentLine.startsWith("end-if")) {
+      if (currentLine.toUpperCase().startsWith("END-IF")) {
         closeBlocks++;
       }
     }
@@ -310,6 +326,13 @@ export class CobolCompletionItemFactory {
    */
   private lineContainsTo(): boolean {
     return this.lineText.toUpperCase().includes(" TO ");
+  }
+
+  /**
+   * Returns true if the current line already contains 'from' clause
+   */
+  private lineContainsFrom(): boolean {
+    return this.lineText.toUpperCase().includes(" FROM ");
   }
 
   /**
