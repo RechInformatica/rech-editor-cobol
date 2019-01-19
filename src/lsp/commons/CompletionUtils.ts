@@ -38,15 +38,23 @@ export class CompletionUtils {
    *
    * @param targetFinalColumn final column until where spaces should be inserted
    * @param currentCursorColumn column where cursor is currently positioned
+   * @param currentLineText current line text
    */
-  public static fillMissingSpaces(targetFinalColumn: number, currentCursorColumn: number): string {
+  public static fillMissingSpaces(targetFinalColumn: number, currentCursorColumn: number, currentLineText?: string): string {
     let missingSpaces = targetFinalColumn - currentCursorColumn;
     let text = "";
     for (var i = 1; i < missingSpaces; i++) {
       text = text.concat(" ");
     }
     if (text.length === 0) {
-      text = " ";
+      if (currentLineText) {
+        let lastChar = currentLineText.charAt(currentCursorColumn - 1);
+        if (lastChar !== " ") {
+          text = " ";
+        }
+      } else {
+        text = " ";
+      }
     }
     return text;
   }
