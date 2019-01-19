@@ -10,7 +10,7 @@ const PIC_COLUMN_DECLARATION = 35;
 export class PictureCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = CompletionUtils.fillExactMissingSpaces(PIC_COLUMN_DECLARATION, column) + "pic is $1($2)";
+        let text = CompletionUtils.fillExactMissingSpaces(PIC_COLUMN_DECLARATION, column, _lines[_line]) + "pic is $1($2)";
         return [{
             label: 'Complete PIC declaration',
             detail: 'PIC clause will be inserted on the most appropriate place.',

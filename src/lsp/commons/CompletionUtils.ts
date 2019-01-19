@@ -68,15 +68,39 @@ export class CompletionUtils {
    *
    * @param targetFinalColumn final column until where spaces should be inserted
    * @param currentCursorColumn column where cursor is currently positioned
+   * @param currentLineText text of current line
    */
-  public static fillExactMissingSpaces(targetFinalColumn: number, currentCursorColumn: number): string {
-    let missingSpaces = targetFinalColumn - currentCursorColumn;
+  public static fillExactMissingSpaces(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string): string {
+    let initialWordColumn = CompletionUtils.findWordStartWithinLine(currentCursorColumn, currentLineText);
+    let missingSpaces = targetFinalColumn - initialWordColumn;
     let text = "";
     for (var i = 0; i < missingSpaces; i++) {
       text = text.concat(" ");
     }
     return text;
   }
+
+  /**
+   * Returns the column where the current word starts within the line
+   * 
+   * @param currentCursorColumn current column where cursor is positioned
+   * @param currentLineText current line text
+   */
+  public static findWordStartWithinLine(currentCursorColumn: number, currentLineText: string): number {
+    let initialWordColumn = currentCursorColumn;
+    while(true) {
+        if (initialWordColumn == 0) {
+          break;
+        }
+        let lastChar = currentLineText.charAt(initialWordColumn - 1);
+        if (lastChar === " ") {
+            break;
+        }
+        initialWordColumn--;
+    }
+    initialWordColumn++;
+    return initialWordColumn;
+}
 
   /**
    * Returns the Cobol command separator for the specified column

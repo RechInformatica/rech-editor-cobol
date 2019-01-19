@@ -26,14 +26,14 @@ import { CompletionUtils } from '../../../lsp/commons/CompletionUtils';
     });
 
     it('Checks filling exact missing spaces', () => {
-      expect("") .to.equal(CompletionUtils.fillExactMissingSpaces(35, 34));
-      expect("") .to.equal(CompletionUtils.fillMissingSpaces(35, 35, "           05 w-var                "));
-      expect("") .to.equal(CompletionUtils.fillMissingSpaces(3, 5, "           05 w-var               "));
-      expect("") .to.equal(CompletionUtils.fillMissingSpaces(3, 3, "           05 w-var               "));
-      expect(" ").to.equal(CompletionUtils.fillMissingSpaces(35, 34, "           05 w-var              L"));
-      expect(" ").to.equal(CompletionUtils.fillMissingSpaces(35, 33, "           05 w-var              "));
-      expect("  ").to.equal(CompletionUtils.fillMissingSpaces(35, 32, "           05 w-var             "));
-      expect("   ").to.equal(CompletionUtils.fillMissingSpaces(35, 31, "           05 w-var            "));
+      expect("                   ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 15, "                                  "));
+      expect("                               ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 3, "        "));
+      expect("                                ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 2, "              "));
+      expect("          ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 27, "                        pic"));
+      expect("").to.equal(CompletionUtils.fillExactMissingSpaces(35, 43, "                                        pic"));
+      expect("                                  ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 0, ""));
+      
+
     });
 
   });
