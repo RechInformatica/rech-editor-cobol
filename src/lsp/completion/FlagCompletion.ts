@@ -11,28 +11,30 @@ const VALUE_COLUMN = 51;
  */
 export class FlagCompletion implements CompletionInterface {
 
-    public generate(line: number, _column: number, lines: string[]): CompletionItem[] {
-        let currentLineText = lines[line];
-        let variable = CobolVariable.parseLine(currentLineText);
-        let variableName, varsim, varnao = '';
-        let posprefixo = variable.getName().indexOf("-");
-        let prefixoName = variable.getName().substring(0, posprefixo + 1);
-        variableName = variable.getName().substring(posprefixo + 1);
-        if (variableName.length == 3) {
-            varsim = 'sim';
-            varnao = 'nao';
-        } else {
-            varsim = '-sim';
-            varnao = '-nao';
-        }
-        if (prefixoName.toLowerCase() != "w-") {
-            variableName = variable.getName();
-        }
-        let firstWordColumn = this.firstWordColumn(lines[line]);
-        let flagsText = this.buildFlagsText(firstWordColumn, variableName, varsim, varnao);
-        let snippetText = lines[line] + "\n" + flagsText;
-        let item = this.createFlagsCompletionItem(line, _column, lines, variableName, snippetText);
-        return [item];
+    public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let currentLineText = lines[line];
+            let variable = CobolVariable.parseLine(currentLineText);
+            let variableName, varsim, varnao = '';
+            let posprefixo = variable.getName().indexOf("-");
+            let prefixoName = variable.getName().substring(0, posprefixo + 1);
+            variableName = variable.getName().substring(posprefixo + 1);
+            if (variableName.length == 3) {
+                varsim = 'sim';
+                varnao = 'nao';
+            } else {
+                varsim = '-sim';
+                varnao = '-nao';
+            }
+            if (prefixoName.toLowerCase() != "w-") {
+                variableName = variable.getName();
+            }
+            let firstWordColumn = this.firstWordColumn(lines[line]);
+            let flagsText = this.buildFlagsText(firstWordColumn, variableName, varsim, varnao);
+            let snippetText = lines[line] + "\n" + flagsText;
+            let item = this.createFlagsCompletionItem(line, _column, lines, variableName, snippetText);
+            resolve([item]);
+        })
     }
 
     /**

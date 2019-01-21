@@ -10,18 +10,22 @@ const TO_COLUMN_DECLARATION = 30;
  */
 export class ToCompletion implements CompletionInterface {
 
-    public generate(line: number, column: number, lines: string[]): CompletionItem[] {
-        let currentText = lines[line];
-        let text = this.buildToTextWithTabStop(currentText, column);
-        return [{
-            label: 'Gerar comando TO',
-            detail: 'Gera o comando TO colocando o cursor na posição da primeira variável',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "to",
-            preselect: true,
-            kind: CompletionItemKind.Keyword
-        }];
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let currentText = lines[line];
+            let text = this.buildToTextWithTabStop(currentText, column);
+            resolve(
+                [{
+                    label: 'Gerar comando TO',
+                    detail: 'Gera o comando TO colocando o cursor na posição da primeira variável',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    filterText: "to",
+                    preselect: true,
+                    kind: CompletionItemKind.Keyword
+                }]
+            );
+        });
     }
 
     /**

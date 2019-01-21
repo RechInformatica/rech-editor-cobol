@@ -7,17 +7,21 @@ import { CompletionUtils } from "../commons/CompletionUtils";
  */
 export class MoveCompletion implements CompletionInterface {
 
-    public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = "move" + CompletionUtils.fillMissingSpaces(20, column + 3) + "${0}";
-        return [{
-            label: 'Gerar comando MOVE',
-            detail: 'Gera o comando MOVE colocando o cursor na posição da primeira variável',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "move mv",
-            preselect: true,
-            kind: CompletionItemKind.Keyword
-        }];
+    public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let text = "move" + CompletionUtils.fillMissingSpaces(20, column + 3) + "${0}";
+            resolve(
+                [{
+                    label: 'Gerar comando MOVE',
+                    detail: 'Gera o comando MOVE colocando o cursor na posição da primeira variável',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    filterText: "move mv",
+                    preselect: true,
+                    kind: CompletionItemKind.Keyword
+                }]
+            );
+        });
     }
 
 }

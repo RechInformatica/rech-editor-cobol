@@ -32,20 +32,22 @@ export class ParagraphCompletion implements CompletionInterface {
         this.callbackSourceExpander = callbackSourceExpander;
     }
 
-    public generate(_line: number, _column: number, lines: string[]): CompletionItem[] {
-        this.currentLines = lines;
-        this.loadCache();
-        let items: CompletionItem[] = [];
-        if (ParagraphCompletion.cache && ParagraphCompletion.cacheSourceFileName == this.cacheFileName) {
-            for (let value of ParagraphCompletion.cache.values()){
-                items.push(value);
+    public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            this.currentLines = lines;
+            this.loadCache();
+            let items: CompletionItem[] = [];
+            if (ParagraphCompletion.cache && ParagraphCompletion.cacheSourceFileName == this.cacheFileName) {
+                for (let value of ParagraphCompletion.cache.values()){
+                    items.push(value);
+                }
+            } else {
+                for (let value of this.generateParagraphCompletion(this.currentLines, false).values()) {
+                    items.push(value);
+                }
             }
-        } else {
-            for (let value of this.generateParagraphCompletion(this.currentLines, false).values()) {
-                items.push(value);
-            }
-        }
-        return items;
+            resolve(items);
+        });
     }
 
     /**

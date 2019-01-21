@@ -69,6 +69,24 @@ export class ParserCobol {
   }
 
   /**
+   * Returns the variable declared in the line ignoring replace
+   *
+   * @param line
+   */
+  public getDeclaracaoVariavelIgnoreReplace(line: string): string | undefined {
+    // variable
+    var match = /^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/i.exec(line);
+    if (match == null) {
+      // $SET CONSTANT
+      match = /^\s+\$SET\s+CONSTANT\s+(?:\(.*\))?([\w\-]+)\s+.*/i.exec(line);
+      if (match == null) {
+        return undefined;
+      }
+    }
+    return match[1];
+  }
+
+  /**
    * Returns the select declared in the line
    *
    * @param line

@@ -10,17 +10,21 @@ const ELSETEXT = "else,";
  */
 export class ElseCompletion implements CompletionInterface {
 
-    public generate(line: number, column: number, lines: string[]): CompletionItem[] {
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         let textEdit = new ElseFormatter().generate(line, column, lines)[0];
-        return [{
-            label: 'Gerar comando ELSE',
-            detail: 'Gera o comando ELSE em um bloco de IF.',
-            textEdit: textEdit,
-            filterText: "e el else" + textEdit.newText,
-            insertTextFormat: InsertTextFormat.Snippet,
-            preselect: true,
-            kind: CompletionItemKind.Keyword
-        }];
+        return new Promise((resolve) => {
+            resolve(
+                [{
+                    label: 'Gerar comando ELSE',
+                    detail: 'Gera o comando ELSE em um bloco de IF.',
+                    textEdit: textEdit,
+                    filterText: "e el else" + textEdit.newText,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    preselect: true,
+                    kind: CompletionItemKind.Keyword
+                }]
+            );
+        });
     }
 
 }

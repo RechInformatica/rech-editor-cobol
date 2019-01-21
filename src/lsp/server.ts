@@ -29,6 +29,7 @@ import { CobolCompletionItemFactory } from "./completion/CobolCompletionItemFact
 import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
 import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 import { HighlightFactory } from "./highlight/HighlightFactory";
+import { WhenCompletion } from "./completion/WhenCompletion";
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -173,6 +174,9 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
         new CobolCompletionItemFactory(line, column, fullDocument)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
+            // Runs Cobol preprocessor on client-side
+            return sendExternalPreprocExpanderExecution(uri, cacheFileName);
+          })).setWhenCompletion(new WhenCompletion(cacheFileName, () => {
             // Runs Cobol preprocessor on client-side
             return sendExternalPreprocExpanderExecution(uri, cacheFileName);
           }))

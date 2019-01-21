@@ -20,7 +20,6 @@ import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
-import { resolve } from "q";
 import Q from "q";
 
 /**
@@ -39,6 +38,8 @@ export class CobolCompletionItemFactory {
   private additionalCompletions: CompletionInterface[];
   /** Completion class to generate the CompletionItem for paragraphs */
   private paragraphCompletion: CompletionInterface | undefined;
+  /** Completion class to generate the WhenItem for When */
+  private whenCompletion: CompletionInterface | undefined;
 
   /**
    * Creates an instance to generate LSP Completion Items for Cobol language
@@ -76,6 +77,16 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Completion class to generate the CompletionItem for paragraphs
+   *
+   * @param whenCompletion
+   */
+  public setWhenCompletion(whenCompletion: CompletionInterface): CobolCompletionItemFactory {
+    this.whenCompletion = whenCompletion;
+    return this;
+  }
+
+  /**
    * Generates completion items for Cobol paragraphs
    *
    * @param lines Cobol source code lines
@@ -83,8 +94,12 @@ export class CobolCompletionItemFactory {
   public generateCompletionItems(): Promise<CompletionItem[]> {
     return new Promise((resolve) => {
       switch (true) {
-        case this.isCommentLine() || this.isIf() || this.isWhen(): {
+        case this.isCommentLine() || this.isIf(): {
           resolve([]);
+          return;
+        }
+        case this.isWhen(): {
+          if (this.whenCompletion) resolve(this.generate(this.whenCompletion));
           return;
         }
         case this.isVarDeclaration(): {
@@ -107,6 +122,7 @@ export class CobolCompletionItemFactory {
           resolve([]);
           return;
         }
+
         default: {
           resolve(this.createDefaultCompletions());
           return;
@@ -358,15 +374,17 @@ export class CobolCompletionItemFactory {
    * @param completion implementation used to generate completion items
    */
   private generate(completion: CompletionInterface): Promise<CompletionItem[]> {
-    return new Promise((resolve) => {
-      let result = completion.generate(this.line, this.column, this.lines);
-      if (!CompletionUtils.isLowerCaseSource(this.lines)) {
-        resolve(this.toUpperCase(result));
-        return;
-      }
-      resolve(result);
-      return;
-    })
+    return new Promise((resolve, reject) => {
+      completion.generate(this.line, this.column, this.lines).then((result) => {
+        if (!CompletionUtils.isLowerCaseSource(this.lines)) {
+          resolve(this.toUpperCase(result));
+          return;
+        }
+        resolve(result);
+      }).catch(() => {
+        reject();
+      });
+    });
   }
 
   /**

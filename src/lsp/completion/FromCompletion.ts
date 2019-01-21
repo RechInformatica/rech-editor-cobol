@@ -10,18 +10,22 @@ const FROM_COLUMN_DECLARATION = 30;
  */
 export class FromCompletion implements CompletionInterface {
 
-    public generate(line: number, column: number, lines: string[]): CompletionItem[] {
-        let currentText = lines[line];
-        let text = this.buildToText(currentText, column);
-        return [{
-            label: 'Gerar comando FROM',
-            detail: 'Gera o comando FROM colocando o cursor na posição da primeira variável',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "from",
-            preselect: true,
-            kind: CompletionItemKind.Keyword
-        }];
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let currentText = lines[line];
+            let text = this.buildToText(currentText, column);
+            resolve(
+                [{
+                    label: 'Gerar comando FROM',
+                    detail: 'Gera o comando FROM colocando o cursor na posição da primeira variável',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    filterText: "from",
+                    preselect: true,
+                    kind: CompletionItemKind.Keyword
+                }]
+            );
+        });
     }
 
     /**

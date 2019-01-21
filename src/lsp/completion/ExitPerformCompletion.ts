@@ -7,17 +7,21 @@ import { CompletionUtils } from "../commons/CompletionUtils";
  */
 export class ExitPerformCompletion implements CompletionInterface {
 
-    public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = "exit" + CompletionUtils.fillMissingSpaces(35, column + 3) + "perform" + CompletionUtils.separatorForColumn(column);
-        return [{
-            label: 'Gerar comando EXIT PERFORM',
-            detail: 'Gera o comando EXIT PERFORM para sair do laço atual',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "exit perform xp",
-            preselect: true,
-            kind: CompletionItemKind.Keyword
-        }];
+    public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let text = "exit" + CompletionUtils.fillMissingSpaces(35, column + 3) + "perform" + CompletionUtils.separatorForColumn(column);
+            resolve(
+                [{
+                    label: 'Gerar comando EXIT PERFORM',
+                    detail: 'Gera o comando EXIT PERFORM para sair do laço atual',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    filterText: "exit perform xp",
+                    preselect: true,
+                    kind: CompletionItemKind.Keyword
+                }]
+            );
+        });
     }
 
 }

@@ -11,19 +11,23 @@ const VALUE_COLUMN_DECLARATION = 51;
  */
 export class ValueCompletion implements CompletionInterface {
 
-    public generate(line: number, column: number, lines: string[]): CompletionItem[] {
-        let currentLineText = lines[line];
-        let variable = CobolVariable.parseLine(currentLineText);
-        let text = this.generateTextFromVariable(variable, column);
-        return [{
-            label: 'Completar declaração de VALUE',
-            detail: 'Será inserida cláusula VALUE no lugar apropriado.',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "value",
-            preselect: true,
-            kind: CompletionItemKind.Variable
-        }];
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let currentLineText = lines[line];
+            let variable = CobolVariable.parseLine(currentLineText);
+            let text = this.generateTextFromVariable(variable, column);
+            resolve(
+                [{
+                    label: 'Completar declaração de VALUE',
+                    detail: 'Será inserida cláusula VALUE no lugar apropriado.',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    filterText: "value",
+                    preselect: true,
+                    kind: CompletionItemKind.Variable
+                }]
+            );
+        });
     }
 
     /**

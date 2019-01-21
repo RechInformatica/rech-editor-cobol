@@ -12,5 +12,5 @@ export interface CompletionInterface {
      * @param column column number where cursor is positioned
      * @param lineText document lines
      */
-    generate(line: number, column: number, lines: string[]): CompletionItem[];
+    generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]>;
 }
