@@ -83,7 +83,7 @@ export class WhenCompletion implements CompletionInterface {
      * @param currentLine
      */
     private getVariable(currentLine: string) {
-        let match = /\s+when ([a-zA-Z0-9-]+)/.exec(currentLine);
+        let match = /\s+when ([a-zA-Z0-9-]+)/gi.exec(currentLine);
         if (match) {
             return match[1]
         }
