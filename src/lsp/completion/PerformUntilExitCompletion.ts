@@ -16,8 +16,8 @@ export class PerformUntilExitCompletion implements CompletionInterface {
             text = text.concat(CompletionUtils.fillMissingSpaces(UNTIL_COLUMN_DECLARATION, column + text.length - 1) + "until exit");
             resolve(
                 [{
-                    label: 'Gerar declaração de laço até sair (until exit).',
-                    detail: 'Gera a declaração de laço até sair (until exit).',
+                    label: 'PERFORM UNTIL EXIT loop',
+                    detail: 'Generates PERFORM UNTIL EXIT loop',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "pu",

@@ -16,8 +16,8 @@ export class ToCompletion implements CompletionInterface {
             let text = this.buildToTextWithTabStop(currentText, column);
             resolve(
                 [{
-                    label: 'Gerar comando TO',
-                    detail: 'Gera o comando TO colocando o cursor na posição da primeira variável',
+                    label: 'TO command',
+                    detail: 'Generates TO command and sets cursor on first variable',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "to",

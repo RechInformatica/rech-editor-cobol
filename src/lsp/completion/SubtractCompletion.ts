@@ -12,8 +12,8 @@ export class SubtractCompletion implements CompletionInterface {
             let text = "subtract ${0}";
             resolve(
                 [{
-                    label: 'Gerar comando SUBTRACT',
-                    detail: 'Gera o comando SUBTRACT colocando o cursor na posição da primeira variável',
+                    label: 'SUBTRACT command',
+                    detail: 'Generates SUBTRACT command and sets cursor on first variable',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "subtract",

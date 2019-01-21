@@ -23,8 +23,8 @@ export class PerformVaryingCompletion implements CompletionInterface {
             let endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, column)];
             resolve(
                 [{
-                    label: 'Gerar declaração de laço variando o índice (perform varying).',
-                    detail: 'Gera a declaração de laço variando o índice (perform varying).',
+                    label: 'PERFORM VARYING loop',
+                    detail: 'Generates the declaration of PERFORM VARYING loop',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     additionalTextEdits: endPerform,

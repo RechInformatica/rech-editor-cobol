@@ -18,8 +18,8 @@ export class ValueCompletion implements CompletionInterface {
             let text = this.generateTextFromVariable(variable, column);
             resolve(
                 [{
-                    label: 'Completar declaração de VALUE',
-                    detail: 'Será inserida cláusula VALUE no lugar apropriado.',
+                    label: 'Complete VALUE declaration',
+                    detail: 'VALUE clause will be inserted on the most appropriate place',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "value",

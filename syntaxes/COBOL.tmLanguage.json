@@ -12,12 +12,12 @@
   "name": "COBOL",
   "patterns": [
     {
-      "comment": "### PERSONALIZADO: Coloriza a declaração de parágrafo",
+      "comment": "Color paragraph declaration",
       "match": "(^       [\\w\\-]+\\.$)",
       "name": "support.function.cobol"
     },
     {
-      "comment": "### PERSONALIZADO: Coloriza o nome do parágrafo na chamada PERFORM thru",
+      "comment": "Color paragraph name on PERFORM THRU",
       "match": "(?i:perform)\\s+([\\w]+?\\-[\\w\\-]+?)\\s(?i:thru)\\s([\\w]+\\-[\\w\\-]+)",
       "captures": {
         "0": {
@@ -32,7 +32,7 @@
       }
     },
     {
-      "comment": "### PERSONALIZADO: Coloriza o nome do parágrafo na chamada via GO TO ou PERFORM",
+      "comment": "Color paragraph name on GO TO or PERFORM",
       "match": "(?i:perform|go\\s+to)\\s+([\\w]+\\-[\\w\\-]+)",
       "captures": {
         "0": {
@@ -116,12 +116,12 @@
       }
     },
     {
-      "match": "\\$(?i:if|else|then|display|xfd|end|set)(.*$)",
+      "match": "\\$(?i:if|else|then|display|xfd|end|set|define)(.*$)",
       "name": "meta.preprocessor"
     },
     {
-      "match": "(?:^|\\s+)>>(?i:if|else|elif|end-if)(?:$|\\s.*$)",
-      "name": "invalid.illegal.cobol"
+      "match": "(?:^|\\s+)>>(?i:if|else|elif|end-if|define)(?:$|\\s.*$)",
+      "name": "meta.preprocessor"
     },
     {
       "match": "(\\*>.*$)",

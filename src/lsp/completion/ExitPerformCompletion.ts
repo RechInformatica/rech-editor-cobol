@@ -12,8 +12,8 @@ export class ExitPerformCompletion implements CompletionInterface {
             let text = "exit" + CompletionUtils.fillMissingSpaces(35, column + 3) + "perform" + CompletionUtils.separatorForColumn(column);
             resolve(
                 [{
-                    label: 'Gerar comando EXIT PERFORM',
-                    detail: 'Gera o comando EXIT PERFORM para sair do laço atual',
+                    label: 'EXIT PERFORM command',
+                    detail: 'Generates EXIT PERFORM command to leave current loop',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "exit perform xp",

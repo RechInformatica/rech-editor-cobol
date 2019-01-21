@@ -12,8 +12,8 @@ export class ExitParagraphCompletion implements CompletionInterface {
             let text = "exit" + CompletionUtils.fillMissingSpaces(35, column + 3) + "paragraph" + CompletionUtils.separatorForColumn(column);
             resolve(
                 [{
-                    label: 'Gerar comando EXIT PARAGRAPH',
-                    detail: 'Gera o comando EXIT PARAGRAPH para sair do parágrafo atual',
+                    label: 'EXIT PARAGRAPH command',
+                    detail: 'Generates EXIT PARAGRAPH command to leave current paragraph',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "exit paragraph xh",

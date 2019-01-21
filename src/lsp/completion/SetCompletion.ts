@@ -12,8 +12,8 @@ export class SetCompletion implements CompletionInterface {
             let text = "set" + CompletionUtils.fillMissingSpaces(20, column + 2) + "${0}";
             resolve(
                 [{
-                    label: 'Gerar comando SET',
-                    detail: 'Gera o comando SET colocando o cursor na posição da primeira variável',
+                    label: 'SET command',
+                    detail: 'Generates SET command and sets cursor on the first variable',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "set",

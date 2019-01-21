@@ -15,8 +15,8 @@ export class ElseCompletion implements CompletionInterface {
         return new Promise((resolve) => {
             resolve(
                 [{
-                    label: 'Gerar comando ELSE',
-                    detail: 'Gera o comando ELSE em um bloco de IF.',
+                    label: 'ELSE command',
+                    detail: 'Generates ELSE command to be used with IF block',
                     textEdit: textEdit,
                     filterText: "e el else" + textEdit.newText,
                     insertTextFormat: InsertTextFormat.Snippet,

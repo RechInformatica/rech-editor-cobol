@@ -11,15 +11,15 @@ export class AddCompletion implements CompletionInterface {
         return new Promise((resolve) => {
             let text = "add" + CompletionUtils.fillMissingSpaces(20, column + 2) + "${0}";
             resolve( [{
-                label: 'Gerar comando ADD',
-                detail: 'Gera o comando ADD colocando o cursor na posição da primeira variável',
+                label: 'ADD command',
+                detail: 'Generates ADD command and sets cursor on the first variable',
                 insertText: text,
                 insertTextFormat: InsertTextFormat.Snippet,
                 filterText: "add",
                 preselect: true,
                 kind: CompletionItemKind.Keyword
             }]);
-        })
+        });
     }
 
 }

@@ -12,8 +12,8 @@ export class ExitCycleCompletion implements CompletionInterface {
             let text = "exit" + CompletionUtils.fillMissingSpaces(35, column + 3) + "perform cycle" + CompletionUtils.separatorForColumn(column);
             resolve(
                 [{
-                    label: 'Gerar comando EXIT PERFORM CYCLE',
-                    detail: 'Gera o comando EXIT PERFORM CYCLE para reiniciar a iteração do laço',
+                    label: 'EXIT PERFORM CYCLE command',
+                    detail: 'Generates EXIT PERFORM CYCLE command to restart loop iteration',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "exit perform cycle xc",

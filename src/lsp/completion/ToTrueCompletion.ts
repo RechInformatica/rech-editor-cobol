@@ -17,8 +17,8 @@ export class ToTrueCompletion implements CompletionInterface {
             text = text.concat(CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentText)));
             resolve(
                 [{
-                    label: 'Gerar comando TO TRUE',
-                    detail: 'Gera o comando TO TRUE colocando o cursor no fim da linha',
+                    label: 'TO TRUE command',
+                    detail: 'Generates TO TRUE command and sets cursor on the end of the line',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "to true tt",

@@ -1,3 +1,5 @@
+import { CobolWordFinder } from "../../commons/CobolWordFinder";
+
 /** Maximum number of interpreted lines */
 const MAX_INTERPRETED_LINES = 100;
 
@@ -38,18 +40,67 @@ export class CompletionUtils {
    *
    * @param targetFinalColumn final column until where spaces should be inserted
    * @param currentCursorColumn column where cursor is currently positioned
+   * @param currentLineText current line text
+   * @deprecated fillExactMissingSpaces should be used instead
    */
-  public static fillMissingSpaces(targetFinalColumn: number, currentCursorColumn: number): string {
+  public static fillMissingSpaces(targetFinalColumn: number, currentCursorColumn: number, currentLineText?: string): string {
     let missingSpaces = targetFinalColumn - currentCursorColumn;
     let text = "";
     for (var i = 1; i < missingSpaces; i++) {
       text = text.concat(" ");
     }
     if (text.length === 0) {
-      text = " ";
+      if (currentLineText) {
+        let lastChar = currentLineText.charAt(currentCursorColumn - 1);
+        if (lastChar !== " ") {
+          text = " ";
+        }
+      } else {
+        text = " ";
+      }
     }
     return text;
   }
+
+  /**
+   * Fills the exact number of missing spaces between the current cursor column and the target final
+   * column.
+   *
+   * @param targetFinalColumn final column until where spaces should be inserted
+   * @param currentCursorColumn column where cursor is currently positioned
+   * @param currentLineText text of current line
+   */
+  public static fillExactMissingSpaces(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string): string {
+    let initialWordColumn = CompletionUtils.findWordStartWithinLine(currentCursorColumn, currentLineText);
+    let missingSpaces = targetFinalColumn - initialWordColumn;
+    let text = "";
+    for (var i = 0; i < missingSpaces; i++) {
+      text = text.concat(" ");
+    }
+    return text;
+  }
+
+  /**
+   * Returns the column where the current word starts within the line
+   * 
+   * @param currentCursorColumn current column where cursor is positioned
+   * @param currentLineText current line text
+   */
+  public static findWordStartWithinLine(currentCursorColumn: number, currentLineText: string): number {
+    let initialWordColumn = currentCursorColumn;
+    while(true) {
+        if (initialWordColumn == 0) {
+          break;
+        }
+        let lastChar = currentLineText.charAt(initialWordColumn - 1);
+        if (lastChar === " ") {
+            break;
+        }
+        initialWordColumn--;
+    }
+    initialWordColumn++;
+    return initialWordColumn;
+}
 
   /**
    * Returns the Cobol command separator for the specified column

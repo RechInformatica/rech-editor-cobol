@@ -1,4 +1,4 @@
-import { CompletionItem, TextDocument } from "vscode-languageserver";
+import { CompletionItem } from "vscode-languageserver";
 import { ParserCobol } from "../../cobol/parsercobol";
 import { PerformCompletion } from "./PerformCompletion";
 import { MoveCompletion } from "./MoveCompletion";
@@ -21,6 +21,10 @@ import { PictureCompletion } from "./PictureCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
 import Q from "q";
+
+
+/* Regex used to detect if the string contains two words */
+const REGEX_CONTAINS_TWO_WORDS = /\s+\w+\s+\w+\s*/;
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -46,12 +50,12 @@ export class CobolCompletionItemFactory {
    *
    * @param line line where the cursor is positioned
    * @param column column where the cursor is positioned
-   * @param fullDocument full document information
+   * @param ilnes document text lines
    */
-  constructor(line: number, column: number, fullDocument: TextDocument) {
+  constructor(line: number, column: number, lines: string[]) {
     this.line = line;
     this.column = column;
-    this.lines = fullDocument.getText().split("\n");
+    this.lines = lines;
     this.lineText = this.lines[line];
     this.additionalCompletions = [];
   }
@@ -107,11 +111,19 @@ export class CobolCompletionItemFactory {
           return;
         }
         case this.isMove() || this.isAdd() || this.isSet(): {
-          resolve(this.createToCompletions());
+          if (this.shouldSuggestTo()) {
+            resolve(this.createToCompletions());
+          } else {
+            resolve([]);
+          }
           return;
         }
         case this.isSubtract(): {
-          resolve(this.generate(new FromCompletion()));
+          if (this.shouldSuggestFrom()) {
+            resolve(this.generate(new FromCompletion()));
+          } else {
+            resolve([]);
+          }
           return;
         }
         case this.isParagraphPerform(): {
@@ -122,7 +134,10 @@ export class CobolCompletionItemFactory {
           resolve([]);
           return;
         }
-
+        case this.isUnhandledCommand(): {
+           resolve([]);
+          return;
+        }
         default: {
           resolve(this.createDefaultCompletions());
           return;
@@ -136,6 +151,22 @@ export class CobolCompletionItemFactory {
    */
   private isCommentLine() {
     return this.lineText.trim().startsWith("*>");
+  }
+
+  /**
+   * Returns true if the Language Server should suggest 'to' completions
+   */
+  private shouldSuggestTo(): boolean {
+    let containsTwoWords = REGEX_CONTAINS_TWO_WORDS.test(this.lineText);
+    return containsTwoWords && !this.lineContainsTo();
+  }
+
+  /**
+   * Returns true if the Language Server should suggest 'from' completions
+   */
+  private shouldSuggestFrom(): boolean {
+    let containsTwoWords = REGEX_CONTAINS_TWO_WORDS.test(this.lineText);
+    return containsTwoWords && !this.lineContainsFrom();
   }
 
   /**
@@ -290,6 +321,22 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if the current line represents a command currently unhandled by this Language Server.
+   *
+   * In this case, doesn't make sense to suggest default commands like 'evaluate', 'perform', etc, so
+   * Language Server will resolve the promise with an empty array to possibly suggest Words as a
+   * default VSCode behavior.
+   *
+   * This method also checks if the last character is a space because if the programmer has typed
+   * 'eval', for example, he or she is typing 'evaluate' and should still suggest EVALUATE completion
+   * item.
+   */
+  public isUnhandledCommand(): boolean {
+    let unhandledCommand = /\s*[^ ]+[ ]+/.test(this.lineText);
+    return unhandledCommand;
+  }
+
+  /**
    * Returns true if the current line is in a if block
    */
   private isInIfBlock(): boolean {
@@ -300,14 +347,28 @@ export class CobolCompletionItemFactory {
         break;
       }
       let currentLine = this.lines[i].toLowerCase().trim();
-      if (currentLine.startsWith("if ")) {
+      if (currentLine.toUpperCase().startsWith("IF ")) {
         openBlocks++;
       }
-      if (currentLine.startsWith("end-if")) {
+      if (currentLine.toUpperCase().startsWith("END-IF")) {
         closeBlocks++;
       }
     }
     return openBlocks != closeBlocks;
+  }
+
+  /**
+   * Returns true if the current line already contains 'to' clause
+   */
+  private lineContainsTo(): boolean {
+    return this.lineText.toUpperCase().includes(" TO ");
+  }
+
+  /**
+   * Returns true if the current line already contains 'from' clause
+   */
+  private lineContainsFrom(): boolean {
+    return this.lineText.toUpperCase().includes(" FROM ");
   }
 
   /**
@@ -321,7 +382,7 @@ export class CobolCompletionItemFactory {
     }
     return new Promise((resolve, reject) => {
       Q.all(items).then((result) => {
-        let completions:CompletionItem[] = [];
+        let completions: CompletionItem[] = [];
         result.forEach((element) => {
           completions = completions.concat(element);
         });
@@ -357,7 +418,7 @@ export class CobolCompletionItemFactory {
     }
     return new Promise((resolve, reject) => {
       Q.all(items).then((result) => {
-        let completions:CompletionItem[] = [];
+        let completions: CompletionItem[] = [];
         result.forEach((element) => {
           completions = completions.concat(element);
         });

@@ -12,8 +12,8 @@ export class MoveCompletion implements CompletionInterface {
             let text = "move" + CompletionUtils.fillMissingSpaces(20, column + 3) + "${0}";
             resolve(
                 [{
-                    label: 'Gerar comando MOVE',
-                    detail: 'Gera o comando MOVE colocando o cursor na posição da primeira variável',
+                    label: 'MOVE command',
+                    detail: 'Generates MOVE command and sets cursor on first variable',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "move mv",
