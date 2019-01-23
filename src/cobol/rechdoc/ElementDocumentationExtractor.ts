@@ -1,15 +1,15 @@
 /**
- * Paragraph Documentation Extractor
+ * Element Documentation Extractor
  */
-export class ParagraphDocumentationExtractor {
+export class ElementDocumentationExtractor {
 
     /**
-     * Returns the documentation of the paragraph on the specified line
+     * Returns the documentation of the element on the specified line
      *
      * @param lines buffer lines
-     * @param lineIndex line with the paragraph declaration which will have the documentation extracted
+     * @param lineIndex line with the element declaration which will have the documentation extracted
      */
-    public getParagraphDocumentation(lines: string[], lineIndex: number): string[] {
+    public getElementDocumentation(lines: string[], lineIndex: number): string[] {
         let documentation: string[] = [];
         for (let index = lineIndex - 1; index >= 0; index--) {
             let currentLineText = lines[index];

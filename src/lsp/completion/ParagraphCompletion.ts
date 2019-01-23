@@ -113,7 +113,7 @@ export class ParagraphCompletion implements CompletionInterface {
         let buffer = lines.join("\n");
         new Scan(buffer).scan(/^\s\s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm, (iterator: any) => {
             let paragraphName = this.parserCobol.getDeclaracaoParagrafo(iterator.lineContent.toString());
-            let docArray = this.getParagraphDocumentation(lines, iterator.row);
+            let docArray = this.getElementDocumentation(lines, iterator.row);
             if (paragraphName) {
                 let paragraphItem = this.createParagraphCompletion(paragraphName, docArray);
                 items.set(paragraphName, paragraphItem);
@@ -150,12 +150,12 @@ export class ParagraphCompletion implements CompletionInterface {
     }
 
     /**
-     * Returns the documentation of the paragraph on the specified line
+     * Returns the documentation of the element on the specified line
      *
      * @param lines buffer lines
      * @param lineIndex line with the paragraph declaration which will have the documentation extracted
      */
-    private getParagraphDocumentation(lines: string[], lineIndex: number): string[] {
+    private getElementDocumentation(lines: string[], lineIndex: number): string[] {
         let documentation: string[] = [];
         for (let index = lineIndex - 1; index >= 0; index--) {
             let currentLineText = lines[index];
