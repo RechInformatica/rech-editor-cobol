@@ -7,7 +7,7 @@ import { RechPosition } from "../../commons/rechposition";
 import { File } from "../../commons/file";
 
 /**
- * Class to generate LSP Completion Items for 'else' clause
+ * Class to generate LSP Completion Items for 'when' clause
  */
 export class WhenCompletion implements CompletionInterface {
 

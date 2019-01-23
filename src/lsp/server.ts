@@ -165,6 +165,7 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
   return new Promise((resolve) => {
     getConfig<string[]>("snippetsRepositories").then(repositories => {
+      getConfig<boolean>("variableSuggestion").then(variableSuggestion => {
       let line = _textDocumentPosition.position.line;
       let column = _textDocumentPosition.position.character;
       let uri = _textDocumentPosition.textDocument.uri;
@@ -172,6 +173,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
       let fullDocument = documents.get(uri);
       if (fullDocument) {
         new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"))
+          .setVariableSuggestion(variableSuggestion)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
             // Runs Cobol preprocessor on client-side
@@ -186,7 +188,8 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
             resolve([]);
           })
       };
-    });
+    })
+  });
   });
 });
 

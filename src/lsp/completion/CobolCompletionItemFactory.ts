@@ -21,10 +21,9 @@ import { PictureCompletion } from "./PictureCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
 import Q from "q";
+import { VariableCompletion } from "./VariableCompletion";
+import { EmptyCompletion } from "./EmptyCompletion";
 
-
-/* Regex used to detect if the string contains two words */
-const REGEX_CONTAINS_TWO_WORDS = /\s+\w+\s+\w+\s*/;
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -41,9 +40,11 @@ export class CobolCompletionItemFactory {
   /** Additional implementations for generating Completion Items */
   private additionalCompletions: CompletionInterface[];
   /** Completion class to generate the CompletionItem for paragraphs */
-  private paragraphCompletion: CompletionInterface | undefined;
+  private paragraphCompletion: CompletionInterface;
   /** Completion class to generate the WhenItem for When */
-  private whenCompletion: CompletionInterface | undefined;
+  private whenCompletion: CompletionInterface;
+  /** Allows variable suggestion */
+  private variableSuggestion: boolean;
 
   /**
    * Creates an instance to generate LSP Completion Items for Cobol language
@@ -58,6 +59,9 @@ export class CobolCompletionItemFactory {
     this.lines = lines;
     this.lineText = this.lines[line];
     this.additionalCompletions = [];
+    this.paragraphCompletion = new EmptyCompletion();
+    this.whenCompletion = new EmptyCompletion();
+    this.variableSuggestion = false;
   }
 
   /**
@@ -91,6 +95,16 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Sets whether variable suggestion is allowed
+   *
+   * @param variableSuggestion
+   */
+  public setVariableSuggestion(variableSuggestion: boolean): CobolCompletionItemFactory {
+    this.variableSuggestion = variableSuggestion;
+    return this;
+  }
+
+  /**
    * Generates completion items for Cobol paragraphs
    *
    * @param lines Cobol source code lines
@@ -98,12 +112,16 @@ export class CobolCompletionItemFactory {
   public generateCompletionItems(): Promise<CompletionItem[]> {
     return new Promise((resolve) => {
       switch (true) {
-        case this.isCommentLine() || this.isIf(): {
+        case this.isCommentLine(): {
           resolve([]);
           return;
         }
+        case this.isIf(): {
+          resolve(this.generate(this.createVariableSuggestionWithEnum()));
+          return;
+        }
         case this.isWhen(): {
-          if (this.whenCompletion) resolve(this.generate(this.whenCompletion));
+          resolve(this.createWhenCompletions());
           return;
         }
         case this.isVarDeclaration(): {
@@ -111,31 +129,31 @@ export class CobolCompletionItemFactory {
           return;
         }
         case this.isMove() || this.isAdd() || this.isSet(): {
-          if (this.shouldSuggestTo()) {
+          if (this.shouldSuggestClause("TO")) {
             resolve(this.createToCompletions());
           } else {
-            resolve([]);
+            if (this.isSet()) {
+              resolve(this.generate(this.createVariableSuggestionWithEnum()));
+            } else {
+              resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
+            }
           }
           return;
         }
         case this.isSubtract(): {
-          if (this.shouldSuggestFrom()) {
+          if (this.shouldSuggestClause("FROM")) {
             resolve(this.generate(new FromCompletion()));
           } else {
-            resolve([]);
+            resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
           }
           return;
         }
         case this.isParagraphPerform(): {
-          if (this.paragraphCompletion) {
-            resolve(this.generate(this.paragraphCompletion));
-            return;
-          }
-          resolve([]);
+          resolve(this.generate(this.paragraphCompletion));
           return;
         }
         case this.isUnhandledCommand(): {
-           resolve([]);
+          resolve([]);
           return;
         }
         default: {
@@ -154,19 +172,58 @@ export class CobolCompletionItemFactory {
   }
 
   /**
-   * Returns true if the Language Server should suggest 'to' completions
+   * Returns true if the Language Server should suggest a completion item to the
+   * specified clause
+   *
+   * @param clause clause to be tested
    */
-  private shouldSuggestTo(): boolean {
-    let containsTwoWords = REGEX_CONTAINS_TWO_WORDS.test(this.lineText);
-    return containsTwoWords && !this.lineContainsTo();
+  public shouldSuggestClause(clause: string): boolean {
+    let withoutEnter = this.lineText.replace("\n", "").replace("\r", "");
+    let lineContainsClause = withoutEnter.toUpperCase().includes(" " + clause + " ");
+    if (lineContainsClause) {
+      return false;
+    }
+    let splitted = withoutEnter.trim().split(/\s+/);
+    if (splitted.length < 2) {
+      return false;
+    }
+    if (splitted.length == 2) {
+      return withoutEnter.endsWith(" ");
+    }
+    let clauseUpper = clause.toUpperCase();
+    let splittedUpper = splitted[2].toUpperCase();
+    let startsWith = clauseUpper.startsWith(splittedUpper);
+    return splitted.length == 3 && startsWith;
   }
 
   /**
-   * Returns true if the Language Server should suggest 'from' completions
+   * Creates a variable completion interface allowing enum suggestion
    */
-  private shouldSuggestFrom(): boolean {
-    let containsTwoWords = REGEX_CONTAINS_TWO_WORDS.test(this.lineText);
-    return containsTwoWords && !this.lineContainsFrom();
+  private createVariableSuggestionWithEnum(): CompletionInterface {
+    if (this.variableSuggestion) {
+      return new VariableCompletion();
+    }
+    return new EmptyCompletion();
+  }
+
+  /**
+   * Creates a variable completion interface ignoring enum suggestion
+   */
+  private createVariableSuggestionWithoutEnum(): CompletionInterface {
+    if (this.variableSuggestion) {
+      return new VariableCompletion().setIgnoreEnums(true);
+    }
+    return new EmptyCompletion();
+  }
+
+  /**
+   * Creates completion items form when clauses
+   */
+  private createWhenCompletions(): Promise<CompletionItem[]> {
+    let items: Promise<CompletionItem[]>[] = [];
+    items = items.concat(this.generate(this.whenCompletion));
+    items = items.concat(this.generate(this.createVariableSuggestionWithEnum()));
+    return this.createWrappingPromise(items);
   }
 
   /**
@@ -380,17 +437,7 @@ export class CobolCompletionItemFactory {
     if (this.isSet()) {
       items = items.concat(this.generate(new ToTrueCompletion()));
     }
-    return new Promise((resolve, reject) => {
-      Q.all(items).then((result) => {
-        let completions: CompletionItem[] = [];
-        result.forEach((element) => {
-          completions = completions.concat(element);
-        });
-        resolve(completions);
-      }).catch(() => {
-        reject();
-      })
-    });
+    return this.createWrappingPromise(items);
   }
 
 
@@ -416,17 +463,7 @@ export class CobolCompletionItemFactory {
     if (this.isInIfBlock()) {
       items = items.concat(this.generate(new ElseCompletion()));
     }
-    return new Promise((resolve, reject) => {
-      Q.all(items).then((result) => {
-        let completions: CompletionItem[] = [];
-        result.forEach((element) => {
-          completions = completions.concat(element);
-        });
-        resolve(completions);
-      }).catch(() => {
-        reject();
-      })
-    });
+    return this.createWrappingPromise(items);
   }
 
   /**
@@ -476,5 +513,24 @@ export class CobolCompletionItemFactory {
       }
     });
     return result;
+  }
+
+  /**
+   * Creates a wrapping promise to generate multiple completion items
+   *
+   * @param items promise items to be returned
+   */
+  private createWrappingPromise(items: Promise<CompletionItem[]>[]): Promise<CompletionItem[]> {
+    return new Promise((resolve, reject) => {
+      Q.all(items).then((result) => {
+        let completions: CompletionItem[] = [];
+        result.forEach((element) => {
+          completions = completions.concat(element);
+        });
+        resolve(completions);
+      }).catch(() => {
+        reject();
+      })
+    });
   }
 }
