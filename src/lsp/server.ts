@@ -17,7 +17,9 @@ import {
   CompletionItem,
   TextDocument,
   DocumentOnTypeFormattingParams,
-  DocumentHighlight
+  DocumentHighlight,
+  FoldingRangeRequestParam,
+  FoldingRange
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
@@ -30,6 +32,7 @@ import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
 import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 import { HighlightFactory } from "./highlight/HighlightFactory";
 import { WhenCompletion } from "./completion/WhenCompletion";
+import { cobolFoldFactory } from "./fold/cobolFoldFactory";
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -52,6 +55,7 @@ connection.onInitialize((params: InitializeParams) => {
       completionProvider: {
         resolveProvider: true
       },
+      foldingRangeProvider: true,
       documentOnTypeFormattingProvider: {
         firstTriggerCharacter: "\n",
         moreTriggerCharacter: ["N", 'n', 'E', 'e'],
@@ -142,6 +146,14 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
     diagnosticMessage
   );
 }
+
+connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[]> => {
+  return new Promise((resolve,) => {
+    let fullDocument = documents.get(_foldingRangeRequestParam.textDocument.uri);
+    let text = fullDocument!.getText();
+    resolve(new cobolFoldFactory().fold(text))
+  });
+});
 
 /**
  * Provide the document highlight positions
