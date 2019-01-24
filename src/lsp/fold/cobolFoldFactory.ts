@@ -5,6 +5,7 @@ import { VariableFolding } from "./VariableFolding";
 import { IfFolding } from "./IfFolding";
 import { ElseFolding } from "./ElseFolding";
 import { CobolFoldInterface } from "./cobolFoldInterface";
+import { EvaluateFolding } from "./EvaluateFolding";
 
 /**
  * Class to fold Cobol source code
@@ -55,7 +56,8 @@ export class cobolFoldFactory {
         new CopyFolding(),
         new VariableFolding(),
         new IfFolding(),
-        new ElseFolding()
+        new ElseFolding(),
+        new EvaluateFolding()
       ];
       let folded = false;
       cobolFolders.forEach((cobolFold) => {

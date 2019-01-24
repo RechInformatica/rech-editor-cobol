@@ -3,18 +3,18 @@ import { FoldingRange } from "vscode-languageserver";
 import { CompletionUtils } from "../commons/CompletionUtils";
 
 /**
-* Class to folding Cobol else blocks
+* Class to folding Cobol if blocks
 */
-export class ElseFolding implements CobolFoldInterface {
+export class EvaluateFolding implements CobolFoldInterface {
 
     mustFolding(line: string): boolean {
-        return /^\s+else,.*/gi.test(line);
+        return /^\s+evaluate\s+.*/gi.test(line);
     }
 
     fold(line: number, lines: string[]): FoldingRange {
         let startLine = line;
         let startColumn = lines[startLine].length;
-        let endLine = this.findEndOfElseDeclaration(line, lines)
+        let endLine = this.findEndOfEvaluateDeclaration(line, lines)
         return {
             startLine: startLine,
             startCharacter: startColumn,
@@ -29,14 +29,14 @@ export class ElseFolding implements CobolFoldInterface {
      * @param line
      * @param lines
      */
-    private findEndOfElseDeclaration(line: number, lines: string[]): number {
-        let elseDeclarationLine = lines[line];
-        let elseDeclarationColumn = CompletionUtils.countSpacesAtBeginning(elseDeclarationLine);
+    private findEndOfEvaluateDeclaration(line: number, lines: string[]): number {
+        let ifDeclarationLine = lines[line];
+        let ifDeclarationColumn = CompletionUtils.countSpacesAtBeginning(ifDeclarationLine);
         for (let index = line; index < lines.length; index++) {
             let currentLine = lines[index];
-            if (currentLine.trimLeft().toLowerCase().startsWith("end-if")) {
+            if (currentLine.trimLeft().toLowerCase().startsWith("end-evaluate")) {
                 let currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
-                if (currentColumn == elseDeclarationColumn) {
+                if (currentColumn == ifDeclarationColumn) {
                     return index - 1;
                 }
             }
