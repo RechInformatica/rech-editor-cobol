@@ -2,6 +2,9 @@ import { FoldingRange } from "vscode-languageserver";
 import { CopyFolding } from "./CopyFolding";
 import Q from "q";
 import { VariableFolding } from "./VariableFolding";
+import { IfFolding } from "./IfFolding";
+import { ElseFolding } from "./ElseFolding";
+import { CobolFoldInterface } from "./cobolFoldInterface";
 
 /**
  * Class to fold Cobol source code
@@ -47,18 +50,24 @@ export class cobolFoldFactory {
    */
   private foldingRange(line: number, lines: string[]): Promise<FoldingRange> {
     return new Promise((resolve, reject) => {
-      let copy = new CopyFolding();
-      let variable = new VariableFolding();
       let currentLine = lines[line];
-      switch(true) {
-        case copy.mustFolding(currentLine):
-          resolve(copy.fold(line, lines))
-          return;
-        case variable.mustFolding(currentLine):
-          resolve(variable.fold(line, lines))
-          return;
+      let cobolFolders: CobolFoldInterface[] = [
+        new CopyFolding(),
+        new VariableFolding(),
+        new IfFolding(),
+        new ElseFolding()
+      ];
+      let folded = false;
+      cobolFolders.forEach((cobolFold) => {
+        if (cobolFold.mustFolding(currentLine)) {
+          folded = true;
+          resolve(cobolFold.fold(line, lines));
+        }
+      })
+      if (!folded) {
+        reject();
       }
-      reject();
     });
   }
+
 }
