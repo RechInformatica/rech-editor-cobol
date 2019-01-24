@@ -30,7 +30,7 @@ export class PerformWithTest implements CobolFoldInterface {
      * @param lines
      */
     private findStartOfPerformDeclaration(line: number, lines: string[]): number {
-        for (let index = line; index <= lines.length; index++) {
+        for (let index = line + 1; index <= lines.length; index++) {
             if (!this.belongsToThePerformDeclarationBlock(index, lines)) {
                 return index - 1;
             }
@@ -46,9 +46,6 @@ export class PerformWithTest implements CobolFoldInterface {
     private belongsToThePerformDeclarationBlock(currentLine: number, lines: string[]) {
         let lineContent = lines[currentLine].trim();
         if (lineContent == "") {
-            return true;
-        }
-        if (lineContent.startsWith("perform")) {
             return true;
         }
         if (lineContent.startsWith("varying")) {
