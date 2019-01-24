@@ -35,6 +35,8 @@ export class WhenCompletion implements CompletionInterface {
             }
             this.buildCompletionItem(variable, line, lines).then((completionItem) => {
                 resolve(completionItem);
+            }).catch(() => {
+                resolve([]);
             });
             return;
         });
@@ -229,23 +231,28 @@ export class WhenCompletion implements CompletionInterface {
     private getLineOfParentDeclaration(variable: string, lines: string[]): Promise<any[]> {
         return new Promise((resolve, reject) => {
             let finder = new CobolDeclarationFinder(lines.join("\n"));
-            finder.findDeclaration(variable, this.cacheFileName, this.callbackSourceExpander).then((position) => {
-                let parenFileLines = lines;
+            finder.findDeclaration(variable, this.cacheFileName, () => {
+                return new Promise((resolver) => {
+                    resolver(this.callbackSourceExpander);
+                    reject()
+                })
+            }).then((position) => {
+                let parentFileLines = lines;
                 if (position.file) {
-                    parenFileLines = new File(position.file).loadBufferSync("latin1").split("\n");
+                    parentFileLines = new File(position.file).loadBufferSync("latin1").split("\n");
                 }
-                let declarationLine = parenFileLines[position.line];
+                let declarationLine = parentFileLines[position.line];
                 for (let i = position.line; i > 0; i--) {
-                    let currentLine = parenFileLines[i];
+                    let currentLine = parentFileLines[i];
                     if (new ParserCobol().getDeclaracaoVariavelIgnoreReplace(currentLine)) {
                         if (!this.is88LevelDeclaration(currentLine)) {
-                            resolve([new RechPosition(i, 0, position.file), parenFileLines, declarationLine]);
+                            resolve([new RechPosition(i, 0, position.file), parentFileLines, declarationLine]);
                             return;
                         }
                     }
                 }
                 reject();
-            })
+            });
         });
     }
 
