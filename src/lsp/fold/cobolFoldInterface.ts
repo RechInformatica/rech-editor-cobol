@@ -15,7 +15,7 @@ export interface CobolFoldInterface {
     fold(line: number, lines: string[]): FoldingRange;
 
     /**
-     *
+     * Returns true if must folding this block
      *
      * @param line
      */
