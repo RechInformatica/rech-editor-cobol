@@ -37,21 +37,12 @@ export class IfFolding implements CobolFoldInterface {
             let nextWords = nextLine.trim().split(" ");
             let firtsWordOfTheNextLine = nextWords[0]
             let lastWord = words[words.length - 1]
-            if (this.isOperator(firtsWordOfTheNextLine) || this.isOperator(lastWord)) {
+            if (CompletionUtils.isOperator(firtsWordOfTheNextLine) || CompletionUtils.isOperator(lastWord)) {
                 continue;
             }
             return index
         }
         return line;
-    }
-
-    /**
-     * Returns true if the word is a oprator
-     *
-     * @param word
-     */
-    private isOperator(word: string) {
-        return /^(and|or|=|>|<|=>|<=)$/.test(word);
     }
 
     /**
