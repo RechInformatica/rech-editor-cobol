@@ -30,12 +30,14 @@ export class IfFolding implements CobolFoldInterface {
      * @param lines
      */
     private findStartLine(line: number, lines: string[]): number {
-        for (let index = line; index < lines.length; index++) {
+        for (let index = line; index <= lines.length; index++) {
             let currentLine  = lines[index];
+            let nextLine  = lines[index + 1];
             let words = currentLine.trim().split(" ");
-            let firtsWord = words[0]
+            let nextWords = nextLine.trim().split(" ");
+            let firtsWordOfTheNextLine = nextWords[0]
             let lastWord = words[words.length - 1]
-            if (this.isOperator(firtsWord) || this.isOperator(lastWord)) {
+            if (this.isOperator(firtsWordOfTheNextLine) || this.isOperator(lastWord)) {
                 continue;
             }
             return index
@@ -49,11 +51,11 @@ export class IfFolding implements CobolFoldInterface {
      * @param word
      */
     private isOperator(word: string) {
-        return /and|or|=|>|<|=>|<=/.test(word);
+        return /^(and|or|=|>|<|=>|<=)$/.test(word);
     }
 
     /**
-     * Find the end of the variable declaration
+     * Find the end of the if block
      *
      * @param line
      * @param lines

@@ -24,7 +24,7 @@ export class ElseFolding implements CobolFoldInterface {
     }
 
     /**
-     * Find the end of the variable declaration
+     * Find the end of the else block
      *
      * @param line
      * @param lines

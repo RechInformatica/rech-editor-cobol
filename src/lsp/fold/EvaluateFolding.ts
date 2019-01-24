@@ -3,7 +3,7 @@ import { FoldingRange } from "vscode-languageserver";
 import { CompletionUtils } from "../commons/CompletionUtils";
 
 /**
-* Class to folding Cobol if blocks
+* Class to folding Cobol evaluate blocks
 */
 export class EvaluateFolding implements CobolFoldInterface {
 
@@ -24,7 +24,7 @@ export class EvaluateFolding implements CobolFoldInterface {
     }
 
     /**
-     * Find the end of the variable declaration
+     * Find the end of the evaluate block
      *
      * @param line
      * @param lines
