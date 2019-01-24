@@ -82,7 +82,7 @@ export class CompletionUtils {
 
   /**
    * Returns the column where the current word starts within the line
-   * 
+   *
    * @param currentCursorColumn current column where cursor is positioned
    * @param currentLineText current line text
    */
@@ -163,6 +163,16 @@ export class CompletionUtils {
       return true;
     }
     return false;
+  }
+
+
+  /**
+   * Returns true if the word is a oprator
+   *
+   * @param word
+   */
+  public static isOperator(word: string) {
+    return /^(and|or|=|>|<|=>|<=)\r?\n?$/.test(word);
   }
 
 }

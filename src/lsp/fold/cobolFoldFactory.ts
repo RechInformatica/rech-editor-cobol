@@ -8,6 +8,8 @@ import { CobolFoldInterface } from "./cobolFoldInterface";
 import { EvaluateFolding } from "./EvaluateFolding";
 import { WhenFolding } from "./WhenFolding";
 import { ParagraphFolding } from "./ParagraphFolding";
+import { PerformUntilFolding } from "./PerformUntilFolding";
+import { PerformWithTest } from "./PerformWithTest";
 
 /**
  * Class to fold Cobol source code
@@ -61,7 +63,9 @@ export class cobolFoldFactory {
         new ElseFolding(),
         new EvaluateFolding(),
         new WhenFolding(),
-        new ParagraphFolding()
+        new ParagraphFolding(),
+        new PerformUntilFolding(),
+        new PerformWithTest()
       ];
       let folded = false;
       cobolFolders.forEach((cobolFold) => {
