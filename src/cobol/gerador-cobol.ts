@@ -129,32 +129,23 @@ export class GeradorCobol {
    */
   async centralizeComment() {
     let lineText = this.editor.getCurrentLine();
-    // Get the comment content
     let regexComment = /^\s*\*>.*/;
     let commentContent = lineText.match(regexComment);
-    // Get the comment type (Ex.: *>, *>->)
     let regexCommentType = /\*>(->)*/;
     let startComment = lineText.match(regexCommentType);
-    // Find if is a valid comment
     if (isNull(commentContent) || isNull(startComment)) return;
-    // Get the comment delimiters
     let startCommentDelimiter = startComment[0];
     let endCommentDelimiter = startCommentDelimiter.split("").reverse().join("").replace(/>/g, "<");
-    // Remove the end delimiter
     let regexCommentContent = /[^\>]*\b.*(\b|\B)/;
     commentContent = regexCommentContent.exec(commentContent[0].toString().replace(endCommentDelimiter, ""));
-    // If not have any comment left
     if (isNull(commentContent)) return;
-    // Remove trailing spaces
     let comment = commentContent[0].toString().trim();
-    // Calculate the size of comment area
     let commentSizeMax = (Colunas.COLUNA_FIM - Colunas.AREA_A - startCommentDelimiter.length - endCommentDelimiter.length + 2);
-    // Verify if need to apply highlight to comment
+
     if (!/[a-z]/.exec(commentContent.toString())) {
       comment = this.removeHighlight(comment);
-      comment = this.addHighlight(comment, commentSizeMax);
+      comment = this.addHighlight(comment);
     }
-    // Mount the final comment
     comment = `      ${startCommentDelimiter}${" ".repeat((commentSizeMax - comment.length) / 2)}${comment}${" ".repeat(Math.ceil((commentSizeMax - comment.length) / 2))}${endCommentDelimiter}`;
     await this.editor.setCurrentLine(comment);
   }
@@ -163,18 +154,17 @@ export class GeradorCobol {
   /**
     * Add Highlight from text
     */
-  private addHighlight(comment: string, commentSizeMax: number): string {
+  private addHighlight(comment: string): string {
     // Percent of comment size to limit the size of highlight
-    const commentRatio = 0.7;
-    let commentArea = commentSizeMax * commentRatio;
-    // Try to apply the first highlight
-    let commentUpper = comment.split('').join(' ').toUpperCase();
-    if (commentUpper.length > commentArea) return comment;
-    // Try to apply the second highlight
-    comment = commentUpper;
-    commentUpper = comment.split('').join(' ').toUpperCase();
-    if (commentUpper.length < commentArea) comment = commentUpper;
-    return comment;
+    let commentUpper = comment;
+    if (comment.length < 26) {
+        commentUpper = comment.split('').join('  ').toUpperCase();
+    } else {
+        if (comment.length < 46) {
+            commentUpper = comment.split('').join(' ').toUpperCase();
+        }
+    }
+    return commentUpper;
   }
 
   /**
@@ -182,14 +172,10 @@ export class GeradorCobol {
     */
   private removeHighlight(comment: string): string {
     let spaces = /\s+/.exec(comment);
-    // Se a string não contem espaços
     if (isNull(spaces)) return comment;
-    // Get greater space length
     let spaceLengthGreater = spaces.reduce((p, v) => (p.length > v.length ? v : p)).length;
     let spaceLengthLesser = spaces.reduce((p, v) => (p.length < v.length ? v : p)).length;
-    // If comment don't have highlight
     if (spaceLengthGreater === 1) return comment;
-    // Remove spaces from previous highlight
     let spaceLength = spaceLengthGreater === spaceLengthLesser ? spaceLengthGreater : spaceLengthGreater - 1;
     let spaceRegex = new RegExp(`\\s{${spaceLength}}`, "g");
     comment = comment.replace(spaceRegex, "");
