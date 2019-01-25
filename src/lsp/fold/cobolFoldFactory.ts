@@ -29,7 +29,9 @@ export class CobolFoldFactory {
    * @param text
    */
   private breakBlocks(text: string[]): Promise<FoldingRange[]> {
-    return new Promise((resolve, reject) => {
+    //return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
+      text = text;
       resolve([]);
       return;
       // Commented on to wait for resolution of performance issues
@@ -56,31 +58,31 @@ export class CobolFoldFactory {
    *
    * @param line
    */
-  private foldingRange(line: number, lines: string[]): Promise<FoldingRange> {
-    return new Promise((resolve, reject) => {
-      let currentLine = lines[line];
-      let cobolFolders: CobolFoldInterface[] = [
-        new CopyFolding(),
-        new VariableFolding(),
-        new IfFolding(),
-        new ElseFolding(),
-        new EvaluateFolding(),
-        new WhenFolding(),
-        new ParagraphFolding(),
-        new PerformUntilFolding(),
-        new PerformWithTest()
-      ];
-      let folded = false;
-      cobolFolders.forEach((cobolFold) => {
-        if (cobolFold.mustFolding(currentLine)) {
-          folded = true;
-          resolve(cobolFold.fold(line, lines));
-        }
-      })
-      if (!folded) {
-        reject();
-      }
-    });
-  }
+  // private foldingRange(line: number, lines: string[]): Promise<FoldingRange> {
+  //   return new Promise((resolve, reject) => {
+  //     let currentLine = lines[line];
+  //     let cobolFolders: CobolFoldInterface[] = [
+  //       new CopyFolding(),
+  //       new VariableFolding(),
+  //       new IfFolding(),
+  //       new ElseFolding(),
+  //       new EvaluateFolding(),
+  //       new WhenFolding(),
+  //       new ParagraphFolding(),
+  //       new PerformUntilFolding(),
+  //       new PerformWithTest()
+  //     ];
+  //     let folded = false;
+  //     cobolFolders.forEach((cobolFold) => {
+  //       if (cobolFold.mustFolding(currentLine)) {
+  //         folded = true;
+  //         resolve(cobolFold.fold(line, lines));
+  //       }
+  //     })
+  //     if (!folded) {
+  //       reject();
+  //     }
+  //   });
+  // }
 
 }
