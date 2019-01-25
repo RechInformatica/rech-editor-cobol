@@ -32,7 +32,7 @@ import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
 import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 import { HighlightFactory } from "./highlight/HighlightFactory";
 import { WhenCompletion } from "./completion/WhenCompletion";
-import { cobolFoldFactory } from "./fold/cobolFoldFactory";
+import { CobolFoldFactory } from "./fold/CobolFoldFactory";
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -151,7 +151,7 @@ connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam)
   return new Promise((resolve,) => {
     let fullDocument = documents.get(_foldingRangeRequestParam.textDocument.uri);
     let text = fullDocument!.getText();
-    resolve(new cobolFoldFactory().fold(text))
+    resolve(new CobolFoldFactory().fold(text))
   });
 });
 

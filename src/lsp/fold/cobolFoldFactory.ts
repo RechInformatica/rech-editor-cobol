@@ -14,7 +14,7 @@ import { PerformWithTest } from "./PerformWithTest";
 /**
  * Class to fold Cobol source code
  */
-export class cobolFoldFactory {
+export class CobolFoldFactory {
   public fold(text: string): Thenable<FoldingRange[]> {
     return new Promise(resolve => {
       let buffer = text.split("\n");
@@ -30,21 +30,24 @@ export class cobolFoldFactory {
    */
   private breakBlocks(text: string[]): Promise<FoldingRange[]> {
     return new Promise((resolve, reject) => {
-      let promiseFoldings: Promise<FoldingRange>[] = [];
-      let foldings: FoldingRange[] = [];
-      for (let index = 0; index < text.length; index++) {
-        promiseFoldings.push(this.foldingRange(index, text));
-      }
-      Q.allSettled(promiseFoldings).then((results) => {
-        results.forEach((result) => {
-          if (result.state === "fulfilled") {
-            foldings.push(result.value!);
-          }
-        });
-        resolve(foldings);
-      }).catch(() => {
-        reject();
-      })
+      resolve([]);
+      return;
+      // Commented on to wait for resolution of performance issues
+      // let promiseFoldings: Promise<FoldingRange>[] = [];
+      // let foldings: FoldingRange[] = [];
+      // for (let index = 0; index < text.length; index++) {
+      //   promiseFoldings.push(this.foldingRange(index, text));
+      // }
+      // Q.allSettled(promiseFoldings).then((results) => {
+      //   results.forEach((result) => {
+      //     if (result.state === "fulfilled") {
+      //       foldings.push(result.value!);
+      //     }
+      //   });
+      //   resolve(foldings);
+      // }).catch(() => {
+      //   reject();
+      // })
     })
   }
 
