@@ -74,7 +74,7 @@
                 "rech.editor.cobol.variableSuggestion": {
                     "type": "boolean",
                     "description": "Controls whether COBOL variable suggestion is allowed.",
-                    "default": false
+                    "default": true
                 }
             }
         },
