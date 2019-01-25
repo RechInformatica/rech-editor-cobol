@@ -15,7 +15,7 @@ export class ValueCompletion implements CompletionInterface {
         return new Promise((resolve) => {
             let currentLineText = lines[line];
             let variable = CobolVariable.parseLine(currentLineText);
-            let text = this.generateTextFromVariable(variable, column);
+            let text = this.generateTextFromVariable(variable, column, currentLineText);
             resolve(
                 [{
                     label: 'Complete VALUE declaration',
@@ -35,9 +35,10 @@ export class ValueCompletion implements CompletionInterface {
      *
      * @param variable Cobol variable
      * @param column column
+     * @param currentLineText current line text
      */
-    private generateTextFromVariable(variable: CobolVariable, column: number): string {
-        let text = CompletionUtils.fillMissingSpaces(VALUE_COLUMN_DECLARATION, column - 1);
+    private generateTextFromVariable(variable: CobolVariable, column: number, currentLineText: string): string {
+        let text = CompletionUtils.fillExactMissingSpaces(VALUE_COLUMN_DECLARATION, column, currentLineText);
         if (variable.getType() == Type.Alphanumeric) {
             text = text.concat("value is ${1:spaces}");
         } else {
