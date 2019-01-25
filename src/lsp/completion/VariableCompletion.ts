@@ -14,6 +14,8 @@ export class VariableCompletion implements CompletionInterface {
     private cobolDocParser: CobolDocParser;
     /** Ignore enumerations (88 variables) */
     private ignoreEnums: boolean = false;
+    /** Ignore display variables */
+    private ignoreDisplay: boolean = false;
 
     constructor() {
         this.cobolDocParser = new CobolDocParser();
@@ -37,6 +39,16 @@ export class VariableCompletion implements CompletionInterface {
      */
     public setIgnoreEnums(ignoreEnums: boolean): VariableCompletion {
         this.ignoreEnums = ignoreEnums;
+        return this;
+    }
+
+    /**
+     * Sets wheter this completion should ignore Cobol display variables
+     *
+     * @param ignoreDisplay should ignore display variables
+     */
+    public setIgnoreDisplay(ignoreDisplay: boolean): VariableCompletion {
+        this.ignoreDisplay = ignoreDisplay;
         return this;
     }
 
@@ -65,7 +77,21 @@ export class VariableCompletion implements CompletionInterface {
      * @param variable variable to be tested
      */
     private shouldIgnoreVariable(variable: CobolVariable): boolean {
-        return this.ignoreEnums && variable.getLevel() == CobolVariable.ENUM_LEVEL;
+        if (variable.getName().toUpperCase() === "FILLER") {
+            return true;
+        }
+        if (this.ignoreDisplay && variable.isDisplay()) {
+            // For now we don't parse constant values and since some constantes can have
+            // numeric values we never filter them
+            if (variable.getLevel() == CobolVariable.CONSTANT_LEVEL) {
+                return false;
+            }
+            return true;
+        }
+        if (this.ignoreEnums && variable.getLevel() == CobolVariable.ENUM_LEVEL) {
+            return true;
+        }
+        return false;
     }
 
     /**
