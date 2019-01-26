@@ -38,7 +38,7 @@ export class ValueCompletion implements CompletionInterface {
      * @param currentLineText current line text
      */
     private generateTextFromVariable(variable: CobolVariable, column: number, currentLineText: string): string {
-        let text = CompletionUtils.fillExactMissingSpaces(VALUE_COLUMN_DECLARATION, column, currentLineText);
+        let text = CompletionUtils.fillSpacesFromWordStart(VALUE_COLUMN_DECLARATION, column, currentLineText);
         if (variable.getType() == Type.Alphanumeric) {
             text = text.concat("value is ${1:spaces}");
         } else {

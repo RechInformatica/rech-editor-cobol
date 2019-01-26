@@ -11,7 +11,7 @@ export class PictureCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let text =  CompletionUtils.fillExactMissingSpaces(PIC_COLUMN_DECLARATION, column, _lines[_line]) + "pic is $1($2)";
+            let text =  CompletionUtils.fillSpacesFromWordStart(PIC_COLUMN_DECLARATION, column, _lines[_line]) + "pic is $1($2)";
             resolve(
                 [{
                     label: 'Complete PIC declaration',

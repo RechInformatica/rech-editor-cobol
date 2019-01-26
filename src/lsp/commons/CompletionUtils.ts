@@ -62,18 +62,59 @@ export class CompletionUtils {
   }
 
   /**
-   * Fills the exact number of missing spaces between the current cursor column and the target final
-   * column.
+   * Fills missing spaces between the colun where the word found on 
+   * current cursor starts, and the target final column.
    *
    * @param targetFinalColumn final column until where spaces should be inserted
    * @param currentCursorColumn column where cursor is currently positioned
    * @param currentLineText text of current line
    */
-  public static fillExactMissingSpaces(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string): string {
+  public static fillSpacesFromWordStart(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string): string {
     let initialWordColumn = CompletionUtils.findWordStartWithinLine(currentCursorColumn, currentLineText);
-    let missingSpaces = targetFinalColumn - initialWordColumn;
+    return CompletionUtils.fillSpacesBetween(initialWordColumn, targetFinalColumn);
+  }
+
+  /**
+   * Fills missing spaces between the colun where the word found on 
+   * current cursor ends, and the target final column.
+   *
+   * @param targetFinalColumn final column until where spaces should be inserted
+   * @param currentCursorColumn column where cursor is currently positioned
+   * @param currentLineText text of current line
+   */
+  public static fillSpacesFromWordEnd(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string): string {
+    let initialWordColumn = CompletionUtils.findWordEndWithinLine(currentCursorColumn, currentLineText);
+    let spacesBetween = CompletionUtils.fillSpacesBetween(initialWordColumn, targetFinalColumn);
+    if (spacesBetween.length == 0) {
+      return " ";
+    }
+    return spacesBetween;
+  }
+
+  /**
+   * Replaces the last word of currentText with the word specified in lastWordReplacement
+   * 
+   * @param currentText current text
+   * @param lastWordReplacement word to replace the last word currently found in currentText
+   */
+  public static replaceLastWord(currentText: string, lastWordReplacement: string): string {
+      if (currentText.length == 0) {
+          return lastWordReplacement;
+      }
+      let withoutLastWord = currentText.substring(0, currentText.lastIndexOf(" ") + 1);
+      return withoutLastWord + lastWordReplacement;
+  }
+
+
+  /**
+   * Returns a string with a number of spaces equal to (finalColumn - initialColumn)
+   * 
+   * @param spaceCount numner of spaces to generate/return
+   */
+  private static fillSpacesBetween(initialColumn: number, finalColumn: number): string {
+    let spaceCount = finalColumn - initialColumn;
     let text = "";
-    for (var i = 0; i < missingSpaces; i++) {
+    for (var i = 0; i < spaceCount; i++) {
       text = text.concat(" ");
     }
     return text;
@@ -85,7 +126,7 @@ export class CompletionUtils {
    * @param currentCursorColumn current column where cursor is positioned
    * @param currentLineText current line text
    */
-  public static findWordStartWithinLine(currentCursorColumn: number, currentLineText: string): number {
+  private static findWordStartWithinLine(currentCursorColumn: number, currentLineText: string): number {
     let initialWordColumn = currentCursorColumn;
     while(true) {
         if (initialWordColumn == 0) {
@@ -99,7 +140,29 @@ export class CompletionUtils {
     }
     initialWordColumn++;
     return initialWordColumn;
-}
+  }
+
+  /**
+   * Returns the column where the current word ends within the line
+   *
+   * @param currentCursorColumn current column where cursor is positioned
+   * @param currentLineText current line text
+   */
+  private static findWordEndWithinLine(currentCursorColumn: number, currentLineText: string): number {
+    let finalWordColumn = currentCursorColumn;
+    while(true) {
+        if (finalWordColumn >= currentLineText.length) {
+          break;
+        }
+        let lastChar = currentLineText.charAt(finalWordColumn + 1);
+        if (lastChar === " ") {
+          break;
+        }
+        finalWordColumn++;
+    }
+    finalWordColumn++;
+    return finalWordColumn;
+  }
 
   /**
    * Returns the Cobol command separator for the specified column

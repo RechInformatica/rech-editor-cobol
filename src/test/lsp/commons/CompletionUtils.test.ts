@@ -25,15 +25,29 @@ import { CompletionUtils } from '../../../lsp/commons/CompletionUtils';
       expect("   ").to.equal(CompletionUtils.fillMissingSpaces(35, 31, "           05 w-var            "));
     });
 
-    it('Checks filling exact missing spaces', () => {
-      expect("                   ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 15, "                                  "));
-      expect("                               ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 3, "        "));
-      expect("                                ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 2, "              "));
-      expect("          ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 27, "                        pic"));
-      expect("").to.equal(CompletionUtils.fillExactMissingSpaces(35, 43, "                                        pic"));
-      expect("                                  ").to.equal(CompletionUtils.fillExactMissingSpaces(35, 0, ""));
-      
+    it('Checks filling spaces from word start', () => {
+      expect("                   ").to.equal(CompletionUtils.fillSpacesFromWordStart(35, 15, "                                  "));
+      expect("                               ").to.equal(CompletionUtils.fillSpacesFromWordStart(35, 3, "        "));
+      expect("                                ").to.equal(CompletionUtils.fillSpacesFromWordStart(35, 2, "              "));
+      expect("          ").to.equal(CompletionUtils.fillSpacesFromWordStart(35, 27, "                        pic"));
+      expect("").to.equal(CompletionUtils.fillSpacesFromWordStart(35, 43, "                                        pic"));
+      expect("                                  ").to.equal(CompletionUtils.fillSpacesFromWordStart(35, 0, ""));
+    });
 
+    it('Checks filling spaces from word end', () => {
+      expect("    ").to.equal(CompletionUtils.fillSpacesFromWordEnd(20, 12, "           move"));
+      expect("    ").to.equal(CompletionUtils.fillSpacesFromWordEnd(20, 13, "           move"));
+      expect("    ").to.equal(CompletionUtils.fillSpacesFromWordEnd(20, 14, "           move"));
+      expect("    ").to.equal(CompletionUtils.fillSpacesFromWordEnd(20, 15, "           move"));
+      expect(" ").to.equal(CompletionUtils.fillSpacesFromWordEnd(15, 20, "           move"));
+      expect("         ").to.equal(CompletionUtils.fillSpacesFromWordEnd(20, 10, "               "));
+    });
+
+    it('Checks replacing last word', () => {
+      expect("    primeira segunda").to.equal(CompletionUtils.replaceLastWord("    primeira seg", "segunda"));
+      expect("    segunda").to.equal(CompletionUtils.replaceLastWord("    primeira", "segunda"));
+      expect("    segunda").to.equal(CompletionUtils.replaceLastWord("    ", "segunda"));
+      expect("segunda").to.equal(CompletionUtils.replaceLastWord("", "segunda"));
     });
 
   });
