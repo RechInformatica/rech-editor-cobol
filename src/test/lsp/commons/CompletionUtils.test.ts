@@ -50,6 +50,16 @@ import { CompletionUtils } from '../../../lsp/commons/CompletionUtils';
       expect("segunda").to.equal(CompletionUtils.replaceLastWord("", "segunda"));
     });
 
+    it('Checks filling spaces from last word replacement word', () => {
+      expect("    ").to.equal(CompletionUtils.fillSpacesFromWordReplacementEnd(20, 12, "           mo", "move"));
+      expect("    ").to.equal(CompletionUtils.fillSpacesFromWordReplacementEnd(20, 13, "           m", "move"));
+      expect("    ").to.equal(CompletionUtils.fillSpacesFromWordReplacementEnd(20, 14, "           ", "move"));
+      expect("    ").to.equal(CompletionUtils.fillSpacesFromWordReplacementEnd(20, 15, "           s", "move"));
+      expect(" ").to.equal(CompletionUtils.fillSpacesFromWordReplacementEnd(15, 20, "           move", "abcd"));
+      expect("         ").to.equal(CompletionUtils.fillSpacesFromWordReplacementEnd(20, 10, "               ", ""));
+      expect("  ").to.equal(CompletionUtils.fillSpacesFromWordReplacementEnd(20, 15, "               ", "fd"));
+    });
+
   });
 
   describe('Count spaces at beginning test', () => {

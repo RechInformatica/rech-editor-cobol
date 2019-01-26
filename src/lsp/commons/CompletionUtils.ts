@@ -77,6 +77,23 @@ export class CompletionUtils {
   /**
    * Fills missing spaces between the colun where the word found on 
    * current cursor ends, and the target final column.
+   * 
+   * Before filling spaces, the last word found in currentLineText is replaced by lastWordReplacement.
+   *
+   * @param targetFinalColumn final column until where spaces should be inserted
+   * @param currentCursorColumn column where cursor is currently positioned
+   * @param currentLineText text of current line
+   * @param lastWordReplacement word to replace the last word currently found in currentText
+   */
+  public static fillSpacesFromWordReplacementEnd(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string, lastWordReplacement: string): string {
+    let lineWithoutEnter = currentLineText.replace("\r", "").replace("\n", "");
+    let futureLine = CompletionUtils.replaceLastWord(lineWithoutEnter, lastWordReplacement);
+    return CompletionUtils.fillSpacesFromWordEnd(targetFinalColumn, currentCursorColumn, futureLine);
+  }
+
+  /**
+   * Fills missing spaces between the colun where the word found on 
+   * current cursor ends, and the target final column.
    *
    * @param targetFinalColumn final column until where spaces should be inserted
    * @param currentCursorColumn column where cursor is currently positioned

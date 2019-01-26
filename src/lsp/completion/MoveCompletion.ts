@@ -9,9 +9,7 @@ export class MoveCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let lineWithoutEnter = _lines[_line].replace("\r", "").replace("\n", "");
-            let futureLine = CompletionUtils.replaceLastWord(lineWithoutEnter, "move");
-            let text = "move" + CompletionUtils.fillSpacesFromWordEnd(20, column, futureLine) + "${0}";
+            let text = "move" + CompletionUtils.fillSpacesFromWordReplacementEnd(20, column, _lines[_line], "move") + "${0}";
             resolve(
                 [{
                     label: 'MOVE command',
