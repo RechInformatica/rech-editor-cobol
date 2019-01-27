@@ -143,7 +143,7 @@ export class CompletionUtils {
    * @param currentCursorColumn current column where cursor is positioned
    * @param currentLineText current line text
    */
-  private static findWordStartWithinLine(currentCursorColumn: number, currentLineText: string): number {
+  public static findWordStartWithinLine(currentCursorColumn: number, currentLineText: string): number {
     let initialWordColumn = currentCursorColumn;
     while(true) {
         if (initialWordColumn == 0) {
