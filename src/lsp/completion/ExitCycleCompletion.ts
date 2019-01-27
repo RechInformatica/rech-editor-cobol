@@ -9,7 +9,8 @@ export class ExitCycleCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let text = "exit" + CompletionUtils.fillMissingSpaces(35, column + 3) + "perform cycle" + CompletionUtils.separatorForColumn(column);
+            let startColumn = CompletionUtils.findWordStartWithinLine(column, _lines[_line]);
+            let text = "exit" + CompletionUtils.fillSpacesFromWordReplacementEnd(35, column, _lines[_line], "exit") + "perform cycle" + CompletionUtils.separatorForColumn(startColumn);
             resolve(
                 [{
                     label: 'EXIT PERFORM CYCLE command',
