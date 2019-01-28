@@ -12,8 +12,7 @@ export class EvaluateCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let text = "evaluate";
-            text += CompletionUtils.fillMissingSpaces(VAR_COLUMN_DECLARATION, column + text.length - 1) + "true";
+            let text = "evaluate" + CompletionUtils.fillSpacesFromWordReplacementEnd(VAR_COLUMN_DECLARATION, column, _lines[_line], "evaluate") + "true";
             resolve(
                 [{
                     label: 'EVALUATE command',
