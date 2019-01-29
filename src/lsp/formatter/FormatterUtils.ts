@@ -46,7 +46,7 @@ export class FormatterUtils {
         let parser = new ParserCobol();
         let indentedClauses: string[] = [];
         clauses.forEach(currentClause => {
-            indentedClauses.push(CompletionUtils.fillMissingSpaces(column, 0) + " " + currentClause.toLowerCase());
+            indentedClauses.push(CompletionUtils.fillSpacesBetween(0, column) + currentClause.toLowerCase());
         });
         for (let index = line; index < lines.length; index++) {
             let lineText = lines[index];

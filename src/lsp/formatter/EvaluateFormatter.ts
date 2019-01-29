@@ -67,7 +67,7 @@ export class EvaluateFormatter implements FormatterInterface {
      */
     private createEndEvaluateTextEdit(line: number, column: number): TextEdit {
         let endEvaluateText = "";
-        endEvaluateText = CompletionUtils.fillMissingSpaces(column, 0) + "end-evaluate";
+        endEvaluateText = CompletionUtils.fillSpacesBetween(0, column - 1) + "end-evaluate";
         endEvaluateText = endEvaluateText.concat(CompletionUtils.separatorForColumn(column));
         endEvaluateText = endEvaluateText.concat("\n");
         return {
