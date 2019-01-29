@@ -62,7 +62,7 @@ export class CompletionUtils {
   }
 
   /**
-   * Fills missing spaces between the colun where the word found on 
+   * Fills missing spaces between the colun where the word found on
    * current cursor starts, and the target final column.
    *
    * @param targetFinalColumn final column until where spaces should be inserted
@@ -75,9 +75,9 @@ export class CompletionUtils {
   }
 
   /**
-   * Fills missing spaces between the colun where the word found on 
+   * Fills missing spaces between the colun where the word found on
    * current cursor ends, and the target final column.
-   * 
+   *
    * Before filling spaces, the last word found in currentLineText is replaced by lastWordReplacement.
    *
    * @param targetFinalColumn final column until where spaces should be inserted
@@ -92,7 +92,7 @@ export class CompletionUtils {
   }
 
   /**
-   * Fills missing spaces between the colun where the word found on 
+   * Fills missing spaces between the colun where the word found on
    * current cursor ends, and the target final column.
    *
    * @param targetFinalColumn final column until where spaces should be inserted
@@ -110,7 +110,7 @@ export class CompletionUtils {
 
   /**
    * Replaces the last word of currentText with the word specified in lastWordReplacement
-   * 
+   *
    * @param currentText current text
    * @param lastWordReplacement word to replace the last word currently found in currentText
    */
@@ -125,10 +125,10 @@ export class CompletionUtils {
 
   /**
    * Returns a string with a number of spaces equal to (finalColumn - initialColumn)
-   * 
+   *
    * @param spaceCount numner of spaces to generate/return
    */
-  private static fillSpacesBetween(initialColumn: number, finalColumn: number): string {
+  public static fillSpacesBetween(initialColumn: number, finalColumn: number): string {
     let spaceCount = finalColumn - initialColumn;
     let text = "";
     for (var i = 0; i < spaceCount; i++) {
