@@ -101,11 +101,7 @@ export class CompletionUtils {
    */
   public static fillSpacesFromWordEnd(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string): string {
     let initialWordColumn = CompletionUtils.findWordEndWithinLine(currentCursorColumn, currentLineText);
-    let spacesBetween = CompletionUtils.fillSpacesBetween(initialWordColumn, targetFinalColumn);
-    if (spacesBetween.length == 0) {
-      return " ";
-    }
-    return spacesBetween;
+    return CompletionUtils.fillSpacesOrSingleSpace(initialWordColumn, targetFinalColumn);
   }
 
   /**
@@ -122,11 +118,28 @@ export class CompletionUtils {
       return withoutLastWord + lastWordReplacement;
   }
 
+  /**
+   * Returns a string with a number of spaces equal to (finalColumn - initialColumn).
+   *
+   * The difference of this method when compared to CompletionUtils.fillSpacesBetween() is that
+   * this method returns a single space instead of an empty string.
+   *
+   * @param initialColumn initial column
+   * @param finalColumn final column
+   */
+  public static fillSpacesOrSingleSpace(initialColumn: number, finalColumn: number): string {
+    let spacesBetween = CompletionUtils.fillSpacesBetween(initialColumn, finalColumn);
+    if (spacesBetween.length == 0) {
+      return " ";
+    }
+    return spacesBetween;
+  }
 
   /**
    * Returns a string with a number of spaces equal to (finalColumn - initialColumn)
    *
-   * @param spaceCount numner of spaces to generate/return
+   * @param initialColumn initial column
+   * @param finalColumn final column
    */
   public static fillSpacesBetween(initialColumn: number, finalColumn: number): string {
     let spaceCount = finalColumn - initialColumn;
