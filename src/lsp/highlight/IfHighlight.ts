@@ -13,7 +13,7 @@ const ELSETERM = "else"
 export class IfHighlight implements HighlightInterface {
 
     isABlockTerm(word: string): boolean {
-        let match = /(if|else|end-if)/i.exec(word);
+        let match = /^(if|else|end-if)$/i.exec(word);
         if (match) {
             return true
         }
