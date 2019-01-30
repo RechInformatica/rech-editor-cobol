@@ -19,7 +19,9 @@ import {
   DocumentOnTypeFormattingParams,
   DocumentHighlight,
   FoldingRangeRequestParam,
-  FoldingRange
+  FoldingRange,
+  ResponseError,
+  ErrorCodes
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
@@ -33,6 +35,7 @@ import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 import { HighlightFactory } from "./highlight/HighlightFactory";
 import { WhenCompletion } from "./completion/WhenCompletion";
 import { CobolFoldFactory } from "./fold/CobolFoldFactory";
+import { promised } from "q";
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -68,12 +71,27 @@ connection.onInitialize((params: InitializeParams) => {
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
   validateTextDocument(change.document);
+  // Clear the folding cache
+  // Does this not folding if the source has any changes
+  CobolFoldFactory.foldingCache.delete(change.document.uri);
 });
+
+// If the document opened
+documents.onDidOpen(document => {
+  let uri = document.document.uri;
+  let fullDocument = documents.get(uri);
+  let text = fullDocument!.getText();
+  new CobolFoldFactory().fold(uri, text.split("\n"))
+})
+
 // If the document closed
 documents.onDidClose(textDocument => {
+  let uri = textDocument.document.uri
+  // Clear the folding cache
+  CobolFoldFactory.foldingCache.delete(uri);
   //Clear the computed diagnostics to VSCode.
   connection.sendDiagnostics({
-    uri: textDocument.document.uri,
+    uri: uri,
     diagnostics: []
   });
 });
@@ -83,10 +101,8 @@ documents.onDidClose(textDocument => {
  *
  * @param textDocument
  */
-export async function validateTextDocument(
-  textDocument: TextDocument
-): Promise<void> {
-  getAutoDiagnostic<Boolean>().then(autodiagnostic => {
+export async function validateTextDocument(textDocument: TextDocument): Promise<void> {
+  return getAutoDiagnostic<Boolean>().then(autodiagnostic => {
     if (autodiagnostic) {
       new Diagnostician()
         .diagnose(
@@ -147,11 +163,17 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
   );
 }
 
-connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[]> => {
+connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[]| ResponseError<undefined>> => {
   return new Promise((resolve,) => {
-    let fullDocument = documents.get(_foldingRangeRequestParam.textDocument.uri);
+    let uri = _foldingRangeRequestParam.textDocument.uri;
+    let fullDocument = documents.get(uri);
     let text = fullDocument!.getText();
-    resolve(new CobolFoldFactory().fold(text))
+    let folding = CobolFoldFactory.foldingCache.get(uri);
+    if (folding) {
+      return resolve(folding)
+    } else {
+      return resolve(undefined);
+    }
   });
 });
 
@@ -208,21 +230,22 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
 /**
  * Document formatter
  */
-connection.onDocumentOnTypeFormatting(
-  (params: DocumentOnTypeFormattingParams) => {
+connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) => {
     let line = params.position.line;
     let column = params.position.character;
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
-      let formatter = new CobolFormatter(line, column, fullDocument);
-      switch (true) {
-        case hasTypedEnter(params.ch):
-          return formatter.formatWhenEnterIsPressed();
-        case params.ch.toUpperCase() == "E":
-          return formatter.formatWhenEIsPressed();
-        case params.ch.toUpperCase() == "N":
-          return formatter.formatWhenNIsPressed();
-      }
+      return new Promise((reolve) => {
+        let formatter = new CobolFormatter(line, column, fullDocument!);
+        switch (true) {
+          case hasTypedEnter(params.ch):
+            return reolve(formatter.formatWhenEnterIsPressed());
+          case params.ch.toUpperCase() == "E":
+            return reolve(formatter.formatWhenEIsPressed());
+          case params.ch.toUpperCase() == "N":
+            return reolve(formatter.formatWhenNIsPressed());
+        }
+      });
     }
     return [];
   }
@@ -245,10 +268,7 @@ connection.onInitialized(() => {
   );
 });
 
-connection.onDefinition(
-  (
-    params: TextDocumentPositionParams
-  ): Thenable<Location> | Thenable<undefined> | undefined => {
+connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location> | Thenable<undefined> | undefined => {
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
       let text = fullDocument.getText();

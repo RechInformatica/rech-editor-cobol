@@ -15,11 +15,16 @@ import { PerformWithTest } from "./PerformWithTest";
  * Class to fold Cobol source code
  */
 export class CobolFoldFactory {
-  public fold(text: string): Thenable<FoldingRange[]> {
+
+  /** Folding cache */
+  public static foldingCache: Map<string, FoldingRange[]> = new Map()
+
+  public fold(uri: string, buffer: string[]): Thenable<FoldingRange[]> {
     return new Promise(resolve => {
-      let buffer = text.split("\n");
-      let result = this.breakBlocks(buffer);
-      resolve(result);
+      this.breakBlocks(buffer).then ((result) => {
+        CobolFoldFactory.foldingCache.set(uri, result);
+        resolve(result);
+      });
     });
   }
 
@@ -29,27 +34,22 @@ export class CobolFoldFactory {
    * @param text
    */
   private breakBlocks(text: string[]): Promise<FoldingRange[]> {
-    //return new Promise((resolve, reject) => {
-    return new Promise((resolve) => {
-      text = text;
-      resolve([]);
-      return;
-      // Commented on to wait for resolution of performance issues
-      // let promiseFoldings: Promise<FoldingRange>[] = [];
-      // let foldings: FoldingRange[] = [];
-      // for (let index = 0; index < text.length; index++) {
-      //   promiseFoldings.push(this.foldingRange(index, text));
-      // }
-      // Q.allSettled(promiseFoldings).then((results) => {
-      //   results.forEach((result) => {
-      //     if (result.state === "fulfilled") {
-      //       foldings.push(result.value!);
-      //     }
-      //   });
-      //   resolve(foldings);
-      // }).catch(() => {
-      //   reject();
-      // })
+    return new Promise((resolve, reject) => {
+      let promiseFoldings: Promise<FoldingRange>[] = [];
+      let foldings: FoldingRange[] = [];
+      for (let index = 0; index < text.length; index++) {
+        promiseFoldings.push(this.foldingRange(index, text));
+      }
+      Q.allSettled(promiseFoldings).then((results) => {
+        results.forEach((result) => {
+          if (result.state === "fulfilled") {
+            foldings.push(result.value!);
+          }
+        });
+        resolve(foldings);
+      }).catch(() => {
+        reject();
+      })
     })
   }
 
@@ -58,31 +58,31 @@ export class CobolFoldFactory {
    *
    * @param line
    */
-  // private foldingRange(line: number, lines: string[]): Promise<FoldingRange> {
-  //   return new Promise((resolve, reject) => {
-  //     let currentLine = lines[line];
-  //     let cobolFolders: CobolFoldInterface[] = [
-  //       new CopyFolding(),
-  //       new VariableFolding(),
-  //       new IfFolding(),
-  //       new ElseFolding(),
-  //       new EvaluateFolding(),
-  //       new WhenFolding(),
-  //       new ParagraphFolding(),
-  //       new PerformUntilFolding(),
-  //       new PerformWithTest()
-  //     ];
-  //     let folded = false;
-  //     cobolFolders.forEach((cobolFold) => {
-  //       if (cobolFold.mustFolding(currentLine)) {
-  //         folded = true;
-  //         resolve(cobolFold.fold(line, lines));
-  //       }
-  //     })
-  //     if (!folded) {
-  //       reject();
-  //     }
-  //   });
-  // }
+  private foldingRange(line: number, lines: string[]): Promise<FoldingRange> {
+    return new Promise((resolve, reject) => {
+      let currentLine = lines[line];
+      let cobolFolders: CobolFoldInterface[] = [
+        new CopyFolding(),
+        new VariableFolding(),
+        new IfFolding(),
+        new ElseFolding(),
+        new EvaluateFolding(),
+        new WhenFolding(),
+        new ParagraphFolding(),
+        new PerformUntilFolding(),
+        new PerformWithTest()
+      ];
+      let folded = false;
+      cobolFolders.forEach((cobolFold) => {
+        if (cobolFold.mustFolding(currentLine)) {
+          folded = true;
+          resolve(cobolFold.fold(line, lines));
+        }
+      })
+      if (!folded) {
+        reject();
+      }
+    });
+  }
 
 }

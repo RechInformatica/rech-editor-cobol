@@ -2,7 +2,6 @@
 
 import * as fs from 'fs';
 import { denodeify } from 'q';
-import { throws } from 'assert';
 
 /** constant function to append file */
 const appendFile = denodeify(fs.appendFile);
