@@ -3,10 +3,10 @@
 import { File } from '../commons/file';
 import { Executor } from '../commons/executor';
 
-/* Time in millis representing an old indent file */
+/** Time in millis representing an old indent file */
 const INDENT_OLD_FILE_IN_MILLIS: number = 3000;
-/* Indent file charset */
-const INDENT_FILE_CHARSET: string = "latin1";
+/** Indent file charset */
+const INDENT_FILE_CHARSET: string = "utf-8";
 /** Limit column of line */
 const INDENT_LIMIT_COLUMN: number = 120;
 /** Start commentary column in the line */
@@ -17,7 +17,7 @@ const START_COMMENTARY_COLUMN: number = 7;
  */
 export class Indenta {
 
-  /**
+    /**
    * Indents the specified source code if this is all commentary lines
    *
    * @param targetSourceCode target source code to be indented
@@ -216,7 +216,7 @@ export class Indenta {
    * Build a command line to run the indenter
    */
   private buildCommandLine(alignment: string, fonte: string): string {
-    let cmd = "Identa.bat ";
+    let cmd = "ruby Identa.rb ";
     cmd += this.buildTmpFileName();
     cmd += ";" + fonte + ";1;" + alignment + ";F;S -lines:3";
     return cmd;
@@ -226,7 +226,7 @@ export class Indenta {
    * Build a temporary file name
    */
   private buildTmpFileName() {
-    return "C:\\tmp\\" + require("os").userInfo().username + ".cbl";
+    return "C:\\tmp\\" + require("os").userInfo().username.toLowerCase() + ".cbl";
   }
 
 }
