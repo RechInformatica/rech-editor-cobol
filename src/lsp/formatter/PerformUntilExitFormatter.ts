@@ -36,7 +36,7 @@ export class PerformUntilExitFormatter implements FormatterInterface {
      */
     private createEndPerformTextEdit(line: number, column: number): TextEdit {
         let endIfText = "";
-        endIfText = CompletionUtils.fillMissingSpaces(column, 0) + "end-perform";
+        endIfText = CompletionUtils.fillSpacesBetween(0, column - 1) + "end-perform";
         endIfText = endIfText.concat(CompletionUtils.separatorForColumn(column));
         endIfText = endIfText.concat("\n");
         return {

@@ -72,8 +72,8 @@ export class FlagCompletion implements CompletionInterface {
      */
     private buildCurrentFlagText(firstWordColumn: number, variableName: string, suffix: string, value: number): string {
         let text = "";
-        text = text.concat(CompletionUtils.fillMissingSpaces(firstWordColumn, - 3) + "88 " + variableName + suffix);
-        text = text.concat(CompletionUtils.fillMissingSpaces(VALUE_COLUMN, text.length));
+        text = text.concat(CompletionUtils.fillSpacesBetween(1, firstWordColumn + 3) + "88 " + variableName + suffix);
+        text = text.concat(CompletionUtils.fillSpacesBetween(text.length + 1, VALUE_COLUMN));
         text = text.concat("value is " + value + ".");
         return text;
     }

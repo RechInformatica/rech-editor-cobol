@@ -45,10 +45,23 @@ export class CobolVariable {
         let level = Number.parseInt(splitted[0]);
         let name = splitted[1].replace(".", "");
         let picture = CobolVariable.extractPicture(splitted);
-        let type = CobolVariable.detectType(picture.toUpperCase());
-        let display = CobolVariable.isDisplay(picture.toUpperCase());
-        let allowNegative = CobolVariable.allowNegative(picture.toUpperCase());
-        return new CobolVariable(level, name, picture, type, display, allowNegative, line);
+        if (picture === "") {
+            return new CobolVariable(level, name, "", Type.Alphanumeric, true, false, line);
+        } else {
+            let type = CobolVariable.detectType(picture.toUpperCase());
+            let display = CobolVariable.isDisplay(picture.toUpperCase());
+            let allowNegative = CobolVariable.allowNegative(picture.toUpperCase());
+            return new CobolVariable(level, name, picture, type, display, allowNegative, line);
+        }
+    }
+
+    /**
+     * Returns true if the variable represents a group item (it's name that ends with dot)
+     *
+     * @param name variable name
+     */
+    private static isGroupItem(name: string) {
+        return name.endsWith(".");
     }
 
     /**
@@ -77,6 +90,9 @@ export class CobolVariable {
      * @param splitted splitted variable information
      */
     private static extractPicture(splitted: string[]): string {
+        if (splitted[splitted.length - 1].endsWith(".")) {
+            splitted[splitted.length - 1] = splitted[splitted.length - 1].slice(0, -1);
+        }
         let foundPicClause = false;
         for (let i = 0; i < splitted.length; i++) {
             if (splitted[i].toUpperCase() === "PIC") {
@@ -115,7 +131,7 @@ export class CobolVariable {
      * @param picture variable picture
      */
     private static isAlphanumeric(picture: string): boolean {
-        return picture.includes("X");
+        return picture.includes("X") || picture.includes("/");
     }
 
     /**
@@ -133,7 +149,7 @@ export class CobolVariable {
      * @param picture variable picture
      */
     private static isDisplay(picture: string): boolean {
-        return picture.includes(".") || picture.includes("Z") || picture.includes("B") || picture.includes("-") || picture.includes(",") || picture.includes("X");
+        return picture.includes(".") || picture.includes("Z") || picture.includes("B") || picture.includes("-") || picture.includes(",") || picture.includes("X") || picture.includes("/");
     }
 
     /**

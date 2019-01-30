@@ -116,8 +116,16 @@ export class CobolCompletionItemFactory {
           resolve([]);
           return;
         }
+        case this.isDisplay() || this.isAccept(): {
+          resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
+          return;
+        }
         case this.isIf(): {
           resolve(this.generate(this.createVariableSuggestionWithEnum()));
+          return;
+        }
+        case this.isCompute(): {
+          resolve(this.generate(this.createVariableSuggestionWithoutEnumAndDisplay()));
           return;
         }
         case this.isWhen(): {
@@ -217,6 +225,16 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Creates a variable completion interface ignoring enum variables and displays
+   */
+  private createVariableSuggestionWithoutEnumAndDisplay(): CompletionInterface {
+    if (this.variableSuggestion) {
+      return new VariableCompletion().setIgnoreDisplay(true).setIgnoreEnums(true);
+    }
+    return new EmptyCompletion();
+  }
+
+  /**
    * Creates completion items form when clauses
    */
   private createWhenCompletions(): Promise<CompletionItem[]> {
@@ -298,6 +316,36 @@ export class CobolCompletionItemFactory {
    */
   private isIf(): boolean {
     if (/\s+(IF|if).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'display'
+   */
+  private isDisplay(): boolean {
+    if (/\s+(DISPLAY|display).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'accept'
+   */
+  private isAccept(): boolean {
+    if (/\s+(ACCEPT|accept).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'compute'
+   */
+  private isCompute(): boolean {
+    if (/\s+(COMPUTE|compute).*/.exec(this.lineText)) {
       return true;
     }
     return false;

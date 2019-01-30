@@ -12,7 +12,7 @@ export class ToTrueCompletion implements CompletionInterface {
         return new Promise((resolve) => {
             let currentText = lines[line];
             let text = "";
-            text = new ToCompletion().buildToTextWithIndent(column);
+            text = new ToCompletion().buildToTextWithIndent(currentText, column);
             text = text.concat("true");
             text = text.concat(CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentText)));
             resolve(

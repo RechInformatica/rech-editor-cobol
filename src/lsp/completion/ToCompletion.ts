@@ -35,7 +35,7 @@ export class ToCompletion implements CompletionInterface {
      * @param column current cursor column
      */
     private buildToTextWithTabStop(currentText: string, column: number): string {
-        let text = this.buildToTextWithIndent(column);
+        let text = this.buildToTextWithIndent(currentText, column);
         text = text.concat("${0}");
         text = text.concat(CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentText)));
         return text;
@@ -44,16 +44,14 @@ export class ToCompletion implements CompletionInterface {
     /**
      * Builds and returns the 'to' text snippet witn indent and without tabstop
      *
+     * @param currentText current line text
      * @param column current cursor column
      */
-    public buildToTextWithIndent(column: number): string {
-        let text = "";
-        if (column < TO_COLUMN_DECLARATION) {
-            text = text.concat(CompletionUtils.fillMissingSpaces(TO_COLUMN_DECLARATION, column - 1));
-        }
-        text = text.concat("to");
-        text = text.concat(CompletionUtils.fillMissingSpaces(35, column + text.length - 1));
-        return text;
+    public buildToTextWithIndent(currentText: string, column: number): string {
+        let wordReplacement =  CompletionUtils.fillSpacesFromWordStart(TO_COLUMN_DECLARATION, column, currentText) + "to";
+        let futureLine = CompletionUtils.replaceLastWord(currentText, wordReplacement);
+        let finalText = wordReplacement + CompletionUtils.fillSpacesFromWordEnd(35, futureLine.length, futureLine);
+        return finalText;
     }
 
 }

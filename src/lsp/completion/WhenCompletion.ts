@@ -119,7 +119,7 @@ export class WhenCompletion implements CompletionInterface {
                                 character: 0
                             }
                         },
-                        newText: CompletionUtils.fillMissingSpaces(whenStartColumn, 0) + "when " + variable
+                        newText: CompletionUtils.fillSpacesBetween(1, whenStartColumn) + "when " + variable
                     },
                     additionalTextEdits: [textEdit],
                     insertTextFormat: InsertTextFormat.Snippet,
@@ -145,7 +145,7 @@ export class WhenCompletion implements CompletionInterface {
         let text = "";
         variables88.forEach((v) => {
             if (v != variable) {
-                text = text.concat(CompletionUtils.fillMissingSpaces(whenStartColumn, 0) + "when " + v + "\n");
+                text = text.concat(CompletionUtils.fillSpacesBetween(1, whenStartColumn) + "when " + v + "\n");
             }
         });
         return {

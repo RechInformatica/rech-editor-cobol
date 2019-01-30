@@ -2,7 +2,7 @@
     "name": "rech-editor-cobol",
     "displayName": "Rech COBOL",
     "description": "Edit Cobol files with Visual Studio Code",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "publisher": "rechinformatica",
     "engines": {
         "vscode": "^1.26.0"
@@ -74,7 +74,7 @@
                 "rech.editor.cobol.variableSuggestion": {
                     "type": "boolean",
                     "description": "Controls whether COBOL variable suggestion is allowed.",
-                    "default": false
+                    "default": true
                 }
             }
         },

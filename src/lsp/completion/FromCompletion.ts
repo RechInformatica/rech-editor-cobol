@@ -13,7 +13,7 @@ export class FromCompletion implements CompletionInterface {
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
             let currentText = lines[line];
-            let text = this.buildToText(currentText, column);
+            let text = this.buildFromText(currentText, column);
             resolve(
                 [{
                     label: 'FROM command',
@@ -29,18 +29,26 @@ export class FromCompletion implements CompletionInterface {
     }
 
     /**
-     * Builds and returns the 'to' text snippet
+     * Builds and returns the 'from' text snippet
      */
-    private buildToText(currentText: string, column: number): string {
-        let text = "";
-        if (column < FROM_COLUMN_DECLARATION) {
-            text = text.concat(CompletionUtils.fillMissingSpaces(FROM_COLUMN_DECLARATION, column - 1));
-        }
-        text = text.concat("from");
-        text = text.concat(CompletionUtils.fillMissingSpaces(35, column + text.length - 1));
+    private buildFromText(currentText: string, column: number): string {
+        let text = this.buildFromTextWithIndent(currentText, column);
         text = text.concat("${0}");
         text = text.concat(CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentText)));
         return text;
+    }
+
+    /**
+     * Builds and returns the 'from' text snippet witn indent and without tabstop
+     *
+     * @param currentText current line text
+     * @param column current cursor column
+     */
+    private buildFromTextWithIndent(currentText: string, column: number): string {
+        let wordReplacement =  CompletionUtils.fillSpacesFromWordStart(FROM_COLUMN_DECLARATION, column, currentText) + "from";
+        let futureLine = CompletionUtils.replaceLastWord(currentText, wordReplacement);
+        let finalText = wordReplacement + CompletionUtils.fillSpacesFromWordEnd(35, futureLine.length, futureLine);
+        return finalText;
     }
 
 }

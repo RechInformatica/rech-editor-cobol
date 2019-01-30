@@ -61,7 +61,7 @@ export class PerformVaryingFormatter implements FormatterInterface {
      */
     private createIndentofUntilTextEdit(line: number, column: number): TextEdit {
         let text = "";
-        text = CompletionUtils.fillMissingSpaces(column - 2, 0);
+        text = CompletionUtils.fillSpacesBetween(0, column - 3);
         return {
             range: {
                 start: {

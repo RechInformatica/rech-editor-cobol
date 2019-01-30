@@ -201,4 +201,27 @@ import { CompletionItem } from 'vscode';
                 expect(expectedItems[i].detail).to.equal(items[i].detail);
             };
         });
+
+        it('Checks cobol variable completion ignoring displays and enums', async () => {
+            //
+            let expectedItems : CompletionItem[] = [];
+            expectedItems.push({
+                label: "w78-nomprg",
+                detail: "Nome do programa"
+            });
+            expectedItems.push({
+                label: "w-total-venda",
+                detail: "Total da venda dos produtos"
+            });
+            expectedItems.push({
+                label: "w-icms",
+                detail: "Valor do ICMS"
+            });
+            const items = await new VariableCompletion().setIgnoreDisplay(true).setIgnoreEnums(true).generate(1,1, lines);
+            expect(expectedItems.length).to.equal(items.length);
+            for (let i = 0; i < items.length; i++) {
+                expect(expectedItems[i].label).to.equal(items[i].label);
+                expect(expectedItems[i].detail).to.equal(items[i].detail);
+            };
+        });
     });
