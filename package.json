@@ -314,12 +314,12 @@
         "test": "npm run compile && mocha -r ts-node/register ./src/test/**/*.test.ts"
     },
     "dependencies": {
+        "@types/chai": "^4.1.6",
         "@types/iconv-lite": "0.0.1",
         "@types/q": "^1.0.0",
+        "chai": "^4.2.0",
         "iconv-lite": "^0.4.24",
         "q": "^1.4.1",
-        "@types/chai": "^4.1.6",
-        "chai": "^4.2.0",
         "ts-node": "^7.0.1",
         "vscode-languageclient": "^4.1.4",
         "vscode-languageserver": "^4.1.3"

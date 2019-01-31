@@ -80,8 +80,12 @@ documents.onDidOpen(document => {
   let uri = document.document.uri;
   let fullDocument = documents.get(uri);
   let text = fullDocument!.getText();
-  new CobolFoldFactory().fold(uri, text.split("\n"))
-})
+  getConfig<boolean>("folding").then(foldingConfig => {
+    if (foldingConfig) {
+      new CobolFoldFactory().fold(uri, text.split("\n"));
+    }
+  });
+});
 
 // If the document closed
 documents.onDidClose(textDocument => {

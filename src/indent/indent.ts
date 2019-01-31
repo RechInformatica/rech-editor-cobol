@@ -2,11 +2,12 @@
 
 import { File } from '../commons/file';
 import { Executor } from '../commons/executor';
+import * as iconv from 'iconv-lite';
 
 /** Time in millis representing an old indent file */
 const INDENT_OLD_FILE_IN_MILLIS: number = 3000;
 /** Indent file charset */
-const INDENT_FILE_CHARSET: string = "utf-8";
+const INDENT_FILE_CHARSET: string = "binary";
 /** Limit column of line */
 const INDENT_LIMIT_COLUMN: number = 120;
 /** Start commentary column in the line */
@@ -141,7 +142,8 @@ export class Indenta {
       return;
     }
     // Saves the target source code in the input file
-    inputFile.saveBufferSync(targetSourceCode, INDENT_FILE_CHARSET);
+    let buffer = iconv.encode(targetSourceCode.join(), "win1252");
+    inputFile.saveBufferSync([buffer.toString("binary")], INDENT_FILE_CHARSET);
     //
     let indentFile = this.createIndentedFileInstance();
     let errorFile = this.createErrorFileIntance();
@@ -152,12 +154,14 @@ export class Indenta {
     new Executor().runSync(this.buildCommandLine(alignment, sourceFileName));
     // If any error was found
     if (errorFile.exists()) {
-      err(errorFile.loadBufferSync(INDENT_FILE_CHARSET).trim());
+      let buffer = iconv.encode(errorFile.loadBufferSync(INDENT_FILE_CHARSET).trim(), "binary");
+      err(iconv.decode(buffer, "win1252"));
       errorFile.delete();
       inputFile.delete();
     } else {
       indentFile.loadBuffer(INDENT_FILE_CHARSET).then((buffer) => {
-        callback(buffer);
+        let identBuffer = iconv.encode(buffer.toString(), "binary");
+        callback([iconv.decode(identBuffer, "win1252")]);
         indentFile.delete();
         inputFile.delete();
       });
@@ -216,7 +220,7 @@ export class Indenta {
    * Build a command line to run the indenter
    */
   private buildCommandLine(alignment: string, fonte: string): string {
-    let cmd = "ruby Identa.rb ";
+    let cmd = "Identa.bat ";
     cmd += this.buildTmpFileName();
     cmd += ";" + fonte + ";1;" + alignment + ";F;S -lines:3";
     return cmd;
