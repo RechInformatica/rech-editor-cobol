@@ -165,14 +165,14 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
 connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[]| ResponseError<undefined>> => {
   return new Promise((resolve,) => {
     let uri = _foldingRangeRequestParam.textDocument.uri;
-    let fullDocument = documents.get(uri);
-    let text = fullDocument!.getText();
     let folding = CobolFoldFactory.foldingCache.get(uri);
-    if (folding) {
-      return resolve(folding)
-    } else {
-      return resolve(undefined);
-    }
+    getConfig<boolean>("folding").then(foldingConfig => {
+      if (foldingConfig && folding) {
+        return resolve(folding)
+      } else {
+        return resolve(undefined);
+      }
+    })
   });
 });
 

@@ -75,6 +75,11 @@
                     "type": "boolean",
                     "description": "Controls whether COBOL variable suggestion is allowed.",
                     "default": true
+                },
+                "rech.editor.cobol.folding": {
+                    "type": "boolean",
+                    "description": "Controls whether COBOL folding is allowed.",
+                    "default": true
                 }
             }
         },
