@@ -79,7 +79,7 @@ export class File {
    * Tests whether the file exists
    */
   public exists(): boolean {
-    return fs.existsSync(this.fileName);
+    return fs.existsSync(this.fileName.trim());
   }
 
   /**
