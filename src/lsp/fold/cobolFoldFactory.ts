@@ -19,7 +19,7 @@ export class CobolFoldFactory {
   /** Folding cache */
   public static foldingCache: Map<string, FoldingRange[]> = new Map()
 
-  public fold(uri: string, buffer: string[]): Thenable<FoldingRange[]> {
+  public fold(uri: string, buffer: string[]): Promise<FoldingRange[]> {
     return new Promise(resolve => {
       this.breakBlocks(buffer).then ((result) => {
         CobolFoldFactory.foldingCache.set(uri, result);

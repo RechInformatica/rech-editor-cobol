@@ -22,6 +22,7 @@ import {
   FoldingRange,
   ResponseError,
   TextDocumentChangeEvent,
+  FoldingRangeRequest,
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
@@ -36,6 +37,8 @@ import { HighlightFactory } from "./highlight/HighlightFactory";
 import { WhenCompletion } from "./completion/WhenCompletion";
 import { CobolFoldFactory } from "./fold/CobolFoldFactory";
 
+/** Max lines in the source to active the folding */
+const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 let connection = createConnection(ProposedFeatures.all);
@@ -80,6 +83,8 @@ documents.onDidChangeContent(change => {
  */
 documents.onDidSave(document => {
   validateTextDocument(document.document, "onSave");
+  loadFolding(document);
+  connection.client.register(FoldingRangeRequest.type, document);
 })
 
 // If the document opened
@@ -103,10 +108,12 @@ documents.onDidClose(textDocument => {
 /**
  * Load the folding of the source
  *
- * @param uri
- * @param text
+ * @param document
  */
 export function loadFolding(document: TextDocumentChangeEvent) {
+  if (document.document.lineCount > MAX_LINE_IN_SOURCE_TO_FOLDING) {
+    return;
+  }
   let uri = document.document.uri;
   let fullDocument = documents.get(uri);
   let text = fullDocument!.getText();
