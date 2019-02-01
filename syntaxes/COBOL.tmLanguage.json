@@ -13,7 +13,7 @@
   "patterns": [
     {
       "comment": "Color paragraph declaration",
-      "match": "(^       [\\w\\-]+\\.$)",
+      "match": "(^       (\\w|\\-|\\(([\\w!@#])+\\))+\\.$)",
       "name": "support.function.cobol"
     },
     {
@@ -26,14 +26,14 @@
         "1": {
           "name": "support.function.cobol"
         },
-        "2":{
+        "2": {
           "name": "support.function.cobol"
         }
       }
     },
     {
       "comment": "Color paragraph name on GO TO or PERFORM",
-      "match": "(?i:perform|go\\s+to)\\s+([\\w]+\\-[\\w\\-]+)",
+      "match": "(?i:perform|go\\s+to)\\s+([\\w]+\\-(\\w|\\-|\\(([a-z!@#])+\\))+)",
       "captures": {
         "0": {
           "name": "keyword.verb.cobol"
@@ -44,7 +44,7 @@
       }
     },
     {
-      "match" : "(^[ \\*][ \\*][ \\*][ \\*][ \\*][ \\*])(\\*.*$)",
+      "match": "(^[ \\*][ \\*][ \\*][ \\*][ \\*][ \\*])(\\*.*$)",
       "name": "comment.line.cobol.fixed"
     },
     {
@@ -74,7 +74,7 @@
       "name": "comment.line.cobol.fixed"
     },
     {
-      "match": "(?:^|\\s+)(?i:\\$\\s*set\\s+)(ilusing.*)$",
+      "match": "(?:^|\\s+)(?i:>>cbl\\s)(.*)$",
       "captures": {
         "0": {
           "name": "comment.line.set.cobol"
@@ -102,7 +102,7 @@
       }
     },
     {
-      "match": "(?:^|\\s+)(?i:>>cbl\\s)(.*)$",
+      "match": "(?:^|\\s+)(?i:\\$\\s*set\\s|>>cbl\\s)(.*)$",
       "captures": {
         "0": {
           "name": "comment.line.set.cobol"
@@ -128,7 +128,7 @@
       "name": "comment.line.modern"
     },
     {
-      "match" : "(>>.*)$",
+      "match": "(>>.*)$",
       "name": "strong comment.line.set.acucobol"
     },
     {
@@ -494,8 +494,12 @@
       }
     },
     {
-      "match" : "(?<![-_])(?i:if|else|end-if|exit\\s+program|exit\\s+method|evaluate|end-evaluate|perform|end-perform|when\\s+other|when|continue|call|end-call|invoke|go\\s+to|sort|merge|use|xml|parse|stop\\s+run|goback|raise|exit\\s+function)(?=\\s|\\.|,|$)",
-      "name" : "keyword.control.cobol"
+      "match": "(?<![-_])(?i:exit)\\s+(?i:paragraph|perform(\\s+cycle)*)(?=\\s|\\.|,|$)",
+      "name": "keyword.control.flow.js"
+    },
+    {
+      "match": "(?<![-_])(?i:if|else|end-if|exit\\s+program|exit\\s+method|evaluate|end-evaluate|perform|end-perform|when\\s+other|when|continue|call|end-call|invoke|go\\s+to|sort|merge|use|xml|parse|stop\\s+run|goback|raise|exit\\s+function)(?=\\s|\\.|,|$)",
+      "name": "keyword.control.cobol"
     },
     {
       "match": "(?<![-_])(?i:accept|add|address|allocate|call|cancel|chain|close|commit|compute|continue|delete|disable|display|bell|divide|eject|enable|enter|evaluate|exhibit|named|exit|free|generate|go\\s+to|initialize\\sonly|initialize|initiate|inspect|merge|end-set|set|end-invoke|invoke\\s+run|invoke|move|corresponding|corr|multiply|otherwise|open|sharing|sort-merge|purge|ready|read|receive|release|return|rewrite|rounded|rollback|search|send|sort|collating\\s+sequence|collating|start|service|subtract|suppress|terminate|then|unlock|string|unstring|validate|write|next|statement|sentence)(?=\\s|\\.|,|$)",
@@ -555,15 +559,15 @@
     },
     {
       "match": "\\s+(?i:=|!=|<|>|<=|>=|<>|\\+|\\-|\\*|\\/|b-and|b-or|b-xor|b-exor|b-not|b-left|b-right|and|or|equals)(?=\\s+|\\.|,|$)",
-      "name": "keyword.operator.cobol"
+      "name": "keyword.operator.logical.cobol"
     },
     {
       "match": "\\s+(?i:(is\\s)?(not\\s)?equal(\\sto)?)(?=\\s+|\\.|,|$)",
-      "name": "keyword.operator.cobol"
+      "name": "keyword.operator.logical.cobol"
     },
     {
       "match": "\\s+(?i:(is\\s)?(not\\s)?(greater|less)(\\sthan)?)(?=\\s+|\\.|,|$)",
-      "name": "keyword.operator.cobol"
+      "name": "keyword.operator.logical.cobol"
     },
     {
       "match": "(?i:not\\s+at\\s+end)",
@@ -571,7 +575,7 @@
     },
     {
       "match": "(?i:not)(?=\\s+|\\.|$)",
-      "name": "keyword.operator.cobol"
+      "name": "keyword.operator.logical.cobol"
     },
     {
       "match": "(?!-)(?i:installation|author|source-computer|object-computer|date-written|date-compiled)(?=\\s|\\.|,)",
@@ -636,10 +640,9 @@
       "match": "(^[0-9][0-9][0-9][0-9][0-9][0-9])",
       "name": "constant.numeric.integer"
     },
-
     {
-      "match": "([0-9a-zA-Z][a-zA-Z\\-0-9]+)",
-      "name": "meta.symbol.cobol"
+      "match": "(?i:([a-z0-9]|\\(([a-z!@#])+\\))([a-z\\-0-9]|\\(([a-z!@#])+\\))+)",
+      "name": "variable.cobol"
     }
   ],
   "scopeName": "source.cobol"
