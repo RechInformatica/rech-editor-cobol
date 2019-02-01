@@ -21,7 +21,7 @@ import {
   FoldingRangeRequestParam,
   FoldingRange,
   ResponseError,
-  ErrorCodes
+  TextDocumentChangeEvent,
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
@@ -69,22 +69,23 @@ connection.onInitialize((params: InitializeParams) => {
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
-  validateTextDocument(change.document);
+  validateTextDocument(change.document, "onChange");
   // Clear the folding cache
   // Does this not folding if the source has any changes
   CobolFoldFactory.foldingCache.delete(change.document.uri);
 });
 
+/**
+ * If the document saved
+ */
+documents.onDidSave(document => {
+  validateTextDocument(document.document, "onSave");
+})
+
 // If the document opened
 documents.onDidOpen(document => {
-  let uri = document.document.uri;
-  let fullDocument = documents.get(uri);
-  let text = fullDocument!.getText();
-  getConfig<boolean>("folding").then(foldingConfig => {
-    if (foldingConfig) {
-      new CobolFoldFactory().fold(uri, text.split("\n"));
-    }
-  });
+  validateTextDocument(document.document, true);
+  loadFolding(document);
 });
 
 // If the document closed
@@ -100,14 +101,32 @@ documents.onDidClose(textDocument => {
 });
 
 /**
+ * Load the folding of the source
+ *
+ * @param uri
+ * @param text
+ */
+export function loadFolding(document: TextDocumentChangeEvent) {
+  let uri = document.document.uri;
+  let fullDocument = documents.get(uri);
+  let text = fullDocument!.getText();
+  getConfig<boolean>("folding").then(foldingConfig => {
+    if (foldingConfig) {
+      new CobolFoldFactory().fold(uri, text.split("\n"));
+    }
+  });
+}
+
+/**
  * Create diagnostics for all errors or warnings
  *
  * @param textDocument
  */
-export async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-  return getAutoDiagnostic<Boolean>().then(autodiagnostic => {
-    if (autodiagnostic) {
-      new Diagnostician()
+export async function validateTextDocument(textDocument: TextDocument, event: "onSave" | "onChange"| boolean): Promise<void> {
+  return getAutoDiagnostic().then(autodiagnostic => {
+    if (autodiagnostic && (event === true || autodiagnostic == event)) {
+      let text = documents.get(textDocument.uri)!.getText();
+      new Diagnostician(text)
         .diagnose(
           textDocument,
           fileName => {
@@ -150,8 +169,8 @@ export function getConfig<T>(section: string) {
 /**
  * Sends a request to the client to identify if should activate auto diagnostic
  */
-export function getAutoDiagnostic<Boolean>() {
-  return connection.sendRequest<Boolean>("custom/getAutoDiagnostic");
+export function getAutoDiagnostic() {
+  return connection.sendRequest<"onChange" | "onSave" | boolean>("custom/getAutoDiagnostic");
 }
 
 /**

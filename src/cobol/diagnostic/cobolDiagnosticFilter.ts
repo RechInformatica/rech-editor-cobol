@@ -7,7 +7,7 @@ import { configuration } from "../../helpers/configuration";
 class CobolDiagnosticFilter {
 
   /** Wheter auto diagnostic is active */
-  private autoDiagnostic: boolean = false;
+  private autoDiagnostic: "onChange" | "onSave" | boolean = false;
   /** Warnings that should not be considered in diagnostics */
   private noShowWarnings: string[] | undefined;
 
@@ -15,14 +15,14 @@ class CobolDiagnosticFilter {
   /**
    * Returns wheter auto diagnostic is active
    */
-  public getAutoDiagnostic(): boolean {
+  public getAutoDiagnostic(): "onChange" | "onSave" | boolean {
     return this.autoDiagnostic;
   }
 
   /**
    * Sets wheter auto diagnostic is active
    */
-  public setAutoDiagnostic(autoDiagnostic: boolean): void {
+  public setAutoDiagnostic(autoDiagnostic: "onChange" | "onSave" | boolean): void {
     this.autoDiagnostic = autoDiagnostic;
   }
 
