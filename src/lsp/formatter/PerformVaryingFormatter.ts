@@ -8,7 +8,7 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 export class PerformVaryingFormatter implements FormatterInterface {
 
     /** RegExp that identifies if it is the until of Perform varying clause*/
-    public static UNTIL_REGEXP = /^\s+UNTIL\s+.*/i;
+    public static UNTIL_REGEXP = /^\s+(UNTIL|until)\s+.*/i;
 
     /**
      * Returns the line of the 'UNTIL' clause
@@ -45,12 +45,12 @@ export class PerformVaryingFormatter implements FormatterInterface {
             untilLineText = lines[untilLine];
         }
         let untilStartColumn = CompletionUtils.countSpacesAtBeginning(untilLineText);
-        if (currentLineText.toLowerCase().endsWith("and") || currentLineText.toLowerCase().endsWith("or")) {
+        if (/.*\s(?:or|and|=|>|<|=>|=<|<>)$/.test(currentLineText.toLowerCase())) {
             let condition = currentLineText.substring(untilStartColumn + 5);
             let conditionColumn = condition.length - condition.trimLeft().length + untilStartColumn + 8
-            return [this.createIndentofUntilTextEdit(line, conditionColumn)];;
+            return [this.createIndentofUntilTextEdit(line, conditionColumn, lines[line].trim())];;
         }
-        return [this.createIndentofUntilTextEdit(line, untilStartColumn)];;
+        return [this.createIndentofUntilTextEdit(line, untilStartColumn, lines[line].trim())];;
     }
 
     /**
@@ -59,9 +59,12 @@ export class PerformVaryingFormatter implements FormatterInterface {
      * @param line line where the 'until' clause will be inserted
      * @param column column where the 'until' clause will be inserted
      */
-    private createIndentofUntilTextEdit(line: number, column: number): TextEdit {
+    private createIndentofUntilTextEdit(line: number, column: number, aditionalText?: string): TextEdit {
         let text = "";
         text = CompletionUtils.fillSpacesBetween(0, column - 3);
+        if (aditionalText) {
+            text += aditionalText;
+        }
         return {
             range: {
                 start: {
