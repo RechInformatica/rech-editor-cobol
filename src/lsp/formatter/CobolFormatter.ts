@@ -79,6 +79,9 @@ export class CobolFormatter {
    */
   public formatWhenEIsPressed(): TextEdit[] {
     let currentText = this.lines[this.line];
+    if (this.isCommentary(currentText)) {
+      return [];
+    }
     if (this.isElseCondition(currentText)) {
       return this.generate(new ElseFormatter());
     }
@@ -90,6 +93,9 @@ export class CobolFormatter {
    */
   public formatWhenNIsPressed(): TextEdit[] {
     let currentText = this.lines[this.line];
+    if (this.isCommentary(currentText)) {
+      return [];
+    }
     if (this.isWhenCondition(currentText)) {
       return this.generate(new WhenFormatter());
     }

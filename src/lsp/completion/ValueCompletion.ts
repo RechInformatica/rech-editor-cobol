@@ -11,19 +11,23 @@ const VALUE_COLUMN_DECLARATION = 51;
  */
 export class ValueCompletion implements CompletionInterface {
 
-    public generate(line: number, column: number, lines: string[]): CompletionItem[] {
-        let currentLineText = lines[line];
-        let variable = CobolVariable.parseLine(currentLineText);
-        let text = this.generateTextFromVariable(variable, column);
-        return [{
-            label: 'Completar declaração de VALUE',
-            detail: 'Será inserida cláusula VALUE no lugar apropriado.',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "value",
-            preselect: true,
-            kind: CompletionItemKind.Variable
-        }];
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let currentLineText = lines[line];
+            let variable = CobolVariable.parseLine(currentLineText);
+            let text = this.generateTextFromVariable(variable, column, currentLineText);
+            resolve(
+                [{
+                    label: 'Complete VALUE declaration',
+                    detail: 'VALUE clause will be inserted on the most appropriate place',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    filterText: "value",
+                    preselect: true,
+                    kind: CompletionItemKind.Variable
+                }]
+            );
+        });
     }
 
     /**
@@ -31,9 +35,10 @@ export class ValueCompletion implements CompletionInterface {
      *
      * @param variable Cobol variable
      * @param column column
+     * @param currentLineText current line text
      */
-    private generateTextFromVariable(variable: CobolVariable, column: number): string {
-        let text = CompletionUtils.fillMissingSpaces(VALUE_COLUMN_DECLARATION, column - 1);
+    private generateTextFromVariable(variable: CobolVariable, column: number, currentLineText: string): string {
+        let text = CompletionUtils.fillSpacesFromWordStart(VALUE_COLUMN_DECLARATION, column, currentLineText);
         if (variable.getType() == Type.Alphanumeric) {
             text = text.concat("value is ${1:spaces}");
         } else {

@@ -9,18 +9,22 @@ const PIC_COLUMN_DECLARATION = 35;
  */
 export class PictureCompletion implements CompletionInterface {
 
-    public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = CompletionUtils.fillMissingSpaces(PIC_COLUMN_DECLARATION, column - 1) + "pic is $1($2)";
-        return [{
-            label: 'Completar declaração de PIC',
-            detail: 'Será inserida cláusula PIC no lugar apropriado.',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "pic",
-            preselect: true,
-            commitCharacters: ['x', '9', 'z', 'b', ' '],
-            kind: CompletionItemKind.Variable
-        }];
+    public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let text =  CompletionUtils.fillSpacesFromWordStart(PIC_COLUMN_DECLARATION, column, _lines[_line]) + "pic is $1($2)";
+            resolve(
+                [{
+                    label: 'Complete PIC declaration',
+                    detail: 'PIC clause will be inserted on the most appropriate place.',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    filterText: "pic",
+                    preselect: true,
+                    commitCharacters: ['x', '9', 'z', 'b', ' '],
+                    kind: CompletionItemKind.Variable
+                }]
+            );
+        })
     }
 
 }

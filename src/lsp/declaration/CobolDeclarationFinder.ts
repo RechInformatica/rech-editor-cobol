@@ -76,7 +76,7 @@ export class CobolDeclarationFinder {
    */
   private buildCacheFileName(uri: string) {
     var path = new Path(uri).fullPathWin();
-    return "c:\\tmp\\PREPROC\\" + new Path(path).fileName();
+    return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" + new Path(path).fileName();
   }
 
   /**

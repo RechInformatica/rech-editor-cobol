@@ -52,7 +52,7 @@ export class CobolDiagnosticPreprocManager {
   fileContent: string[],
   errorCallback: () => any
   ) {
-    file.saveBuffer(fileContent).then(() => {
+    file.saveBuffer(fileContent, "latin1").then(() => {
       CobolDiagnosticPreprocManager.runPreproc(
         PreprocessCallback,
         file,

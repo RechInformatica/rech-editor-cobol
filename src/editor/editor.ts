@@ -517,14 +517,30 @@ export class Editor {
     }
     // Select whole lines of the selection range
     this.selectWholeLines();
+    let indenter = new Indenta();
+    if (indenter.isAllCommentaryLines(this.getSelectionBuffer())) {
+      indenter.indentCommentary(this.getSelectionBuffer(), (buffer) => this.replaceBuffer(buffer, restoreCursor));
+      return;
+    }
     //Indent the selection range
-    new Indenta().indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), (buffer) => {
-      this.replaceSelection(buffer.toString());
-      // Restore original cursor if necessary. This won't keep selection on entire line after a single line indentation
-      if (restoreCursor != null) {
-        this.setCursorPosition(restoreCursor);
-      }
+    indenter.indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), (buffer) => {
+      this.replaceBuffer(buffer, restoreCursor);
     }, (bufferErr) => { this.showWarningMessage(bufferErr); });
+  }
+
+  /**
+   * Replace buffer content
+   *
+   * @param buffer
+   * @param restoreCursor
+   */
+  private replaceBuffer(buffer: string[], restoreCursor: RechPosition) {
+    this.replaceSelection(buffer.toString());
+    // Restore original cursor if necessary. This won't keep selection on entire line after a single line indentation
+    if (restoreCursor != null) {
+      this.setCursorPosition(restoreCursor);
+    }
+
   }
 
   /**

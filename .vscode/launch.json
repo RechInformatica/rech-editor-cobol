@@ -10,17 +10,23 @@
 			"request": "launch",
 			"name": "Launch Client",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}"],
-			"outFiles": ["${workspaceRoot}/client/out/**/*.js"],
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}"
+			],
+			"outFiles": [
+				"${workspaceRoot}/client/out/**/*.js"
+			],
 			"preLaunchTask": "npm: watch:client"
 		},
 		{
 			"type": "node",
 			"request": "attach",
 			"name": "Attach to Server",
-			"port": 10998,
+			"port": 10999,
 			"restart": true,
-			"outFiles": ["${workspaceRoot}/server/out/**/*.js"]
+			"outFiles": [
+				"${workspaceRoot}/server/out/**/*.js"
+			]
 		},
 		{
 			"name": "Language Server E2E Test",
@@ -32,13 +38,34 @@
 				"--extensionTestsPath=${workspaceRoot}/client/out/test",
 				"${workspaceRoot}/client/testFixture"
 			],
-			"outFiles": ["${workspaceRoot}/client/out/test/**/*.js"]
+			"outFiles": [
+				"${workspaceRoot}/client/out/test/**/*.js"
+			]
+		},
+		{
+			"name": "Run mocha",
+			"type": "node",
+			"request": "launch",
+			"program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+			"stopOnEntry": false,
+			"args": [
+				"src/**/*.ts",
+				"--no-timeouts"
+			],
+			"cwd": "${workspaceRoot}",
+			"runtimeExecutable": null,
+			"env": {
+				"NODE_ENV": "testing"
+			}
 		}
 	],
 	"compounds": [
 		{
 			"name": "Client + Server",
-			"configurations": ["Launch Client", "Attach to Server"]
+			"configurations": [
+				"Launch Client",
+				"Attach to Server"
+			]
 		}
 	]
 }

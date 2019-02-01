@@ -36,7 +36,7 @@ export class IfFormatter implements FormatterInterface {
      */
     private createEndIfTextEdit(line: number, column: number): TextEdit {
         let endIfText = "";
-        endIfText = CompletionUtils.fillMissingSpaces(column, 0) + "end-if";
+        endIfText = CompletionUtils.fillSpacesBetween(0, column - 1) + "end-if";
         endIfText = endIfText.concat(CompletionUtils.separatorForColumn(column));
         endIfText = endIfText.concat("\n");
         return {

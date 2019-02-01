@@ -10,18 +10,21 @@ const VAR_COLUMN_DECLARATION = 35;
  */
 export class EvaluateCompletion implements CompletionInterface {
 
-    public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = "evaluate";
-        text += CompletionUtils.fillMissingSpaces(VAR_COLUMN_DECLARATION, column + text.length - 1) + "true";
-        return [{
-            label: 'Gerar comando EVALUATE',
-            detail: 'Gera a declaração do comando evaluate.',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "evaluate",
-            preselect: true,
-            kind: CompletionItemKind.Keyword
-        }];
+    public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let text = "evaluate" + CompletionUtils.fillSpacesFromWordReplacementEnd(VAR_COLUMN_DECLARATION, column, _lines[_line], "evaluate") + "true";
+            resolve(
+                [{
+                    label: 'EVALUATE command',
+                    detail: 'Generates the declaration of EVALUATE command',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    filterText: "evaluate",
+                    preselect: true,
+                    kind: CompletionItemKind.Keyword
+                }]
+            );
+        });
     }
 
 }

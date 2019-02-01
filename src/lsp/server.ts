@@ -17,7 +17,11 @@ import {
   CompletionItem,
   TextDocument,
   DocumentOnTypeFormattingParams,
-  DocumentHighlight
+  DocumentHighlight,
+  FoldingRangeRequestParam,
+  FoldingRange,
+  ResponseError,
+  TextDocumentChangeEvent,
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
@@ -29,6 +33,8 @@ import { CobolCompletionItemFactory } from "./completion/CobolCompletionItemFact
 import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
 import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 import { HighlightFactory } from "./highlight/HighlightFactory";
+import { WhenCompletion } from "./completion/WhenCompletion";
+import { CobolFoldFactory } from "./fold/CobolFoldFactory";
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -51,6 +57,7 @@ connection.onInitialize((params: InitializeParams) => {
       completionProvider: {
         resolveProvider: true
       },
+      foldingRangeProvider: true,
       documentOnTypeFormattingProvider: {
         firstTriggerCharacter: "\n",
         moreTriggerCharacter: ["N", 'n', 'E', 'e'],
@@ -62,28 +69,64 @@ connection.onInitialize((params: InitializeParams) => {
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
-  validateTextDocument(change.document);
+  validateTextDocument(change.document, "onChange");
+  // Clear the folding cache
+  // Does this not folding if the source has any changes
+  CobolFoldFactory.foldingCache.delete(change.document.uri);
 });
+
+/**
+ * If the document saved
+ */
+documents.onDidSave(document => {
+  validateTextDocument(document.document, "onSave");
+})
+
+// If the document opened
+documents.onDidOpen(document => {
+  validateTextDocument(document.document, true);
+  loadFolding(document);
+});
+
 // If the document closed
 documents.onDidClose(textDocument => {
+  let uri = textDocument.document.uri
+  // Clear the folding cache
+  CobolFoldFactory.foldingCache.delete(uri);
   //Clear the computed diagnostics to VSCode.
   connection.sendDiagnostics({
-    uri: textDocument.document.uri,
+    uri: uri,
     diagnostics: []
   });
 });
+
+/**
+ * Load the folding of the source
+ *
+ * @param uri
+ * @param text
+ */
+export function loadFolding(document: TextDocumentChangeEvent) {
+  let uri = document.document.uri;
+  let fullDocument = documents.get(uri);
+  let text = fullDocument!.getText();
+  getConfig<boolean>("folding").then(foldingConfig => {
+    if (foldingConfig) {
+      new CobolFoldFactory().fold(uri, text.split("\n"));
+    }
+  });
+}
 
 /**
  * Create diagnostics for all errors or warnings
  *
  * @param textDocument
  */
-export async function validateTextDocument(
-  textDocument: TextDocument
-): Promise<void> {
-  getAutoDiagnostic<Boolean>().then(autodiagnostic => {
-    if (autodiagnostic) {
-      new Diagnostician()
+export async function validateTextDocument(textDocument: TextDocument, event: "onSave" | "onChange"| boolean): Promise<void> {
+  return getAutoDiagnostic().then(autodiagnostic => {
+    if (autodiagnostic && (event === true || autodiagnostic == event)) {
+      let text = documents.get(textDocument.uri)!.getText();
+      new Diagnostician(text)
         .diagnose(
           textDocument,
           fileName => {
@@ -126,8 +169,8 @@ export function getConfig<T>(section: string) {
 /**
  * Sends a request to the client to identify if should activate auto diagnostic
  */
-export function getAutoDiagnostic<Boolean>() {
-  return connection.sendRequest<Boolean>("custom/getAutoDiagnostic");
+export function getAutoDiagnostic() {
+  return connection.sendRequest<"onChange" | "onSave" | boolean>("custom/getAutoDiagnostic");
 }
 
 /**
@@ -141,6 +184,20 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
     diagnosticMessage
   );
 }
+
+connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[]| ResponseError<undefined>> => {
+  return new Promise((resolve,) => {
+    let uri = _foldingRangeRequestParam.textDocument.uri;
+    let folding = CobolFoldFactory.foldingCache.get(uri);
+    getConfig<boolean>("folding").then(foldingConfig => {
+      if (foldingConfig && folding) {
+        return resolve(folding)
+      } else {
+        return resolve(undefined);
+      }
+    })
+  });
+});
 
 /**
  * Provide the document highlight positions
@@ -162,47 +219,55 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
-  return getConfig<string[]>("snippetsRepositories").then(repositories => {
-    let items: CompletionItem[] = [];
-    let line = _textDocumentPosition.position.line;
-    let column = _textDocumentPosition.position.character;
-    let uri = _textDocumentPosition.textDocument.uri;
-    let cacheFileName = buildCacheFileName(uri);
-    let fullDocument = documents.get(uri);
-    if (fullDocument) {
-      new CobolCompletionItemFactory(line, column, fullDocument)
-        .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
-        .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
-          // Runs Cobol preprocessor on client-side
-          return sendExternalPreprocExpanderExecution(uri, cacheFileName);
-        }))
-        .generateCompletionItems()
-        .forEach(element => {
-          items.push(element);
-        });
-    };
-    return items;
+  return new Promise((resolve) => {
+    getConfig<string[]>("snippetsRepositories").then(repositories => {
+      getConfig<boolean>("variableSuggestion").then(variableSuggestion => {
+      let line = _textDocumentPosition.position.line;
+      let column = _textDocumentPosition.position.character;
+      let uri = _textDocumentPosition.textDocument.uri;
+      let cacheFileName = buildCacheFileName(uri);
+      let fullDocument = documents.get(uri);
+      if (fullDocument) {
+        new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"))
+          .setVariableSuggestion(variableSuggestion)
+          .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
+          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
+            // Runs Cobol preprocessor on client-side
+            return sendExternalPreprocExpanderExecution(uri, cacheFileName);
+          })).setWhenCompletion(new WhenCompletion(cacheFileName, () => {
+            // Runs Cobol preprocessor on client-side
+            return sendExternalPreprocExpanderExecution(uri, cacheFileName);
+          }))
+          .generateCompletionItems().then((items) => {
+            resolve(items);
+          }).catch(() => {
+            resolve([]);
+          })
+      };
+    })
+  });
   });
 });
 
 /**
  * Document formatter
  */
-connection.onDocumentOnTypeFormatting(
-  (params: DocumentOnTypeFormattingParams) => {
+connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) => {
     let line = params.position.line;
     let column = params.position.character;
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
-      let formatter = new CobolFormatter(line, column, fullDocument);
-      switch (true) {
-        case hasTypedEnter(params.ch):
-          return formatter.formatWhenEnterIsPressed();
-        case params.ch.toUpperCase() == "E":
-          return formatter.formatWhenEIsPressed();
-        case params.ch.toUpperCase() == "N":
-          return formatter.formatWhenNIsPressed();
-      }
+      return new Promise((reolve) => {
+        let formatter = new CobolFormatter(line, column, fullDocument!);
+        switch (true) {
+          case hasTypedEnter(params.ch):
+            return reolve(formatter.formatWhenEnterIsPressed());
+          case params.ch.toUpperCase() == "E":
+            return reolve(formatter.formatWhenEIsPressed());
+          case params.ch.toUpperCase() == "N":
+            return reolve(formatter.formatWhenNIsPressed());
+        }
+      });
     }
     return [];
   }
@@ -225,10 +290,7 @@ connection.onInitialized(() => {
   );
 });
 
-connection.onDefinition(
-  (
-    params: TextDocumentPositionParams
-  ): Thenable<Location> | Thenable<undefined> | undefined => {
+connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location> | Thenable<undefined> | undefined => {
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
       let text = fullDocument.getText();
@@ -322,7 +384,7 @@ export function createPromiseForWordDeclaration(
  */
 export function buildCacheFileName(uri: string) {
   var path = new Path(uri).fullPathWin();
-  return "c:\\tmp\\PREPROC\\" + new Path(path).fileName();
+  return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" +  new Path(path).fileName();
 }
 
 /**

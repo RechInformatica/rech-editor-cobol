@@ -11,7 +11,7 @@ import { CommandSeparatorFormatter } from "./CommandSeparatorFormatter";
 export class EvaluateFormatter implements FormatterInterface {
 
     /** RegExp that identifies if it is the EVALUATE clause */
-    public static EVALUATE_REGEXP = /\s+(EVALUATE|evaluate).*/;
+    public static EVALUATE_REGEXP = /^\s+(EVALUATE|evaluate).*/;
 
     /**
      * Generates an array of Text Edits for source code formatting
@@ -67,7 +67,7 @@ export class EvaluateFormatter implements FormatterInterface {
      */
     private createEndEvaluateTextEdit(line: number, column: number): TextEdit {
         let endEvaluateText = "";
-        endEvaluateText = CompletionUtils.fillMissingSpaces(column, 0) + "end-evaluate";
+        endEvaluateText = CompletionUtils.fillSpacesBetween(0, column - 1) + "end-evaluate";
         endEvaluateText = endEvaluateText.concat(CompletionUtils.separatorForColumn(column));
         endEvaluateText = endEvaluateText.concat("\n");
         return {

@@ -87,6 +87,7 @@ export function deactivate() {
 
 export * from "./commons/executor";
 export * from "./commons/CobolWordFinder";
+export * from "./commons/VariableUtils";
 export * from "./commons/file";
 export * from "./commons/path";
 export * from "./commons/Process";
@@ -99,7 +100,7 @@ export * from "./indent/indent";
 export * from "./cobol/parsercobol";
 export * from "./cobol/gerador-cobol";
 export * from "./cobol/compiler";
-export * from "./cobol/rechdoc/ParagraphDocumentationExtractor"
+export * from "./cobol/rechdoc/ElementDocumentationExtractor"
 export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./lsp/declaration/CobolDeclarationFinder";
 export * from "./cobol/diagnostic/cobolDiagnosticFilter";

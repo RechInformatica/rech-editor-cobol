@@ -32,20 +32,22 @@ export class ParagraphCompletion implements CompletionInterface {
         this.callbackSourceExpander = callbackSourceExpander;
     }
 
-    public generate(_line: number, _column: number, lines: string[]): CompletionItem[] {
-        this.currentLines = lines;
-        this.loadCache();
-        let items: CompletionItem[] = [];
-        if (ParagraphCompletion.cache && ParagraphCompletion.cacheSourceFileName == this.cacheFileName) {
-            for (let value of ParagraphCompletion.cache.values()){
-                items.push(value);
+    public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            this.currentLines = lines;
+            this.loadCache();
+            let items: CompletionItem[] = [];
+            if (ParagraphCompletion.cache && ParagraphCompletion.cacheSourceFileName == this.cacheFileName) {
+                for (let value of ParagraphCompletion.cache.values()){
+                    items.push(value);
+                }
+            } else {
+                for (let value of this.generateParagraphCompletion(this.currentLines, false).values()) {
+                    items.push(value);
+                }
             }
-        } else {
-            for (let value of this.generateParagraphCompletion(this.currentLines, false).values()) {
-                items.push(value);
-            }
-        }
-        return items;
+            resolve(items);
+        });
     }
 
     /**
@@ -111,7 +113,7 @@ export class ParagraphCompletion implements CompletionInterface {
         let buffer = lines.join("\n");
         new Scan(buffer).scan(/^\s\s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm, (iterator: any) => {
             let paragraphName = this.parserCobol.getDeclaracaoParagrafo(iterator.lineContent.toString());
-            let docArray = this.getParagraphDocumentation(lines, iterator.row);
+            let docArray = this.getElementDocumentation(lines, iterator.row);
             if (paragraphName) {
                 let paragraphItem = this.createParagraphCompletion(paragraphName, docArray);
                 items.set(paragraphName, paragraphItem);
@@ -148,12 +150,12 @@ export class ParagraphCompletion implements CompletionInterface {
     }
 
     /**
-     * Returns the documentation of the paragraph on the specified line
+     * Returns the documentation of the element on the specified line
      *
      * @param lines buffer lines
      * @param lineIndex line with the paragraph declaration which will have the documentation extracted
      */
-    private getParagraphDocumentation(lines: string[], lineIndex: number): string[] {
+    private getElementDocumentation(lines: string[], lineIndex: number): string[] {
         let documentation: string[] = [];
         for (let index = lineIndex - 1; index >= 0; index--) {
             let currentLineText = lines[index];

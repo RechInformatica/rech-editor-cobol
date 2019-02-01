@@ -2,16 +2,16 @@
     "name": "rech-editor-cobol",
     "displayName": "Rech COBOL",
     "description": "Edit Cobol files with Visual Studio Code",
-    "version": "1.0.9",
+    "version": "1.0.15",
     "publisher": "rechinformatica",
     "engines": {
         "vscode": "^1.26.0"
     },
     "icon": "images/cobol.png",
-    "license": "MIT",
+    "license": "SEE LICENSE IN LICENSE.txt",
     "bugs": {
         "url": "https://github.com/RechInformatica/rech-editor-cobol/issues",
-        "email": "smcbreen@microsoft.com"
+        "email": "infra@rech.com.br"
     },
     "repository": {
         "type": "git",
@@ -69,7 +69,17 @@
                 },
                 "rech.editor.cobol.snippetsRepositories": {
                     "type": "array",
-                    "description": "Repositories where JSON snippets are located"
+                    "description": "Repositories where JSON snippets are located."
+                },
+                "rech.editor.cobol.variableSuggestion": {
+                    "type": "boolean",
+                    "description": "Controls whether COBOL variable suggestion is allowed.",
+                    "default": true
+                },
+                "rech.editor.cobol.folding": {
+                    "type": "boolean",
+                    "description": "Controls whether COBOL folding is allowed.",
+                    "default": true
                 }
             }
         },
@@ -304,12 +314,12 @@
         "test": "npm run compile && mocha -r ts-node/register ./src/test/**/*.test.ts"
     },
     "dependencies": {
+        "@types/chai": "^4.1.6",
         "@types/iconv-lite": "0.0.1",
         "@types/q": "^1.0.0",
+        "chai": "^4.2.0",
         "iconv-lite": "^0.4.24",
         "q": "^1.4.1",
-        "@types/chai": "^4.1.6",
-        "chai": "^4.2.0",
         "ts-node": "^7.0.1",
         "vscode-languageclient": "^4.1.4",
         "vscode-languageserver": "^4.1.3"

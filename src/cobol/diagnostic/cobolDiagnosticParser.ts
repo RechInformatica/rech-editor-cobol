@@ -1,15 +1,23 @@
 "use babel";
-import { Diagnostic, DiagnosticSeverity } from "vscode-languageserver";
+import { Diagnostic, DiagnosticSeverity, Range } from "vscode-languageserver";
 import { CobolDiagnostic } from "./cobolDiagnostic";
 import { TextRange } from "./textRange";
 import { TextPosition } from "./textPosition";
 import { File } from "../../commons/file";
 import { Path } from "../../commons/path";
+import { Scan } from "../../commons/Scan";
 
 /**
  * Class conteiner of diagnostcs of cobol language
  */
 export class CobolDiagnosticParser {
+
+  /** Lines of the source */
+  private sourceLines: string;
+
+  constructor(sourceLines: string) {
+    this.sourceLines = sourceLines;
+  }
 
   /**
    * Parses the preprocessor results
@@ -45,8 +53,8 @@ export class CobolDiagnosticParser {
 
   /**
    * Returns a CobolDiagnostic with diagnostics found
-   * 
-   * @param diagnostics 
+   *
+   * @param diagnostics
    */
   private buildCobolDiagnostic(diagnostics: Diagnostic[]): CobolDiagnostic {
     let errors: Diagnostic[] = [];
@@ -135,17 +143,18 @@ export class CobolDiagnosticParser {
    * @param source
    */
   private createDiagnostic(fileName: string, severity: DiagnosticSeverity, range: TextRange, message: string, source: string): Diagnostic {
+    let diagnosticRange = this.diagnosticPosition(fileName, source, range)
     let fullFileName = this.fullFileName(new Path(fileName).fullPathWin(), source);
     let diagnostic: Diagnostic = {
       severity: severity,
       range: {
         start: {
-          line: range.start.line,
-          character: range.start.character
+          line: diagnosticRange.start.line,
+          character: diagnosticRange.start.character
         },
         end: {
-          line: range.end.line,
-          character: range.end.character
+          line: diagnosticRange.end.line,
+          character: diagnosticRange.end.character
         }
       },
       message: message,
@@ -153,18 +162,72 @@ export class CobolDiagnosticParser {
     };
     diagnostic.relatedInformation = [
       {
-          location: {
-              uri: new Path(fullFileName).fullPathVscode(),
-              range: Object.assign({}, diagnostic.range)
-          },
-          message: message
+        location: {
+          uri: new Path(fullFileName).fullPathVscode(),
+          range: Object.assign({}, {
+            start: {
+              line: range.start.line,
+              character: range.start.character
+            },
+            end: {
+              line: range.end.line,
+              character: range.end.character
+            }
+          })
+        },
+        message: message
       },
-  ];
-
-
+    ];
     return diagnostic;
   }
 
+  /**
+   * Find the diagnostic position
+   *
+   * @param fileName
+   * @param source
+   * @param range
+   */
+  private diagnosticPosition(fileName: string, source: string, range: TextRange): Range {
+    if (new Path(fileName).fileName() == source) {
+      return range;
+    }
+    let result: any = undefined;
+    let regexp = new RegExp(".*" + source.replace(".", "\\.") + ".*", "gmi");
+    new Scan(this.sourceLines).scan(regexp, (iterator: any) => {
+      result =  {
+        start: {
+          line: iterator.row,
+          character: 0
+        },
+        end: {
+          line: iterator.row,
+          character: 120
+        }
+      }
+    });
+    if (result) {
+      return result;
+    }
+    let length = this.sourceLines.split("\n").length
+    return {
+      start: {
+        line: length,
+        character: 0
+      },
+      end: {
+        line: length,
+        character: 120
+      }
+    };
+  }
+
+  /**
+   * Returns the full file name
+   *
+   * @param fileName
+   * @param source
+   */
   private fullFileName(fileName: string, source: string): string {
     let file = new File(new Path(fileName).directory() + source);
     if (file.exists()) {
@@ -173,5 +236,5 @@ export class CobolDiagnosticParser {
       return "F:\\Fontes\\" + source;
     }
   }
-  
+
 }

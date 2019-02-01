@@ -76,47 +76,47 @@
 		"body": "blank when zeros"
 	},
 	"rechdoc" : {
-		"prefix": "rechdoc",
+		"prefix": "RechDoc",
 		"body": [
 			"      *>/**",
-			"      *> ${0:Comentário da rotina}",
+			"      *> ${0:Paragraph documentation}",
 			"      *>",
-			"      *> @param  XXXXXX-XXX parâmetro",
-			"      *> @return XXXXXX-XXX Saída",
-			"      *> @throws XXXXXX-XXX Erro",
+			"      *> @param XXXXXX-XXX parameter description",
+			"      *> @return XXXXXX-XXX result description",
+			"      *> @throws XXXXXX-XXX error description",
 			"      *>*/"
 		],
-		"description": "Documentação RechDoc"
+		"description": "RechDoc documentation"
 	},
 	"@param" : {
-		"prefix": "@param",
-		"body": "@param  ${1:XXXXXX-XXX} ${0:Descrição do parâmetro}",
-		"description": "RechDoc de parâmetro"
+		"prefix": "RechDoc @param",
+		"body": "@param ${1:XXXXXX-XXX} ${0:parameter description}",
+		"description": "RechDoc parameter"
 	},
 	"@return" : {
-		"prefix": "@return",
-		"body": "@return ${1:XXXXXX-XXX} ${0:Descrição do retorno}",
-		"description": "RechDoc de retorno"
+		"prefix": "RechDoc @return",
+		"body": "@return ${1:XXXXXX-XXX} ${0:result description}",
+		"description": "RechDoc result"
 	},
 	"@throws" : {
-		"prefix": "@throws",
-		"body": "@throws ${1:XXXXXX-XXX} ${0:Descrição do retorno}",
-		"description": "RechDoc de status de retorno"
+		"prefix": "RechDoc @throws",
+		"body": "@throws ${1:XXXXXX-XXX} ${0:error description}",
+		"description": "RechDoc error"
 	},
 	"@enum" : {
-		"prefix": "@enum",
-		"body": "   @enum ${1:XXXXXX-XXX} ${0:Descrição do enumerado}",
-		"description": "RechDoc de enumerado"
+		"prefix": "RechDoc @enum",
+		"body": "   @enum ${1:XXXXXX-XXX} ${0:enum description}",
+		"description": "RechDoc enum"
 	},
 	"@optional" : {
-		"prefix": "@optional",
+		"prefix": "RechDoc @optional",
 		"body": "   @optional",
-		"description": "RechDoc de parâmetro opcional"
+		"description": "RechDoc optional parameter"
 	},
 	"@default" : {
-		"prefix": "@default",
+		"prefix": "RechDoc @default",
 		"body": "   @default",
-		"description": "RechDoc de valor default"
+		"description": "RechDoc default value"
 	},
 	"search" : {
 		"prefix": "search",
@@ -158,61 +158,61 @@
 	"fun length" : {
 		"prefix": "fun length",
 		"body": "function length (${0:<var>})",
-		"description": "Retorna um inteiro igual ao comprimento da variável em argument-1"
+		"description": "Returns an integer equal to the length of the variable specified in argument-1"
 	},
 	"fun date" : {
 		"prefix": "fun date",
 		"body": "function current-date",
-		"description": "Retorna em um inteiro 9(12) a data atual. Formato AAAAMMDDHHMM"
+		"description": "Returns in an integer 9(12) of the current date. Format AAAAMMDDHHMM"
 	},
 	"fun upper" : {
 		"prefix": "fun upper",
 		"body": "function upper-case (${0:<var>})",
-		"description": "Retorna o alfanuméricos de argument-1 em maiúsculas"
+		"description": "Returns the value of argument-1 in uppercase"
 	},
 	"fun lower" : {
 		"prefix": "fun lower",
 		"body": "function lower-case (${0:<var>})",
-		"description": "Retorna o alfanuméricos de argument-1 em minúsculas"
+		"description": "Returns the value of argument-1 in lowercase"
 	},
 	"fun mod" : {
 		"prefix": "fun mod",
 		"body": "function mod (${0:<var>})",
-		"description": "Retorna o resto da divisão entre argument-1 e argument-2"
+		"description": "Returns the rest of the division between argument-1 and argument-2"
 	},
 	"fun integer" : {
 		"prefix": "fun integer",
 		"body": "function integer (${0:<var>})",
-		"description": "Retorna o maior valor inteiro antes de argument-1"
+		"description": "Returns the largest integer value before argument-1"
 	},
 	"fun comp" : {
 		"prefix": "fun comp",
 		"body": "function when-compiled",
-		"description": "Retorna data e hora que o programa foi compilado. Formato YYYYMMDDHHMMSSCC-FUSO"
+		"description": "Returns date and time that the program was compiled. Format YYYYMMDDHHMMSSCC-TIMEZONE"
 	},
 	"fun numval" : {
 		"prefix": "fun numval",
 		"body": "function numval (${0:<var>})",
-		"description": "Retorna um valor numérico para o valor alfanuméricos de argument-1"
+		"description": "Returns a numeric value for the alphanumeric value of argument-1"
 	},
 	"fun log10" : {
 		"prefix": "fun log10",
 		"body": "function log10 (${0:<var>})",
-		"description": "Retorna um valor numérico aproximado para o logaritmo de base 10 de argument-1"
+		"description": "Returns an approximate numeric value for the base-10 logarithm of argument-1"
 	},
 	"fun rem" : {
 		"prefix": "fun rem",
 		"body": "function rem (${0:<var>})",
-		"description": "Retorna o resto da divisão entre argument-1 e argument-2"
+		"description": "returns a numeric value that is the remainder of argument-1 divided by argument-2"
 	},
 	"fun abs" : {
 		"prefix": "fun abs",
 		"body": "function abs (${0:<var>})",
-		"description": "Retorna o valor absoluto (inteiro) de argument-1"
+		"description": "Returns the absolute (integer) value of argument-1"
 	},
 	"fun sqrt" : {
 		"prefix": "fun sqrt",
 		"body": "function sqrt (${0:<var>})",
-		"description": "Retorna a raiz de argument-1"
+		"description": "Returns the square root of argument-1"
 	}
 }

@@ -1,5 +1,10 @@
 # Edit Cobol files with Visual Studio Code
 
+## Variable suggestion
+Variables are suggested on several Cobol commands, such as _move_, _if_, _subtract_, _add_ and others. Constants are also considered, each one appearing with a different icon on IntelliSense.
+
+!['variable-suggestion' variable-suggestion](doc/suggestion/variable-suggestion.gif)
+
 ## Paragraph suggestion and documentation
 This extension suggests paragraphs based on what is typed on _perform_ clause. Notice that it also parses a **java-like** documentation for paragraphs, as follows.
 
@@ -54,7 +59,7 @@ First of all, configure the directory where specific JSON snippets are located:
     ]
 
 Second, create one or more JSON files following the example below. This example adds two snippets for files with name containing **WREG**.
-```json  
+```json
 {
     "conditions": {
         "sourceFileNameRegex": ".*WREG.*"

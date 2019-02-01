@@ -79,17 +79,24 @@ export class File {
    * Tests whether the file exists
    */
   public exists(): boolean {
-    return fs.existsSync(this.fileName);
+    return fs.existsSync(this.fileName.trim());
   }
 
   /**
    * Create a new directory
    */
   public mkdir() {
-    try {
-      fs.mkdirSync(this.fileName);
-    } catch (err) {
-    }
+    let partsOfFileName = this.fileName.split("\\");
+    let directory = "";
+    partsOfFileName.forEach((currentPart) => {
+      directory == "" ? directory = currentPart : directory = directory + "\\" + currentPart;
+      if (!new File(directory).exists()) {
+        try {
+          fs.mkdirSync(directory);
+        } catch (err) {
+        }
+      }
+    });
   }
 
   /**

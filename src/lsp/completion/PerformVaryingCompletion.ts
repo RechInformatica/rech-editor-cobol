@@ -9,28 +9,33 @@ const PARAM_COLUMN_DECLARATION = 35;
  */
 export class PerformVaryingCompletion implements CompletionInterface {
 
-    public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        const performClause = "perform";
-        const varyingClause = "varying";
-        const untilClause = "until";
-        let text = "";
-        text = text.concat(performClause).concat("\n");
-        text = text.concat(CompletionUtils.fillMissingSpaces(column + 4, column) + varyingClause);
-        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + varyingClause.length + 2) + "${1} from ${2:} by ${3:1}\n");
-        text = text.concat(CompletionUtils.fillMissingSpaces(column + 7, column) + untilClause);
-        text = text.concat(CompletionUtils.fillMissingSpaces(PARAM_COLUMN_DECLARATION, column + untilClause.length + 5) + "${1} ${4}");
-        let endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, column)];
-        return [{
-            label: 'Gerar declaração de laço variando o índice (perform varying).',
-            detail: 'Gera a declaração de laço variando o índice (perform varying).',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            additionalTextEdits: endPerform,
-            filterText: "pb",
-            preselect: true,
-            kind: CompletionItemKind.Keyword,
-            data: 8
-        }];
+    public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            const performClause = "perform";
+            const varyingClause = "varying";
+            const untilClause = "until";
+            let startColumn = CompletionUtils.findWordStartWithinLine(column, _lines[_line]);
+            let text = "";
+            text = text.concat(performClause).concat("\n");
+            text = text.concat(CompletionUtils.fillSpacesBetween(startColumn, startColumn + 3) + varyingClause);
+            text = text.concat(CompletionUtils.fillSpacesOrSingleSpace(startColumn + varyingClause.length + 2, PARAM_COLUMN_DECLARATION - 1) + "${1} from ${2:} by ${3:1}\n");
+            text = text.concat(CompletionUtils.fillSpacesBetween(startColumn, startColumn + 6) + untilClause);
+            text = text.concat(CompletionUtils.fillSpacesOrSingleSpace(startColumn + untilClause.length + 5, PARAM_COLUMN_DECLARATION - 1) + "${1} ${4}");
+            let endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, startColumn)];
+            resolve(
+                [{
+                    label: 'PERFORM VARYING loop',
+                    detail: 'Generates the declaration of PERFORM VARYING loop',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    additionalTextEdits: endPerform,
+                    filterText: "pb perform varying",
+                    preselect: true,
+                    kind: CompletionItemKind.Keyword,
+                    data: 8
+                }]
+            );
+        });
     }
 
     /**
@@ -40,7 +45,7 @@ export class PerformVaryingCompletion implements CompletionInterface {
      * @param column column where the 'end-perform' clause will be inserted
      */
     private createEndPerformTextEdit(line: number, column: number): TextEdit {
-        let text = CompletionUtils.fillMissingSpaces(column, 0) + "end-perform";
+        let text = CompletionUtils.fillSpacesBetween(1, column) + "end-perform";
         text = text.concat(CompletionUtils.separatorForColumn(column));
         text = text.concat("\n");
         return {

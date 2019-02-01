@@ -1,4 +1,4 @@
-import { CompletionItem, TextDocument } from "vscode-languageserver";
+import { CompletionItem } from "vscode-languageserver";
 import { ParserCobol } from "../../cobol/parsercobol";
 import { PerformCompletion } from "./PerformCompletion";
 import { MoveCompletion } from "./MoveCompletion";
@@ -20,6 +20,10 @@ import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
+import Q from "q";
+import { VariableCompletion } from "./VariableCompletion";
+import { EmptyCompletion } from "./EmptyCompletion";
+
 
 /**
  * Class to generate LSP Completion Items for Cobol language
@@ -36,21 +40,28 @@ export class CobolCompletionItemFactory {
   /** Additional implementations for generating Completion Items */
   private additionalCompletions: CompletionInterface[];
   /** Completion class to generate the CompletionItem for paragraphs */
-  private paragraphCompletion: CompletionInterface | undefined;
+  private paragraphCompletion: CompletionInterface;
+  /** Completion class to generate the WhenItem for When */
+  private whenCompletion: CompletionInterface;
+  /** Allows variable suggestion */
+  private variableSuggestion: boolean;
 
   /**
    * Creates an instance to generate LSP Completion Items for Cobol language
    *
    * @param line line where the cursor is positioned
    * @param column column where the cursor is positioned
-   * @param fullDocument full document information
+   * @param ilnes document text lines
    */
-  constructor(line: number, column: number, fullDocument: TextDocument) {
+  constructor(line: number, column: number, lines: string[]) {
     this.line = line;
     this.column = column;
-    this.lines = fullDocument.getText().split("\n");
+    this.lines = lines;
     this.lineText = this.lines[line];
     this.additionalCompletions = [];
+    this.paragraphCompletion = new EmptyCompletion();
+    this.whenCompletion = new EmptyCompletion();
+    this.variableSuggestion = false;
   }
 
   /**
@@ -74,34 +85,91 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Completion class to generate the CompletionItem for paragraphs
+   *
+   * @param whenCompletion
+   */
+  public setWhenCompletion(whenCompletion: CompletionInterface): CobolCompletionItemFactory {
+    this.whenCompletion = whenCompletion;
+    return this;
+  }
+
+  /**
+   * Sets whether variable suggestion is allowed
+   *
+   * @param variableSuggestion
+   */
+  public setVariableSuggestion(variableSuggestion: boolean): CobolCompletionItemFactory {
+    this.variableSuggestion = variableSuggestion;
+    return this;
+  }
+
+  /**
    * Generates completion items for Cobol paragraphs
    *
    * @param lines Cobol source code lines
    */
-  public generateCompletionItems(): CompletionItem[] {
-    switch (true) {
-      case this.isCommentLine() || this.isIf() || this.isWhen(): {
-        return [];
-      }
-      case this.isVarDeclaration(): {
-        return this.createVariableCompletions();
-      }
-      case this.isMove() || this.isAdd() || this.isSet(): {
-        return this.createToCompletions();
-      }
-      case this.isSubtract(): {
-        return this.generate(new FromCompletion());
-      }
-      case this.isParagraphPerform(): {
-        if (this.paragraphCompletion) {
-          return this.generate(this.paragraphCompletion);
+  public generateCompletionItems(): Promise<CompletionItem[]> {
+    return new Promise((resolve) => {
+      switch (true) {
+        case this.isCommentLine(): {
+          resolve([]);
+          return;
         }
-        return [];
+        case this.isDisplay() || this.isAccept(): {
+          resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
+          return;
+        }
+        case this.isIf(): {
+          resolve(this.generate(this.createVariableSuggestionWithEnum()));
+          return;
+        }
+        case this.isCompute(): {
+          resolve(this.generate(this.createVariableSuggestionWithoutEnumAndDisplay()));
+          return;
+        }
+        case this.isWhen(): {
+          resolve(this.createWhenCompletions());
+          return;
+        }
+        case this.isVarDeclaration(): {
+          resolve(this.createVariableCompletions());
+          return;
+        }
+        case this.isMove() || this.isAdd() || this.isSet(): {
+          if (this.shouldSuggestClause("TO")) {
+            resolve(this.createToCompletions());
+          } else {
+            if (this.isSet()) {
+              resolve(this.generate(this.createVariableSuggestionWithEnum()));
+            } else {
+              resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
+            }
+          }
+          return;
+        }
+        case this.isSubtract(): {
+          if (this.shouldSuggestClause("FROM")) {
+            resolve(this.generate(new FromCompletion()));
+          } else {
+            resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
+          }
+          return;
+        }
+        case this.isParagraphPerform(): {
+          resolve(this.generate(this.paragraphCompletion));
+          return;
+        }
+        case this.isUnhandledCommand(): {
+          resolve([]);
+          return;
+        }
+        default: {
+          resolve(this.createDefaultCompletions());
+          return;
+        }
       }
-      default: {
-        return this.createDefaultCompletions();
-      }
-    }
+    })
   }
 
   /**
@@ -112,21 +180,92 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if the Language Server should suggest a completion item to the
+   * specified clause
+   *
+   * @param clause clause to be tested
+   */
+  public shouldSuggestClause(clause: string): boolean {
+    let withoutEnter = this.lineText.replace("\n", "").replace("\r", "");
+    let lineContainsClause = withoutEnter.toUpperCase().includes(" " + clause + " ");
+    if (lineContainsClause) {
+      return false;
+    }
+    let splitted = withoutEnter.trim().split(/\s+/);
+    if (splitted.length < 2) {
+      return false;
+    }
+    if (splitted.length == 2) {
+      return withoutEnter.endsWith(" ");
+    }
+    let clauseUpper = clause.toUpperCase();
+    let splittedUpper = splitted[2].toUpperCase();
+    let startsWith = clauseUpper.startsWith(splittedUpper);
+    return splitted.length == 3 && startsWith;
+  }
+
+  /**
+   * Creates a variable completion interface allowing enum suggestion
+   */
+  private createVariableSuggestionWithEnum(): CompletionInterface {
+    if (this.variableSuggestion) {
+      return new VariableCompletion();
+    }
+    return new EmptyCompletion();
+  }
+
+  /**
+   * Creates a variable completion interface ignoring enum suggestion
+   */
+  private createVariableSuggestionWithoutEnum(): CompletionInterface {
+    if (this.variableSuggestion) {
+      return new VariableCompletion().setIgnoreEnums(true);
+    }
+    return new EmptyCompletion();
+  }
+
+  /**
+   * Creates a variable completion interface ignoring enum variables and displays
+   */
+  private createVariableSuggestionWithoutEnumAndDisplay(): CompletionInterface {
+    if (this.variableSuggestion) {
+      return new VariableCompletion().setIgnoreDisplay(true).setIgnoreEnums(true);
+    }
+    return new EmptyCompletion();
+  }
+
+  /**
+   * Creates completion items form when clauses
+   */
+  private createWhenCompletions(): Promise<CompletionItem[]> {
+    let items: Promise<CompletionItem[]>[] = [];
+    items = items.concat(this.generate(this.whenCompletion));
+    items = items.concat(this.generate(this.createVariableSuggestionWithEnum()));
+    return this.createWrappingPromise(items);
+  }
+
+  /**
    * Creates completion items for Cobol variables
    */
-  private createVariableCompletions(): CompletionItem[] {
-    if (!this.isVariableDeclarationFinalized()) {
-      if (!this.isPictureDeclared()) {
-        return this.generate(new PictureCompletion());
+  private createVariableCompletions(): Promise<CompletionItem[]> {
+    return new Promise((resolve) => {
+      if (!this.isVariableDeclarationFinalized()) {
+        if (!this.isPictureDeclared()) {
+          resolve(this.generate(new PictureCompletion()));
+          return;
+        }
+        if (!this.isValueDeclared()) {
+          resolve(this.generate(new ValueCompletion()));
+          return;
+        }
       }
-      if (!this.isValueDeclared()) {
-        return this.generate(new ValueCompletion());
+      if (this.isFlagParent()) {
+        resolve(this.generate(new FlagCompletion()));
+        return;
       }
-    }
-    if (this.isFlagParent()) {
-      return this.generate(new FlagCompletion());
-    }
-    return [];
+      resolve([]);
+      return;
+    })
   }
 
   /**
@@ -177,6 +316,36 @@ export class CobolCompletionItemFactory {
    */
   private isIf(): boolean {
     if (/\s+(IF|if).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'display'
+   */
+  private isDisplay(): boolean {
+    if (/\s+(DISPLAY|display).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'accept'
+   */
+  private isAccept(): boolean {
+    if (/\s+(ACCEPT|accept).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'compute'
+   */
+  private isCompute(): boolean {
+    if (/\s+(COMPUTE|compute).*/.exec(this.lineText)) {
       return true;
     }
     return false;
@@ -257,6 +426,22 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if the current line represents a command currently unhandled by this Language Server.
+   *
+   * In this case, doesn't make sense to suggest default commands like 'evaluate', 'perform', etc, so
+   * Language Server will resolve the promise with an empty array to possibly suggest Words as a
+   * default VSCode behavior.
+   *
+   * This method also checks if the last character is a space because if the programmer has typed
+   * 'eval', for example, he or she is typing 'evaluate' and should still suggest EVALUATE completion
+   * item.
+   */
+  public isUnhandledCommand(): boolean {
+    let unhandledCommand = /\s*[^ ]+[ ]+/.test(this.lineText);
+    return unhandledCommand;
+  }
+
+  /**
    * Returns true if the current line is in a if block
    */
   private isInIfBlock(): boolean {
@@ -267,10 +452,10 @@ export class CobolCompletionItemFactory {
         break;
       }
       let currentLine = this.lines[i].toLowerCase().trim();
-      if (currentLine.startsWith("if ")) {
+      if (currentLine.toUpperCase().startsWith("IF ")) {
         openBlocks++;
       }
-      if (currentLine.startsWith("end-if")) {
+      if (currentLine.toUpperCase().startsWith("END-IF")) {
         closeBlocks++;
       }
     }
@@ -278,23 +463,37 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if the current line already contains 'to' clause
+   */
+  private lineContainsTo(): boolean {
+    return this.lineText.toUpperCase().includes(" TO ");
+  }
+
+  /**
+   * Returns true if the current line already contains 'from' clause
+   */
+  private lineContainsFrom(): boolean {
+    return this.lineText.toUpperCase().includes(" FROM ");
+  }
+
+  /**
    * Fills the completion items with 'To' Cobol commands
    */
-  private createToCompletions() {
-    let items: CompletionItem[] = [];
+  private createToCompletions(): Promise<CompletionItem[]> {
+    let items: Promise<CompletionItem[]>[] = [];
     items = items.concat(this.generate(new ToCompletion()));
     if (this.isSet()) {
       items = items.concat(this.generate(new ToTrueCompletion()));
     }
-    return items;
+    return this.createWrappingPromise(items);
   }
 
 
   /**
    * Fills the completion items with default Cobol commands
    */
-  private createDefaultCompletions() {
-    let items: CompletionItem[] = [];
+  private createDefaultCompletions(): Promise<CompletionItem[]> {
+    let items: Promise<CompletionItem[]>[] = [];
     items = items.concat(this.generate(new PerformCompletion()));
     items = items.concat(this.generate(new MoveCompletion()));
     items = items.concat(this.generate(new SetCompletion()));
@@ -312,7 +511,7 @@ export class CobolCompletionItemFactory {
     if (this.isInIfBlock()) {
       items = items.concat(this.generate(new ElseCompletion()));
     }
-    return items;
+    return this.createWrappingPromise(items);
   }
 
   /**
@@ -320,12 +519,18 @@ export class CobolCompletionItemFactory {
    *
    * @param completion implementation used to generate completion items
    */
-  private generate(completion: CompletionInterface): CompletionItem[] {
-    let result = completion.generate(this.line, this.column, this.lines);
-    if (!CompletionUtils.isLowerCaseSource(this.lines)) {
-      return this.toUpperCase(result);
-    }
-    return result;
+  private generate(completion: CompletionInterface): Promise<CompletionItem[]> {
+    return new Promise((resolve, reject) => {
+      completion.generate(this.line, this.column, this.lines).then((result) => {
+        if (!CompletionUtils.isLowerCaseSource(this.lines)) {
+          resolve(this.toUpperCase(result));
+          return;
+        }
+        resolve(result);
+      }).catch(() => {
+        reject();
+      });
+    });
   }
 
   /**
@@ -356,5 +561,24 @@ export class CobolCompletionItemFactory {
       }
     });
     return result;
+  }
+
+  /**
+   * Creates a wrapping promise to generate multiple completion items
+   *
+   * @param items promise items to be returned
+   */
+  private createWrappingPromise(items: Promise<CompletionItem[]>[]): Promise<CompletionItem[]> {
+    return new Promise((resolve, reject) => {
+      Q.all(items).then((result) => {
+        let completions: CompletionItem[] = [];
+        result.forEach((element) => {
+          completions = completions.concat(element);
+        });
+        resolve(completions);
+      }).catch(() => {
+        reject();
+      })
+    });
   }
 }

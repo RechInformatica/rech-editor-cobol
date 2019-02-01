@@ -2,28 +2,39 @@ import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-lan
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 
+
 /**
  * Class representing a Cobol variable
  */
 export class CobolVariable {
 
+    /* Level representing a constant */
+    public static CONSTANT_LEVEL: number = 78;
+    /* Level representing a 'enum' */
+    public static ENUM_LEVEL: number = 88;
     /* Variable level */
     private level: number;
     /* Variable name */
     private name: string;
+    /* Variable picture */
+    private picture: string;
     /* Variable type */
     private type: Type;
     /* Variable is display */
     private display: boolean;
     /* Variable allows negative values */
     private allowNegative: boolean;
+    /* Raw variable declaration from source code */
+    private raw: string;
 
-    private constructor(level: number, name: string, type: Type, display: boolean, allowNegative: boolean) {
+    private constructor(level: number, name: string, picture: string, type: Type, display: boolean, allowNegative: boolean, raw: string) {
         this.level = level;
         this.name = name;
+        this.picture = picture;
         this.type = type;
         this.display = display;
         this.allowNegative = allowNegative;
+        this.raw = raw;
     }
 
     /**
@@ -32,12 +43,25 @@ export class CobolVariable {
     public static parseLine(line: string): CobolVariable {
         let splitted = CobolVariable.splitVariableInfo(line);
         let level = Number.parseInt(splitted[0]);
-        let name = splitted[1];
-        let picture = CobolVariable.extractPicture(splitted).toUpperCase();
-        let type = CobolVariable.detectType(picture);
-        let display = CobolVariable.isDisplay(picture);
-        let allowNegative = CobolVariable.allowNegative(picture);
-        return new CobolVariable(level, name, type, display, allowNegative);
+        let name = splitted[1].replace(".", "");
+        let picture = CobolVariable.extractPicture(splitted);
+        if (picture === "") {
+            return new CobolVariable(level, name, "", Type.Alphanumeric, true, false, line);
+        } else {
+            let type = CobolVariable.detectType(picture.toUpperCase());
+            let display = CobolVariable.isDisplay(picture.toUpperCase());
+            let allowNegative = CobolVariable.allowNegative(picture.toUpperCase());
+            return new CobolVariable(level, name, picture, type, display, allowNegative, line);
+        }
+    }
+
+    /**
+     * Returns true if the variable represents a group item (it's name that ends with dot)
+     *
+     * @param name variable name
+     */
+    private static isGroupItem(name: string) {
+        return name.endsWith(".");
     }
 
     /**
@@ -66,6 +90,9 @@ export class CobolVariable {
      * @param splitted splitted variable information
      */
     private static extractPicture(splitted: string[]): string {
+        if (splitted[splitted.length - 1].endsWith(".")) {
+            splitted[splitted.length - 1] = splitted[splitted.length - 1].slice(0, -1);
+        }
         let foundPicClause = false;
         for (let i = 0; i < splitted.length; i++) {
             if (splitted[i].toUpperCase() === "PIC") {
@@ -104,7 +131,7 @@ export class CobolVariable {
      * @param picture variable picture
      */
     private static isAlphanumeric(picture: string): boolean {
-        return picture.includes("X");
+        return picture.includes("X") || picture.includes("/");
     }
 
     /**
@@ -122,7 +149,7 @@ export class CobolVariable {
      * @param picture variable picture
      */
     private static isDisplay(picture: string): boolean {
-        return picture.includes(".") || picture.includes("Z") || picture.includes("B") || picture.includes("-") || picture.includes(",") || picture.includes("X");
+        return picture.includes(".") || picture.includes("Z") || picture.includes("B") || picture.includes("-") || picture.includes(",") || picture.includes("X") || picture.includes("/");
     }
 
     /**
@@ -149,6 +176,13 @@ export class CobolVariable {
     }
 
     /**
+     * Returns the variable picture
+     */
+    public getPicture(): string {
+        return this.picture;
+    }
+
+    /**
      * Returns the variable type
      */
     public getType(): Type {
@@ -167,6 +201,13 @@ export class CobolVariable {
      */
     public isAllowNegative(): boolean {
         return this.allowNegative;
+    }
+
+    /**
+     * Returns raw variable declaration from source code
+     */
+    public getRaw(): string {
+        return this.raw;
     }
 
 }

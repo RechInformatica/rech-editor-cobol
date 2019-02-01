@@ -6,10 +6,22 @@ import { File } from "../../commons/file";
 import { CobolDiagnosticParser } from "./cobolDiagnosticParser";
 import { CobolDiagnosticPreprocManager } from "./CobolDiagnosticPreprocManager";
 
+/** Root directory from diagnostic files */
+const DIAGNOSTIC_ROOT_DIR = "C:\\TMP\\Diagnostic\\";
+
+
 /**
  * Class to diagnose sources
  */
 export class Diagnostician {
+
+  /** Lines of the source */
+  private sourceLines: string;
+
+  constructor(sourceLines: string) {
+    this.sourceLines = sourceLines;
+  }
+
   /**
    * Diagnoses the source
    *
@@ -64,8 +76,12 @@ export class Diagnostician {
       if (new Path(textDocument.uri).extension().toUpperCase() != ".CBL") {
         reject();
       }
+      let dir = new File(DIAGNOSTIC_ROOT_DIR + require("os").userInfo().username + "\\");
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
       let tmpFile = new File(
-        "C:\\TMP\\" + new Path(textDocument.uri).fileName()
+        dir.fileName + new Path(textDocument.uri).fileName()
       );
       CobolDiagnosticPreprocManager.runWhenPossible(
         PreprocessCallback,
@@ -73,7 +89,7 @@ export class Diagnostician {
         [textDocument.getText()],
         (buffer) => {
           let fileName = new Path(textDocument.uri).fullPath();
-          new CobolDiagnosticParser()
+          new CobolDiagnosticParser(this.sourceLines)
             .parser(buffer, fileName, externalDiagnosticFilter)
             .then(cobolDiagnostic => {
               resolve(cobolDiagnostic);

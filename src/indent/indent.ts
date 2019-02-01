@@ -2,20 +2,134 @@
 
 import { File } from '../commons/file';
 import { Executor } from '../commons/executor';
+import * as iconv from 'iconv-lite';
 
-/* Time in millis representing an old indent file */
+/** Time in millis representing an old indent file */
 const INDENT_OLD_FILE_IN_MILLIS: number = 3000;
-/* Indent file charset */
-const INDENT_FILE_CHARSET: string = "latin1";
+/** Indent file charset */
+const INDENT_FILE_CHARSET: string = "binary";
+/** Limit column of line */
+const INDENT_LIMIT_COLUMN: number = 120;
+/** Start commentary column in the line */
+const START_COMMENTARY_COLUMN: number = 7;
 
 /**
  * Class to indent sources
  */
 export class Indenta {
 
+    /**
+   * Indents the specified source code if this is all commentary lines
+   *
+   * @param targetSourceCode target source code to be indented
+   */
+  public indentCommentary(targetSourceCode: string[], callback: (buffer: string[]) => any,) {
+    let buffer = this.buildBufferOfCommentary(targetSourceCode);
+    callback([this.buildCommentaryLines(buffer)]);
+  }
+
+  /**
+   * Build buffer of commentary
+   *
+   * @param targetSourceCode
+   */
+  private buildBufferOfCommentary(targetSourceCode: string[]) {
+    let buffer: string[] = [];
+    targetSourceCode.forEach((occurs) => {
+      occurs.split("\n").forEach((line) => {
+        line = line.replace(/\*>->/g, "").replace(/\n/g, " ").trim();
+        if (line.startsWith("...")) {
+          line = line.replace("...", "");
+          buffer[buffer.length - 1] += line + " ";
+        } else {
+          if (buffer.length > 0) {
+            buffer[buffer.length - 1].trim().replace(/\s{2,}/g, ' ');
+          }
+          if (line != "") {
+            buffer.push(line + " ");
+          }
+        }
+      });
+    });
+    return buffer;
+  }
+
+  /**
+   * Build Commentary lines
+   *
+   * @param buffer
+   */
+  private buildCommentaryLines(buffer: string[]) {
+    let result = "";
+    buffer.forEach((commentary) => {
+      let words = commentary.trim().split(" ");
+      result += this.buildCommentBlock(words)
+    })
+    return result;
+  }
+
+  /**
+   * Build comment block
+   *
+   * @param words
+   */
+  private buildCommentBlock(words: string[]) {
+    let result: string[] = [];
+    for (let i = 0; i < words.length; i++) {
+      if (result.length == 0) {
+        result = this.startCommentary(result, false);
+      }
+      let word = words[i];
+      if (result[result.length - 1].length + word.length > INDENT_LIMIT_COLUMN) {
+        result[result.length - 1] = result[result.length - 1].trimRight() + "\n"
+        result = this.startCommentary(result, true);
+      }
+      result[result.length - 1] += word + " "
+    }
+    result[result.length - 1] += "\n"
+    return result.join("");
+  }
+
+  /**
+   * Start new commentary line in the buffer
+   *
+   * @param buffer
+   */
+  private startCommentary(buffer: string[], withReticences: boolean): string[] {
+    const commentaryToken = "*>->";
+    let commentary = ""
+    for (let i = 1; i < START_COMMENTARY_COLUMN; i++) {
+      commentary = commentary.concat(" ");
+    }
+    commentary = commentary.concat(commentaryToken);
+    commentary = commentary.concat(" ");
+    if (withReticences) {
+      commentary = commentary.concat("...");
+    }
+    buffer.push(commentary);
+    return buffer;
+  }
+
+  /**
+   * Returns true if all lines of the buffer are commentaries
+   *
+   * @param buffer
+   */
+  public isAllCommentaryLines(buffer: string[]) {
+    let result = true;
+    buffer.forEach((occurs) => {
+      occurs.split("\n").forEach((line) => {
+        if (!line.trimLeft().startsWith("*>->") && line !== "") {
+          result = false;
+        }
+      });
+    });
+    return result;
+  }
+
   /**
    * Indents the specified source code
-   * 
+   *
    * @param alignment indentation alignment
    * @param targetSourceCode target source code to be indented
    * @param sourceFileName name of the source file to be indented
@@ -28,7 +142,8 @@ export class Indenta {
       return;
     }
     // Saves the target source code in the input file
-    inputFile.saveBufferSync(targetSourceCode, INDENT_FILE_CHARSET);
+    let buffer = iconv.encode(targetSourceCode.join(), "win1252");
+    inputFile.saveBufferSync([buffer.toString("binary")], INDENT_FILE_CHARSET);
     //
     let indentFile = this.createIndentedFileInstance();
     let errorFile = this.createErrorFileIntance();
@@ -39,12 +154,14 @@ export class Indenta {
     new Executor().runSync(this.buildCommandLine(alignment, sourceFileName));
     // If any error was found
     if (errorFile.exists()) {
-      err(errorFile.loadBufferSync(INDENT_FILE_CHARSET).trim());
+      let buffer = iconv.encode(errorFile.loadBufferSync(INDENT_FILE_CHARSET).trim(), "binary");
+      err(iconv.decode(buffer, "win1252"));
       errorFile.delete();
       inputFile.delete();
     } else {
       indentFile.loadBuffer(INDENT_FILE_CHARSET).then((buffer) => {
-        callback(buffer);
+        let identBuffer = iconv.encode(buffer.toString(), "binary");
+        callback([iconv.decode(identBuffer, "win1252")]);
         indentFile.delete();
         inputFile.delete();
       });
@@ -74,7 +191,7 @@ export class Indenta {
 
   /**
    * Creates a file instance with the specified suffix
-   * 
+   *
    * @param suffix filename suffix
    */
   private createFileWithSuffix(suffix: string): File {
@@ -85,7 +202,7 @@ export class Indenta {
 
   /**
    * Deletes old indented filename if needed
-   * 
+   *
    * @param file old indented filename
    */
   private deleteOldFileIfExist(file: File) {
@@ -113,7 +230,7 @@ export class Indenta {
    * Build a temporary file name
    */
   private buildTmpFileName() {
-    return "C:\\tmp\\" + require("os").userInfo().username + ".cbl";
+    return "C:\\tmp\\" + require("os").userInfo().username.toLowerCase() + ".cbl";
   }
 
 }

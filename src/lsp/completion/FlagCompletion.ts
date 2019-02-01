@@ -11,28 +11,30 @@ const VALUE_COLUMN = 51;
  */
 export class FlagCompletion implements CompletionInterface {
 
-    public generate(line: number, _column: number, lines: string[]): CompletionItem[] {
-        let currentLineText = lines[line];
-        let variable = CobolVariable.parseLine(currentLineText);
-        let variableName, varsim, varnao = '';
-        let posprefixo = variable.getName().indexOf("-");
-        let prefixoName = variable.getName().substring(0, posprefixo + 1);
-        variableName = variable.getName().substring(posprefixo + 1);
-        if (variableName.length == 3) {
-            varsim = 'sim';
-            varnao = 'nao';
-        } else {
-            varsim = '-sim';
-            varnao = '-nao';
-        }
-        if (prefixoName.toLowerCase() != "w-") {
-            variableName = variable.getName();
-        }
-        let firstWordColumn = this.firstWordColumn(lines[line]);
-        let flagsText = this.buildFlagsText(firstWordColumn, variableName, varsim, varnao);
-        let snippetText = lines[line] + "\n" + flagsText;
-        let item = this.createFlagsCompletionItem(line, _column, lines, variableName, snippetText);
-        return [item];
+    public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let currentLineText = lines[line];
+            let variable = CobolVariable.parseLine(currentLineText);
+            let variableName, varsim, varnao = '';
+            let posprefixo = variable.getName().indexOf("-");
+            let prefixoName = variable.getName().substring(0, posprefixo + 1);
+            variableName = variable.getName().substring(posprefixo + 1);
+            if (variableName.length == 3) {
+                varsim = 'sim';
+                varnao = 'nao';
+            } else {
+                varsim = '-sim';
+                varnao = '-nao';
+            }
+            if (prefixoName.toLowerCase() != "w-") {
+                variableName = variable.getName();
+            }
+            let firstWordColumn = this.firstWordColumn(lines[line]);
+            let flagsText = this.buildFlagsText(firstWordColumn, variableName, varsim, varnao);
+            let snippetText = lines[line] + "\n" + flagsText;
+            let item = this.createFlagsCompletionItem(line, _column, lines, variableName, snippetText);
+            resolve([item]);
+        })
     }
 
     /**
@@ -70,8 +72,8 @@ export class FlagCompletion implements CompletionInterface {
      */
     private buildCurrentFlagText(firstWordColumn: number, variableName: string, suffix: string, value: number): string {
         let text = "";
-        text = text.concat(CompletionUtils.fillMissingSpaces(firstWordColumn, - 3) + "88 " + variableName + suffix);
-        text = text.concat(CompletionUtils.fillMissingSpaces(VALUE_COLUMN, text.length));
+        text = text.concat(CompletionUtils.fillSpacesBetween(1, firstWordColumn + 3) + "88 " + variableName + suffix);
+        text = text.concat(CompletionUtils.fillSpacesBetween(text.length + 1, VALUE_COLUMN));
         text = text.concat("value is " + value + ".");
         return text;
     }
@@ -84,8 +86,8 @@ export class FlagCompletion implements CompletionInterface {
      */
     private createFlagsCompletionItem(_line: number, _column: number, _lines: string[], _variableName: string, text: string): CompletionItem {
         return {
-            label: 'Gerar 88 SIM/NAO para a variável',
-            detail: 'Gera os níveis 88 de SIM/NAO para a variável',
+            label: '88 SIM/NAO variables',
+            detail: 'Generates 88 SIM/NAO variables',
             filterText: _lines[_line],
             textEdit: {
                 range: {

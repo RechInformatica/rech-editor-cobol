@@ -24,7 +24,7 @@ export class CommandSeparatorFormatter implements FormatterInterface {
 
     /**
      * Creates a text edit to prevent editor from removing dot/comma from the end of the line
-     * 
+     *
      * @param previousLineText current line text
      * @param previousLineNumber line where the cursor is positioned
      * @param currentLineText text of the current line
@@ -42,13 +42,13 @@ export class CommandSeparatorFormatter implements FormatterInterface {
                     character: previousLineText.length
                 }
             },
-            newText: targetChar + "\n" + CompletionUtils.fillMissingSpaces(CompletionUtils.countSpacesAtBeginning(previousLineText) + 1, 0)
+            newText: targetChar + "\n" + CompletionUtils.fillSpacesBetween(0, CompletionUtils.countSpacesAtBeginning(previousLineText))
         };
     }
 
     /**
      * Returns the command delimiter for the specified line text
-     * 
+     *
      * @param lineText line text
      */
     private getCommandDelimiter(lineText: string): string {

@@ -60,7 +60,7 @@ export class ElseFormatter implements FormatterInterface {
      * @param column column where the 'when' clause will be inserted
      */
   public createElseTextEdit(line: number, column: number): TextEdit {
-    let text = CompletionUtils.fillMissingSpaces(column, 0) + " else,";
+    let text = CompletionUtils.fillSpacesBetween(0, column) + "else,";
     return {
       range: {
         start: {

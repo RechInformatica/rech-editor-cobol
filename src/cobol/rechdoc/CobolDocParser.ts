@@ -96,7 +96,7 @@ export class CobolDocParser {
      * @param currentLine current line to create a document element
      */
     private createDocElementFromLine(currentLine: string): DocElement | undefined {
-        let docElementRegex = /\s+\*>\s+(@param|@return|@throws)\s([\w-]+)\s?(.*)?/.exec(currentLine);
+        let docElementRegex = /\s+\*>\s+(@param|@return|@throws)\s+([\w-]+)\s?(.*)?/.exec(currentLine);
         if (docElementRegex) {
             if (docElementRegex[3]) {
                 docElementRegex[3]

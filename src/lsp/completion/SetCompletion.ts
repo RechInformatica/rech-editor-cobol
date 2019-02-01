@@ -7,17 +7,21 @@ import { CompletionUtils } from "../commons/CompletionUtils";
  */
 export class SetCompletion implements CompletionInterface {
 
-    public generate(_line: number, column: number, _lines: string[]): CompletionItem[] {
-        let text = "set" + CompletionUtils.fillMissingSpaces(20, column + 2) + "${0}";
-        return [{
-            label: 'Gerar comando SET',
-            detail: 'Gera o comando SET colocando o cursor na posição da primeira variável',
-            insertText: text,
-            insertTextFormat: InsertTextFormat.Snippet,
-            filterText: "set",
-            preselect: true,
-            kind: CompletionItemKind.Keyword
-        }];
+    public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
+        return new Promise((resolve) => {
+            let text = "set" + CompletionUtils.fillSpacesFromWordReplacementEnd(20, column, _lines[_line], "set") + "${0}";            
+            resolve(
+                [{
+                    label: 'SET command',
+                    detail: 'Generates SET command and sets cursor on the first variable',
+                    insertText: text,
+                    insertTextFormat: InsertTextFormat.Snippet,
+                    filterText: "set",
+                    preselect: true,
+                    kind: CompletionItemKind.Keyword
+                }]
+            );
+        });
     }
 
 }
