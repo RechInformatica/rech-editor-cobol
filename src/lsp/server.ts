@@ -252,13 +252,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
         new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"))
           .setVariableSuggestion(variableSuggestion)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
-          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
-            // Runs Cobol preprocessor on client-side
-            return sendExternalPreprocExpanderExecution(uri, cacheFileName);
-          })).setWhenCompletion(new WhenCompletion(cacheFileName, () => {
-            // Runs Cobol preprocessor on client-side
-            return sendExternalPreprocExpanderExecution(uri, cacheFileName);
-          }))
+          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri)).setWhenCompletion(new WhenCompletion(uri))
           .generateCompletionItems().then((items) => {
             resolve(items);
           }).catch(() => {
@@ -378,10 +372,7 @@ export function createPromiseForWordDeclaration(
   return new Promise<Location>(resolve => {
     // Creates a promise to find the word declaration
     new CobolDeclarationFinder(documentFullText)
-      .findDeclaration(word, uri, (cacheFileName) => {
-        // Runs Cobol preprocessor on client-side
-        return sendExternalPreprocExpanderExecution(uri, cacheFileName);
-      })
+      .findDeclaration(word, uri)
       .then((position: RechPosition) => {
         // If the delcaration was found on an external file
         if (position.file) {

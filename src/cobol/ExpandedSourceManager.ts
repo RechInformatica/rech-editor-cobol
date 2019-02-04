@@ -46,6 +46,13 @@ export class ExpandedSourceManager {
   }
 
   /**
+   * Returns true if it has a sourceExpander
+   */
+  public static hasSourceExpander(): boolean {
+    return ExpandedSourceManager.callbackSourceExpander != undefined
+  }
+
+  /**
    * Returns the cache of expanded source
    *
    * @param source

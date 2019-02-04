@@ -11,14 +11,11 @@ import { File } from "../../commons/file";
  */
 export class WhenCompletion implements CompletionInterface {
 
-    /** Cache file name */
-    private cacheFileName: string;
-    /** callback to expander the source */
-    private callbackSourceExpander: (() => Thenable<any>) | undefined;
+    /** uri of file */
+    private uri: string;
 
-    constructor(cacheFileName: string, callbackSourceExpander?: (() => Thenable<any>)) {
-        this.cacheFileName = cacheFileName;
-        this.callbackSourceExpander = callbackSourceExpander;
+    constructor(uri: string) {
+        this.uri = uri;
     }
 
     public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
@@ -40,7 +37,6 @@ export class WhenCompletion implements CompletionInterface {
             });
             return;
         });
-
     }
 
     /**
@@ -231,12 +227,7 @@ export class WhenCompletion implements CompletionInterface {
     private getLineOfParentDeclaration(variable: string, lines: string[]): Promise<any[]> {
         return new Promise((resolve, reject) => {
             let finder = new CobolDeclarationFinder(lines.join("\n"));
-            finder.findDeclaration(variable, this.cacheFileName, () => {
-                return new Promise((resolver) => {
-                    resolver(this.callbackSourceExpander);
-                    reject()
-                })
-            }).then((position) => {
+            finder.findDeclaration(variable, this.uri).then((position) => {
                 let parentFileLines = lines;
                 if (position.file) {
                     parentFileLines = new File(position.file).loadBufferSync("latin1").split("\n");
@@ -252,6 +243,8 @@ export class WhenCompletion implements CompletionInterface {
                     }
                 }
                 reject();
+            }).catch(() => {
+                reject()
             });
         });
     }

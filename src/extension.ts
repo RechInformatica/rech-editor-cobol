@@ -104,3 +104,4 @@ export * from "./cobol/rechdoc/ElementDocumentationExtractor"
 export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./lsp/declaration/CobolDeclarationFinder";
 export * from "./cobol/diagnostic/cobolDiagnosticFilter";
+export * from "./cobol/ExpandedSourceManager";
