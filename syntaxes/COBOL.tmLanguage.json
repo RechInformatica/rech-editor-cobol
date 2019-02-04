@@ -495,7 +495,7 @@
     },
     {
       "match": "(?<![-_])(?i:exit)\\s+(?i:paragraph|perform(\\s+cycle)*)(?=\\s|\\.|,|$)",
-      "name": "keyword.control.flow.js"
+      "name": "keyword.control.flow.cobol"
     },
     {
       "match": "(?<![-_])(?i:if|else|end-if|exit\\s+program|exit\\s+method|evaluate|end-evaluate|perform|end-perform|when\\s+other|when|continue|call|end-call|invoke|go\\s+to|sort|merge|use|xml|parse|stop\\s+run|goback|raise|exit\\s+function)(?=\\s|\\.|,|$)",
