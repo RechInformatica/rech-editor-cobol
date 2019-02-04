@@ -36,6 +36,7 @@ import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 import { HighlightFactory } from "./highlight/HighlightFactory";
 import { WhenCompletion } from "./completion/WhenCompletion";
 import { CobolFoldFactory } from "./fold/CobolFoldFactory";
+import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -51,6 +52,9 @@ connection.onInitialize((params: InitializeParams) => {
     capabilities.textDocument &&
     capabilities.textDocument.publishDiagnostics &&
     capabilities.textDocument.publishDiagnostics.relatedInformation;
+  ExpandedSourceManager.setSourceExpander((uri: string, cacheFileName: string) => {
+    return sendExternalPreprocExpanderExecution(uri, cacheFileName);
+  });
   return {
     capabilities: {
       textDocumentSync: documents.syncKind,
@@ -82,15 +86,23 @@ documents.onDidChangeContent(change => {
  * If the document saved
  */
 documents.onDidSave(document => {
+  // Validate the document
   validateTextDocument(document.document, "onSave");
+  // Update the folding
   loadFolding(document);
   connection.client.register(FoldingRangeRequest.type, document);
+  // Update the expanded source
+  new ExpandedSourceManager(document.document.uri).expandSource()
 })
 
 // If the document opened
 documents.onDidOpen(document => {
+  // Validate the document
   validateTextDocument(document.document, true);
+  // Load the folding
   loadFolding(document);
+  // Load the expanded source
+  new ExpandedSourceManager(document.document.uri).expandSource();
 });
 
 // If the document closed
@@ -98,6 +110,8 @@ documents.onDidClose(textDocument => {
   let uri = textDocument.document.uri
   // Clear the folding cache
   CobolFoldFactory.foldingCache.delete(uri);
+  // Clear the expanded source cache
+  ExpandedSourceManager.removeSourceOfCache(uri);
   //Clear the computed diagnostics to VSCode.
   connection.sendDiagnostics({
     uri: uri,
