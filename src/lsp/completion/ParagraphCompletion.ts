@@ -25,12 +25,15 @@ export class ParagraphCompletion implements CompletionInterface {
     private uri: string;
     /** Current lines in the source */
     private currentLines: string[] | undefined;
+    /** Source of completions */
+    private sourceOfCompletions: Thenable<string>;
 
-    constructor(cacheFileName: string, uri: string) {
+    constructor(cacheFileName: string, uri: string, sourceOfCompletions: Thenable<string>) {
         this.parserCobol = new ParserCobol();
         this.cobolDocParser = new CobolDocParser();
         this.cacheFileName = cacheFileName;
         this.uri = uri;
+        this.sourceOfCompletions = sourceOfCompletions;
     }
 
     public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
@@ -59,13 +62,20 @@ export class ParagraphCompletion implements CompletionInterface {
      */
     private loadCache() {
         return new Promise((resolve, reject) => {
-            ExpandedSourceManager.getExpandedSource(this.uri).then((buffer) => {
-                ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
-                ParagraphCompletion.cache = this.generateParagraphCompletion(buffer.toString().split("\n"), true);
-                return resolve();
-            }).catch(() => {
-                return reject();
-            })
+            this.sourceOfCompletions.then((sourceOfCompletions) => {
+                if (sourceOfCompletions == "local") {
+                    ParagraphCompletion.cache = this.generateParagraphCompletion(<string[]>this.currentLines, false)
+                    ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
+                    return resolve();
+                }
+                ExpandedSourceManager.getExpandedSource(this.uri).then((buffer) => {
+                    ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
+                    ParagraphCompletion.cache = this.generateParagraphCompletion(buffer.toString().split("\n"), true);
+                    return resolve();
+                }).catch(() => {
+                    return reject();
+                })
+            });
         });
     }
 
@@ -136,6 +146,14 @@ export class ParagraphCompletion implements CompletionInterface {
         }
         documentation = documentation.reverse();
         return documentation;
+    }
+
+    /**
+     * Clear the paragraphs cache
+     */
+    public static clearCache() {
+        ParagraphCompletion.cache = new Map();
+        ParagraphCompletion.cacheSourceFileName = "";
     }
 
 }

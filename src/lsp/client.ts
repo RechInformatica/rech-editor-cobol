@@ -8,6 +8,7 @@ import { Process } from '../commons/Process';
 import { configuration } from '../helpers/configuration';
 import { cobolDiagnosticFilter } from '../cobol/diagnostic/cobolDiagnosticFilter';
 import { SourceExpander } from '../editor/SourceExpander';
+import { SourceOfCompletions } from './commons/SourceOfCompletions';
 
 /**
  * Language Server Provider client
@@ -80,6 +81,11 @@ export class Client {
 				return new Promise<Boolean>((resolve) => {
 					let result = cobolDiagnosticFilter.isDiagnosticValid(diagnosticMessage);
 					resolve(result);
+				})
+			});
+			Client.client.onRequest("custom/sourceOfCompletions", () => {
+				return new Promise<string>((resolve) => {
+					resolve(SourceOfCompletions.getSourceOfCompletions());
 				})
 			});
 		}

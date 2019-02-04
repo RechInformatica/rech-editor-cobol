@@ -12,9 +12,9 @@ import { File } from "../../commons/file";
 export class WhenCompletion implements CompletionInterface {
 
     /** uri of file */
-    private uri: string;
+    private uri: string | undefined;
 
-    constructor(uri: string) {
+    constructor(uri?: string) {
         this.uri = uri;
     }
 
@@ -226,8 +226,11 @@ export class WhenCompletion implements CompletionInterface {
      */
     private getLineOfParentDeclaration(variable: string, lines: string[]): Promise<any[]> {
         return new Promise((resolve, reject) => {
+            if (!this.uri) {
+                reject();
+            }
             let finder = new CobolDeclarationFinder(lines.join("\n"));
-            finder.findDeclaration(variable, this.uri).then((position) => {
+            finder.findDeclaration(variable, this.uri!).then((position) => {
                 let parentFileLines = lines;
                 if (position.file) {
                     parentFileLines = new File(position.file).loadBufferSync("latin1").split("\n");

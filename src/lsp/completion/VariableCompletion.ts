@@ -4,31 +4,51 @@ import { Scan } from "../../commons/Scan";
 import { CobolVariable } from "./CobolVariable";
 import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
 import { VariableUtils } from "../../commons/VariableUtils";
+import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
 
 /**
  * Class to generate LSP Completion Items for Cobol variables
  */
 export class VariableCompletion implements CompletionInterface {
 
+    /** Cache of CompletionItems results */
+    private static cache: Map<string, Map<string, CompletionItem>> = new Map()
     /** Cobol documentation parser */
     private cobolDocParser: CobolDocParser;
     /** Ignore enumerations (88 variables) */
     private ignoreEnums: boolean = false;
     /** Ignore display variables */
     private ignoreDisplay: boolean = false;
+    /** uri of source file */
+    private uri: string | undefined
+    /** Current lines in the source */
+    private currentLines: string[] | undefined;
+    /** Source of completions */
+    private sourceOfCompletions: Thenable<string> | undefined;
 
-    constructor() {
+    constructor(uri?: string, sourceOfCompletions?: Thenable<string>) {
         this.cobolDocParser = new CobolDocParser();
+        this.uri = uri;
+        this.sourceOfCompletions = sourceOfCompletions;
     }
 
     public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
+            this.currentLines = lines;
             let items: CompletionItem[] = [];
-            let itemsMap = this.generateItemsFromCurrentBuffer(lines);
-            for (let value of itemsMap.values()) {
-                items.push(value);
+            this.loadCache();
+            let uri = this.uri ? this.uri : "";
+            let cache = VariableCompletion.cache.get(uri);
+            if (cache) {
+                for (let value of cache.values()){
+                    items.push(value);
+                }
+            } else {
+                for (let value of this.generateItemsFromCurrentBuffer(this.currentLines, false).values()) {
+                    items.push(value);
+                }
             }
-            resolve(items);
+            return resolve(items);
         });
     }
 
@@ -53,11 +73,45 @@ export class VariableCompletion implements CompletionInterface {
     }
 
     /**
+     * Load the cache result
+     */
+    private loadCache() {
+
+        return new Promise((resolve, reject) => {
+            if (!this.uri) {
+                reject();
+            }
+            let awaitsResult = false;
+            if (this.sourceOfCompletions) {
+                awaitsResult = true;
+                this.sourceOfCompletions.then((sourceOfCompletions) => {
+                    if (sourceOfCompletions == "expanded") {
+                        ExpandedSourceManager.getExpandedSource(this.uri!).then((buffer) => {
+                            let result = this.generateItemsFromCurrentBuffer(buffer.toString().split("\n"), true);
+                            VariableCompletion.cache.set(this.uri!, result);
+                            return resolve();
+                        }).catch(() => {
+                            return reject();
+                        })
+                    } else {
+                        VariableCompletion.cache.set(this.uri!, this.generateItemsFromCurrentBuffer(<string[]>this.currentLines, false));
+                        return resolve();
+                    }
+                })
+            }
+            if (!awaitsResult) {
+                VariableCompletion.cache.set(this.uri!, this.generateItemsFromCurrentBuffer(<string[]>this.currentLines, false));
+                return resolve();
+            }
+        });
+    }
+
+    /**
      * Generates completion items from the current source
      *
      * @param lines buffer lines
      */
-    private generateItemsFromCurrentBuffer(lines: string[]): Map<string, CompletionItem> {
+    private generateItemsFromCurrentBuffer(lines: string[], useCache: boolean): Map<string, CompletionItem> {
         let itemsMap: Map<string, CompletionItem> = new Map;
         let buffer = lines.join("\n");
         new Scan(buffer).scan(/^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm, (iterator: any) => {
@@ -68,7 +122,16 @@ export class VariableCompletion implements CompletionInterface {
                 itemsMap.set(variable.getName(), variableItem);
             }
         });
+        // Merge the cache with the local paragraphs
+        if (useCache) {
+            this.generateItemsFromCurrentBuffer(<string[]>this.currentLines, false).forEach((value, key) => {
+                if (!itemsMap.has(key)){
+                    itemsMap.set(key, value);
+                }
+            })
+        }
         return itemsMap;
+
     }
 
     /**
@@ -146,6 +209,15 @@ export class VariableCompletion implements CompletionInterface {
         }
         info = info.concat("`" + variable.getRaw().trim() + "`\n\n");
         return info;
+    }
+
+    /**
+     * Remove the uri from the cache
+     *
+     * @param uri
+     */
+    public static removeCache(uri: string) {
+        VariableCompletion.cache.delete(uri);
     }
 
 }

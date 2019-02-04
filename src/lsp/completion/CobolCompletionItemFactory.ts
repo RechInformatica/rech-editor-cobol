@@ -23,6 +23,7 @@ import { ElseCompletion } from "./ElseCompletion";
 import Q from "q";
 import { VariableCompletion } from "./VariableCompletion";
 import { EmptyCompletion } from "./EmptyCompletion";
+import { WhenCompletion } from "./WhenCompletion";
 
 
 /**
@@ -41,10 +42,12 @@ export class CobolCompletionItemFactory {
   private additionalCompletions: CompletionInterface[];
   /** Completion class to generate the CompletionItem for paragraphs */
   private paragraphCompletion: CompletionInterface;
-  /** Completion class to generate the WhenItem for When */
-  private whenCompletion: CompletionInterface;
+  /** Completion class to generate the CompletionItem for variables */
+  private variableCompletion: CompletionInterface;
   /** Allows variable suggestion */
   private variableSuggestion: boolean;
+  /** uri of source file */
+  private uri: string | undefined;
 
   /**
    * Creates an instance to generate LSP Completion Items for Cobol language
@@ -53,14 +56,15 @@ export class CobolCompletionItemFactory {
    * @param column column where the cursor is positioned
    * @param ilnes document text lines
    */
-  constructor(line: number, column: number, lines: string[]) {
+  constructor(line: number, column: number, lines: string[], uri?: string) {
     this.line = line;
     this.column = column;
     this.lines = lines;
     this.lineText = this.lines[line];
+    this.uri = uri;
     this.additionalCompletions = [];
     this.paragraphCompletion = new EmptyCompletion();
-    this.whenCompletion = new EmptyCompletion();
+    this.variableCompletion = new EmptyCompletion();
     this.variableSuggestion = false;
   }
 
@@ -85,12 +89,12 @@ export class CobolCompletionItemFactory {
   }
 
   /**
-   * Completion class to generate the CompletionItem for paragraphs
+   * Completion class to generate the CompletionItem for variables
    *
-   * @param whenCompletion
+   * @param variableCompletion
    */
-  public setWhenCompletion(whenCompletion: CompletionInterface): CobolCompletionItemFactory {
-    this.whenCompletion = whenCompletion;
+  public setVariableCompletion(variableCompletion: CompletionInterface): CobolCompletionItemFactory {
+    this.variableCompletion = variableCompletion;
     return this;
   }
 
@@ -208,8 +212,8 @@ export class CobolCompletionItemFactory {
    * Creates a variable completion interface allowing enum suggestion
    */
   private createVariableSuggestionWithEnum(): CompletionInterface {
-    if (this.variableSuggestion) {
-      return new VariableCompletion();
+    if (this.variableSuggestion && this.variableCompletion instanceof VariableCompletion) {
+      return this.variableCompletion;
     }
     return new EmptyCompletion();
   }
@@ -218,8 +222,8 @@ export class CobolCompletionItemFactory {
    * Creates a variable completion interface ignoring enum suggestion
    */
   private createVariableSuggestionWithoutEnum(): CompletionInterface {
-    if (this.variableSuggestion) {
-      return new VariableCompletion().setIgnoreEnums(true);
+    if (this.variableSuggestion && this.variableCompletion instanceof VariableCompletion) {
+      return (<VariableCompletion>this.variableCompletion).setIgnoreEnums(true);
     }
     return new EmptyCompletion();
   }
@@ -228,8 +232,8 @@ export class CobolCompletionItemFactory {
    * Creates a variable completion interface ignoring enum variables and displays
    */
   private createVariableSuggestionWithoutEnumAndDisplay(): CompletionInterface {
-    if (this.variableSuggestion) {
-      return new VariableCompletion().setIgnoreDisplay(true).setIgnoreEnums(true);
+    if (this.variableSuggestion && this.variableCompletion instanceof VariableCompletion) {
+      return (<VariableCompletion>this.variableCompletion).setIgnoreDisplay(true).setIgnoreEnums(true);
     }
     return new EmptyCompletion();
   }
@@ -239,7 +243,7 @@ export class CobolCompletionItemFactory {
    */
   private createWhenCompletions(): Promise<CompletionItem[]> {
     let items: Promise<CompletionItem[]>[] = [];
-    items = items.concat(this.generate(this.whenCompletion));
+    items = items.concat(this.generate(new WhenCompletion(this.uri)));
     items = items.concat(this.generate(this.createVariableSuggestionWithEnum()));
     return this.createWrappingPromise(items);
   }

@@ -37,6 +37,7 @@ import { HighlightFactory } from "./highlight/HighlightFactory";
 import { WhenCompletion } from "./completion/WhenCompletion";
 import { CobolFoldFactory } from "./fold/CobolFoldFactory";
 import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
+import { VariableCompletion } from "./completion/VariableCompletion";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -86,13 +87,16 @@ documents.onDidChangeContent(change => {
  * If the document saved
  */
 documents.onDidSave(document => {
+  let uri = document.document.uri;
   // Validate the document
   validateTextDocument(document.document, "onSave");
   // Update the folding
   loadFolding(document);
   connection.client.register(FoldingRangeRequest.type, document);
   // Update the expanded source
-  new ExpandedSourceManager(document.document.uri).expandSource()
+  new ExpandedSourceManager(uri).expandSource()
+  // Clear the variableCompletion cache
+  VariableCompletion.removeCache(uri);
 })
 
 // If the document opened
@@ -112,6 +116,8 @@ documents.onDidClose(textDocument => {
   CobolFoldFactory.foldingCache.delete(uri);
   // Clear the expanded source cache
   ExpandedSourceManager.removeSourceOfCache(uri);
+  // Clear the variableCompletion cache
+  VariableCompletion.removeCache(uri);
   //Clear the computed diagnostics to VSCode.
   connection.sendDiagnostics({
     uri: uri,
@@ -249,10 +255,11 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
       let cacheFileName = buildCacheFileName(uri);
       let fullDocument = documents.get(uri);
       if (fullDocument) {
-        new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"))
+        new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"), uri)
           .setVariableSuggestion(variableSuggestion)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
-          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri)).setWhenCompletion(new WhenCompletion(uri))
+          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfCompletions()))
+          .setVariableCompletion(new VariableCompletion(uri, getCurrentSourceOfCompletions()))
           .generateCompletionItems().then((items) => {
             resolve(items);
           }).catch(() => {
@@ -263,6 +270,13 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
   });
   });
 });
+
+/**
+ * Returns the current source of completionsItems
+ */
+function getCurrentSourceOfCompletions() {
+  return connection.sendRequest<string>("custom/sourceOfCompletions")
+}
 
 /**
  * Document formatter
