@@ -1,6 +1,7 @@
 import { CobolFoldInterface } from "./cobolFoldInterface";
 import { FoldingRange } from "vscode-languageserver";
 import { ParserCobol } from "../../cobol/parsercobol";
+import { CobolVariable } from "../completion/CobolVariable";
 
 /**
 * Class to folding Cobol variables declarations
@@ -45,7 +46,7 @@ export class VariableFolding implements CobolFoldInterface {
             let match = pattern.exec(currentLine)
             if (match) {
                 let level = match[1];
-                if (level <= currentVariableLevel || this.isEspecialVariableType(level)) {
+                if (level <= currentVariableLevel || CobolVariable.isEspecialVariableType(level)) {
                     return this.startOfDeclaration(index - 1, lines);
                 }
             } else {
@@ -79,15 +80,6 @@ export class VariableFolding implements CobolFoldInterface {
             }
         }
         return line;
-    }
-
-    /**
-     * Returns true if the level indicates a special variable type
-     *
-     * @param level
-     */
-    private isEspecialVariableType(level: string) {
-        return /78|77/.test(level)
     }
 
 }

@@ -76,7 +76,6 @@ export class VariableCompletion implements CompletionInterface {
      * Load the cache result
      */
     private loadCache() {
-
         return new Promise((resolve, reject) => {
             if (!this.uri) {
                 reject();
@@ -116,6 +115,7 @@ export class VariableCompletion implements CompletionInterface {
         let buffer = lines.join("\n");
         new Scan(buffer).scan(/^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm, (iterator: any) => {
             let variable = CobolVariable.parseLine(iterator.lineContent.toString());
+            variable = CobolVariable.parseAndSetChildren(variable, iterator.row, lines);
             if (!this.shouldIgnoreVariable(variable)) {
                 let docArray = VariableUtils.findVariableDocArray(lines, iterator.row);
                 let variableItem = this.createVariableCompletion(variable, docArray);
@@ -208,6 +208,14 @@ export class VariableCompletion implements CompletionInterface {
             info = info.concat("*Picture*: `" + variable.getPicture() + "`\n\n");
         }
         info = info.concat("`" + variable.getRaw().trim() + "`\n\n");
+        let childrens = variable.getChildrens();
+        if (childrens && childrens.length > 0) {
+            info = info.concat("##### Childrens\n\n");
+            childrens.forEach((children) => {
+                info = info.concat("`" + children.getName() + "`\n\n");
+            })
+        }
+        info = info.concat("##### Size = " + variable.getByteSize() + "\n\n");
         return info;
     }
 
