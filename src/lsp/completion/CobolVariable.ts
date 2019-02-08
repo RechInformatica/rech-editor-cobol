@@ -264,7 +264,7 @@ export class CobolVariable {
         }
         let expandedPicture = this.expandPricture(picture);
         let absolutePicture = expandedPicture.toLowerCase().replace("v", "")
-        absolutePicture = expandedPicture.replace(/comp.*/, "");
+        absolutePicture = absolutePicture.replace(/comp.*/, "");
         if (!CobolVariable.hasComp(picture)) {
             return absolutePicture.length - 1;
         }
@@ -337,7 +337,7 @@ export class CobolVariable {
                     if (!Number.isNaN(Number(sSize))) {
                         size = Number.parseInt(sSize);
                     }
-                    for (let rep = 0; rep < size; rep++) {
+                    for (let rep = 0; rep < size - 1; rep++) {
                         expandedPicture += firstChar
                     }
                     i = fim;
