@@ -1,3 +1,5 @@
+import { RechPosition } from "../../commons/rechposition";
+
 /**
  * Class representing a Cobol variable
  */
@@ -24,6 +26,8 @@ export class CobolVariable {
     private childrens: CobolVariable[] | undefined;
     /** Parent variable */
     private parent: CobolVariable | undefined;
+    /** Declaration position */
+    private declarationPosition: RechPosition | undefined;
 
     private constructor(level: number, name: string, picture: string, type: Type, display: boolean, allowNegative: boolean, raw: string) {
         this.level = level;
@@ -53,34 +57,6 @@ export class CobolVariable {
         }
     }
 
-     /**
-     * Parse the source and defines the parent variable of the specidied variable
-     *
-     * @param variable
-     * @param line
-     * @param lines
-     * @param level
-     */
-    public static parseAndSetParent(variable: CobolVariable, line: number, lines: string[]) {
-        let level = variable.getLevel();
-        for (let index = line - 1; index >= 0; index--) {
-            let currentLine = lines[index];
-            let match = /^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/g.exec(currentLine);
-            if (match) {
-                let splitted = CobolVariable.splitVariableInfo(currentLine);
-                let currentLevel = Number.parseInt(splitted[0]);
-                if (currentLevel < level ) {
-                    variable.setParent(CobolVariable.parseLine(currentLine));
-                    return;
-                }
-            }
-            if (currentLine.trim().toLowerCase().startsWith("working-storage")) {
-                break;
-            }
-        }
-        return variable;
-    }
-
     /**
      * Parse the source and defines the childrens of the specidied variable
      *
@@ -103,6 +79,8 @@ export class CobolVariable {
                     !CobolVariable.isEspecialVariableType(splitted[0])) {
                     let children = CobolVariable.parseLine(currentLine);
                     children = CobolVariable.parseAndSetChildren(children, index, lines);
+                    let startDeclarationColumn = currentLine.length - currentLine.trimLeft().length
+                    children.setDeclarationPosition(new RechPosition(index, startDeclarationColumn))
                     if (firstChildrenLevel == 0) {
                         firstChildrenLevel = children.getLevel();
                     } else {
@@ -456,6 +434,22 @@ export class CobolVariable {
      */
     public setChildrens(childrens: CobolVariable[]) {
         this.childrens = childrens;
+    }
+
+    /**
+     * Returns the declaration position
+     */
+    public getDeclarationPosition(): RechPosition | undefined {
+        return this.declarationPosition;
+    }
+
+    /**
+     * Defines the declaration position
+     *
+     * @param declarationPosition
+     */
+    public setDeclarationPosition(declarationPosition: RechPosition) {
+        this.declarationPosition = declarationPosition;
     }
 
 }

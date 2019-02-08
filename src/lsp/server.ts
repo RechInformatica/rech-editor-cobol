@@ -74,6 +74,17 @@ connection.onInitialize((params: InitializeParams) => {
   };
 });
 
+/** When requesto to return the declaration position of term */
+connection.onRequest("custom/findDeclarationPosition", (word: string, fullDocument: string, uri: string) => {
+  return new Promise((resolve) => {
+    callCobolFinder(word, fullDocument, uri).then((position) => {
+      resolve(position);
+    }).catch(() => {
+      resolve(undefined);
+    });
+  })
+})
+
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
@@ -384,23 +395,39 @@ export function createPromiseForWordDeclaration(
   // Creates an external promise so the reject function can be called when no definition
   // is found for the specified word
   return new Promise<Location>(resolve => {
-    // Creates a promise to find the word declaration
+    callCobolFinder(word, documentFullText, uri).then((position) => {
+      // If the delcaration was found on an external file
+      if (position.file) {
+        // Retrieves the location on the external file
+        resolve(createLocation(position.file, position));
+      } else {
+        // Retrieves the location on the current file
+        resolve(createLocation(uri, position));
+      }
+    })
+    .catch(() => {
+      resolve(undefined);
+    });
+  });
+}
+
+/**
+ * Call the cobol word declaration finder
+ *
+ * @param word
+ * @param documentFullText
+ * @param uri
+ */
+export function callCobolFinder(word: string, documentFullText: string, uri: string): Promise<RechPosition> {
+  return new Promise((resolve, reject) => {
     new CobolDeclarationFinder(documentFullText)
       .findDeclaration(word, uri)
       .then((position: RechPosition) => {
-        // If the delcaration was found on an external file
-        if (position.file) {
-          // Retrieves the location on the external file
-          resolve(createLocation(position.file, position));
-        } else {
-          // Retrieves the location on the current file
-          resolve(createLocation(uri, position));
-        }
+        return resolve(position);
+      }).catch(() => {
+        reject();
       })
-      .catch(() => {
-        resolve(undefined);
-      });
-  });
+  })
 }
 
 /**

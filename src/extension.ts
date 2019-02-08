@@ -8,6 +8,7 @@ import { TabStopper } from './cobol/TabStopper';
 import { Client } from './lsp/client';
 import { CustomDecorator } from './decoration/CustomDecorator';
 import { SourceOfCompletions } from './lsp/commons/SourceOfCompletions';
+import { ElementsDisplayerFactory } from './cobol/elementsdisplayer/ElementsDisplayerFactory';
 
 /** Controll the sourceOfCompletions StatusBarItem */
 var sourceOfCompletions: StatusBarItem;
@@ -67,6 +68,13 @@ export function activate(_context: any) {
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos51', () => {
         new Editor().setColumn(COLUNA_VALUE - 1);
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.showElementProperties', () => {
+        let editor = new Editor();
+        let word = editor.getCurrentWord();
+        let buffer = editor.getEditorBuffer();
+        let uri = editor.getPath().fullPathVscode()
+        new ElementsDisplayerFactory().show(word, buffer, uri);
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos12', () => {
         new Editor().setColumn(AREA_B - 1);

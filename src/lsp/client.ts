@@ -2,13 +2,11 @@ import { workspace, ExtensionContext, DocumentFilter } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
 import { Editor } from '../editor/editor';
 import * as path from 'path';
-import { configure } from 'vscode/lib/testrunner';
-import { File } from '../extension';
-import { Process } from '../commons/Process';
 import { configuration } from '../helpers/configuration';
 import { cobolDiagnosticFilter } from '../cobol/diagnostic/cobolDiagnosticFilter';
 import { SourceExpander } from '../editor/SourceExpander';
 import { SourceOfCompletions } from './commons/SourceOfCompletions';
+import { RechPosition } from '../commons/rechposition';
 
 /**
  * Language Server Provider client
@@ -132,6 +130,26 @@ export class Client {
 			return undefined;
 		}
 		return Client.client.stop();
+	}
+
+	/**
+	 * Request the server and return the RechPosition of word declaration
+	 */
+	public static getDeclararion(word: string, fullDocument: string, uri: string): Promise<RechPosition> {
+		return new Promise((resolve, reject) => {
+			if (Client.client) {
+				let params = [word, fullDocument, uri];
+				return Client.client.sendRequest<RechPosition | undefined>("custom/findDeclarationPosition", params).then((position) => {
+					if (position) {
+						resolve(position)
+					} else {
+						reject()
+					}
+				})
+			} else {
+				reject()
+			}
+		});
 	}
 
 }

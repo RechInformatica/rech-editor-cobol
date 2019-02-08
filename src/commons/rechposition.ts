@@ -4,11 +4,11 @@
  */
 export class RechPosition {
     /** Line position */
-    private _line: number;
+    public line: number;
     /** Column position */
-    private _column: number;
+    public column: number;
     /** file */
-    private _file: string | undefined;
+    public file: string | undefined;
 
     /**
      * Constructor of RechPosition
@@ -18,29 +18,8 @@ export class RechPosition {
      * @param file
      */
     public constructor (line: number, column: number, file?: string) {
-        this._line = line;
-        this._column = column;
-        this._file = file;
-    }
-
-    /**
-     * Return the line Position
-     */
-    public get line(): number {
-        return this._line;
-    }
-
-    /**
-     * Return the column position
-     */
-    public get column(): number {
-        return this._column;
-    }
-
-    /**
-     * Return the column position
-     */
-    public get file(): string | undefined {
-        return this._file;
+        this.line = line;
+        this.column = column;
+        this.file = file;
     }
 }
