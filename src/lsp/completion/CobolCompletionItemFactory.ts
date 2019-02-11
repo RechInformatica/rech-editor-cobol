@@ -132,6 +132,10 @@ export class CobolCompletionItemFactory {
           resolve(this.generate(this.createVariableSuggestionWithoutEnumAndDisplay()));
           return;
         }
+        case this.isInitialize(): {
+          resolve(this.generate(this.createVariableSuggestionWithEnum()));
+          return;
+        }
         case this.isWhen(): {
           resolve(this.createWhenCompletions());
           return;
@@ -350,6 +354,16 @@ export class CobolCompletionItemFactory {
    */
   private isCompute(): boolean {
     if (/\s+(COMPUTE|compute).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents a 'Initialize'
+   */
+  private isInitialize(): boolean {
+    if (/\s+(INITIALIZE|initialize).*/.exec(this.lineText)) {
       return true;
     }
     return false;
