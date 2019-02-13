@@ -24,6 +24,7 @@ import Q from "q";
 import { VariableCompletion } from "./VariableCompletion";
 import { EmptyCompletion } from "./EmptyCompletion";
 import { WhenCompletion } from "./WhenCompletion";
+import { EndCompletion } from "./EndCompletion";
 
 
 /**
@@ -523,6 +524,7 @@ export class CobolCompletionItemFactory {
     items = items.concat(this.generate(new EvaluateCompletion()));
     items = items.concat(this.generate(new PerformUntilExitCompletion()));
     items = items.concat(this.generate(new PerformVaryingCompletion()));
+    items = items.concat(this.generate(new EndCompletion()));
     this.additionalCompletions.forEach(impl => {
       items = items.concat(this.generate(impl));
     });
