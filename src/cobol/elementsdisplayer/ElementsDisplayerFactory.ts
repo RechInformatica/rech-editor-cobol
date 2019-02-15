@@ -36,6 +36,7 @@ export class ElementsDisplayerFactory {
       case this.isVariable(lines[position.line]): {
         let variable = CobolVariable.parseLine(lines[position.line])
         variable = CobolVariable.parseAndSetChildren(variable, position.line, lines)
+        variable = CobolVariable.parserAndSetComment(variable, position.line, lines)
         variable.setDeclarationPosition(position);
         new VariableDisplayer().show(variable)
       }

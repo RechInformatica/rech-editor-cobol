@@ -8,9 +8,9 @@ export interface ElementInterface extends QuickPickItem {
   onSelection?: ((element: ElementInterface) => any) | undefined
 
   /**
-   * Returns the element childrens
+   * Returns the element children
    */
-  getChildrens(): ElementInterface[];
+  getChildren(): ElementInterface[];
 
   /**
    * Object related to element
