@@ -283,12 +283,12 @@ export class CobolVariable {
         }
         let expandedPicture = this.expandPricture(picture);
         let absolutePicture = expandedPicture.toLowerCase().replace(/comp.*/, "")
-        absolutePicture = absolutePicture.replace("v", "");
-        absolutePicture = absolutePicture.replace(",", "");
-        absolutePicture = absolutePicture.replace("s", "");
         if (!CobolVariable.hasComp(picture)) {
+            absolutePicture = absolutePicture.replace("v", "");
             return absolutePicture.length;
         }
+        absolutePicture = absolutePicture.replace("v", "");
+        absolutePicture = absolutePicture.replace("s", "");
         if (picture.toLowerCase().startsWith("s")) {
             if (absolutePicture.length <= 2) {
                 return 1;
