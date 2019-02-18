@@ -28,10 +28,12 @@ export class VariableCompletion implements CompletionInterface {
     }
 
     public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.currentLines = lines;
             let items: CompletionItem[] = [];
-            this.loadCache();
+            this.loadCache().catch(() => {
+                reject();
+            });
             let uri = this.uri ? this.uri : "";
             let cache = VariableCompletion.cache.get(uri);
             if (cache) {
