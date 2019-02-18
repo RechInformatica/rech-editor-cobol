@@ -46,10 +46,10 @@
       *>-> Nível 77
        77  w-nivel-77             pic is x(01)    value is spaces.
       *>-> Variáveis para teste de tamanho
-       01  w-byte-size-100.
+       01  w-byte-size.
            05 w-byte-size-40.
               10 w-byte-size-30   pic is x(30)    value is spaces.
-              10 w-byte-size-10   pic is 9(05),9(05) value is zeros.
+              10 w-byte-size-10   pic is 9(05),9(04) value is zeros.
            05 w-any-length.
               10 w-byte-size-64.
                  15 w-byte-size-09.
@@ -72,9 +72,9 @@
                     20 w-byte-size-pic14 pic is 9(14) value is zeros comp-x.
                     20 w-byte-size-pic15 pic is 9(15) value is zeros comp-x.
                     20 w-byte-size-pic16 pic is 9(16) value is zeros comp-x.
-              10 w-byte-sipic1v1 pic is 9V9 value is zeros comp.
-              10 w-byte-sipic91v1 pic is 9(1)V9 value is zeros comp.
-              10 w-byte-sipic1v91 pic is 9V9(1) value is zeros comp.
+              10 w-byte-sipic1v1  pic is 9V9      value is zeros comp.
+              10 w-byte-sipic91v1 pic is 9(1)V9   value is zeros comp.
+              10 w-byte-sipic1v91 pic is 9V9(1)   value is zeros comp.
               10 w-byte-size-pic92v99 pic is 9(02)V99 value is zeros comp.
               10 w-byte-size-pic97v93 pic is 9(7)V9(03) value is zeros comp.
               10 w-byte-size-pic999v93 pic is 999V9(03) value is zeros comp.
@@ -86,4 +86,10 @@
               10 w-occdad.
                  15 w-occ                        occurs 12 times.
                     20 w-filho-occ pic is 9(05)                  comp-x.
+           05 w-display.
+              10 w-displayzzz999  pic is zzz999   value is zeros.
+              10 w-displayzzzd999 pic is zzz.999  value is zeros.
+              10 w-displayzzzc999 pic is zzz,999  value is zeros.
+              10 w-display-99c99  pic is -99,99   value is zeros.
+              10 w-display-9999   pic is -9999    value is zeros.
       *>--------------------------------------------- CALICM.cbl -----------------------------------------------------<*
