@@ -7,8 +7,6 @@ import { denodeify } from 'q';
 const appendFile = denodeify(fs.appendFile);
 /** constant function to write file */
 const writeFile = denodeify(fs.writeFile);
-/** constant function to read file */
-const readFile = denodeify<string[]>(fs.readFile);
 
 /**
  * Class to manipulate files
@@ -64,8 +62,18 @@ export class File {
   /**
    * Load the file content
    */
-  public loadBuffer(encoding?: string): Q.Promise<string[]> {
-    return readFile(this.fileName, { encoding: encoding });
+  public loadBuffer(encoding?: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (!encoding) {
+        encoding = "latin1";
+      }
+      fs.readFile(this.fileName, { encoding: encoding }, (err, buffer)=> {
+        if (err) {
+          reject();
+        }
+        resolve(buffer)
+      });
+    });
   }
 
   /**

@@ -57,10 +57,8 @@ export class CobolDeclarationFinder {
   private findDeclarationWithPreproc(term: string, uri: string, expandSource: boolean): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       ExpandedSourceManager.getExpandedSource(uri).then((expandedSource) => {
-        // Make this to adjust the objects types
-        let buffer = expandedSource.toString().split("\n").join("\n");
         let path = new Path(uri);
-        let result = this.findDeclarationInPreprocessedSource(term, path, buffer);
+        let result = this.findDeclarationInPreprocessedSource(term, path, expandedSource);
         if (result) {
           return resolve(result);
         } else {

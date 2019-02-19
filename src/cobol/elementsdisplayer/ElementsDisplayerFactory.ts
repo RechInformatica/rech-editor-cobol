@@ -57,7 +57,7 @@ export class ElementsDisplayerFactory {
         resolve(currentBuffer)
       } else {
         new File(position.file).loadBuffer("latin1").then((buffer) => {
-          resolve(buffer.toString());
+          resolve(buffer);
         }).catch(() => {
           reject()
         })

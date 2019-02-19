@@ -25,7 +25,7 @@ describe('File Functions', () => {
     var result = new File(fileName).saveBuffer(buffer, "latin1");
     result.then(() => {
       new File(fileName).loadBuffer("latin1").then((b) => {
-        assert.equal(buffer, b);
+        assert.equal(buffer.toString(), b);
         done();
       }).catch(() => {
         reject();
@@ -43,7 +43,7 @@ describe('File Functions', () => {
     var result = new File(fileName).saveBuffer(buffer, "UTF-8");
     result.then(() => {
       new File(fileName).loadBuffer("UTF-8").then((b) => {
-        assert.equal(buffer, b);
+        assert.equal(buffer.toString(), b);
         done();
       }).catch(() => {
         reject();
@@ -62,7 +62,7 @@ describe('File Functions', () => {
       file.appendBuffer(buffer[1], "latin1").then(() => {
         file.appendBuffer(buffer[2], "latin1").then(() => {
           file.loadBuffer("latin1").then((b) => {
-            assert.equal(b.toString(), buffer.toString().replace(/,/g, ""));
+            assert.equal(b, buffer.toString().replace(/,/g, ""));
             done();
           }).catch((e) => {
             assert.fail(e);
@@ -81,7 +81,7 @@ describe('File Functions', () => {
       done();
     });
   });
-  
+
   // Try delete a file
   it('Delete a file', (done) => {
     let file = new File("C:\\tmp\\teste_file_vscode.txt");

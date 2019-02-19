@@ -160,7 +160,7 @@ export class Indenta {
       inputFile.delete();
     } else {
       indentFile.loadBuffer(INDENT_FILE_CHARSET).then((buffer) => {
-        let identBuffer = iconv.encode(buffer.toString(), "binary");
+        let identBuffer = iconv.encode(buffer, "binary");
         callback([iconv.decode(identBuffer, "win1252")]);
         indentFile.delete();
         inputFile.delete();

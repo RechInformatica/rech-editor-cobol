@@ -6,7 +6,7 @@ import { File } from "../commons/file";
  */
 export class ExpandedSourceManager {
   /** Expanded sources */
-  private static expandedSource: Map<string, string[]> = new Map();
+  private static expandedSource: Map<string, string> = new Map();
   /** callback to expander the source */
   private static callbackSourceExpander: ((uri: string, cacheFileName: string) => Thenable<{}>) | undefined;
   /** Source to expand*/
@@ -19,7 +19,7 @@ export class ExpandedSourceManager {
   /**
    * Expand the source and load the cache
    */
-  public expandSource(): Promise<string[]> {
+  public expandSource(): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!ExpandedSourceManager.callbackSourceExpander) {
         return reject()
@@ -57,7 +57,7 @@ export class ExpandedSourceManager {
    *
    * @param source
    */
-  public static getExpandedSource(source: string): Promise<string[]> {
+  public static getExpandedSource(source: string): Promise<string> {
     return new Promise((resolve, reject) => {
       let expandedSource = ExpandedSourceManager.expandedSource.get(source);
       if (expandedSource) {
