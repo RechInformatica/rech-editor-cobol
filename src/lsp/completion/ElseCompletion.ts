@@ -1,6 +1,7 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat, TextEdit } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
 import { ElseFormatter } from "../formatter/ElseFormatter";
+import { CompletionUtils } from "../commons/CompletionUtils";
 
 /** Else text to insert */
 const ELSETEXT = "else,";
@@ -12,6 +13,7 @@ export class ElseCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         let textEdit = new ElseFormatter().generate(line, column, lines)[0];
+        textEdit.newText = textEdit.newText + "\n" + CompletionUtils.fillSpacesBetween(0, CompletionUtils.countSpacesAtBeginning(textEdit.newText)) + "   ";
         return new Promise((resolve) => {
             resolve(
                 [{
