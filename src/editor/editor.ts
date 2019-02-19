@@ -4,7 +4,9 @@ import { RechPosition } from '../commons/rechposition';
 import { Indenta } from '../indent/indent';
 import { GenericExecutor } from '../commons/genericexecutor';
 import * as path from 'path';
+import * as fs from 'fs';
 import { PositionFinder } from './PositionFinder';
+import { File } from '../commons/file';
 
 /**
  * Class to manipulate vscode editor
@@ -651,6 +653,13 @@ export class Editor {
    */
   public static getPreprocessor() {
     return this.preprocessor
+  }
+
+  /**
+   * Returns true if the source is readOnly
+   */
+  public isReadOnly() {
+    return ((fs.statSync(this.editor.document.uri.fsPath).mode & 146) == 0)
   }
 
 }
