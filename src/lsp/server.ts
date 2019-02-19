@@ -270,8 +270,8 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
         new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"), uri)
           .setVariableSuggestion(variableSuggestion)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
-          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfCompletions()))
-          .setVariableCompletion(new VariableCompletion(uri, getCurrentSourceOfCompletions()))
+          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
+          .setVariableCompletion(new VariableCompletion(uri, getCurrentSourceOfVariableCompletions()))
           .generateCompletionItems().then((items) => {
             resolve(items);
           }).catch(() => {
@@ -288,8 +288,15 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
 /**
  * Returns the current source of completionsItems
  */
-function getCurrentSourceOfCompletions() {
-  return connection.sendRequest<string>("custom/sourceOfCompletions")
+function getCurrentSourceOfParagraphCompletions() {
+  return connection.sendRequest<string>("custom/sourceOfParagraphCompletions")
+}
+
+/**
+ * Returns the current source of completionsItems
+ */
+function getCurrentSourceOfVariableCompletions() {
+  return connection.sendRequest<string>("custom/sourceOfVariableCompletions")
 }
 
 /**

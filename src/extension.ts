@@ -10,8 +10,6 @@ import { CustomDecorator } from './decoration/CustomDecorator';
 import { SourceOfCompletions } from './lsp/commons/SourceOfCompletions';
 import { ElementsDisplayerFactory } from './cobol/elementsdisplayer/ElementsDisplayerFactory';
 
-/** Controll the sourceOfCompletions StatusBarItem */
-var sourceOfCompletions: StatusBarItem;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(_context: any) {
@@ -21,7 +19,7 @@ export function activate(_context: any) {
     // Custom decorators beyond language syntax highlight
     CustomDecorator.activate(_context);
     // Build the statusBar to control the source of completions suggested in the server side
-    sourceOfCompletions = SourceOfCompletions.buildStatusBar();
+    SourceOfCompletions.buildStatusBar();
     //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
@@ -91,11 +89,12 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos08', () => {
         new Editor().setColumn(AREA_A - 1);
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeSource', () => {
-        SourceOfCompletions.toggleTheSource();
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeParagraphSource', () => {
+        SourceOfCompletions.toggleTheParagraphSource();
     }));
-
-    sourceOfCompletions.show();
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeVariableSource', () => {
+        SourceOfCompletions.toggleTheVariableSource();
+    }));
 }
 
 // this method is called when your extension is deactivated

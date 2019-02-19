@@ -81,11 +81,19 @@ export class Client {
 					resolve(result);
 				})
 			});
-			Client.client.onRequest("custom/sourceOfCompletions", () => {
+			Client.client.onRequest("custom/sourceOfParagraphCompletions", () => {
 				return new Promise<string>((resolve) => {
-					resolve(SourceOfCompletions.getSourceOfCompletions());
+					resolve(SourceOfCompletions.getSourceOfParagraphCompletions());
 				})
 			});
+			Client.client.onRequest("custom/sourceOfVariableCompletions", () => {
+				return new Promise<string>((resolve) => {
+					resolve(SourceOfCompletions.getSourceOfVariableCompletions());
+				})
+			});
+			if (Editor.getSourceExpander()) {
+				SourceOfCompletions.show();
+			}
 		}
 	}
 
