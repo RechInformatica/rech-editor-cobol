@@ -81,3 +81,7 @@ Second, create one or more JSON files following the example below. This example 
 Snippet **placeholders** are also **supported**.
 
 ![Personal snippets](doc/suggestion/snippet.gif)
+
+
+## Considerations
+This extension is designed for Cobol code developed with **FREE FORMAT** style, and is **not** fully prepared for **FIXED FORMAT**. Comment lines are treated as **&ast;>** and not as **&ast;** which is typically used in FIXED mode.
