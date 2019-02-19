@@ -11,8 +11,16 @@ export class CommaDotInsertTextBuilder implements VariableInsertTextBuilder {
      *
      * @param variableName name of the variable to be suggested
      * @param currentCommand command located on the line where cursor is currently positioned
+     * @param column column where cursor is currently positioned
      */
-    buildInsertText(variableName: string, currentCommand: string): string {
-        return variableName + CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentCommand));
+    buildInsertText(variableName: string, currentCommand: string, column: number): string {
+        if (column < currentCommand.length) {
+            return variableName;
+        }
+        let separator = CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentCommand));
+        if (currentCommand.endsWith(separator)) {
+            return variableName;
+        }
+        return variableName + separator;
     }
 }

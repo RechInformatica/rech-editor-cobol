@@ -35,9 +35,10 @@ export class VariableCompletion implements CompletionInterface {
         this.insertTextBuilder = new VariableNameInsertTextBuilder();
     }
 
-    public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve, reject) => {
             this.currentLines = lines;
+            let lineWithoutEnter = lines[line].replace("\r", "").replace("\n", "");
             let items: CompletionItem[] = [];
             this.loadCache().catch(() => {
                 reject();
@@ -46,12 +47,12 @@ export class VariableCompletion implements CompletionInterface {
             let cache = VariableCompletion.cache.get(uri);
             if (cache) {
                 for (let value of cache.values()){
-                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lines[_line]);
+                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lineWithoutEnter, column);
                     items.push(value);
                 }
             } else {
                 for (let value of this.generateItemsFromCurrentBuffer(this.currentLines, false).values()) {
-                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lines[_line]);
+                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lineWithoutEnter, column);
                     items.push(value);
                 }
             }

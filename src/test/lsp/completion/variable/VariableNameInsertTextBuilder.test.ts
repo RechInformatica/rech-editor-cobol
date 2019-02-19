@@ -7,7 +7,7 @@ import { VariableNameInsertTextBuilder } from '../../../../lsp/completion/variab
     describe('Variable suggestions insert text with variable name', () => {
 
         it('Checks the insertText of w-i with to clause', async () => {
-            let text = new VariableNameInsertTextBuilder().buildInsertText("w-idv", "           move    w-i");
+            let text = new VariableNameInsertTextBuilder().buildInsertText("w-idv", "           move    w-i", 10);
             expect("w-idv").to.equal(text);
         });
 

@@ -10,8 +10,9 @@ export class VariableNameInsertTextBuilder implements VariableInsertTextBuilder 
      *
      * @param variableName name of the variable to be suggested
      * @param _currentCommand command located on the line where cursor is currently positioned
+     * @param _column column where cursor is currently positioned
      */
-    buildInsertText(variableName: string, _currentCommand: string): string {
+    buildInsertText(variableName: string, _currentCommand: string, _column: number): string {
         return variableName;
     }
 }

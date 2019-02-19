@@ -19,12 +19,12 @@ export class CommandSeparatorInsertTextBuilder implements VariableInsertTextBuil
      * Builds the insertText of variable completion items
      *
      * @param variableName name of the variable to be suggested
-     * @param _currentCommand command located on the line where cursor is currently positioned
+     * @param currentCommand command located on the line where cursor is currently positioned
+     * @param _column column where cursor is currently positioned
      */
-    buildInsertText(variableName: string, currentCommand: string): string {
+    buildInsertText(variableName: string, currentCommand: string, _column: number): string {
         //
-        let lineWithoutEnter = currentCommand.replace("\r", "").replace("\n", "");
-        let finalCommand = CompletionUtils.replaceLastWord(lineWithoutEnter, variableName);
+        let finalCommand = CompletionUtils.replaceLastWord(currentCommand, variableName);
         let insertText = variableName + CompletionUtils.fillSpacesFromWordEnd(30, finalCommand.length, finalCommand);
         //
         insertText = insertText + this.commandSeparatorClause;
