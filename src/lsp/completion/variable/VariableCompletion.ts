@@ -193,7 +193,7 @@ export class VariableCompletion implements CompletionInterface {
                 kind: MarkupKind.Markdown,
                 value: this.buildVariableAsMarkdown(variable)
             },
-             kind: variableKind
+            kind: variableKind
         };
     }
 

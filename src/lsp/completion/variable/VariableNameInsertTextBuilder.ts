@@ -1,4 +1,4 @@
-import { VariableInsertTextBuilder } from "./VariableInsertTextBuilder";
+import { VariableInsertTextBuilder as VariableInsertTextBuilder } from "./VariableInsertTextBuilder";
 
 /**
  * Implementation to build the insertText of variable completions with the variable name

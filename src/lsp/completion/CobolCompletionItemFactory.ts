@@ -28,6 +28,7 @@ import { EndCompletion } from "./EndCompletion";
 import { VariableCompletionFactory } from "./variable/VariableCompletionFactory";
 import { CommandSeparatorInsertTextBuilder } from "./variable/CommandSeparatorInsertTextBuilder";
 import { CommaDotInsertTextBuilder } from "./variable/CommaDotInsertTextBuilder";
+import { ToTrueInsertTextBuilder } from "./variable/ToTrueInsertTextBuilder";
 
 
 /**
@@ -175,7 +176,12 @@ export class CobolCompletionItemFactory {
       if (this.lineContainsTo()) {
         varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
       } else {
-        varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("to"));
+        if (this.isSet()) {
+          varCompletion.setInsertTextBuilder(new ToTrueInsertTextBuilder());
+        } else {
+          varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("to"));
+        }
+
       }
       return this.generate(varCompletion);
     }
