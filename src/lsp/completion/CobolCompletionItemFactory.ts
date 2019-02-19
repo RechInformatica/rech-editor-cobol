@@ -21,10 +21,12 @@ import { PictureCompletion } from "./PictureCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
 import Q from "q";
-import { VariableCompletion } from "./VariableCompletion";
+import { VariableCompletion } from "./variable/VariableCompletion";
 import { EmptyCompletion } from "./EmptyCompletion";
 import { WhenCompletion } from "./WhenCompletion";
 import { EndCompletion } from "./EndCompletion";
+import { VariableCompletionFactory } from "./variable/VariableCompletionFactory";
+import { CommandSeparatorInsertTextBuilder } from "./variable/CommandSeparatorInsertTextBuilder";
 
 
 /**
@@ -44,9 +46,7 @@ export class CobolCompletionItemFactory {
   /** Completion class to generate the CompletionItem for paragraphs */
   private paragraphCompletion: CompletionInterface;
   /** Completion class to generate the CompletionItem for variables */
-  private variableCompletion: CompletionInterface;
-  /** Allows variable suggestion */
-  private variableSuggestion: boolean;
+  private variableCompletionFactory: VariableCompletionFactory | undefined;
   /** uri of source file */
   private uri: string | undefined;
 
@@ -55,7 +55,8 @@ export class CobolCompletionItemFactory {
    *
    * @param line line where the cursor is positioned
    * @param column column where the cursor is positioned
-   * @param ilnes document text lines
+   * @param lines document text lines
+   * @param uri uri of source file
    */
   constructor(line: number, column: number, lines: string[], uri?: string) {
     this.line = line;
@@ -65,8 +66,6 @@ export class CobolCompletionItemFactory {
     this.uri = uri;
     this.additionalCompletions = [];
     this.paragraphCompletion = new EmptyCompletion();
-    this.variableCompletion = new EmptyCompletion();
-    this.variableSuggestion = false;
   }
 
   /**
@@ -92,20 +91,10 @@ export class CobolCompletionItemFactory {
   /**
    * Completion class to generate the CompletionItem for variables
    *
-   * @param variableCompletion
+   * @param variableCompletionFactory
    */
-  public setVariableCompletion(variableCompletion: CompletionInterface): CobolCompletionItemFactory {
-    this.variableCompletion = variableCompletion;
-    return this;
-  }
-
-  /**
-   * Sets whether variable suggestion is allowed
-   *
-   * @param variableSuggestion
-   */
-  public setVariableSuggestion(variableSuggestion: boolean): CobolCompletionItemFactory {
-    this.variableSuggestion = variableSuggestion;
+  public setVariableCompletionFactory(variableCompletionFactory: VariableCompletionFactory): CobolCompletionItemFactory {
+    this.variableCompletionFactory = variableCompletionFactory;
     return this;
   }
 
@@ -146,23 +135,11 @@ export class CobolCompletionItemFactory {
           return;
         }
         case this.isMove() || this.isAdd() || this.isSet(): {
-          if (this.shouldSuggestClause("TO")) {
-            resolve(this.createToCompletions());
-          } else {
-            if (this.isSet()) {
-              resolve(this.generate(this.createVariableSuggestionWithEnum()));
-            } else {
-              resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
-            }
-          }
+          resolve(this.createCompletionsForToCommands());
           return;
         }
         case this.isSubtract(): {
-          if (this.shouldSuggestClause("FROM")) {
-            resolve(this.generate(new FromCompletion()));
-          } else {
-            resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
-          }
+          resolve(this.createCompletionsForFromCommands());
           return;
         }
         case this.isParagraphPerform(): {
@@ -182,8 +159,43 @@ export class CobolCompletionItemFactory {
   }
 
   /**
-   * Returns true if the cursor is on a comment line
+   * Generate completion items for commands that considers 'to' clause
    */
+  private createCompletionsForToCommands(): Promise<CompletionItem[]> {
+    if (this.shouldSuggestClause("TO")) {
+      return this.createToCompletions();
+    } else {
+      let varCompletion: VariableCompletion;
+      if (this.isSet()) {
+        varCompletion = this.createVariableSuggestionWithEnum();
+      } else {
+        varCompletion = this.createVariableSuggestionWithoutEnum();
+      }
+      if (!this.lineContainsTo()) {
+        varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("to"));
+      }
+      return this.generate(varCompletion);
+    }
+  }
+
+  /**
+   * Generate completion items for commands that considers 'from' clause
+   */
+  private createCompletionsForFromCommands(): Promise<CompletionItem[]> {
+    if (this.shouldSuggestClause("FROM")) {
+      return this.generate(new FromCompletion());
+    } else {
+      let varCompletion: VariableCompletion = this.createVariableSuggestionWithoutEnum();
+      if (!this.lineContainsFrom()) {
+        varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("from"));
+      }
+      return this.generate(varCompletion);
+    }
+  }
+
+  /**
+  * Returns true if the cursor is on a comment line
+  */
   private isCommentLine() {
     return this.lineText.trim().startsWith("*>");
   }
@@ -216,31 +228,22 @@ export class CobolCompletionItemFactory {
   /**
    * Creates a variable completion interface allowing enum suggestion
    */
-  private createVariableSuggestionWithEnum(): CompletionInterface {
-    if (this.variableSuggestion && this.variableCompletion instanceof VariableCompletion) {
-      return this.variableCompletion;
-    }
-    return new EmptyCompletion();
+  private createVariableSuggestionWithEnum(): VariableCompletion {
+    return this.variableCompletionFactory!.create();
   }
 
   /**
    * Creates a variable completion interface ignoring enum suggestion
    */
-  private createVariableSuggestionWithoutEnum(): CompletionInterface {
-    if (this.variableSuggestion && this.variableCompletion instanceof VariableCompletion) {
-      return (<VariableCompletion>this.variableCompletion).setIgnoreEnums(true);
-    }
-    return new EmptyCompletion();
+  private createVariableSuggestionWithoutEnum(): VariableCompletion {
+    return this.variableCompletionFactory!.create().setIgnoreEnums(true);
   }
 
   /**
    * Creates a variable completion interface ignoring enum variables and displays
    */
-  private createVariableSuggestionWithoutEnumAndDisplay(): CompletionInterface {
-    if (this.variableSuggestion && this.variableCompletion instanceof VariableCompletion) {
-      return (<VariableCompletion>this.variableCompletion).setIgnoreDisplay(true).setIgnoreEnums(true);
-    }
-    return new EmptyCompletion();
+  private createVariableSuggestionWithoutEnumAndDisplay(): VariableCompletion {
+    return this.variableCompletionFactory!.create().setIgnoreDisplay(true).setIgnoreEnums(true);
   }
 
   /**

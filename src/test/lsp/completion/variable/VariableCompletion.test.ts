@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import 'mocha';
-import { VariableCompletion } from '../../../lsp/completion/VariableCompletion';
+import { VariableCompletion } from '../../../../lsp/completion/variable/VariableCompletion';
 import { CompletionItem } from 'vscode';
 
     //
@@ -224,4 +224,5 @@ import { CompletionItem } from 'vscode';
                 expect(expectedItems[i].detail).to.equal(items[i].detail);
             };
         });
+
     });
