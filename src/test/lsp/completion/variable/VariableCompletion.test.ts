@@ -2,9 +2,10 @@ import { expect } from 'chai';
 import 'mocha';
 import { VariableCompletion } from '../../../../lsp/completion/variable/VariableCompletion';
 import { CompletionItem } from 'vscode';
+import { VariableInsertTextBuilder } from '../../../../lsp/completion/variable/VariableInsertTextBuilder';
 
-    //
-    let buffer = "      *>--------------------------------------------------------------------------------------------------------------<*\r\n" +
+//
+let buffer = "      *>--------------------------------------------------------------------------------------------------------------<*\r\n" +
     "      *>                                                Calcula o ICMS                                                <*\r\n" +
     "      *>--------------------------------------------------------------------------------------------------------------<*\r\n" +
     "       identification             division.\r\n" +
@@ -96,133 +97,176 @@ import { CompletionItem } from 'vscode';
     "              end-if,\r\n" +
     "           end-perform.\r\n" +
     "      *>--------------------------------------------- CALICM.cbl -----------------------------------------------------<*";
-    let lines = buffer.split("\r\n");
+let lines = buffer.split("\r\n");
 
-    describe('Cobol variable completion', () => {
+describe('Cobol variable completion', () => {
 
-        it('Checks cobol variable completion including enums', async () => {
-            //
-            let expectedItems : CompletionItem[] = [];
-            expectedItems.push({
-                label: "w78-nomprg",
-                detail: "Nome do programa"
-            });
-            expectedItems.push({
-                label: "w-total-venda",
-                detail: "Total da venda dos produtos"
-            });
-            expectedItems.push({
-                label: "w-icms",
-                detail: "Valor do ICMS"
-            });
-            expectedItems.push({
-                label: "w-categoria",
-                detail: "Categoria do produto"
-            });
-            expectedItems.push({
-                label: "categoria-cesta-basica",
-                detail: "Categoria do produto"
-            });
-            expectedItems.push({
-                label: "categoria-produtos-normais",
-                detail: "Categoria do produto"
-            });
-            expectedItems.push({
-                label: "categoria-servicos",
-                detail: "Categoria do produto"
-            });
-            expectedItems.push({
-                label: "w-pai-oito-oito",
-                detail: "Variável exemplo para pai de níveis 88"
-            });
-            expectedItems.push({
-                label: "pai-oito-oito-pri",
-                detail: "Comentário diferente para o primeiro nível 88"
-            });
-            expectedItems.push({
-                label: "pai-oito-oito-seg",
-                detail: "Comentário diferente para o segundo nível 88"
-            });
-            expectedItems.push({
-                label: "pai-oito-oito-ter",
-                detail: "Variável exemplo para pai de níveis 88"
-            });
-            expectedItems.push({
-                label: "w-uf",
-                detail: ""
-            });
-            expectedItems.push({
-                label: "w-tecla",
-                detail: "Tecla auxiliar"
-            });
-            const items = await new VariableCompletion().generate(1,1, lines);
-            expect(expectedItems.length).to.equal(items.length);
-            for (let i = 0; i < items.length; i++) {
-                expect(expectedItems[i].label).to.equal(items[i].label);
-                expect(expectedItems[i].detail).to.equal(items[i].detail);
-            };
+    it('Checks cobol variable completion including enums', async () => {
+        //
+        let expectedItems: CompletionItem[] = [];
+        expectedItems.push({
+            label: "w78-nomprg",
+            detail: "Nome do programa"
         });
-
-        it('Checks cobol variable completion ignoring enums', async () => {
-            //
-            let expectedItems : CompletionItem[] = [];
-            expectedItems.push({
-                label: "w78-nomprg",
-                detail: "Nome do programa"
-            });
-            expectedItems.push({
-                label: "w-total-venda",
-                detail: "Total da venda dos produtos"
-            });
-            expectedItems.push({
-                label: "w-icms",
-                detail: "Valor do ICMS"
-            });
-            expectedItems.push({
-                label: "w-categoria",
-                detail: "Categoria do produto"
-            });
-            expectedItems.push({
-                label: "w-pai-oito-oito",
-                detail: "Variável exemplo para pai de níveis 88"
-            });
-            expectedItems.push({
-                label: "w-uf",
-                detail: ""
-            });
-            expectedItems.push({
-                label: "w-tecla",
-                detail: "Tecla auxiliar"
-            });
-            const items = await new VariableCompletion().setIgnoreEnums(true).generate(1,1, lines);
-            expect(expectedItems.length).to.equal(items.length);
-            for (let i = 0; i < items.length; i++) {
-                expect(expectedItems[i].label).to.equal(items[i].label);
-                expect(expectedItems[i].detail).to.equal(items[i].detail);
-            };
+        expectedItems.push({
+            label: "w-total-venda",
+            detail: "Total da venda dos produtos"
         });
-
-        it('Checks cobol variable completion ignoring displays and enums', async () => {
-            //
-            let expectedItems : CompletionItem[] = [];
-            expectedItems.push({
-                label: "w78-nomprg",
-                detail: "Nome do programa"
-            });
-            expectedItems.push({
-                label: "w-total-venda",
-                detail: "Total da venda dos produtos"
-            });
-            expectedItems.push({
-                label: "w-icms",
-                detail: "Valor do ICMS"
-            });
-            const items = await new VariableCompletion().setIgnoreDisplay(true).setIgnoreEnums(true).generate(1,1, lines);
-            expect(expectedItems.length).to.equal(items.length);
-            for (let i = 0; i < items.length; i++) {
-                expect(expectedItems[i].label).to.equal(items[i].label);
-                expect(expectedItems[i].detail).to.equal(items[i].detail);
-            };
+        expectedItems.push({
+            label: "w-icms",
+            detail: "Valor do ICMS"
         });
-
+        expectedItems.push({
+            label: "w-categoria",
+            detail: "Categoria do produto"
+        });
+        expectedItems.push({
+            label: "categoria-cesta-basica",
+            detail: "Categoria do produto"
+        });
+        expectedItems.push({
+            label: "categoria-produtos-normais",
+            detail: "Categoria do produto"
+        });
+        expectedItems.push({
+            label: "categoria-servicos",
+            detail: "Categoria do produto"
+        });
+        expectedItems.push({
+            label: "w-pai-oito-oito",
+            detail: "Variável exemplo para pai de níveis 88"
+        });
+        expectedItems.push({
+            label: "pai-oito-oito-pri",
+            detail: "Comentário diferente para o primeiro nível 88"
+        });
+        expectedItems.push({
+            label: "pai-oito-oito-seg",
+            detail: "Comentário diferente para o segundo nível 88"
+        });
+        expectedItems.push({
+            label: "pai-oito-oito-ter",
+            detail: "Variável exemplo para pai de níveis 88"
+        });
+        expectedItems.push({
+            label: "w-uf",
+            detail: ""
+        });
+        expectedItems.push({
+            label: "w-tecla",
+            detail: "Tecla auxiliar"
+        });
+        const items = await new VariableCompletion().generate(1, 1, lines);
+        expect(expectedItems.length).to.equal(items.length);
+        for (let i = 0; i < items.length; i++) {
+            expect(expectedItems[i].label).to.equal(items[i].label);
+            expect(expectedItems[i].detail).to.equal(items[i].detail);
+        };
     });
+
+    it('Checks cobol variable completion ignoring enums', async () => {
+        //
+        let expectedItems: CompletionItem[] = [];
+        expectedItems.push({
+            label: "w78-nomprg",
+            detail: "Nome do programa"
+        });
+        expectedItems.push({
+            label: "w-total-venda",
+            detail: "Total da venda dos produtos"
+        });
+        expectedItems.push({
+            label: "w-icms",
+            detail: "Valor do ICMS"
+        });
+        expectedItems.push({
+            label: "w-categoria",
+            detail: "Categoria do produto"
+        });
+        expectedItems.push({
+            label: "w-pai-oito-oito",
+            detail: "Variável exemplo para pai de níveis 88"
+        });
+        expectedItems.push({
+            label: "w-uf",
+            detail: ""
+        });
+        expectedItems.push({
+            label: "w-tecla",
+            detail: "Tecla auxiliar"
+        });
+        const items = await new VariableCompletion().setIgnoreEnums(true).generate(1, 1, lines);
+        expect(expectedItems.length).to.equal(items.length);
+        for (let i = 0; i < items.length; i++) {
+            expect(expectedItems[i].label).to.equal(items[i].label);
+            expect(expectedItems[i].detail).to.equal(items[i].detail);
+        };
+    });
+
+    it('Checks cobol variable completion ignoring displays and enums', async () => {
+        //
+        let expectedItems: CompletionItem[] = [];
+        expectedItems.push({
+            label: "w78-nomprg",
+            insertText: "w78-nomprg",
+            detail: "Nome do programa"
+        });
+        expectedItems.push({
+            label: "w-total-venda",
+            insertText: "w-total-venda",
+            detail: "Total da venda dos produtos"
+        });
+        expectedItems.push({
+            label: "w-icms",
+            insertText: "w-icms",
+            detail: "Valor do ICMS"
+        });
+        const items = await new VariableCompletion().setIgnoreDisplay(true).setIgnoreEnums(true).generate(1, 1, lines);
+        expect(expectedItems.length).to.equal(items.length);
+        for (let i = 0; i < items.length; i++) {
+            expect(expectedItems[i].label).to.equal(items[i].label);
+            expect(expectedItems[i].detail).to.equal(items[i].detail);
+        };
+    });
+
+    it('Checks cobol variable completion using specific VariableInsertTextBuilder', async () => {
+        //
+        let expectedItems: CompletionItem[] = [];
+        expectedItems.push({
+            label: "w78-nomprg",
+            insertText: "antes w78-nomprg dummy",
+            detail: "Nome do programa"
+        });
+        expectedItems.push({
+            label: "w-total-venda",
+            insertText: "antes w-total-venda dummy",
+            detail: "Total da venda dos produtos"
+        });
+        expectedItems.push({
+            label: "w-icms",
+            insertText: "antes w-icms dummy",
+            detail: "Valor do ICMS"
+        });
+        const items = await new VariableCompletion().setInsertTextBuilder(new DummyInsertTextBuilder()).setIgnoreDisplay(true).setIgnoreEnums(true).generate(1, 1, lines);
+        expect(expectedItems.length).to.equal(items.length);
+        for (let i = 0; i < items.length; i++) {
+            expect(expectedItems[i].label).to.equal(items[i].label);
+            expect(expectedItems[i].insertText).to.equal(items[i].insertText);
+            expect(expectedItems[i].detail).to.equal(items[i].detail);
+        };
+    });
+
+});
+
+/**
+ * Dummy text builder
+ */
+class DummyInsertTextBuilder implements VariableInsertTextBuilder {
+
+    buildInsertText(variableName: string, _currentCommand: string): string {
+        return "antes " + variableName + " dummy";
+    }
+
+}
+
+

@@ -27,6 +27,7 @@ import { WhenCompletion } from "./WhenCompletion";
 import { EndCompletion } from "./EndCompletion";
 import { VariableCompletionFactory } from "./variable/VariableCompletionFactory";
 import { CommandSeparatorInsertTextBuilder } from "./variable/CommandSeparatorInsertTextBuilder";
+import { CommaDotInsertTextBuilder } from "./variable/CommaDotInsertTextBuilder";
 
 
 /**
@@ -139,7 +140,7 @@ export class CobolCompletionItemFactory {
           return;
         }
         case this.isSubtract(): {
-          resolve(this.createCompletionsForFromCommands());
+          resolve(this.createCompletionsForSubtract());
           return;
         }
         case this.isParagraphPerform(): {
@@ -171,7 +172,9 @@ export class CobolCompletionItemFactory {
       } else {
         varCompletion = this.createVariableSuggestionWithoutEnum();
       }
-      if (!this.lineContainsTo()) {
+      if (this.lineContainsTo()) {
+        varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
+      } else {
         varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("to"));
       }
       return this.generate(varCompletion);
@@ -179,14 +182,16 @@ export class CobolCompletionItemFactory {
   }
 
   /**
-   * Generate completion items for commands that considers 'from' clause
+   * Generate completion items for subtract command
    */
-  private createCompletionsForFromCommands(): Promise<CompletionItem[]> {
+  private createCompletionsForSubtract(): Promise<CompletionItem[]> {
     if (this.shouldSuggestClause("FROM")) {
       return this.generate(new FromCompletion());
     } else {
       let varCompletion: VariableCompletion = this.createVariableSuggestionWithoutEnum();
-      if (!this.lineContainsFrom()) {
+      if (this.lineContainsFrom()) {
+        varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
+      } else {
         varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("from"));
       }
       return this.generate(varCompletion);
