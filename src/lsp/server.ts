@@ -37,7 +37,8 @@ import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 import { HighlightFactory } from "./highlight/HighlightFactory";
 import { CobolFoldFactory } from "./fold/CobolFoldFactory";
 import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
-import { VariableCompletion } from "./completion/VariableCompletion";
+import { VariableCompletion } from "./completion/variable/VariableCompletion";
+import { VariableCompletionFactory } from "./completion/variable/VariableCompletionFactory";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -260,7 +261,6 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
   return new Promise((resolve, reject) => {
     getConfig<string[]>("snippetsRepositories").then(repositories => {
-      getConfig<boolean>("variableSuggestion").then(variableSuggestion => {
       let line = _textDocumentPosition.position.line;
       let column = _textDocumentPosition.position.character;
       let uri = _textDocumentPosition.textDocument.uri;
@@ -268,10 +268,9 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
       let fullDocument = documents.get(uri);
       if (fullDocument) {
         new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"), uri)
-          .setVariableSuggestion(variableSuggestion)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
-          .setVariableCompletion(new VariableCompletion(uri, getCurrentSourceOfVariableCompletions()))
+          .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
           .generateCompletionItems().then((items) => {
             resolve(items);
           }).catch(() => {
@@ -280,7 +279,6 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
       } else {
         reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error load Completion Items"))
       };
-    })
   });
   });
 });

@@ -1,8 +1,13 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat, MarkupKind } from "vscode-languageserver";
-import { CompletionInterface } from "./CompletionInterface";
-import { Scan } from "../../commons/Scan";
-import { CobolVariable } from "./CobolVariable";
-import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
+import { CompletionInterface } from "../CompletionInterface";
+import { Scan } from "../../../commons/Scan";
+import { CobolVariable } from "../CobolVariable";
+import { CobolDocParser } from "../../../cobol/rechdoc/CobolDocParser";
+import { VariableUtils } from "../../../commons/VariableUtils";
+import { ExpandedSourceManager } from "../../../cobol/ExpandedSourceManager";
+import { CompletionUtils } from "../../commons/CompletionUtils";
+import { VariableInsertTextBuilder } from "./VariableInsertTextBuilder";
+import { VariableNameInsertTextBuilder } from "./VariableNameInsertTextBuilder";
 
 /**
  * Class to generate LSP Completion Items for Cobol variables
@@ -15,7 +20,9 @@ export class VariableCompletion implements CompletionInterface {
     private ignoreEnums: boolean = false;
     /** Ignore display variables */
     private ignoreDisplay: boolean = false;
-    /** uri of source file */
+    /* Implementation to build the insertText of variable completion items */
+    private insertTextBuilder: VariableInsertTextBuilder;
+    /** Uri of source file */
     private uri: string | undefined
     /** Current lines in the source */
     private currentLines: string[] | undefined;
@@ -25,11 +32,13 @@ export class VariableCompletion implements CompletionInterface {
     constructor(uri?: string, sourceOfCompletions?: Thenable<string>) {
         this.uri = uri;
         this.sourceOfCompletions = sourceOfCompletions;
+        this.insertTextBuilder = new VariableNameInsertTextBuilder();
     }
 
-    public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve, reject) => {
             this.currentLines = lines;
+            let lineWithoutEnter = lines[line].replace("\r", "").replace("\n", "");
             let items: CompletionItem[] = [];
             this.loadCache().catch(() => {
                 reject();
@@ -38,10 +47,12 @@ export class VariableCompletion implements CompletionInterface {
             let cache = VariableCompletion.cache.get(uri);
             if (cache) {
                 for (let value of cache.values()){
+                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lineWithoutEnter, column);
                     items.push(value);
                 }
             } else {
                 for (let value of this.generateItemsFromCurrentBuffer(this.currentLines, false).values()) {
+                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lineWithoutEnter, column);
                     items.push(value);
                 }
             }
@@ -66,6 +77,16 @@ export class VariableCompletion implements CompletionInterface {
      */
     public setIgnoreDisplay(ignoreDisplay: boolean): VariableCompletion {
         this.ignoreDisplay = ignoreDisplay;
+        return this;
+    }
+
+    /**
+     * Sets the implementation to build the insertText of variable completion items
+     *
+     * @param insertTextBuilder implementation
+     */
+    public setInsertTextBuilder(insertTextBuilder: VariableInsertTextBuilder): VariableCompletion {
+        this.insertTextBuilder = insertTextBuilder;
         return this;
     }
 
@@ -172,7 +193,7 @@ export class VariableCompletion implements CompletionInterface {
                 kind: MarkupKind.Markdown,
                 value: this.buildVariableAsMarkdown(variable)
             },
-             kind: variableKind
+            kind: variableKind
         };
     }
 
