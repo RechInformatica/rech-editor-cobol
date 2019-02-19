@@ -1,4 +1,6 @@
 import { RechPosition } from "../../commons/rechposition";
+import { VariableUtils } from "../../commons/VariableUtils";
+import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
 
 /**
  * Class representing a Cobol variable
@@ -22,12 +24,14 @@ export class CobolVariable {
     private allowNegative: boolean;
     /* Raw variable declaration from source code */
     private raw: string;
-    /** Childrens of variable */
-    private childrens: CobolVariable[] | undefined;
+    /** Children of variable */
+    private children: CobolVariable[] | undefined;
     /** Parent variable */
     private parent: CobolVariable | undefined;
     /** Declaration position */
     private declarationPosition: RechPosition | undefined;
+    /** Comment of variable */
+    private comment: string[] | undefined
 
     private constructor(level: number, name: string, picture: string, type: Type, display: boolean, allowNegative: boolean, raw: string) {
         this.level = level;
@@ -58,7 +62,7 @@ export class CobolVariable {
     }
 
     /**
-     * Parse the source and defines the childrens of the specidied variable
+     * Parse the source and defines the children of the specidied variable
      *
      * @param variable
      * @param line
@@ -79,6 +83,7 @@ export class CobolVariable {
                     !CobolVariable.isEspecialVariableType(splitted[0])) {
                     let children = CobolVariable.parseLine(currentLine);
                     children = CobolVariable.parseAndSetChildren(children, index, lines);
+                    children = CobolVariable.parserAndSetComment(children, index, lines);
                     let startDeclarationColumn = currentLine.length - currentLine.trimLeft().length
                     children.setDeclarationPosition(new RechPosition(index, startDeclarationColumn))
                     if (firstChildrenLevel == 0) {
@@ -97,7 +102,21 @@ export class CobolVariable {
                 break;
             }
         }
-        variable.setChildrens(result);
+        variable.setChildren(result);
+        return variable;
+    }
+
+    /**
+     * Parser the lines and set the variable comments
+     *
+     * @param variable
+     * @param line
+     * @param lines
+     */
+    public static parserAndSetComment(variable: CobolVariable, line: number, lines: string[]) {
+        let docArray = VariableUtils.findVariableDocArray(lines, line);
+        let doc = new CobolDocParser().parseCobolDoc(docArray);
+        variable.setComment(doc.comment);
         return variable;
     }
 
@@ -245,8 +264,8 @@ export class CobolVariable {
      */
     public getByteSize() {
         let size = this.getBytesFromPicture(this.picture);
-        if (this.childrens) {
-            this.childrens.forEach((children) => {
+        if (this.children) {
+            this.children.forEach((children) => {
                 size += children.getByteSize();
             })
         }
@@ -263,11 +282,12 @@ export class CobolVariable {
             return 0;
         }
         let expandedPicture = this.expandPricture(picture);
-        let absolutePicture = expandedPicture.toLowerCase().replace("v", "")
-        absolutePicture = absolutePicture.replace(/comp.*/, "");
+        let absolutePicture = expandedPicture.toLowerCase().replace(/comp.*/, "")
         if (!CobolVariable.hasComp(picture)) {
-            return absolutePicture.length - 1;
+            absolutePicture = absolutePicture.replace("v", "");
+            return absolutePicture.length;
         }
+        absolutePicture = absolutePicture.replace("v", "");
         absolutePicture = absolutePicture.replace("s", "");
         if (picture.toLowerCase().startsWith("s")) {
             if (absolutePicture.length <= 2) {
@@ -423,17 +443,17 @@ export class CobolVariable {
     }
 
     /**
-     * Returns a CobolVariable array with the childrens of variable
+     * Returns a CobolVariable array with the children of variable
      */
-    public getChildrens(): CobolVariable[] | undefined {
-        return this.childrens;
+    public getChildren(): CobolVariable[] | undefined {
+        return this.children;
     }
 
     /**
-     * Defines the childrens of variable
+     * Defines the children of variable
      */
-    public setChildrens(childrens: CobolVariable[]) {
-        this.childrens = childrens;
+    public setChildren(children: CobolVariable[]) {
+        this.children = children;
     }
 
     /**
@@ -450,6 +470,22 @@ export class CobolVariable {
      */
     public setDeclarationPosition(declarationPosition: RechPosition) {
         this.declarationPosition = declarationPosition;
+    }
+
+    /**
+     * Returns the comment of variable
+     */
+    public getComment(): string[] | undefined {
+        return this.comment;
+    }
+
+    /**
+     * Defines the comment of variable
+     *
+     * @param comment
+     */
+    public setComment(comment: string[]) {
+        this.comment = comment;
     }
 
 }

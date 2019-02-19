@@ -16,8 +16,6 @@ export class VariableCompletion implements CompletionInterface {
 
     /** Cache of CompletionItems results */
     private static cache: Map<string, Map<string, CompletionItem>> = new Map()
-    /** Cobol documentation parser */
-    private cobolDocParser: CobolDocParser;
     /** Ignore enumerations (88 variables) */
     private ignoreEnums: boolean = false;
     /** Ignore display variables */
@@ -32,17 +30,18 @@ export class VariableCompletion implements CompletionInterface {
     private sourceOfCompletions: Thenable<string> | undefined;
 
     constructor(uri?: string, sourceOfCompletions?: Thenable<string>) {
-        this.cobolDocParser = new CobolDocParser();
         this.uri = uri;
         this.sourceOfCompletions = sourceOfCompletions;
         this.insertTextBuilder = new VariableNameInsertTextBuilder();
     }
 
     public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.currentLines = lines;
             let items: CompletionItem[] = [];
-            this.loadCache();
+            this.loadCache().catch(() => {
+                reject();
+            });
             let uri = this.uri ? this.uri : "";
             let cache = VariableCompletion.cache.get(uri);
             if (cache) {
@@ -133,10 +132,9 @@ export class VariableCompletion implements CompletionInterface {
         let buffer = lines.join("\n");
         new Scan(buffer).scan(/^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm, (iterator: any) => {
             let variable = CobolVariable.parseLine(iterator.lineContent.toString());
-            variable = CobolVariable.parseAndSetChildren(variable, iterator.row, lines);
+            variable = CobolVariable.parserAndSetComment(variable, iterator.row, lines);
             if (!this.shouldIgnoreVariable(variable)) {
-                let docArray = VariableUtils.findVariableDocArray(lines, iterator.row);
-                let variableItem = this.createVariableCompletion(variable, docArray);
+                let variableItem = this.createVariableCompletion(variable);
                 itemsMap.set(variable.getName(), variableItem);
             }
         });
@@ -181,12 +179,15 @@ export class VariableCompletion implements CompletionInterface {
      * @param variable variable to create the completion item
      * @param docArray variable documentation array
      */
-    private createVariableCompletion(variable: CobolVariable, docArray: string[]): CompletionItem {
-        let cobolDoc = this.cobolDocParser.parseCobolDoc(docArray);
+    private createVariableCompletion(variable: CobolVariable): CompletionItem {
         let variableKind = this.getAppropriateKind(variable);
+        let comments = variable.getComment()
+        if (!comments) {
+            comments = [""];
+        }
         return {
             label: variable.getName(),
-            detail: cobolDoc.comment.join(" "),
+            detail: comments.join(" | "),
             documentation: {
                 kind: MarkupKind.Markdown,
                 value: this.buildVariableAsMarkdown(variable)
@@ -226,14 +227,6 @@ export class VariableCompletion implements CompletionInterface {
             info = info.concat("*Picture*: `" + variable.getPicture() + "`\n\n");
         }
         info = info.concat("`" + variable.getRaw().trim() + "`\n\n");
-        let childrens = variable.getChildrens();
-        if (childrens && childrens.length > 0) {
-            info = info.concat("##### Childrens\n\n");
-            childrens.forEach((children) => {
-                info = info.concat("`" + children.getName() + "`\n\n");
-            })
-        }
-        info = info.concat("##### Size = " + variable.getByteSize() + "\n\n");
         return info;
     }
 

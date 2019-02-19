@@ -22,10 +22,10 @@ export class ElementsDisplayer {
     this.quickPick.activeItems = []
     this.quickPick.onDidChangeSelection((selection) => {
       let selec = selection[0];
-      let childrens = selec.getChildrens();
-      if (childrens.length > 0) {
+      let children = selec.getChildren();
+      if (children.length > 0) {
         this.history.push(this.quickPick.items);
-        this.quickPick.items = childrens
+        this.quickPick.items = children
       } else {
         if (selec.onSelection) {
           this.history.push(this.quickPick.items);

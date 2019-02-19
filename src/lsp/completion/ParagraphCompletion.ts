@@ -37,9 +37,11 @@ export class ParagraphCompletion implements CompletionInterface {
     }
 
     public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.currentLines = lines;
-            this.loadCache();
+            this.loadCache().catch(() => {
+                reject();
+            });
             let items: CompletionItem[] = [];
             if (ParagraphCompletion.cache && ParagraphCompletion.cacheSourceFileName == this.cacheFileName) {
                 for (let value of ParagraphCompletion.cache.values()){

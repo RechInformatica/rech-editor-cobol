@@ -2,6 +2,7 @@ import { ElementsDisplayer } from "../ElementsDisplayer";
 import { VariableElement } from "./VariableElement";
 import { CobolVariable, Type } from "../../../lsp/completion/CobolVariable";
 import { Editor } from "../../../editor/editor";
+import { GeradorCobol } from "../../gerador-cobol";
 
 export class VariableDisplayer {
   /** Display controller */
@@ -29,10 +30,10 @@ export class VariableDisplayer {
    */
   private createItemsFromVariable(variable: CobolVariable) {
     this.addTheBasicInformation(variable);
-    let childrens = variable.getChildrens()
-    if (childrens && childrens.length > 0) {
-      let childrensItems = new VariableElement("childrens");
-      this.controller.addElement(this.insertChildren(childrensItems, childrens));
+    let children = variable.getChildren()
+    if (children && children.length > 0) {
+      let childrenItems = new VariableElement("Children");
+      this.controller.addElement(this.insertChildren(childrenItems, children));
     }
   }
 
@@ -56,38 +57,60 @@ export class VariableDisplayer {
       }
     })
     .setObject(variable));
-    let type = "";
-    switch(variable.getType()) {
-      case Type.Integer: type = "Integer"; break;
-      case Type.Decimal: type = "Decimal"; break;
-      case Type.Alphanumeric: type = "Alphanumeric"; break;
+    if (variable.getComment()) {
+      this.controller.addElement(
+        new VariableElement("Documentation")
+        .setDetail(variable.getComment()!.join(" | "))
+        .setOnSelection((selectItem) => {
+          let obj = selectItem.object
+          if (obj) {
+            let comments = (<CobolVariable>obj).getComment();
+            if (comments) {
+              this.insertCommentInEditor((<CobolVariable>obj).getComment()!)
+              this.controller.dispose();
+            }
+          }
+        })
+        .setObject(variable));
     }
-    this.controller.addElement(new VariableElement("Type")
-    .setDetail(type));
+  }
+
+  /**
+   * Function to insert comment in editor
+   *
+   * @param comments
+   */
+  private async insertCommentInEditor(comments: string[]) {
+    let editor = new Editor();
+    let cursor = editor.getCursors()[0]
+    for (let i = comments.length - 1; i >= 0; i--) {
+      await new GeradorCobol().insertCommentLineWithText(comments[i]);
+    }
+    await editor.setCursor(cursor.line + comments.length, cursor.column);
   }
 
   /**
    * Inser a children in the displayer options
    *
-   * @param childrensItems
-   * @param childrens
+   * @param childrenItems
+   * @param children
    */
-  private insertChildren(childrensItems: VariableElement, childrens: CobolVariable[]): VariableElement {
-    childrens.forEach((children) => {
+  private insertChildren(childrenItems: VariableElement, children: CobolVariable[]): VariableElement {
+    children.forEach((children) => {
       let childrenItem = new VariableElement(children.getName())
       .setDescription(children.getPicture() + " - Size: " + children.getByteSize())
       .setDetail(children.getRaw())
       .setOnSelection((selectItem) => {
-        let chi = children.getChildrens();
+        let chi = children.getChildren();
         if (chi) {
           this.controller.clearElements();
           this.createItemsFromVariable(<CobolVariable>selectItem.object)
         }
       })
       .setObject(children);
-      childrensItems.add(childrenItem);
+      childrenItems.add(childrenItem);
     });
-    return childrensItems;
+    return childrenItems;
   }
 
 

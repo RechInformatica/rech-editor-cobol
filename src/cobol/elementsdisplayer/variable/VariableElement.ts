@@ -9,10 +9,10 @@ export class VariableElement implements ElementInterface {
   _picked?: boolean | undefined;
   _onSelection: ((element: ElementInterface) => any) | undefined
   _object: any
-  private childrens: ElementInterface[]
+  private children: ElementInterface[]
 
   constructor(label: string) {
-    this.childrens = [];
+    this.children = [];
     this._label = label;
   }
 
@@ -72,11 +72,11 @@ export class VariableElement implements ElementInterface {
    * @param children
    */
   public add(children: ElementInterface) {
-    this.childrens.push(children);
+    this.children.push(children);
   }
 
-  getChildrens(): ElementInterface[] {
-    return this.childrens;
+  getChildren(): ElementInterface[] {
+    return this.children;
   }
 
   get onSelection() {
