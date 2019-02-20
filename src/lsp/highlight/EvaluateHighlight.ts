@@ -94,7 +94,7 @@ export class EvaluateHighlight implements HighlightInterface {
         let index = currentLine;
         while ((forward && index < buffer.length) || (!forward && index > 0)) {
             let line = buffer[index];
-            if (line.trimLeft().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
+            if (line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
                 return index
             }
             if (forward) {
