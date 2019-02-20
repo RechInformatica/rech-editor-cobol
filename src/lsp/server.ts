@@ -215,11 +215,7 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
     let text = fullDocument!.getText();
     let line = _textDocumentPosition.position.line;
     let character = _textDocumentPosition.position.character
-    let word = getLineText(
-      text,
-      line,
-      character
-    );
+    let word = getLineText(text, line, character);
     resolve(new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character))
   })
 })
