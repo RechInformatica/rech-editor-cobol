@@ -1,12 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, commands } from 'vscode';
+import { ExtensionContext, commands, StatusBarItem, window, StatusBarAlignment } from 'vscode';
 import { GeradorCobol } from './cobol/gerador-cobol';
 import { Editor } from './editor/editor';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
 import { TabStopper } from './cobol/TabStopper';
 import { Client } from './lsp/client';
 import { CustomDecorator } from './decoration/CustomDecorator';
+import { SourceOfCompletions } from './lsp/commons/SourceOfCompletions';
+import { ElementsDisplayerFactory } from './cobol/elementsdisplayer/ElementsDisplayerFactory';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -16,6 +18,8 @@ export function activate(_context: any) {
     Client.startServerAndEstablishCommunication(_context);
     // Custom decorators beyond language syntax highlight
     CustomDecorator.activate(_context);
+    // Build the statusBar to control the source of completions suggested in the server side
+    SourceOfCompletions.buildStatusBar();
     //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
@@ -63,6 +67,13 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos51', () => {
         new Editor().setColumn(COLUNA_VALUE - 1);
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.showElementProperties', () => {
+        let editor = new Editor();
+        let word = editor.getCurrentWord();
+        let buffer = editor.getEditorBuffer();
+        let uri = editor.getPath().fullPathVscode()
+        new ElementsDisplayerFactory().show(word, buffer, uri);
+    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos12', () => {
         new Editor().setColumn(AREA_B - 1);
     }));
@@ -77,6 +88,12 @@ export function activate(_context: any) {
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos08', () => {
         new Editor().setColumn(AREA_A - 1);
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeParagraphSource', () => {
+        SourceOfCompletions.toggleTheParagraphSource();
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeVariableSource', () => {
+        SourceOfCompletions.toggleTheVariableSource();
     }));
 }
 
@@ -104,3 +121,4 @@ export * from "./cobol/rechdoc/ElementDocumentationExtractor"
 export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./lsp/declaration/CobolDeclarationFinder";
 export * from "./cobol/diagnostic/cobolDiagnosticFilter";
+export * from "./cobol/ExpandedSourceManager";

@@ -43,6 +43,10 @@
 		"prefix": "filler",
 		"body": "filler"
 	},
+	"true" : {
+		"prefix": "true",
+		"body": "true"
+	},
 	"zeros": {
 		"prefix": "ze",
 		"body": "zeros"

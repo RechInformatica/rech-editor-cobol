@@ -207,6 +207,10 @@
             {
                 "command": "rech.editor.cobol.centralizeComment",
                 "title": "Centers the Cobol comment"
+            },
+            {
+                "command": "rech.editor.cobol.showElementProperties",
+                "title": "Show the cobol element properties"
             }
         ],
         "keybindings": [
@@ -298,6 +302,11 @@
             {
                 "command": "rech.editor.cobol.cobolInvertMoveOperators",
                 "key": "ctrl+alt+d",
+                "when": "editorLangId == COBOL"
+            },
+            {
+                "command": "rech.editor.cobol.showElementProperties",
+                "key": "shift+alt+q",
                 "when": "editorLangId == COBOL"
             }
         ]

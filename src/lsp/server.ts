@@ -23,6 +23,7 @@ import {
   ResponseError,
   TextDocumentChangeEvent,
   FoldingRangeRequest,
+  ErrorCodes,
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
@@ -34,8 +35,10 @@ import { CobolCompletionItemFactory } from "./completion/CobolCompletionItemFact
 import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
 import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 import { HighlightFactory } from "./highlight/HighlightFactory";
-import { WhenCompletion } from "./completion/WhenCompletion";
 import { CobolFoldFactory } from "./fold/CobolFoldFactory";
+import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
+import { VariableCompletion } from "./completion/variable/VariableCompletion";
+import { VariableCompletionFactory } from "./completion/variable/VariableCompletionFactory";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -51,6 +54,9 @@ connection.onInitialize((params: InitializeParams) => {
     capabilities.textDocument &&
     capabilities.textDocument.publishDiagnostics &&
     capabilities.textDocument.publishDiagnostics.relatedInformation;
+  ExpandedSourceManager.setSourceExpander((uri: string, cacheFileName: string) => {
+    return sendExternalPreprocExpanderExecution(uri, cacheFileName);
+  });
   return {
     capabilities: {
       textDocumentSync: documents.syncKind,
@@ -69,6 +75,17 @@ connection.onInitialize((params: InitializeParams) => {
   };
 });
 
+/** When requesto to return the declaration position of term */
+connection.onRequest("custom/findDeclarationPosition", (word: string, fullDocument: string, uri: string) => {
+  return new Promise((resolve, reject) => {
+    callCobolFinder(word, fullDocument, uri).then((position) => {
+      resolve(position);
+    }).catch(() => {
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration"));
+    });
+  })
+})
+
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
@@ -82,15 +99,26 @@ documents.onDidChangeContent(change => {
  * If the document saved
  */
 documents.onDidSave(document => {
+  let uri = document.document.uri;
+  // Validate the document
   validateTextDocument(document.document, "onSave");
+  // Update the folding
   loadFolding(document);
   connection.client.register(FoldingRangeRequest.type, document);
+  // Update the expanded source
+  new ExpandedSourceManager(uri).expandSource()
+  // Clear the variableCompletion cache
+  VariableCompletion.removeCache(uri);
 })
 
 // If the document opened
 documents.onDidOpen(document => {
+  // Validate the document
   validateTextDocument(document.document, true);
+  // Load the folding
   loadFolding(document);
+  // Load the expanded source
+  new ExpandedSourceManager(document.document.uri).expandSource();
 });
 
 // If the document closed
@@ -98,6 +126,10 @@ documents.onDidClose(textDocument => {
   let uri = textDocument.document.uri
   // Clear the folding cache
   CobolFoldFactory.foldingCache.delete(uri);
+  // Clear the expanded source cache
+  ExpandedSourceManager.removeSourceOfCache(uri);
+  // Clear the variableCompletion cache
+  VariableCompletion.removeCache(uri);
   //Clear the computed diagnostics to VSCode.
   connection.sendDiagnostics({
     uri: uri,
@@ -192,15 +224,15 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
   );
 }
 
-connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[]| ResponseError<undefined>> => {
-  return new Promise((resolve,) => {
+connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[] | ResponseError<undefined>> => {
+  return new Promise((resolve, reject) => {
     let uri = _foldingRangeRequestParam.textDocument.uri;
     let folding = CobolFoldFactory.foldingCache.get(uri);
     getConfig<boolean>("folding").then(foldingConfig => {
       if (foldingConfig && folding) {
         return resolve(folding)
       } else {
-        return resolve(undefined);
+        return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration"));
       }
     })
   });
@@ -210,75 +242,85 @@ connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam)
  * Provide the document highlight positions
  */
 connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParams): Thenable<DocumentHighlight[]> => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
     let text = fullDocument!.getText();
     let line = _textDocumentPosition.position.line;
     let character = _textDocumentPosition.position.character
-    let word = getLineText(
-      text,
-      line,
-      character
-    );
-    resolve(new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character))
+    let word = getLineText(text, line, character);
+    let result = new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character)
+    if (result) {
+      return resolve(result)
+    } else {
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to high ligth"))
+    }
   })
 })
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     getConfig<string[]>("snippetsRepositories").then(repositories => {
-      getConfig<boolean>("variableSuggestion").then(variableSuggestion => {
       let line = _textDocumentPosition.position.line;
       let column = _textDocumentPosition.position.character;
       let uri = _textDocumentPosition.textDocument.uri;
       let cacheFileName = buildCacheFileName(uri);
       let fullDocument = documents.get(uri);
       if (fullDocument) {
-        new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"))
-          .setVariableSuggestion(variableSuggestion)
+        new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"), uri)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
-          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, () => {
-            // Runs Cobol preprocessor on client-side
-            return sendExternalPreprocExpanderExecution(uri, cacheFileName);
-          })).setWhenCompletion(new WhenCompletion(cacheFileName, () => {
-            // Runs Cobol preprocessor on client-side
-            return sendExternalPreprocExpanderExecution(uri, cacheFileName);
-          }))
+          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
+          .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
           .generateCompletionItems().then((items) => {
             resolve(items);
           }).catch(() => {
             resolve([]);
           })
+      } else {
+        reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error load Completion Items"))
       };
-    })
   });
   });
 });
 
 /**
+ * Returns the current source of completionsItems
+ */
+function getCurrentSourceOfParagraphCompletions() {
+  return connection.sendRequest<string>("custom/sourceOfParagraphCompletions")
+}
+
+/**
+ * Returns the current source of completionsItems
+ */
+function getCurrentSourceOfVariableCompletions() {
+  return connection.sendRequest<string>("custom/sourceOfVariableCompletions")
+}
+
+/**
  * Document formatter
  */
 connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) => {
+  return new Promise((reolve, reject) => {
     let line = params.position.line;
     let column = params.position.character;
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
-      return new Promise((reolve) => {
-        let formatter = new CobolFormatter(line, column, fullDocument!);
-        switch (true) {
-          case hasTypedEnter(params.ch):
-            return reolve(formatter.formatWhenEnterIsPressed());
-          case params.ch.toUpperCase() == "E":
-            return reolve(formatter.formatWhenEIsPressed());
-          case params.ch.toUpperCase() == "N":
-            return reolve(formatter.formatWhenNIsPressed());
-        }
-      });
+      let formatter = new CobolFormatter(line, column, fullDocument!);
+      switch (true) {
+        case hasTypedEnter(params.ch):
+          return reolve(formatter.formatWhenEnterIsPressed());
+        case params.ch.toUpperCase() == "E":
+          return reolve(formatter.formatWhenEIsPressed());
+        case params.ch.toUpperCase() == "N":
+          return reolve(formatter.formatWhenNIsPressed());
+        default:
+          return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to formatter"))
+      }
     }
-    return [];
-  }
-);
+    return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to formatter"))
+  });
+});
 
 /**
  * Retrun if the character that has been typed is a enter
@@ -297,25 +339,22 @@ connection.onInitialized(() => {
   );
 });
 
-connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location> | Thenable<undefined> | undefined => {
+connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location | ResponseError<undefined>>  => {
+  return new Promise((resolve, reject) => {
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
       let text = fullDocument.getText();
-      let word = getLineText(
-        text,
-        params.position.line,
-        params.position.character
-      );
-      return createPromiseForWordDeclaration(
-        text,
-        word,
-        params.textDocument.uri
-      );
+      let word = getLineText(text, params.position.line, params.position.character);
+      createPromiseForWordDeclaration(text, word, params.textDocument.uri).then((location) => {
+        resolve(location);
+      }).catch(() => {
+        resolve(undefined);
+      });
     } else {
-      return undefined;
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration"));
     }
-  }
-);
+  })
+});
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
@@ -354,34 +393,43 @@ export function getLineText(
  * @param word the target word which declaration will be searched
  * @param uri URI of the current file open in editor
  */
-export function createPromiseForWordDeclaration(
-  documentFullText: string,
-  word: string,
-  uri: string
-) {
+export function createPromiseForWordDeclaration(documentFullText: string, word: string, uri: string) {
   // Creates an external promise so the reject function can be called when no definition
   // is found for the specified word
-  return new Promise<Location>(resolve => {
-    // Creates a promise to find the word declaration
-    new CobolDeclarationFinder(documentFullText)
-      .findDeclaration(word, uri, (cacheFileName) => {
-        // Runs Cobol preprocessor on client-side
-        return sendExternalPreprocExpanderExecution(uri, cacheFileName);
-      })
-      .then((position: RechPosition) => {
-        // If the delcaration was found on an external file
-        if (position.file) {
-          // Retrieves the location on the external file
-          resolve(createLocation(position.file, position));
-        } else {
-          // Retrieves the location on the current file
-          resolve(createLocation(uri, position));
-        }
-      })
-      .catch(() => {
-        resolve(undefined);
-      });
+  return new Promise<Location>((resolve, reject) => {
+    callCobolFinder(word, documentFullText, uri).then((position) => {
+      // If the delcaration was found on an external file
+      if (position.file) {
+        // Retrieves the location on the external file
+        resolve(createLocation(position.file, position));
+      } else {
+        // Retrieves the location on the current file
+        resolve(createLocation(uri, position));
+      }
+    })
+    .catch(() => {
+      reject();
+    });
   });
+}
+
+/**
+ * Call the cobol word declaration finder
+ *
+ * @param word
+ * @param documentFullText
+ * @param uri
+ */
+export function callCobolFinder(word: string, documentFullText: string, uri: string): Promise<RechPosition> {
+  return new Promise((resolve, reject) => {
+    new CobolDeclarationFinder(documentFullText)
+      .findDeclaration(word, uri)
+      .then((position: RechPosition) => {
+        return resolve(position);
+      }).catch(() => {
+        reject();
+      })
+  })
 }
 
 /**

@@ -4,6 +4,7 @@ import { MarkupKind, CompletionItemKind, CompletionItem } from "vscode-languages
 import { CompletionInterface } from "./CompletionInterface";
 import { File } from "../../commons/file";
 import { Scan } from "../../commons/Scan";
+import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
 
 /**
  * Class to generate LSP Completion Items for Cobol paragraphs declarations
@@ -20,22 +21,27 @@ export class ParagraphCompletion implements CompletionInterface {
     private cobolDocParser: CobolDocParser;
     /** Cache file name */
     private cacheFileName: string;
-    /** callback to expander the source */
-    private callbackSourceExpander: (() => Thenable<any>) | undefined;
+    /** uri of file */
+    private uri: string;
     /** Current lines in the source */
     private currentLines: string[] | undefined;
+    /** Source of completions */
+    private sourceOfCompletions: Thenable<string>;
 
-    constructor(cacheFileName: string, callbackSourceExpander?: () => Thenable<any>) {
+    constructor(cacheFileName: string, uri: string, sourceOfCompletions: Thenable<string>) {
         this.parserCobol = new ParserCobol();
         this.cobolDocParser = new CobolDocParser();
         this.cacheFileName = cacheFileName;
-        this.callbackSourceExpander = callbackSourceExpander;
+        this.uri = uri;
+        this.sourceOfCompletions = sourceOfCompletions;
     }
 
     public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.currentLines = lines;
-            this.loadCache();
+            this.loadCache().catch(() => {
+                reject();
+            });
             let items: CompletionItem[] = [];
             if (ParagraphCompletion.cache && ParagraphCompletion.cacheSourceFileName == this.cacheFileName) {
                 for (let value of ParagraphCompletion.cache.values()){
@@ -58,44 +64,19 @@ export class ParagraphCompletion implements CompletionInterface {
      */
     private loadCache() {
         return new Promise((resolve, reject) => {
-            let file = new File(this.cacheFileName);
-            if (file.exists()) {
-                this.loadCacheFromPreprocessedFile(file).then((items) => {
-                    ParagraphCompletion.cache = items;
-                    resolve();
+            this.sourceOfCompletions.then((sourceOfCompletions) => {
+                if (sourceOfCompletions == "local") {
+                    ParagraphCompletion.cache = this.generateParagraphCompletion(<string[]>this.currentLines, false)
+                    ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
+                    return resolve();
+                }
+                ExpandedSourceManager.getExpandedSource(this.uri).then((buffer) => {
+                    ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
+                    ParagraphCompletion.cache = this.generateParagraphCompletion(buffer.toString().split("\n"), true);
+                    return resolve();
                 }).catch(() => {
-                    reject()
+                    return reject();
                 })
-            }
-            if (this.callbackSourceExpander && ParagraphCompletion.cacheSourceFileName != this.cacheFileName) {
-                ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
-                ParagraphCompletion.cache = undefined;
-                this.callbackSourceExpander().then(() => {
-                    this.loadCacheFromPreprocessedFile(file).then((items) => {
-                        ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
-                        ParagraphCompletion.cache = items;
-                        resolve();
-                    }).catch(() => {
-                        reject();
-                    })
-                });
-            }
-        });
-    }
-
-    /**
-     * Load the cache with the preprocessed file
-     *
-     * @param file
-     * @param _line
-     * @param _column
-     */
-    private loadCacheFromPreprocessedFile(file: File): Promise<Map<string, CompletionItem>> {
-        return new Promise((resolve, reject) => {
-            file.loadBuffer("latin1").then((buffer) => {
-                resolve(this.generateParagraphCompletion(buffer.toString().split("\n"), true));
-            }).catch(() => {
-                reject();
             });
         });
     }
@@ -167,6 +148,14 @@ export class ParagraphCompletion implements CompletionInterface {
         }
         documentation = documentation.reverse();
         return documentation;
+    }
+
+    /**
+     * Clear the paragraphs cache
+     */
+    public static clearCache() {
+        ParagraphCompletion.cache = new Map();
+        ParagraphCompletion.cacheSourceFileName = "";
     }
 
 }

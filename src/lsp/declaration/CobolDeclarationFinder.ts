@@ -3,6 +3,7 @@ import { File } from '../../commons/file';
 import { Scan } from '../../commons/Scan';
 import { ParserCobol } from '../../cobol/parsercobol'
 import { RechPosition } from '../../commons/rechposition'
+import { ExpandedSourceManager } from '../../cobol/ExpandedSourceManager';
 
 /**
  * Class to find Cobol declarations
@@ -21,16 +22,13 @@ export class CobolDeclarationFinder {
     this.text = text;
   }
 
-
   /**
    * Find the declaration of the term
    *
-   * @param path
-   * @param term
+   * @param term Term to find
    */
-  public findDeclaration(term: string, sourceFileName: string, callbackSourceExpander?: (cacheFileName: string) => Thenable<any>): Promise<RechPosition> {
+  public findDeclaration(term: string, uri: string): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
-      let path = new Path(sourceFileName);
       // If the word is too small
       if (term.length < 3) {
         reject();
@@ -39,15 +37,43 @@ export class CobolDeclarationFinder {
       // Busca declaração no próprio documento
       let result = this.findDeclarationInBuffer(term, this.text);
       if (result) {
-        resolve(result);
-        return;
+        return resolve(result);
       }
-      let cacheFileName = this.buildCacheFileName(sourceFileName);
-      this.findDeclarationWithPreproc(term, path, cacheFileName, true, callbackSourceExpander).then((result) => {
-        resolve(result);
+      this.findDeclarationWithPreproc(term, uri, true).then((result) => {
+        return resolve(result)
       }).catch(() => {
-        reject();
+        return reject();
       });
+    });
+  }
+
+  /**
+   * Find the declaration of term with preprocessed source
+   *
+   * @param term term to find
+   * @param uri uri of the file
+   * @param expandSource can expand the source?
+   */
+  private findDeclarationWithPreproc(term: string, uri: string, expandSource: boolean): Promise<RechPosition> {
+    return new Promise((resolve, reject) => {
+      ExpandedSourceManager.getExpandedSource(uri).then((expandedSource) => {
+        let path = new Path(uri);
+        let result = this.findDeclarationInPreprocessedSource(term, path, expandedSource);
+        if (result) {
+          return resolve(result);
+        } else {
+          if (expandSource) {
+            new ExpandedSourceManager(uri).expandSource();
+            this.findDeclarationWithPreproc(term, uri, false).then((result) => {
+              return resolve(result);
+            })
+          } else {
+            return reject();
+          }
+        }
+      }).catch(() => {
+        return reject();
+      })
     });
   }
 
@@ -70,95 +96,35 @@ export class CobolDeclarationFinder {
   }
 
   /**
-   * Builds Cobol preprocessor cache filename
-   *
-   * @param uri current URI of the file open in editor
-   */
-  private buildCacheFileName(uri: string) {
-    var path = new Path(uri).fullPathWin();
-    return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" + new Path(path).fileName();
-  }
-
-  /**
-   * Find the declaration of term with preprocessed source
-   *
-   * @param term
-   * @param path
-   * @param cache
-   */
-  private findDeclarationWithPreproc(term: string, path: Path, cacheFileName: string, cache: boolean, callbackSourceExpander?: (cacheFileName: string) => Thenable<any>): Promise<RechPosition> {
-    return new Promise((resolve, reject) => {
-      let processou = false;
-      // Se o arquivo de cache não existe, não tenta ler dele
-      if (!new File(cacheFileName).exists()) {
-        cache = false;
-      }
-      // If must to use cache
-      if (cache) {
-        this.findDeclarationInPreprocessedSource(term, path, cacheFileName).then((result) => {
-          resolve(result);
-        }).catch(() => {
-          // Try reprocess
-          this.findDeclarationWithPreproc(term, path, cacheFileName, false, callbackSourceExpander).then((result) => {
-            resolve(result);
-          }).catch(() => {
-            reject();
-          });
-        });
-      } else {
-        if (callbackSourceExpander && !processou) {
-          callbackSourceExpander(cacheFileName).then(() => {
-            processou = true;
-            this.findDeclarationWithPreproc(term, path, cacheFileName, true).then((result) => {
-              resolve(result);
-            }).catch(() => {
-              reject();
-            });
-          }, () => {
-            reject();
-          });
-        } else {
-          reject();
-        }
-      }
-    });
-  }
-
-  /**
    * Find the declaration in the preprocessed source
    *
    * @param term
    * @param path
-   * @param tmpFile
+   * @param buffer
    */
-  private findDeclarationInPreprocessedSource(term: string, path: Path, tmpFile: string): Promise<RechPosition> {
+  private findDeclarationInPreprocessedSource(term: string, path: Path, buffer: string): Promise<RechPosition> {
     let parser = new ParserCobol();
     return new Promise((resolve, reject) => {
-      new File(tmpFile).loadBuffer().then((buffers: string[]) => {
-        let result = null;
-        let buffer = buffers.toString();
-        new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
-          if (parser.isDeclaration(term, iterator.lineContent)) {
-            let match = <RegExpMatchArray>/.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
-            let line = parseInt(match[1]) - 1;
-            let file = path.fullPath();
-            if (match[2] != undefined) {
-              file = match[2];
-            }
-            let column = iterator.column;
-            // build the result
-            result = new RechPosition(<number>line, <number>column, this.getFullPath(file, path));
-            iterator.stop();
+      let result = undefined;
+      new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
+        if (parser.isDeclaration(term, iterator.lineContent)) {
+          let match = <RegExpMatchArray>/.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
+          let line = parseInt(match[1]) - 1;
+          let file = path.fullPath();
+          if (match[2]) {
+            file = match[2];
           }
-        });
-        if (result != null) {
-          resolve(<RechPosition>result);
-        } else {
-          reject();
+          let column = iterator.column;
+          // build the result
+          result = new RechPosition(<number>line, <number>column, this.getFullPath(file, path));
+          iterator.stop();
         }
-      }).catch(() => {
-        reject();
       });
+      if (result) {
+        resolve(<RechPosition>result);
+      } else {
+        reject();
+      }
     });
   }
 
