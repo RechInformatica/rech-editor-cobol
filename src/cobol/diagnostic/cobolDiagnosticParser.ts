@@ -80,16 +80,16 @@ export class CobolDiagnosticParser {
    * @param externalDiagnosticFilter
    */
   private interpretsTheErrorMessage(fileName: string, pattern: RegExp, currentLine: string, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<Diagnostic> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let match = pattern.exec(currentLine);
       if (!match) {
-        resolve();
+        reject();
         return;
       }
       let fullError, message: any, file: any, line: any, error: any;
       [fullError, message, file, line, error] = match;
       if (externalDiagnosticFilter) {
-        externalDiagnosticFilter(message).then(result => {
+        externalDiagnosticFilter(message).then((result) => {
           if (result) {
             this.buildDiagnosticOfError(fileName, message, file, line, error);
             resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));

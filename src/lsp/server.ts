@@ -148,12 +148,14 @@ export function loadFolding(document: TextDocumentChangeEvent) {
   }
   let uri = document.document.uri;
   let fullDocument = documents.get(uri);
-  let text = fullDocument!.getText();
-  getConfig<boolean>("folding").then(foldingConfig => {
-    if (foldingConfig) {
-      new CobolFoldFactory().fold(uri, text.split("\n"));
-    }
-  });
+  if (fullDocument) {
+    let text = fullDocument.getText();
+    getConfig<boolean>("folding").then(foldingConfig => {
+      if (foldingConfig) {
+        new CobolFoldFactory().fold(uri, text.split("\n"));
+      }
+    });
+  }
 }
 
 /**
@@ -164,9 +166,10 @@ export function loadFolding(document: TextDocumentChangeEvent) {
 export async function validateTextDocument(textDocument: TextDocument, event: "onSave" | "onChange"| boolean): Promise<void> {
   return getAutoDiagnostic().then(autodiagnostic => {
     if (autodiagnostic && (event === true || autodiagnostic == event)) {
-      let text = documents.get(textDocument.uri)!.getText();
-      new Diagnostician(text)
-        .diagnose(
+      let document = documents.get(textDocument.uri)
+      if (document) {
+        let text = document.getText();
+        new Diagnostician(text).diagnose(
           textDocument,
           fileName => {
             return sendExternalPreprocessExecution(fileName);
@@ -174,14 +177,20 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
           message => {
             return externalDiagnosticFilter(message);
           }
-        )
-        .then(diagnostics => {
+        ).then(diagnostics => {
           //Send the computed diagnostics to VSCode.
           connection.sendDiagnostics({
             uri: textDocument.uri,
             diagnostics: diagnostics
           });
+        }).catch(() => {
+          //Send the computed diagnostics to VSCode.
+          connection.sendDiagnostics({
+            uri: textDocument.uri,
+            diagnostics: []
+          });
         });
+      }
     }
   });
 }
@@ -244,13 +253,17 @@ connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam)
 connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParams): Thenable<DocumentHighlight[]> => {
   return new Promise((resolve, reject) => {
     let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
-    let text = fullDocument!.getText();
-    let line = _textDocumentPosition.position.line;
-    let character = _textDocumentPosition.position.character
-    let word = getLineText(text, line, character);
-    let result = new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character)
-    if (result) {
-      return resolve(result)
+    if (fullDocument) {
+      let text = fullDocument.getText();
+      let line = _textDocumentPosition.position.line;
+      let character = _textDocumentPosition.position.character
+      let word = getLineText(text, line, character);
+      let result = new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character)
+      if (result) {
+        return resolve(result)
+      } else {
+        reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to high ligth"))
+      }
     } else {
       reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to high ligth"))
     }
