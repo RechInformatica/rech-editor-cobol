@@ -223,17 +223,23 @@ export class CobolCompletionItemFactory {
     if (lineContainsClause) {
       return false;
     }
-    let splitted = withoutEnter.trim().split(/\s+/);
-    if (splitted.length < 2) {
+    // let splitted = withoutEnter.trim().split(/\s+/);
+    let myTrimmed = withoutEnter.trim();
+    // let splitted = myTrimmed.split(/[^\s"']+|"([^"]*)"|'([^']*)'/);
+    let splitted = /(MOVE|SET|SUBTRACT|ADD)(\s+(?:".*"|'.*'|[A-Za-z0-9-]+))?(\s+(?:[A-Za-z]+))?/gi.exec(myTrimmed);
+    if (splitted == undefined) {
       return false;
     }
-    if (splitted.length == 2) {
+    if (splitted[2] == undefined) {
+      return false;
+    }
+    if (splitted[2] != undefined && splitted[3] == undefined) {
       return withoutEnter.endsWith(" ");
     }
     let clauseUpper = clause.toUpperCase();
-    let splittedUpper = splitted[2].toUpperCase();
+    let splittedUpper = splitted[3].toUpperCase().trim();
     let startsWith = clauseUpper.startsWith(splittedUpper);
-    return splitted.length == 3 && startsWith;
+    return startsWith;
   }
 
   /**
