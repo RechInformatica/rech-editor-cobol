@@ -29,6 +29,8 @@ import { VariableCompletionFactory } from "./variable/VariableCompletionFactory"
 import { CommandSeparatorInsertTextBuilder } from "./variable/CommandSeparatorInsertTextBuilder";
 import { CommaDotInsertTextBuilder } from "./variable/CommaDotInsertTextBuilder";
 import { ToTrueInsertTextBuilder } from "./variable/ToTrueInsertTextBuilder";
+import { CobolWordFinder } from "../../commons/CobolWordFinder";
+import { AssignerCommandParser } from "./parser/AssignerCommandParser";
 
 
 /**
@@ -176,12 +178,13 @@ export class CobolCompletionItemFactory {
       if (this.lineContainsTo()) {
         varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
       } else {
-        if (this.isSet()) {
-          varCompletion.setInsertTextBuilder(new ToTrueInsertTextBuilder());
-        } else {
-          varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("to"));
+        if (!this.cursorWordContainsParentheses()) {
+          if (this.isSet()) {
+            varCompletion.setInsertTextBuilder(new ToTrueInsertTextBuilder());
+          } else {
+            varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("to"));
+          }
         }
-
       }
       return this.generate(varCompletion);
     }
@@ -198,7 +201,9 @@ export class CobolCompletionItemFactory {
       if (this.lineContainsFrom()) {
         varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
       } else {
-        varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("from"));
+        if (!this.cursorWordContainsParentheses()) {
+          varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("from"));
+        }
       }
       return this.generate(varCompletion);
     }
@@ -212,34 +217,22 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if the word where cursor is currently positioned contains parentheses.
+   * If true, it means the variable is indexed and should not suggest 'to' inside parentheses.
+   */
+  public cursorWordContainsParentheses(): boolean {
+    let wordWithIndex = new CobolWordFinder().findWordWithIndexAt(this.lineText, this.column);
+    return wordWithIndex.includes("(") && wordWithIndex.includes(")");
+  }
+
+  /**
    * Returns true if the Language Server should suggest a completion item to the
    * specified clause
    *
    * @param clause clause to be tested
    */
   public shouldSuggestClause(clause: string): boolean {
-    let withoutEnter = this.lineText.replace("\n", "").replace("\r", "");
-    let lineContainsClause = withoutEnter.toUpperCase().includes(" " + clause + " ");
-    if (lineContainsClause) {
-      return false;
-    }
-    // let splitted = withoutEnter.trim().split(/\s+/);
-    let myTrimmed = withoutEnter.trim();
-    // let splitted = myTrimmed.split(/[^\s"']+|"([^"]*)"|'([^']*)'/);
-    let splitted = /(MOVE|SET|SUBTRACT|ADD)(\s+(?:".*"|'.*'|[A-Za-z0-9-\(\)]+))?(\s+(?:[A-Za-z]+))?/gi.exec(myTrimmed);
-    if (splitted == undefined) {
-      return false;
-    }
-    if (splitted[2] == undefined) {
-      return false;
-    }
-    if (splitted[2] != undefined && splitted[3] == undefined) {
-      return withoutEnter.endsWith(" ");
-    }
-    let clauseUpper = clause.toUpperCase();
-    let splittedUpper = splitted[3].toUpperCase().trim();
-    let startsWith = clauseUpper.startsWith(splittedUpper);
-    return startsWith;
+    return new AssignerCommandParser().shouldSuggestClause(this.lineText, clause);
   }
 
   /**
