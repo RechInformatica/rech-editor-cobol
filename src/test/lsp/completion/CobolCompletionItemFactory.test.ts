@@ -42,4 +42,11 @@ import { CobolCompletionItemFactory } from '../../../lsp/completion/CobolComplet
             expect(false).to.equal(new CobolCompletionItemFactory(5,1, lines).shouldSuggestClause("TO"));
             expect(true).to.equal(new CobolCompletionItemFactory(6,1, lines).shouldSuggestClause("TO"));
         });
+
+        it('Checks should suggest to clause when moving indexed variable', () => {
+            let lines = ["move    w-numitm(w-idv) ", "move    w-numitm(w-idv) to"];
+            expect(true).to.equal(new CobolCompletionItemFactory(0,1, lines).shouldSuggestClause("TO"));
+            expect(true).to.equal(new CobolCompletionItemFactory(1,1, lines).shouldSuggestClause("TO"));
+        });
+
     });

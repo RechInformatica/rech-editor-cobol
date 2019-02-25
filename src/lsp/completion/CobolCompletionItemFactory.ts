@@ -226,7 +226,7 @@ export class CobolCompletionItemFactory {
     // let splitted = withoutEnter.trim().split(/\s+/);
     let myTrimmed = withoutEnter.trim();
     // let splitted = myTrimmed.split(/[^\s"']+|"([^"]*)"|'([^']*)'/);
-    let splitted = /(MOVE|SET|SUBTRACT|ADD)(\s+(?:".*"|'.*'|[A-Za-z0-9-]+))?(\s+(?:[A-Za-z]+))?/gi.exec(myTrimmed);
+    let splitted = /(MOVE|SET|SUBTRACT|ADD)(\s+(?:".*"|'.*'|[A-Za-z0-9-\(\)]+))?(\s+(?:[A-Za-z]+))?/gi.exec(myTrimmed);
     if (splitted == undefined) {
       return false;
     }
