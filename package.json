@@ -81,9 +81,9 @@
                     "description": "Controls whether COBOL folding is allowed.",
                     "default": true
                 },
-                "rech.editor.cobol.server.log": {
+                "rech.editor.cobol.log": {
                     "type": "boolean",
-                    "description": "Controls whether Cobol Language Server logging is active.",
+                    "description": "Controls whether Rech Cobol extension logging is active.",
                     "default": false
                 }
             }

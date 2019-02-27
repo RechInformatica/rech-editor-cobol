@@ -22,6 +22,8 @@ export function activate(_context: any) {
     CustomDecorator.activate(_context);
     // Build the statusBar to control the source of completions suggested in the server side
     SourceOfCompletions.buildStatusBar();
+    // Configures the Logging instance on client side
+    Log.get().setActive(configuration.get<boolean>("log"));
     //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand

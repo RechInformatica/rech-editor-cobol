@@ -1,5 +1,6 @@
 import { Path } from "../commons/path";
 import { File } from "../commons/file";
+import { Log } from "../commons/Log";
 
 /**
  * Class to manager the expanded source
@@ -22,14 +23,17 @@ export class ExpandedSourceManager {
   public expandSource(): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!ExpandedSourceManager.callbackSourceExpander) {
+        Log.get().warning("SourceExpander is undefined");
         return reject()
       }
       ExpandedSourceManager.callbackSourceExpander(this.source, ExpandedSourceManager.buildExpandedSourceFileName(this.source)).then(() => {
         let file = new File(ExpandedSourceManager.buildExpandedSourceFileName(this.source));
         file.loadBuffer("latin1").then((buffer) => {
           ExpandedSourceManager.expandedSource.set(this.source, buffer);
+          Log.get().info("Expanded source loaded successfully");
           resolve(buffer)
         }).catch(() => {
+          Log.get().error("Error to load expanded source");
           reject();
         });
       });
@@ -58,14 +62,18 @@ export class ExpandedSourceManager {
    * @param source
    */
   public static getExpandedSource(source: string): Promise<string> {
+    Log.get().info("Expanded source requested. Source: " + source);
     return new Promise((resolve, reject) => {
       let expandedSource = ExpandedSourceManager.expandedSource.get(source);
       if (expandedSource) {
+        Log.get().info("Expanded source got from cache. Source: " + source);
         return resolve(expandedSource);
       } else {
         new ExpandedSourceManager(source).expandSource().then((expandedSource) => {
+          Log.get().info("Expanded source got from expanded file. Source: " + source);
           return resolve(expandedSource);
         }).catch(() => {
+          Log.get().error("Error to get the expanded source. Source: " + source);
           return reject()
         });
       }
