@@ -9,6 +9,8 @@ import { Client } from './lsp/client';
 import { CustomDecorator } from './decoration/CustomDecorator';
 import { SourceOfCompletions } from './lsp/commons/SourceOfCompletions';
 import { ElementsDisplayerFactory } from './cobol/elementsdisplayer/ElementsDisplayerFactory';
+import { Log } from './commons/Log';
+import { configuration } from './helpers/configuration';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

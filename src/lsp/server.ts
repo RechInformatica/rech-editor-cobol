@@ -39,16 +39,18 @@ import { CobolFoldFactory } from "./fold/CobolFoldFactory";
 import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
 import { VariableCompletion } from "./completion/variable/VariableCompletion";
 import { VariableCompletionFactory } from "./completion/variable/VariableCompletionFactory";
+import { Log } from "../commons/Log";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 let connection = createConnection(ProposedFeatures.all);
+let loggingConfigured: boolean;
 
 let hasDiagnosticRelatedInformationCapability: boolean | undefined = false;
 let documents: TextDocuments = new TextDocuments();
-connection.onInitialize((params: InitializeParams) => {
+connection.onInitialize(async (params: InitializeParams) => {
   let capabilities = params.capabilities;
   hasDiagnosticRelatedInformationCapability =
     capabilities.textDocument &&
@@ -74,6 +76,8 @@ connection.onInitialize((params: InitializeParams) => {
     }
   };
 });
+
+
 
 /** When requesto to return the declaration position of term */
 connection.onRequest("custom/findDeclarationPosition", (word: string, fullDocument: string, uri: string) => {
@@ -113,6 +117,7 @@ documents.onDidSave(document => {
 
 // If the document opened
 documents.onDidOpen(document => {
+  configureServerLog();
   // Validate the document
   validateTextDocument(document.document, true);
   // Load the folding
@@ -163,7 +168,7 @@ export function loadFolding(document: TextDocumentChangeEvent) {
  *
  * @param textDocument
  */
-export async function validateTextDocument(textDocument: TextDocument, event: "onSave" | "onChange"| boolean): Promise<void> {
+export async function validateTextDocument(textDocument: TextDocument, event: "onSave" | "onChange" | boolean): Promise<void> {
   return getAutoDiagnostic().then(autodiagnostic => {
     if (autodiagnostic && (event === true || autodiagnostic == event)) {
       let document = documents.get(textDocument.uri)
@@ -292,7 +297,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
       } else {
         reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error load Completion Items"))
       };
-  });
+    });
   });
 });
 
@@ -352,15 +357,17 @@ connection.onInitialized(() => {
   );
 });
 
-connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location | ResponseError<undefined>>  => {
+connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location | ResponseError<undefined>> => {
   return new Promise((resolve, reject) => {
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
       let text = fullDocument.getText();
       let word = getLineText(text, params.position.line, params.position.character);
       createPromiseForWordDeclaration(text, word, params.textDocument.uri).then((location) => {
+        Log.get().info("Found declaration for " + word + " in " + location.uri + ". Key pressed in " + params.textDocument.uri);
         resolve(location);
       }).catch(() => {
+        Log.get().warning("Could not find declaration for " + word + ". Key pressed in " + params.textDocument.uri);
         resolve(undefined);
       });
     } else {
@@ -420,9 +427,9 @@ export function createPromiseForWordDeclaration(documentFullText: string, word: 
         resolve(createLocation(uri, position));
       }
     })
-    .catch(() => {
-      reject();
-    });
+      .catch(() => {
+        reject();
+      });
   });
 }
 
@@ -452,7 +459,7 @@ export function callCobolFinder(word: string, documentFullText: string, uri: str
  */
 export function buildCacheFileName(uri: string) {
   var path = new Path(uri).fullPathWin();
-  return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" +  new Path(path).fileName();
+  return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" + new Path(path).fileName();
 }
 
 /**
@@ -483,4 +490,18 @@ export function createLocation(uri: string, position: RechPosition) {
   );
   let fileUri = uri.replace(/\\\\/g, "/").replace("F:", "file:///F%3A");
   return Location.create(fileUri, firstCharRange);
+}
+
+/**
+ * Configures the server logger instance
+ */
+export async function configureServerLog() {
+  if (loggingConfigured) {
+    return;
+  }
+  let loggingActive = await getConfig<boolean>("server.log");
+  if (loggingActive) {
+    Log.get().setActive(true);
+  }
+  loggingConfigured = true;
 }
