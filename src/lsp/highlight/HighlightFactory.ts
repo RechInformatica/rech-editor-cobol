@@ -3,6 +3,7 @@ import { DefaultHighlight } from "./DefaultHighlight";
 import { IfHighlight } from "./IfHighlight";
 import { EvaluateHighlight } from "./EvaluateHighlight";
 import { PerformHighlight } from "./PerformHighlight";
+import { TryHighlight } from "./tryHighlight";
 
 /**
  * Classe to provide the Highlight
@@ -27,6 +28,9 @@ export class HighlightFactory {
             }
             case new PerformHighlight().isABlockTerm(word): {
                 return new PerformHighlight().positions(text, word, currentLine, currentCharacter);
+            }
+            case new TryHighlight().isABlockTerm(word): {
+                return new TryHighlight().positions(text, word, currentLine, currentCharacter);
             }
             default: {
                 return new DefaultHighlight().positions(text, word, currentLine, currentCharacter);
