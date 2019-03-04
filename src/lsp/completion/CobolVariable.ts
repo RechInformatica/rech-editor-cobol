@@ -155,6 +155,9 @@ export class CobolVariable {
     private static splitVariableInfo(parentVariable: string): string[] {
         let parentVariableLineText = this.removeDuplicateWhitespaces(parentVariable);
         let splittedParent = parentVariableLineText.split(" ");
+        if (splittedParent[splittedParent.length - 1] == "") {
+            splittedParent = splittedParent.slice(0, splittedParent.length - 2);
+        }
         return splittedParent;
     }
 
@@ -164,7 +167,7 @@ export class CobolVariable {
      * @param currentText
      */
     private static removeDuplicateWhitespaces(currentText: string): string {
-        return currentText.trimLeft().replace(/\s+/g, ' ');
+        return currentText.trim().replace(/\s+/g, ' ');
     }
 
     /**

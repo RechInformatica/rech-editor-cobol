@@ -92,4 +92,9 @@
               10 w-displayzzzc999 pic is zzz,999  value is zeros.
               10 w-display-99c99  pic is -99,99   value is zeros.
               10 w-display-9999   pic is -9999    value is zeros.
+           05 w-pix10-no-value    pic is x(10).
+           05 w-pix01-no-value     pic is x(01).
+           05 w-pix1-no-value     pic is x.
+           05 w-pi91-no-value     pic is 9.
+           05 w-pi910-no-value    pic is 9(10).
       *>--------------------------------------------- CALICM.cbl -----------------------------------------------------<*
