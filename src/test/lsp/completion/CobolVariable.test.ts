@@ -391,5 +391,34 @@ describe('Cobol variable get length test', () => {
         valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
         expect(5).to.equal(valiable.getByteSize());
     });
-
+    it('Check Cobol variable pic x(10) no value', () => {
+        let line = 94
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(10).to.equal(valiable.getByteSize());
+    });
+    it('Check Cobol variable pic x(01) no value', () => {
+        let line = 95
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(1).to.equal(valiable.getByteSize());
+    });
+    it('Check Cobol variable pic x no value', () => {
+        let line = 96
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(1).to.equal(valiable.getByteSize());
+    });
+    it('Check Cobol variable pic 9 no value', () => {
+        let line = 97
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(1).to.equal(valiable.getByteSize());
+    });
+    it('Check Cobol variable pic 9(10) no value', () => {
+        let line = 98
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(10).to.equal(valiable.getByteSize());
+    });
 });

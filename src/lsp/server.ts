@@ -39,16 +39,18 @@ import { CobolFoldFactory } from "./fold/CobolFoldFactory";
 import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
 import { VariableCompletion } from "./completion/variable/VariableCompletion";
 import { VariableCompletionFactory } from "./completion/variable/VariableCompletionFactory";
+import { Log } from "../commons/Log";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 let connection = createConnection(ProposedFeatures.all);
+let loggingConfigured: boolean;
 
 let hasDiagnosticRelatedInformationCapability: boolean | undefined = false;
 let documents: TextDocuments = new TextDocuments();
-connection.onInitialize((params: InitializeParams) => {
+connection.onInitialize(async (params: InitializeParams) => {
   let capabilities = params.capabilities;
   hasDiagnosticRelatedInformationCapability =
     capabilities.textDocument &&
@@ -78,9 +80,12 @@ connection.onInitialize((params: InitializeParams) => {
 /** When requesto to return the declaration position of term */
 connection.onRequest("custom/findDeclarationPosition", (word: string, fullDocument: string, uri: string) => {
   return new Promise((resolve, reject) => {
+    Log.get().info("Found declaration position request for " + word + " starting");
     callCobolFinder(word, fullDocument, uri).then((position) => {
+      Log.get().info("Found declaration position request for " + word + " in " + position.file + " request on " + uri);
       resolve(position);
     }).catch(() => {
+      Log.get().warning("Could not find declaration position request for " + word + " request on " + uri);
       reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration"));
     });
   })
@@ -113,6 +118,7 @@ documents.onDidSave(document => {
 
 // If the document opened
 documents.onDidOpen(document => {
+  configureServerLog();
   // Validate the document
   validateTextDocument(document.document, true);
   // Load the folding
@@ -148,12 +154,14 @@ export function loadFolding(document: TextDocumentChangeEvent) {
   }
   let uri = document.document.uri;
   let fullDocument = documents.get(uri);
-  let text = fullDocument!.getText();
-  getConfig<boolean>("folding").then(foldingConfig => {
-    if (foldingConfig) {
-      new CobolFoldFactory().fold(uri, text.split("\n"));
-    }
-  });
+  if (fullDocument) {
+    let text = fullDocument.getText();
+    getConfig<boolean>("folding").then(foldingConfig => {
+      if (foldingConfig) {
+        new CobolFoldFactory().fold(uri, text.split("\n"));
+      }
+    });
+  }
 }
 
 /**
@@ -161,12 +169,14 @@ export function loadFolding(document: TextDocumentChangeEvent) {
  *
  * @param textDocument
  */
-export async function validateTextDocument(textDocument: TextDocument, event: "onSave" | "onChange"| boolean): Promise<void> {
+export async function validateTextDocument(textDocument: TextDocument, event: "onSave" | "onChange" | boolean): Promise<void> {
   return getAutoDiagnostic().then(autodiagnostic => {
     if (autodiagnostic && (event === true || autodiagnostic == event)) {
-      let text = documents.get(textDocument.uri)!.getText();
-      new Diagnostician(text)
-        .diagnose(
+      let document = documents.get(textDocument.uri)
+      if (document) {
+        let text = document.getText();
+        Log.get().info("Diagnose from " + document.uri + " starting");
+        new Diagnostician(text).diagnose(
           textDocument,
           fileName => {
             return sendExternalPreprocessExecution(fileName);
@@ -174,14 +184,22 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
           message => {
             return externalDiagnosticFilter(message);
           }
-        )
-        .then(diagnostics => {
+        ).then(diagnostics => {
+          Log.get().info("Diagnose from " + textDocument.uri + " resulted ok");
           //Send the computed diagnostics to VSCode.
           connection.sendDiagnostics({
             uri: textDocument.uri,
             diagnostics: diagnostics
           });
+        }).catch(() => {
+          Log.get().info("Diagnose from " + textDocument.uri + " resulted empty");
+          //Send the computed diagnostics to VSCode.
+          connection.sendDiagnostics({
+            uri: textDocument.uri,
+            diagnostics: []
+          });
         });
+      }
     }
   });
 }
@@ -225,14 +243,17 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
 }
 
 connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[] | ResponseError<undefined>> => {
+  Log.get().info(`Called callback of onFoldingRanges. File ${_foldingRangeRequestParam.textDocument.uri}`);
   return new Promise((resolve, reject) => {
     let uri = _foldingRangeRequestParam.textDocument.uri;
     let folding = CobolFoldFactory.foldingCache.get(uri);
     getConfig<boolean>("folding").then(foldingConfig => {
       if (foldingConfig && folding) {
+        Log.get().info("Called callback of onFoldingRanges");
         return resolve(folding)
       } else {
-        return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration"));
+        Log.get().warning(`Error on folding. File ${uri}`);
+        return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error on folding"));
       }
     })
   });
@@ -244,13 +265,17 @@ connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam)
 connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParams): Thenable<DocumentHighlight[]> => {
   return new Promise((resolve, reject) => {
     let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
-    let text = fullDocument!.getText();
-    let line = _textDocumentPosition.position.line;
-    let character = _textDocumentPosition.position.character
-    let word = getLineText(text, line, character);
-    let result = new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character)
-    if (result) {
-      return resolve(result)
+    if (fullDocument) {
+      let text = fullDocument.getText();
+      let line = _textDocumentPosition.position.line;
+      let character = _textDocumentPosition.position.character
+      let word = getLineText(text, line, character);
+      let result = new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character)
+      if (result) {
+        return resolve(result)
+      } else {
+        reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to high ligth"))
+      }
     } else {
       reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to high ligth"))
     }
@@ -259,6 +284,7 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
+  Log.get().info(`Called callback of onCompletion. File ${_textDocumentPosition.textDocument.uri}`);
   return new Promise((resolve, reject) => {
     getConfig<string[]>("snippetsRepositories").then(repositories => {
       let line = _textDocumentPosition.position.line;
@@ -272,14 +298,17 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
           .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
           .generateCompletionItems().then((items) => {
+            Log.get().info(`Generated ${items.length} CompletionItems. File: ${_textDocumentPosition.textDocument.uri}`);
             resolve(items);
           }).catch(() => {
-            resolve([]);
+            Log.get().error(`Error loading Completion Items. CobolCompletionItemFactory.generateCompletionItems() is rejected. File: ${_textDocumentPosition.textDocument.uri}`);
+            reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items"))
           })
       } else {
-        reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error load Completion Items"))
+        Log.get().error(`Error loading Completion Items. fullDocument is undefined. File: ${_textDocumentPosition.textDocument.uri}`);
+        reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
       };
-  });
+    });
   });
 });
 
@@ -301,6 +330,7 @@ function getCurrentSourceOfVariableCompletions() {
  * Document formatter
  */
 connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) => {
+  Log.get().info(`Formatting file: ${params.textDocument.uri}`);
   return new Promise((reolve, reject) => {
     let line = params.position.line;
     let column = params.position.character;
@@ -309,16 +339,21 @@ connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) =
       let formatter = new CobolFormatter(line, column, fullDocument!);
       switch (true) {
         case hasTypedEnter(params.ch):
-          return reolve(formatter.formatWhenEnterIsPressed());
+           Log.get().info(`Formatting with enter. File: ${params.textDocument.uri}`);
+           return reolve(formatter.formatWhenEnterIsPressed());
         case params.ch.toUpperCase() == "E":
-          return reolve(formatter.formatWhenEIsPressed());
+           Log.get().info(`Formatting with \"E\". File: ${params.textDocument.uri}`);
+           return reolve(formatter.formatWhenEIsPressed());
         case params.ch.toUpperCase() == "N":
-          return reolve(formatter.formatWhenNIsPressed());
+           Log.get().info(`Formatting with \"N\". File: ${params.textDocument.uri}`);
+           return reolve(formatter.formatWhenNIsPressed());
         default:
-          return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to formatter"))
+          Log.get().error(`Error formatting file: ${params.textDocument.uri}`);
+          return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error formatting"))
       }
     }
-    return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to formatter"))
+    Log.get().error(`Error formatting. fullDocument is undefined. File: ${params.textDocument.uri}`);
+    return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error formatting"))
   });
 });
 
@@ -339,18 +374,22 @@ connection.onInitialized(() => {
   );
 });
 
-connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location | ResponseError<undefined>>  => {
+connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location | ResponseError<undefined>> => {
   return new Promise((resolve, reject) => {
     let fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
       let text = fullDocument.getText();
       let word = getLineText(text, params.position.line, params.position.character);
+      Log.get().info(`Found declaration for ${word} starting`);
       createPromiseForWordDeclaration(text, word, params.textDocument.uri).then((location) => {
+        Log.get().info("Found declaration for " + word + " in " + location.uri + ". Key pressed in " + params.textDocument.uri);
         resolve(location);
       }).catch(() => {
+        Log.get().warning("Could not find declaration for " + word + ". Key pressed in " + params.textDocument.uri);
         resolve(undefined);
       });
     } else {
+      Log.get().error("Error to get the fullDocument");
       reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration"));
     }
   })
@@ -407,9 +446,9 @@ export function createPromiseForWordDeclaration(documentFullText: string, word: 
         resolve(createLocation(uri, position));
       }
     })
-    .catch(() => {
-      reject();
-    });
+      .catch(() => {
+        reject();
+      });
   });
 }
 
@@ -439,7 +478,7 @@ export function callCobolFinder(word: string, documentFullText: string, uri: str
  */
 export function buildCacheFileName(uri: string) {
   var path = new Path(uri).fullPathWin();
-  return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" +  new Path(path).fileName();
+  return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" + new Path(path).fileName();
 }
 
 /**
@@ -470,4 +509,18 @@ export function createLocation(uri: string, position: RechPosition) {
   );
   let fileUri = uri.replace(/\\\\/g, "/").replace("F:", "file:///F%3A");
   return Location.create(fileUri, firstCharRange);
+}
+
+/**
+ * Configures the server logger instance
+ */
+export async function configureServerLog() {
+  if (loggingConfigured) {
+    return;
+  }
+  let loggingActive = await getConfig<boolean>("log");
+  if (loggingActive) {
+    Log.get().setActive(true);
+  }
+  loggingConfigured = true;
 }

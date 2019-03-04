@@ -29,31 +29,22 @@ export class Diagnostician {
    * @param preprocessorResultFileName
    * @param PreprocessCallback
    */
-  public diagnose(
-    textDocument: TextDocument,
+  public diagnose(textDocument: TextDocument,
     PreprocessCallback: (uri: string) => Thenable<string>,
     externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>
   ): Promise<Diagnostic[]> {
     return new Promise((resolve, reject) => {
-      this.findErrorsAndWarnings(
-        textDocument,
-        PreprocessCallback,
-        externalDiagnosticFilter
-      )
-        .then(cobolDiagnostic => {
+      this.findErrorsAndWarnings(textDocument, PreprocessCallback, externalDiagnosticFilter).then(cobolDiagnostic => {
           if (!cobolDiagnostic) {
             reject();
             return;
           }
-          this.extractDiagnostics(cobolDiagnostic)
-            .then(diagnostics => {
-              resolve(diagnostics);
-            })
-            .catch(() => {
-              reject();
-            });
-        })
-        .catch(() => {
+          this.extractDiagnostics(cobolDiagnostic).then(diagnostics => {
+            resolve(diagnostics);
+          }).catch(() => {
+            reject();
+          });
+        }).catch(() => {
           reject();
         });
     });
@@ -108,10 +99,8 @@ export class Diagnostician {
    *
    * @param cobolDiagnostic
    */
-  private extractDiagnostics(
-    cobolDiagnostic: CobolDiagnostic
-  ): Promise<Diagnostic[]> {
-    return new Promise(resolve => {
+  private extractDiagnostics(cobolDiagnostic: CobolDiagnostic): Promise<Diagnostic[]> {
+    return new Promise((resolve, reject) => {
       let diagnostics: Diagnostic[] = [];
       cobolDiagnostic.errors.forEach(diagnostic => {
         diagnostics.push(diagnostic);
@@ -119,7 +108,11 @@ export class Diagnostician {
       cobolDiagnostic.warnings.forEach(diagnostic => {
         diagnostics.push(diagnostic);
       });
-      resolve(diagnostics);
+      if (diagnostics) {
+        return resolve(diagnostics);
+      } else {
+        return reject()
+      }
     });
   }
 }

@@ -1,5 +1,5 @@
 import { Path } from '../commons/path';
-import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn } from 'vscode';
+import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn, workspace } from 'vscode';
 import { RechPosition } from '../commons/rechposition';
 import { Indenta } from '../indent/indent';
 import { GenericExecutor } from '../commons/genericexecutor';
@@ -334,12 +334,43 @@ export class Editor {
   }
 
   /**
+   * Returns an array with the name of all documents currently open in editor
+   */
+  public getOpenDocumentsNames(): string[] {
+    let names: string[] = [];
+    workspace.textDocuments.forEach(currentTextEditor => {
+      names.push(currentTextEditor.fileName);
+    });
+    return names;
+  }
+
+  /**
+   * Opens the specified file ignoring case
+   *
+   * @param file file to be opened
+   * @param callback callback function executed after the file is opened
+   */
+  public openFileInsensitive(file: string, callback?: () => any) {
+    let alreadyOpen = false;
+    let names = this.getOpenDocumentsNames();
+    names.forEach(currentFile => {
+        if (!alreadyOpen && currentFile.toUpperCase() === file.toUpperCase()) {
+            this.openFile(currentFile, callback);
+            alreadyOpen = true;
+        }
+    });
+    if (!alreadyOpen) {
+        this.openFile(file, callback);
+    }
+  }
+
+  /**
    * Opens the specified file
    *
    * @param file file to be opened
    * @param callback callback function executed after the file is opened
    */
-  openFile(file: string, callback?: () => any) {
+  public openFile(file: string, callback?: () => any) {
     let options: TextDocumentShowOptions = {
       viewColumn: ViewColumn.Active,
       preview: false

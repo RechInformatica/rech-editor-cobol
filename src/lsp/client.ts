@@ -44,8 +44,8 @@ export class Client {
 		};
 		// Create the language client and start the client.
 		Client.client = new LanguageClient(
-			'languageServerExample',
-			'Language Server Example',
+			'cobolLanguageServer',
+			'Cobol Language Server',
 			serverOptions,
 			clientOptions
 		);
