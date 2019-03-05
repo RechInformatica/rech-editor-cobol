@@ -95,7 +95,7 @@ export class ParserCobol {
    * @param line
    */
   public getCopyDeclaration(line: string): string | undefined {
-    var match = /^\s+COPY\s+([A-Za-z0-9]+).(?:CPY|CPB).*/i.exec(line);
+    var match = /^\s+COPY\s+([A-Za-z0-9-_]+).(?:CPY|CPB).*/i.exec(line);
     if (match == null) {
       return undefined;
     }

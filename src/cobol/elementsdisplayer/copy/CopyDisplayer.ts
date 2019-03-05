@@ -3,7 +3,7 @@ import { CobolCopy } from "../../CobolCopy";
 import { CopyElement } from "./CopyElement";
 import { Editor } from "../../../editor/editor";
 import { GeradorCobol } from "../../gerador-cobol";
-import { window, workspace } from "vscode";
+import { window } from "vscode";
 import { PositionFinder } from "../../../editor/PositionFinder";
 import { RechPosition } from "../../../commons/rechposition";
 import { Path } from "../../../commons/path";
@@ -55,22 +55,6 @@ export class copyDisplayer {
       editor.openFile(new Path(selectItem.description).fullPathWin())
       this.controller.dispose();
     }));
-    if (copy.getComment()) {
-      this.controller.addElement(
-        new CopyElement("Comment")
-        .setDetail(copy.getComment()!.join(" | "))
-        .setOnSelection((selectItem) => {
-          let obj = selectItem.object
-          if (obj) {
-            let comments = (<CobolCopy>obj).getComment();
-            if (comments) {
-              this.insertCommentInEditor((<CobolCopy>obj).getComment()!)
-              this.controller.dispose();
-            }
-          }
-        })
-        .setObject(copy));
-    }
     if (copy.getHeader()) {
       this.controller.addElement(
         new CopyElement("Header")
