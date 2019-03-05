@@ -26,7 +26,9 @@ export class PositionFinder {
    * Find the line positions of the regex
    *
    * @param regex
+   * @param direction
    * @param startLineToFind
+   * @param returnFrst
    */
   public findPositions(regex: RegExp, direction: number, startLineToFind?: TextLine, returnFrst?: boolean): RechPosition[] | undefined {
     let startLine = 0;
@@ -60,7 +62,7 @@ export class PositionFinder {
     for (let lineNumber = startLine; lineNumber < document.lineCount; lineNumber++) {
       let p = this.findMacherAtLine(regex, lineNumber, document);
       if (p) {
-        positionsToReturn.push(p)
+        positionsToReturn = positionsToReturn.concat(p)
         if (returnFrst) {
           break;
         }
@@ -84,7 +86,7 @@ export class PositionFinder {
     for (let lineNumber = startLine; lineNumber > 0; lineNumber--) {
       let p = this.findMacherAtLine(regex, lineNumber, document);
       if (p) {
-        positionsToReturn.push(p)
+        positionsToReturn = positionsToReturn.concat(p)
         if (returnFrst) {
           break;
         }
@@ -102,12 +104,19 @@ export class PositionFinder {
    * @param lineNumber
    * @param document
    */
-  private findMacherAtLine(regex: RegExp, lineNumber: number, document: TextDocument): RechPosition | undefined {
+  private findMacherAtLine(regex: RegExp, lineNumber: number, document: TextDocument): RechPosition[] | undefined {
+    let result: RechPosition[] = [];
     let lineText = document.lineAt(lineNumber);
     let matcher = lineText.text.match(regex);
     if (matcher) {
-      //Temporariamente está retornando apenas a posição inicial da linha onde encontrou o conteúdo
-      return new RechPosition(lineText.lineNumber, 1);
+      matcher.forEach((match) => {
+        let column = lineText.text.indexOf(match);
+        if (!(column > 0)) {
+          column = 1;
+        }
+        result.push(new RechPosition(lineText.lineNumber, column));
+      })
+      return result;
     }
   }
 

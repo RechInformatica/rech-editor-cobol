@@ -24,6 +24,9 @@ export class ParserCobol {
     if (this.equalsIgnoreReplacing(element, this.getDeclaracaoClasse(line))) {
       return true;
     }
+    if (this.equalsIgnoreReplacing(element, this.getCopyDeclaration(line))) {
+      return true;
+    }
     return false;
   }
 
@@ -82,6 +85,19 @@ export class ParserCobol {
       if (match == null) {
         return undefined;
       }
+    }
+    return match[1];
+  }
+
+  /**
+   * Returns the copy declared in the line
+   *
+   * @param line
+   */
+  public getCopyDeclaration(line: string): string | undefined {
+    var match = /^\s+COPY\s+([A-Za-z0-9]+).(?:CPY|CPB).*/i.exec(line);
+    if (match == null) {
+      return undefined;
     }
     return match[1];
   }

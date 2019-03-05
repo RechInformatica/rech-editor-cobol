@@ -75,8 +75,9 @@ export function activate(_context: any) {
         let editor = new Editor();
         let word = editor.getCurrentWord();
         let buffer = editor.getEditorBuffer();
-        let uri = editor.getPath().fullPathVscode()
-        new ElementsDisplayerFactory().show(word, buffer, uri);
+        let uri = editor.getPath().fullPathVscode();
+        let line = editor.getCurrentRow();
+        new ElementsDisplayerFactory().show(word, buffer, uri, line);
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos12', () => {
         new Editor().setColumn(AREA_B - 1);
