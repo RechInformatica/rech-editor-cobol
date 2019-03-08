@@ -6,6 +6,7 @@ import { TextPosition } from "./textPosition";
 import { File } from "../../commons/file";
 import { Path } from "../../commons/path";
 import { Scan } from "../../commons/Scan";
+import Q from "q";
 
 /**
  * Class conteiner of diagnostcs of cobol language
@@ -43,7 +44,13 @@ export class CobolDiagnosticParser {
       lines.forEach(currentLine => {
         interpreters.push(this.interpretsTheErrorMessage(fileName, pattern, currentLine, externalDiagnosticFilter));
       });
-      Promise.all(interpreters).then((diagnostics) => {
+      Q.allSettled(interpreters).then((results) => {
+        let diagnostics: Diagnostic[] = [];
+        results.forEach((result) => {
+          if (result.state === "fulfilled") {
+            diagnostics.push(result.value!);
+          }
+        });
         resolve(this.buildCobolDiagnostic(diagnostics));
       }).catch(() => {
         reject();

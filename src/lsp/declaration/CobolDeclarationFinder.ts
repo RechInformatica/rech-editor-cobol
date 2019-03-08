@@ -110,7 +110,7 @@ export class CobolDeclarationFinder {
         if (parser.isDeclaration(term, iterator.lineContent)) {
           let match = <RegExpMatchArray>/.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
           let line = parseInt(match[1]) - 1;
-          let file = path.fullPath();
+          let file = path.fileName();
           if (match[2]) {
             file = match[2];
           }
