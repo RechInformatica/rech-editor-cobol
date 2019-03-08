@@ -61,6 +61,13 @@ export class ElementsDisplayer {
   }
 
   /**
+   * Dispose the displayer
+   */
+  public hide() {
+    this.quickPick.hide()
+  }
+
+  /**
    * Add element into displayer
    *
    * @param element

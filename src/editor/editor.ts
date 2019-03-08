@@ -78,6 +78,18 @@ export class Editor {
   }
 
   /**
+   * Select a range in the text
+   *
+   * @param start
+   * @param end
+   */
+  public selectRange(start: RechPosition, end: RechPosition) {
+    this.editor.selection = new Selection(
+      new Position(start.line, start.column),
+      new Position(end.line, end.column)
+    );
+  }
+  /**
   * Returns the text of the specified range
   */
   private getRangeBuffer(range: Range) {
