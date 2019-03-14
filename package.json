@@ -318,7 +318,7 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "package": "vsce package --out f:/div/VSCode/extension/rech-editor-cobol/rech-editor-cobol.vsix",
+        "package": "vsce package --out F:/DIV/VSCode/extension/market/rech-editor-cobol/rech-editor-cobol.vsix",
         "compile": "tsc -p ./",
         "compile:client": "tsc -p ./",
         "compile:server": "tsc -p ./",
