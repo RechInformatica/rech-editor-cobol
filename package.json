@@ -2,7 +2,7 @@
     "name": "rech-editor-cobol",
     "displayName": "Rech COBOL",
     "description": "Edit Cobol files with Visual Studio Code",
-    "version": "1.0.16",
+    "version": "1.0.17",
     "publisher": "rechinformatica",
     "engines": {
         "vscode": "^1.26.0"
@@ -318,7 +318,7 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "package": "vsce package --out f:/div/VSCode/extension/rech-editor-cobol/rech-editor-cobol.vsix",
+        "package": "vsce package --out F:/DIV/VSCode/extension/market/rech-editor-cobol/rech-editor-cobol.vsix",
         "compile": "tsc -p ./",
         "compile:client": "tsc -p ./",
         "compile:server": "tsc -p ./",
