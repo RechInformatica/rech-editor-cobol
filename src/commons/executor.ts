@@ -50,9 +50,6 @@ export class Executor {
     onFinish: (errorLevel: number) => void): Promise<{ stdout: string; stderr: string }> {
     return new Promise<{ stdout: string; stderr: string }>(
       (resolve, reject) => {
-        if (!options.cwd) {
-          options.cwd = require("os").tmpdir()
-        }
         let proc = cp.exec(command, options, (error, stdout, stderr) => {
           if (error) {
             reject({ error, stdout, stderr });
@@ -78,7 +75,7 @@ export class Executor {
     const channel = this.getOutputChannel(name);
     channel.clear;
     channel.show(true);
-    this.runOnChannel(channel, command, { cwd: vscode.workspace.rootPath },onFinish).catch(err => {
+    this.runOnChannel(channel, command, { }, onFinish).catch(err => {
       if (err.stderr) {
         channel.appendLine(err.stderr);
       }
