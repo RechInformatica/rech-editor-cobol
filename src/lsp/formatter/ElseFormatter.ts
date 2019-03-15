@@ -32,21 +32,20 @@ export class ElseFormatter implements FormatterInterface {
    * @param line current line
    * @param lines document lines
    */
-  private findStartColumn(line: number, lines: string[]) {
-    let isClose = false;
+  public findStartColumn(line: number, lines: string[]) {
+    let depth = 0;
     for (let i = line; i > 0; i--) {
       if (CompletionUtils.isTheParagraphDeclaration(lines[i])) {
         break
       }
       if (lines[i].trim().toLowerCase().startsWith("end-if")) {
-        isClose = true;
-        continue;
+        depth++;
+      } else {
+        if (lines[i].trim().toLowerCase().startsWith("if ")) {
+          depth--;
+        }
       }
-      if (isClose && lines[i].trim().toLowerCase().startsWith("if ")) {
-        isClose = false;
-        continue;
-      }
-      if (IfFormatter.IF_REGEXP.exec(lines[i])) {
+      if (depth < 0) {
         return CompletionUtils.countSpacesAtBeginning(lines[i]);
       }
     }
