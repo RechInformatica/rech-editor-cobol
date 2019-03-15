@@ -50,6 +50,9 @@ export class Executor {
     onFinish: (errorLevel: number) => void): Promise<{ stdout: string; stderr: string }> {
     return new Promise<{ stdout: string; stderr: string }>(
       (resolve, reject) => {
+        if (!options.cwd) {
+          options.cwd = require("os").tmpdir()
+        }
         let proc = cp.exec(command, options, (error, stdout, stderr) => {
           if (error) {
             reject({ error, stdout, stderr });
@@ -82,7 +85,7 @@ export class Executor {
       if (err.stdout) {
         channel.appendLine(err.stdout);
       }
-      channel.appendLine("executeOutputChannelfailed!\n" + err);
+      channel.appendLine("executeOutputChannelfailed!\n" + err.error);
     });
   }
 
