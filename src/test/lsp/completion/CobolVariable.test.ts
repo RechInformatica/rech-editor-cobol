@@ -421,4 +421,28 @@ describe('Cobol variable get length test', () => {
         valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
         expect(10).to.equal(valiable.getByteSize());
     });
+    it('Check size of variable without redefines clause', () => {
+        let line = 100
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(20).to.equal(valiable.getByteSize());
+    });
+    it('Check size of variable with redefines clause', () => {
+        let line = 101
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(20).to.equal(valiable.getByteSize());
+    });
+    it('Check size of variable with redefines clause but ignoring redefined value', () => {
+        let line = 101
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(0).to.equal(valiable.getByteSizeIgnoringRedefines());
+    });
+    it('Check size of parent variable with redefines of children elements', () => {
+        let line = 102
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(30).to.equal(valiable.getByteSize());
+    });
 });

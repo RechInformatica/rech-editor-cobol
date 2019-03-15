@@ -97,4 +97,13 @@
            05 w-pix1-no-value     pic is x.
            05 w-pi91-no-value     pic is 9.
            05 w-pi910-no-value    pic is 9(10).
+      *>-> Testes com redefines
+       01  w-var-sem-redefines    pic is x(20)    value is spaces.
+       01  w-var-com-redefines    redefines w-var-sem-redefines pic is x(20).
+       01  w-pai-de-redefines.
+           05 w-primeira-filha-sem-redefines pic is x(30).
+           05 w-redefines-primeira-filha redefines w-primeira-filha-sem-redefines.
+           05 w-novo-redefines-primeira-filha redefines w-primeira-filha-sem-redefines.
+           05 filler    redefines w-primeira-filha-sem-redefines.
+              10 wfil-ven         pic is x(03)   occurs 10 times.
       *>--------------------------------------------- CALICM.cbl -----------------------------------------------------<*
