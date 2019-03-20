@@ -108,7 +108,7 @@ export class CobolCompletionItemFactory {
    * @param lines Cobol source code lines
    */
   public generateCompletionItems(): Promise<CompletionItem[]> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.generateConditionalCompletionItems().then((result) => {
         if (result.length > 0) {
           let items: Promise<CompletionItem[]>[] = [];
@@ -122,6 +122,8 @@ export class CobolCompletionItemFactory {
         } else {
           resolve([]);
         }
+      }).catch(() => {
+        reject();
       })
     });
   }
