@@ -118,6 +118,8 @@ export class CobolCompletionItemFactory {
           this.createWrappingPromise(items).then((item) => {
             result = result.concat(item);
             resolve(result);
+          }).catch(() => {
+            resolve([]);
           })
         } else {
           resolve([]);
