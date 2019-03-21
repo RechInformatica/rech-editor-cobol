@@ -554,7 +554,7 @@ export class Editor {
   /**
    * Indent the selection Buffer
    */
-  indent(alignment: string) {
+  async indent(alignment: string) {
     // If doesn't have selection, backup actual cursor to restore it later
     let restoreCursor: RechPosition;
     if (this.getSelectionRange().length == 1 && this.getSelectionRange()[0].isEmpty) {
@@ -568,7 +568,7 @@ export class Editor {
       return;
     }
     //Indent the selection range
-    indenter.indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), (buffer) => {
+    await indenter.indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), (buffer) => {
       this.replaceBuffer(buffer, restoreCursor);
     }, (bufferErr) => { this.showWarningMessage(bufferErr); });
   }

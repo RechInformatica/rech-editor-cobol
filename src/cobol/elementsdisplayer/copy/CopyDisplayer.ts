@@ -59,12 +59,12 @@ export class copyDisplayer {
       this.controller.addElement(
         new CopyElement("Header")
         .setDetail(copy.getHeader()!.join(" | "))
-        .setOnSelection((selectItem) => {
+        .setOnSelection(async (selectItem) => {
           let obj = selectItem.object
           if (obj) {
             let comments = (<CobolCopy>obj).getHeader();
             if (comments) {
-              this.insertCommentInEditor((<CobolCopy>obj).getHeader()!)
+              await this.insertCommentInEditor((<CobolCopy>obj).getHeader()!)
               this.controller.dispose();
             }
           }

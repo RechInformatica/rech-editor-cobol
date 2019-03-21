@@ -1,0 +1,27 @@
+{
+    "defaultSeverity": "error",
+    "plugins": [],
+    "jsRules": {},
+    //"extends": "tslint:recommended",
+    "rules": {
+        "no-floating-promises": {
+            "severity": "error",
+            "options": [
+                "Promise",
+                "Q.Promise"
+            ]
+        },
+        "deprecation": {
+            "severity": "warning"
+        },
+        "no-duplicate-imports": true,
+        "no-duplicate-switch-case": true,
+        "no-magic-numbers": {
+            "severity": "warning"
+        },
+        "prefer-const": {
+            "severity": "warning"
+        }
+    },
+    "rulesDirectory": []
+}

@@ -26,7 +26,7 @@ export class ElementsDisplayerFactory {
         window.showWarningMessage(`Element ${word} not found`);
         return
       })
-    })
+    }).catch()
   }
 
   /**

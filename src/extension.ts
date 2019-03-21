@@ -36,25 +36,25 @@ export function activate(_context: any) {
         new GeradorCobol().endLineToggle(',');
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInvertMoveOperators', () => {
-        new GeradorCobol().invertMoveOperators();
+        new GeradorCobol().invertMoveOperators().then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInsertStartComment', () => {
-        new GeradorCobol().insertStartComment();
+        new GeradorCobol().insertStartComment().then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInsertEndComment', () => {
-        new GeradorCobol().insertStartEndComment();
+        new GeradorCobol().insertStartEndComment().then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInsertCommentLine', () => {
-        new GeradorCobol().insertCommentLine();
+        new GeradorCobol().insertCommentLine().then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.insertTodo', () => {
-        new GeradorCobol().insertCommentLineTodo();
+        new GeradorCobol().insertCommentLineTodo().then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.centralizeComment', () => {
-        new GeradorCobol().centralizeComment();
+        new GeradorCobol().centralizeComment().then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cobolInsertLineSeparator', () => {
-        new GeradorCobol().insertLineSeparator();
+        new GeradorCobol().insertLineSeparator().then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.findNextParagraph', () => {
         new Editor().findNextParagraph();
@@ -69,7 +69,7 @@ export function activate(_context: any) {
         new TabStopper().processTabKey(false);
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos51', () => {
-        new Editor().setColumn(COLUNA_VALUE - 1);
+        new Editor().setColumn(COLUNA_VALUE - 1).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.showElementProperties', () => {
         let editor = new Editor();
@@ -80,19 +80,19 @@ export function activate(_context: any) {
         new ElementsDisplayerFactory().show(word, buffer, uri, line);
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos12', () => {
-        new Editor().setColumn(AREA_B - 1);
+        new Editor().setColumn(AREA_B - 1).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos30', () => {
-        new Editor().setColumn(COLUNA_B - 1);
+        new Editor().setColumn(COLUNA_B - 1).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos20', () => {
-        new Editor().setColumn(COLUNA_A - 1);
+        new Editor().setColumn(COLUNA_A - 1).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos35', () => {
-        new Editor().setColumn(COLUNA_C - 1);
+        new Editor().setColumn(COLUNA_C - 1).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos08', () => {
-        new Editor().setColumn(AREA_A - 1);
+        new Editor().setColumn(AREA_A - 1).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeParagraphSource', () => {
         SourceOfCompletions.toggleTheParagraphSource();

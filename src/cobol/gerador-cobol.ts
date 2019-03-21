@@ -190,15 +190,15 @@ export class GeradorCobol {
     let lineText = this.editor.getCurrentLine().trimRight();
     switch (true) {
       case lineText.length > Colunas.COLUNA_FIM: {
-        this.removeExceedingDots(lineText);
+        this.removeExceedingDots(lineText).then().catch();
         break;
       }
       case lineText.length == Colunas.COLUNA_FIM: {
-        this.removeDotsAtEnd(lineText);
+        this.removeDotsAtEnd(lineText).then().catch();
         break;
       }
       default: {
-        this.fillLineWithDots(lineText);
+        this.fillLineWithDots(lineText).then().catch();
       }
     }
     await this.editor.setCursorPosition(originalPosotion);

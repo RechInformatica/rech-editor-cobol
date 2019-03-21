@@ -319,13 +319,14 @@
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "package": "vsce package --out F:/DIV/VSCode/extension/market/rech-editor-cobol/rech-editor-cobol.vsix",
-        "compile": "tsc -p ./",
+        "compile": "npm run tslint && tsc -p ./",
         "compile:client": "tsc -p ./",
         "compile:server": "tsc -p ./",
         "watch:client": "tsc -watch -p ./",
         "watch:server": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && mocha -r ts-node/register ./src/test/**/*.test.ts"
+        "test": "npm run compile && mocha -r ts-node/register ./src/test/**/*.test.ts",
+        "tslint": "tslint --project tsconfig.json --config tslint.json"
     },
     "dependencies": {
         "@types/chai": "^4.1.6",
@@ -335,15 +336,16 @@
         "iconv-lite": "^0.4.24",
         "q": "^1.4.1",
         "ts-node": "^7.0.1",
+        "tslint": "^5.14.0",
         "vscode-languageclient": "^4.1.4",
         "vscode-languageserver": "^4.1.3"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.21",
         "@types/mocha": "^2.2.48",
         "@types/node": "^8.10.25",
         "mocha": "^5.2.0",
-        "vsce": "^1.53.0"
+        "typescript": "^2.9.2",
+        "vsce": "^1.53.0",
+        "vscode": "^1.1.21"
     }
 }

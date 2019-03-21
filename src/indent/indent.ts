@@ -136,7 +136,7 @@ export class Indenta {
    * @param callback callback executed when no indenting errors are found
    * @param err callback executed when indenting errors are found
    */
-  public indenta(alignment: string, targetSourceCode: string[], sourceFileName: string, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
+  public async indenta(alignment: string, targetSourceCode: string[], sourceFileName: string, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
     let inputFile = this.createInputFileInstance();
     if (inputFile.exists()) {
       return;
@@ -159,7 +159,7 @@ export class Indenta {
       errorFile.delete();
       inputFile.delete();
     } else {
-      indentFile.loadBuffer(INDENT_FILE_CHARSET).then((buffer) => {
+      await indentFile.loadBuffer(INDENT_FILE_CHARSET).then((buffer) => {
         let identBuffer = iconv.encode(buffer, "binary");
         callback([iconv.decode(identBuffer, "win1252")]);
         indentFile.delete();
