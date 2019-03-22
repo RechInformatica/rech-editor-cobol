@@ -40,6 +40,7 @@ import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
 import { VariableCompletion } from "./completion/variable/VariableCompletion";
 import { VariableCompletionFactory } from "./completion/variable/VariableCompletionFactory";
 import { Log } from "../commons/Log";
+import { BufferSplitter } from "../commons/BufferSplitter";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -158,7 +159,7 @@ export function loadFolding(document: TextDocumentChangeEvent) {
     let text = fullDocument.getText();
     getConfig<boolean>("folding").then(foldingConfig => {
       if (foldingConfig) {
-        new CobolFoldFactory().fold(uri, text.split("\n"));
+        new CobolFoldFactory().fold(uri, BufferSplitter.split(text));
       }
     });
   }
@@ -293,7 +294,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
       let cacheFileName = buildCacheFileName(uri);
       let fullDocument = documents.get(uri);
       if (fullDocument) {
-        new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"), uri)
+        new CobolCompletionItemFactory(line, column, BufferSplitter.split(fullDocument.getText()), uri)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
           .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
@@ -421,7 +422,7 @@ export function getLineText(
   line: number,
   column: number
 ) {
-  var currentLine = documentText.split("\n")[line];
+  var currentLine = BufferSplitter.split(documentText)[line];
   return new CobolWordFinder().findWordAt(currentLine, column);
 }
 

@@ -8,6 +8,7 @@ import { ExpandedSourceManager } from "../../../cobol/ExpandedSourceManager";
 import { CompletionUtils } from "../../commons/CompletionUtils";
 import { VariableInsertTextBuilder } from "./VariableInsertTextBuilder";
 import { VariableNameInsertTextBuilder } from "./VariableNameInsertTextBuilder";
+import { BufferSplitter } from "../../../commons/BufferSplitter";
 
 /**
  * Class to generate LSP Completion Items for Cobol variables
@@ -38,7 +39,6 @@ export class VariableCompletion implements CompletionInterface {
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve, reject) => {
             this.currentLines = lines;
-            let lineWithoutEnter = lines[line].replace("\r", "").replace("\n", "");
             let items: CompletionItem[] = [];
             this.loadCache().catch(() => {
                 reject();
@@ -47,12 +47,12 @@ export class VariableCompletion implements CompletionInterface {
             let cache = VariableCompletion.cache.get(uri);
             if (cache) {
                 for (let value of cache.values()){
-                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lineWithoutEnter, column);
+                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lines[line], column);
                     items.push(value);
                 }
             } else {
                 for (let value of this.generateItemsFromCurrentBuffer(this.currentLines, false).values()) {
-                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lineWithoutEnter, column);
+                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lines[line], column);
                     items.push(value);
                 }
             }
@@ -104,7 +104,7 @@ export class VariableCompletion implements CompletionInterface {
                 this.sourceOfCompletions.then((sourceOfCompletions) => {
                     if (sourceOfCompletions == "expanded") {
                         ExpandedSourceManager.getExpandedSource(this.uri!).then((buffer) => {
-                            let result = this.generateItemsFromCurrentBuffer(buffer.toString().split("\n"), true);
+                            let result = this.generateItemsFromCurrentBuffer(BufferSplitter.split(buffer.toString()), true);
                             VariableCompletion.cache.set(this.uri!, result);
                             return resolve();
                         }).catch(() => {

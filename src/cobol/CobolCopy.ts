@@ -4,6 +4,7 @@ import { puts } from "util";
 import { CobolDocParser } from "./rechdoc/CobolDocParser";
 import { Path } from "../commons/path";
 import { File } from "../commons/file";
+import { BufferSplitter } from "../commons/BufferSplitter";
 
 /**
  * Class representing a Cobol copy
@@ -81,7 +82,7 @@ export class CobolCopy {
         if (!copy.exists()) {
             return;
         }
-        let copyBuffer = copy.loadBufferSync("latin1").split("\n");
+        let copyBuffer = BufferSplitter.split(copy.loadBufferSync("latin1"));
         let comment = new CobolDocParser().parseSingleLineCobolDoc(copyBuffer[1]).comment;
         if (!(comment.length > 0)) {
             return;

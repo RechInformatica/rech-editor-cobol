@@ -35,7 +35,7 @@ export class AssignerCommandParser {
       return false;
     }
     if (elements[2] != undefined && elements[3] == undefined) {
-      return this.removeEnters(lineText).endsWith(" ");
+      return lineText.endsWith(" ");
     }
     let clauseUpper = clause.toUpperCase();
     let splittedUpper = elements[3].toUpperCase().trim();
@@ -49,17 +49,8 @@ export class AssignerCommandParser {
    * @param lineText current line text
    */
   private splitCommandElements(lineText: string): RegExpExecArray | null {
-    let trimmedLine = this.removeEnters(lineText).trim();
+    let trimmedLine = lineText.trim();
     return /(MOVE|SET|SUBTRACT|ADD)(\s+(?:".*"|'.*'|[A-Za-z0-9-\(\)]+))?(\s+(?:[A-Za-z]+))?/gi.exec(trimmedLine);
-  }
-
-  /**
-   * Remove enters from the specified line text
-   *
-   * @param lineText current line text
-   */
-  private removeEnters(lineText: string) {
-    return lineText.replace("\n", "").replace("\r", "");
   }
 
 }

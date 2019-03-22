@@ -3,6 +3,7 @@
 import { File } from '../commons/file';
 import { Executor } from '../commons/executor';
 import * as iconv from 'iconv-lite';
+import { BufferSplitter } from '../commons/BufferSplitter';
 
 /** Time in millis representing an old indent file */
 const INDENT_OLD_FILE_IN_MILLIS: number = 3000;
@@ -36,7 +37,7 @@ export class Indenta {
   private buildBufferOfCommentary(targetSourceCode: string[]) {
     let buffer: string[] = [];
     targetSourceCode.forEach((occurs) => {
-      occurs.split("\n").forEach((line) => {
+      BufferSplitter.split(occurs).forEach((line) => {
         line = line.replace(/\*>->/g, "").replace(/\n/g, " ").trim();
         if (line.startsWith("...")) {
           line = line.replace("...", "");
@@ -118,7 +119,7 @@ export class Indenta {
   public isAllCommentaryLines(buffer: string[]) {
     let result = true;
     buffer.forEach((occurs) => {
-      occurs.split("\n").forEach((line) => {
+      BufferSplitter.split(occurs).forEach((line) => {
         if (!line.trimLeft().startsWith("*>->") && line !== "") {
           result = false;
         }

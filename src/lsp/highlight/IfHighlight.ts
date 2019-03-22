@@ -1,6 +1,7 @@
 
 import { HighlightInterface } from "./HighlightInterface";
 import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
+import { BufferSplitter } from "../../commons/BufferSplitter";
 
 /** Terms of block */
 const BEGINBLOCKTERM = "if"
@@ -22,7 +23,7 @@ export class IfHighlight implements HighlightInterface {
 
     positions(text: TextDocument, _word: string, currentLine: number, _currentCharacter: number): DocumentHighlight[]{
         let results: DocumentHighlight[] = []
-        let buffer = text.getText().split("\n");
+        let buffer = BufferSplitter.split(text.getText());
         let currentLineContent = buffer[currentLine];
         let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
         let beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
@@ -69,7 +70,7 @@ export class IfHighlight implements HighlightInterface {
      * @param commandColumn
      */
     private findLineOfBlockTerm(text: TextDocument, currentLine: number, term: string, commandColumn: number, forward: boolean) {
-        let buffer = text.getText().split("\n");
+        let buffer = BufferSplitter.split(text.getText());
         let index = currentLine;
         while ((forward && index < buffer.length) || (!forward && index > 0)) {
             let line = buffer[index];

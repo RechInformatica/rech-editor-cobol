@@ -7,6 +7,7 @@ import { File } from "../../commons/file";
 import { Path } from "../../commons/path";
 import { Scan } from "../../commons/Scan";
 import Q from "q";
+import { BufferSplitter } from "../../commons/BufferSplitter";
 
 /**
  * Class conteiner of diagnostcs of cobol language
@@ -39,7 +40,7 @@ export class CobolDiagnosticParser {
   private extractDiagnostic(preprocResult: string, fileName: string, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean> ): Promise<CobolDiagnostic> {
     return new Promise((resolve, reject) => {
       let interpreters: Array<Promise<Diagnostic>> = [];
-      let lines = preprocResult.split("\n");
+      let lines = BufferSplitter.split(preprocResult);
       let pattern = /\*\*\*\sWarning:\s(.*);\sfile\s=\s([A-Za-z0-9.]+),\sline\s=\s(\d+)\s?(\(Erro\))?/;
       lines.forEach(currentLine => {
         interpreters.push(this.interpretsTheErrorMessage(fileName, pattern, currentLine, externalDiagnosticFilter));
@@ -216,7 +217,7 @@ export class CobolDiagnosticParser {
     if (result) {
       return result;
     }
-    let length = this.sourceLines.split("\n").length
+    let length = BufferSplitter.split(this.sourceLines).length
     return {
       start: {
         line: length,
