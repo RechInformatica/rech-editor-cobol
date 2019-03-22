@@ -20,10 +20,12 @@ export class CobolFoldFactory {
   public static foldingCache: Map<string, FoldingRange[]> = new Map()
 
   public fold(uri: string, buffer: string[]): Promise<FoldingRange[]> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.breakBlocks(buffer).then ((result) => {
         CobolFoldFactory.foldingCache.set(uri, result);
         resolve(result);
+      }).catch(() => {
+        reject();
       });
     });
   }

@@ -18,6 +18,6 @@ describe("Buffer scan functions", () => {
         }
       });
       done();
-    });
+    }).catch();
   });
 });

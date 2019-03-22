@@ -53,7 +53,7 @@ export class Client {
 		Client.client.start();
 		Client.client.onReady().then(() => {
 			Client.configureClientWhenReady();
-		});
+		}).catch();
 	}
 
 	/**

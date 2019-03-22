@@ -63,9 +63,11 @@ export class CobolDeclarationFinder {
           return resolve(result);
         } else {
           if (expandSource) {
-            new ExpandedSourceManager(uri).expandSource();
+            new ExpandedSourceManager(uri).expandSource().then(()=>{}).catch(() => {});
             this.findDeclarationWithPreproc(term, uri, false).then((result) => {
               return resolve(result);
+            }).catch(() => {
+              return reject();
             })
           } else {
             return reject();

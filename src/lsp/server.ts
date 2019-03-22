@@ -95,7 +95,7 @@ connection.onRequest("custom/findDeclarationPosition", (word: string, fullDocume
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
-  validateTextDocument(change.document, "onChange");
+  validateTextDocument(change.document, "onChange").then().catch();
   // Clear the folding cache
   // Does this not folding if the source has any changes
   CobolFoldFactory.foldingCache.delete(change.document.uri);
@@ -107,25 +107,25 @@ documents.onDidChangeContent(change => {
 documents.onDidSave(document => {
   let uri = document.document.uri;
   // Validate the document
-  validateTextDocument(document.document, "onSave");
+  validateTextDocument(document.document, "onSave").then().catch();
   // Update the folding
   loadFolding(document);
   connection.client.register(FoldingRangeRequest.type, document);
   // Update the expanded source
-  new ExpandedSourceManager(uri).expandSource()
+  new ExpandedSourceManager(uri).expandSource().then().catch()
   // Clear the variableCompletion cache
   VariableCompletion.removeCache(uri);
 })
 
 // If the document opened
 documents.onDidOpen(document => {
-  configureServerLog();
+  configureServerLog().then().catch();
   // Validate the document
-  validateTextDocument(document.document, true);
+  validateTextDocument(document.document, true).then().catch();
   // Load the folding
   loadFolding(document);
   // Load the expanded source
-  new ExpandedSourceManager(document.document.uri).expandSource();
+  new ExpandedSourceManager(document.document.uri).expandSource().then().catch();
 });
 
 // If the document closed
@@ -159,7 +159,7 @@ export function loadFolding(document: TextDocumentChangeEvent) {
     let text = fullDocument.getText();
     getConfig<boolean>("folding").then(foldingConfig => {
       if (foldingConfig) {
-        new CobolFoldFactory().fold(uri, BufferSplitter.split(text));
+        new CobolFoldFactory().fold(uri, BufferSplitter.split(text)).then().catch();
       }
     });
   }
