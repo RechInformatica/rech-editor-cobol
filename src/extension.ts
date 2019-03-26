@@ -10,7 +10,9 @@ import { CustomDecorator } from './decoration/CustomDecorator';
 import { SourceOfCompletions } from './lsp/commons/SourceOfCompletions';
 import { ElementsDisplayerFactory } from './cobol/elementsdisplayer/ElementsDisplayerFactory';
 import { Log } from './commons/Log';
-import { configuration } from './helpers/configuration';
+import { configuration, Configuration } from './helpers/configuration';
+import { GenericExecutor } from './commons/genericexecutor';
+import { cobolDiagnosticFilter, CobolDiagnosticFilter } from './cobol/diagnostic/cobolDiagnosticFilter';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -100,6 +102,49 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeVariableSource', () => {
         SourceOfCompletions.toggleTheVariableSource();
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.definesSourceExpander', () => {
+        SourceOfCompletions.toggleTheVariableSource();
+    }));
+    defineSourceExpander()
+    definePreprocessor()
+    defineDianosticConfigs()
+}
+
+/**
+ * Sets the global source expander which is responsible for executing Cobol Preprocessor
+ */
+function defineSourceExpander() {
+    const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("sourceExpanderFunction");
+    commands.executeCommand(commandToConfigSourceExpander).then((sourceExpander) => {
+        if (sourceExpander) {
+            Editor.setSourceExpander(<GenericExecutor>sourceExpander)
+        }
+    });
+}
+
+/**
+ * Sets the global source compile which is responsible for executing Cobol Compile
+ */
+function definePreprocessor() {
+    const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("preprocessorFunction");
+    commands.executeCommand(commandToConfigSourceExpander).then((preproc) => {
+        if (preproc) {
+            Editor.setPreprocessor(<GenericExecutor>preproc);
+        }
+    });
+}
+
+/**
+ * Sets configurations for Cobol source diagnostic
+ */
+function defineDianosticConfigs() {
+    const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("dianosticProperties");
+    commands.executeCommand(commandToConfigSourceExpander).then((cobolDiagnosticFilterProperties) => {
+        if (cobolDiagnosticFilterProperties) {
+            cobolDiagnosticFilter.setAutoDiagnostic((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).getAutoDiagnostic());
+            cobolDiagnosticFilter.setNoShowWarnings((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).getNoShowWarnings());
+        }
+    });
 }
 
 // this method is called when your extension is deactivated

@@ -4,7 +4,7 @@ import { configuration } from "../../helpers/configuration";
 /**
  * Class to filter and configure diagnostics
  */
-class CobolDiagnosticFilter {
+export class CobolDiagnosticFilter {
 
   /** Wheter auto diagnostic is active */
   private autoDiagnostic: "onChange" | "onSave" | boolean = false;
@@ -24,6 +24,13 @@ class CobolDiagnosticFilter {
    */
   public setAutoDiagnostic(autoDiagnostic: "onChange" | "onSave" | boolean): void {
     this.autoDiagnostic = autoDiagnostic;
+  }
+
+  /**
+   * Sets the warnings that should not be considered in diagnostics
+   */
+  public getNoShowWarnings(): string[] | undefined {
+    return this.noShowWarnings;
   }
 
   /**

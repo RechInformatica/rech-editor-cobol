@@ -1,4 +1,5 @@
 import { Editor } from './editor';
+import { Log } from '../commons/Log';
 
 /**
  * Class to expand Cobol source codes
@@ -21,10 +22,12 @@ export class SourceExpander {
         executor.setPath(currentFile).exec(cacheFile).then(() => {
           resolve();
         }).catch(() => {
+          Log.get().error("Fatal error to expand the source");
           reject();
         });
       } else {
-        reject();
+        Log.get().warning("Editor.SourceExpander was undefined");
+        resolve();
       }
     });
   }
