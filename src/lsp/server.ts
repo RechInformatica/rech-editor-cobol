@@ -173,16 +173,19 @@ export function loadFolding(document: TextDocumentChangeEvent) {
 export async function validateTextDocument(textDocument: TextDocument, event: "onSave" | "onChange" | boolean): Promise<void> {
   return getAutoDiagnostic().then(autodiagnostic => {
     if (autodiagnostic && (event === true || autodiagnostic == event)) {
-      let document = documents.get(textDocument.uri)
+      const document = documents.get(textDocument.uri)
       if (document) {
-        let text = document.getText();
+        const text = document.getText();
         Log.get().info("Diagnose from " + document.uri + " starting");
         new Diagnostician(text).diagnose(
           textDocument,
-          fileName => {
+          (fileName) => {
             return sendExternalPreprocessExecution(fileName);
           },
-          message => {
+          (fileName) => {
+            return sendExternalGetCopyHierarchy(fileName);
+          },
+          (message) => {
             return externalDiagnosticFilter(message);
           }
         ).then(diagnostics => {
@@ -213,6 +216,15 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
 export function sendExternalPreprocessExecution(uri: string) {
   var files = [uri];
   return connection.sendRequest<string>("custom/runPreprocessor", [files]);
+}
+
+/**
+ * Sends a request to the client for return the Copy Hierarchy of source
+ *
+ * @param uri current URI of the file open in editor
+ */
+export function sendExternalGetCopyHierarchy(uri: string) {
+  return connection.sendRequest<string>("custom/runCopyHierarchy", uri);
 }
 
 /**

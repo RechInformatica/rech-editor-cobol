@@ -74,7 +74,7 @@ export class CobolDiagnosticPreprocManager {
     file: File,
     errorCallback: () => any
   ) {
-    let currentPendingCallbacks = CobolDiagnosticPreprocManager.pendingCallbacks;
+    const currentPendingCallbacks = CobolDiagnosticPreprocManager.pendingCallbacks;
     CobolDiagnosticPreprocManager.pendingCallbacks = [];
     PreprocessCallback(file.fileName).then(buffer => {
       CobolDiagnosticPreprocManager.PreprocessCallbackCalled = false;

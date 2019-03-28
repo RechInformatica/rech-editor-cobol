@@ -6,7 +6,6 @@ import { GenericExecutor } from '../commons/genericexecutor';
 import * as path from 'path';
 import * as fs from 'fs';
 import { PositionFinder } from './PositionFinder';
-import { File } from '../commons/file';
 
 /**
  * Class to manipulate vscode editor
@@ -16,6 +15,8 @@ export class Editor {
   private editor: TextEditor;
   /** Source expander function */
   private static sourceExpander: GenericExecutor;
+  /** function to return the copy hierarchy */
+  private static copyHierarchy: GenericExecutor;
   /** Source preprocessor function */
   private static preprocessor: GenericExecutor;
 
@@ -41,7 +42,7 @@ export class Editor {
    * Returns the selected text
    */
   getSelectionBuffer() {
-    let buffer: string[] = new Array();
+    const buffer: string[] = new Array();
     this.editor.selections.forEach(element => {
       buffer.push(this.getRangeBuffer(new Range(element.start, element.end)));
     });
@@ -52,7 +53,7 @@ export class Editor {
    * Returns the range of the current selection
    */
   private getSelectionRange() {
-    let range: Range[] = new Array();
+    const range: Range[] = new Array();
     this.editor.selections.forEach(element => {
       range.push(new Range(element.start, element.end));
     });
@@ -63,7 +64,7 @@ export class Editor {
    * Defines and editor multi selections
    */
   private setSelectionsRange(ranges: Range[]) {
-    let selects: Selection[] = new Array();
+    const selects: Selection[] = new Array();
     ranges.forEach(range => {
       selects.push(new Selection(range.start, range.end))
     });
@@ -111,7 +112,7 @@ export class Editor {
    * Adjusts selection to select the whole line
    */
   selectWholeLines() {
-    let ranges: Range[] = new Array();
+    const ranges: Range[] = new Array();
     // Adjusts each range to fill whole line with selection
     this.getSelectionRange().forEach(range => {
       if (range.isEmpty || range.end.character != 0) {
@@ -127,7 +128,7 @@ export class Editor {
    * Returns the current word
    */
   getCurrentWord() {
-    let range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÁÂÀãÃÊËÈÍÎÏÌÓÔÒõÕÚÛÙüÉì_\-])+/g);
+    const range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÞÂÀãÃÊËÈÞÞÞÌÓÔÒõÕÚÛÙüÉì_\-])+/g);
     if (range === undefined) {
       return '';
     }
@@ -216,9 +217,9 @@ export class Editor {
    * @param Positions
    */
   setCursors(positions: RechPosition[]) {
-    let ranges: Range[] = new Array();
+    const ranges: Range[] = new Array();
     positions.forEach(position => {
-      let p = new Position(position.line, position.column);
+      const p = new Position(position.line, position.column);
       ranges.push(new Range(p, p));
     });
     this.setSelectionsRange(ranges);
@@ -229,8 +230,8 @@ export class Editor {
    * Defines the cursor position for internal usage since it depends on VSCode API
    */
   setCursorPosition(position: RechPosition) {
-    let cursor = new Position(position.line, position.column);
-    let range = new Range(cursor, cursor);
+    const cursor = new Position(position.line, position.column);
+    const range = new Range(cursor, cursor);
     this.editor.revealRange(range, 2);
     return this.setSelectionRange(range);
   }
@@ -240,7 +241,7 @@ export class Editor {
    * PS: works with multiple cursors
    */
   getCursors() {
-    let cursors: RechPosition[] = new Array();
+    const cursors: RechPosition[] = new Array();
     this.editor.selections.forEach(cursor => {
       cursors.push(new RechPosition(cursor.start.line, cursor.start.character));
     });
@@ -255,8 +256,8 @@ export class Editor {
     /* Insert the text into the selections from user */
     await this.editor.edit(editBuilder => {
       this.editor.selections.forEach(selection => {
-        let size = this.getLine(selection.start.line).length;
-        let diff = column - size;
+        const size = this.getLine(selection.start.line).length;
+        const diff = column - size;
         if (diff > 0) {
           editBuilder.insert(new Position(selection.start.line, size), " ".repeat(diff));
         }
@@ -330,7 +331,7 @@ export class Editor {
    * @param callback callback function called for each selected file
    */
   showOpenDialog(defaultDir: string, callback: (file: string) => any) {
-    let options: OpenDialogOptions = {
+    const options: OpenDialogOptions = {
       openLabel: 'Abrir arquivo'
     };
     if (defaultDir) {
@@ -349,7 +350,7 @@ export class Editor {
    * Returns an array with the name of all documents currently open in editor
    */
   public getOpenDocumentsNames(): string[] {
-    let names: string[] = [];
+    const names: string[] = [];
     workspace.textDocuments.forEach(currentTextEditor => {
       names.push(currentTextEditor.fileName);
     });
@@ -364,7 +365,7 @@ export class Editor {
    */
   public openFileInsensitive(file: string, callback?: () => any) {
     let alreadyOpen = false;
-    let names = this.getOpenDocumentsNames();
+    const names = this.getOpenDocumentsNames();
     names.forEach(currentFile => {
         if (!alreadyOpen && currentFile.toUpperCase() === file.toUpperCase()) {
             this.openFile(currentFile, callback);
@@ -383,7 +384,7 @@ export class Editor {
    * @param callback callback function executed after the file is opened
    */
   public openFile(file: string, callback?: () => any) {
-    let options: TextDocumentShowOptions = {
+    const options: TextDocumentShowOptions = {
       viewColumn: ViewColumn.Active,
       preview: false
     }
@@ -472,7 +473,7 @@ export class Editor {
    * Go to the next paragraph
    */
   findNextParagraph() {
-    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
     if (positionsToReturn) {
       this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
@@ -484,7 +485,7 @@ export class Editor {
    * Go to the previous paragraph
    */
   findPreviousParagraph() {
-    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
     if (positionsToReturn) {
       this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
@@ -562,7 +563,7 @@ export class Editor {
     }
     // Select whole lines of the selection range
     this.selectWholeLines();
-    let indenter = new Indenta();
+    const indenter = new Indenta();
     if (indenter.isAllCommentaryLines(this.getSelectionBuffer())) {
       indenter.indentCommentary(this.getSelectionBuffer(), (buffer) => this.replaceBuffer(buffer, restoreCursor));
       return;
@@ -613,7 +614,7 @@ export class Editor {
    * Returns the basename of the file currently open in editor without the extension
    */
   getCurrentFileBaseNameWithoutExtension(){
-    let fileName = this.getCurrentFileBaseName();
+    const fileName = this.getCurrentFileBaseName();
     return fileName.substr(0, fileName.length - 4);
   }
 
@@ -621,7 +622,7 @@ export class Editor {
    * Returns the extension of the file currently open in editor
    */
   getCurrentFileBaseNameExtension(){
-    let fileName = this.getCurrentFileBaseName();
+    const fileName = this.getCurrentFileBaseName();
     return fileName.substr(fileName.length - 3, fileName.length);
   }
 
@@ -680,6 +681,24 @@ export class Editor {
    */
   public static getSourceExpander() {
     return Editor.sourceExpander
+  }
+
+  /**
+   * Define the function to return the copy hierarchy
+   *
+   * @param copyHierarchy
+   */
+  public static setCopyHierarchy(copyHierarchy: GenericExecutor) {
+    Editor.copyHierarchy = copyHierarchy
+  }
+
+  /**
+   * Returns the function to return the copy hierarchy
+   *
+   * @param copyHierarchy
+   */
+  public static getCopyHierarchy() {
+    return Editor.copyHierarchy
   }
 
   /**

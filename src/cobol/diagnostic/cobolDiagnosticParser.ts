@@ -8,6 +8,8 @@ import { Path } from "../../commons/path";
 import { Scan } from "../../commons/Scan";
 import Q from "q";
 import { BufferSplitter } from "../../commons/BufferSplitter";
+import { CobolDiagnosticPreprocManager } from "./CobolDiagnosticPreprocManager";
+import { TreeItem } from "vscode";
 
 /**
  * Class conteiner of diagnostcs of cobol language
@@ -16,9 +18,13 @@ export class CobolDiagnosticParser {
 
   /** Lines of the source */
   private sourceLines: string;
+  /** Lines of the source */
+  private copyHierarchy: string;
+
 
   constructor(sourceLines: string) {
     this.sourceLines = sourceLines;
+    this.copyHierarchy = "";
   }
 
   /**
@@ -27,8 +33,17 @@ export class CobolDiagnosticParser {
    * @param preprocResult
    * @param fileName
    */
-  parser(preprocResult: string, fileName: string, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<CobolDiagnostic> {
-    return this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter);
+  parser(preprocResult: string, fileName: string, externalGetCopyHierarchy: (uri: string) => Thenable<string>, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<CobolDiagnostic> {
+    return new Promise((resolve, reject) => {
+      externalGetCopyHierarchy(fileName).then((copyHierarchy) => {
+        this.copyHierarchy = copyHierarchy;
+        this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter).then((result) => {
+          resolve(result);
+        }).catch(() => {
+          reject();
+        })
+      });
+    })
   }
 
   /**
@@ -39,14 +54,14 @@ export class CobolDiagnosticParser {
    */
   private extractDiagnostic(preprocResult: string, fileName: string, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean> ): Promise<CobolDiagnostic> {
     return new Promise((resolve, reject) => {
-      let interpreters: Array<Promise<Diagnostic>> = [];
-      let lines = BufferSplitter.split(preprocResult);
-      let pattern = /\*\*\*\sWarning:\s(.*);\sfile\s=\s([A-Za-z0-9.]+),\sline\s=\s(\d+)\s?(\(Erro\))?/;
+      const interpreters: Array<Promise<Diagnostic>> = [];
+      const lines = BufferSplitter.split(preprocResult);
+      const pattern = /\*\*\*\sWarning:\s(.*);\sfile\s=\s([A-Za-z0-9.]+),\sline\s=\s(\d+)\s?(\(Erro\))?/;
       lines.forEach(currentLine => {
         interpreters.push(this.interpretsTheErrorMessage(fileName, pattern, currentLine, externalDiagnosticFilter));
       });
       Q.allSettled(interpreters).then((results) => {
-        let diagnostics: Diagnostic[] = [];
+        const diagnostics: Diagnostic[] = [];
         results.forEach((result) => {
           if (result.state === "fulfilled") {
             diagnostics.push(result.value!);
@@ -65,8 +80,8 @@ export class CobolDiagnosticParser {
    * @param diagnostics
    */
   private buildCobolDiagnostic(diagnostics: Diagnostic[]): CobolDiagnostic {
-    let errors: Diagnostic[] = [];
-    let warnings: Diagnostic[] = [];
+    const errors: Diagnostic[] = [];
+    const warnings: Diagnostic[] = [];
     diagnostics.forEach((diagnostic) => {
       if (diagnostic) {
         if (diagnostic.severity == DiagnosticSeverity.Error) {
@@ -89,7 +104,7 @@ export class CobolDiagnosticParser {
    */
   private interpretsTheErrorMessage(fileName: string, pattern: RegExp, currentLine: string, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<Diagnostic> {
     return new Promise((resolve, reject) => {
-      let match = pattern.exec(currentLine);
+      const match = pattern.exec(currentLine);
       if (!match) {
         reject();
         return;
@@ -99,7 +114,6 @@ export class CobolDiagnosticParser {
       if (externalDiagnosticFilter) {
         externalDiagnosticFilter(message).then((result) => {
           if (result) {
-            this.buildDiagnosticOfError(fileName, message, file, line, error);
             resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
           } else {
             resolve();
@@ -120,15 +134,15 @@ export class CobolDiagnosticParser {
    * @param line
    * @param error
    */
-  private buildDiagnosticOfError(fileName: string, message: string, file: string, line: string, error: boolean) {
-    let nLine = Number.parseInt(line) - 1
+  private buildDiagnosticOfError(fileName: string, message: string, file: string, line: string, error: boolean): Diagnostic {
+    const nLine = Number.parseInt(line) - 1
     let diagnosticSeverity: DiagnosticSeverity;
     if (error) {
       diagnosticSeverity = DiagnosticSeverity.Error;
     } else {
       diagnosticSeverity = DiagnosticSeverity.Warning;
     }
-    let diagnostic = this.createDiagnostic(
+    return this.createDiagnostic(
       fileName,
       diagnosticSeverity,
       new TextRange(
@@ -138,7 +152,6 @@ export class CobolDiagnosticParser {
       message,
       file
     )
-    return diagnostic;
   }
 
   /**
@@ -151,9 +164,9 @@ export class CobolDiagnosticParser {
    * @param source
    */
   private createDiagnostic(fileName: string, severity: DiagnosticSeverity, range: TextRange, message: string, source: string): Diagnostic {
-    let diagnosticRange = this.diagnosticPosition(fileName, source, range)
-    let fullFileName = this.fullFileName(new Path(fileName).fullPathWin(), source);
-    let diagnostic: Diagnostic = {
+    const diagnosticRange = this.diagnosticPosition(fileName, source, range)
+    const fullFileName = this.fullFileName(new Path(fileName).fullPathWin(), source);
+    const diagnostic: Diagnostic = {
       severity: severity,
       range: {
         start: {
@@ -196,12 +209,12 @@ export class CobolDiagnosticParser {
    * @param source
    * @param range
    */
-  private diagnosticPosition(fileName: string, source: string, range: TextRange): Range {
+  private diagnosticPosition(fileName: string, source: string, range: TextRange): Range | TextRange {
     if (new Path(fileName).fileName() == source) {
-      return range;
+        return range;
     }
     let result: any = undefined;
-    let regexp = new RegExp(".*" + source.replace(".", "\\.") + ".*", "gmi");
+    const regexp = new RegExp(".*" + this.copyDeclaredInSource(source).replace(".", "\\.") + ".*", "gmi");
     new Scan(this.sourceLines).scan(regexp, (iterator: any) => {
       result =  {
         start: {
@@ -217,7 +230,7 @@ export class CobolDiagnosticParser {
     if (result) {
       return result;
     }
-    let length = BufferSplitter.split(this.sourceLines).length
+    const length = BufferSplitter.split(this.sourceLines).length
     return {
       start: {
         line: length,
@@ -231,13 +244,37 @@ export class CobolDiagnosticParser {
   }
 
   /**
+   * Returns the declared copy in current source containing the errors
+   *
+   * @param source
+   */
+  private copyDeclaredInSource(source: string): string {
+    const copyArray = this.copyHierarchy.split("\n");
+    let copyFounded = false;
+    for (let i = copyArray.length; i > 0 ; i--) {
+      const copy = copyArray[i];
+      if (!copyFounded && copy && copy.includes(source)) {
+        copyFounded = true;
+      }
+      if (copyFounded) {
+        if (copy == copy.trimLeft()) {
+          const match = /(.*\.(?:cpy|cpb))/.exec(copy.trim());
+          const copyName = match ? match[1] : "";
+          return new Path(copyName).fileName();
+        }
+      }
+    }
+    return "Copy not found";
+  }
+
+  /**
    * Returns the full file name
    *
    * @param fileName
    * @param source
    */
   private fullFileName(fileName: string, source: string): string {
-    let file = new File(new Path(fileName).directory() + source);
+    const file = new File(new Path(fileName).directory() + source);
     if (file.exists()) {
       return file.fileName;
     } else {

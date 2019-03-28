@@ -108,6 +108,7 @@ export function activate(_context: any) {
     defineSourceExpander()
     definePreprocessor()
     defineDianosticConfigs()
+    defineCopyHierarchyFunction()
 }
 
 /**
@@ -143,6 +144,18 @@ function defineDianosticConfigs() {
         if (cobolDiagnosticFilterProperties) {
             cobolDiagnosticFilter.setAutoDiagnostic((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).getAutoDiagnostic());
             cobolDiagnosticFilter.setNoShowWarnings((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).getNoShowWarnings());
+        }
+    });
+}
+
+/**
+ * Sets configurations for Cobol source diagnostic
+ */
+function defineCopyHierarchyFunction() {
+    const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("copyHierarchy");
+    commands.executeCommand(commandToConfigSourceExpander).then((copyHierarchy) => {
+        if (copyHierarchy) {
+            Editor.setCopyHierarchy(<GenericExecutor>copyHierarchy);
         }
     });
 }
