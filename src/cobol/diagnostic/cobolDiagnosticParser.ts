@@ -21,7 +21,6 @@ export class CobolDiagnosticParser {
   /** Lines of the source */
   private copyHierarchy: string;
 
-
   constructor(sourceLines: string) {
     this.sourceLines = sourceLines;
     this.copyHierarchy = "";
