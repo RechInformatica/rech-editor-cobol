@@ -2,6 +2,7 @@
 import { HighlightInterface } from "./HighlightInterface";
 import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
 import { DefaultHighlight } from "./DefaultHighlight";
+import { BufferSplitter } from "../../commons/BufferSplitter";
 
 /** Terms of block */
 const BEGINBLOCKTERM = "perform"
@@ -22,7 +23,7 @@ export class PerformHighlight implements HighlightInterface {
 
     positions(text: TextDocument, word: string, currentLine: number, currentCharacter: number): DocumentHighlight[]{
         let results: DocumentHighlight[] = []
-        let buffer = text.getText().split("\n");
+        let buffer = BufferSplitter.split(text.getText());
         let currentLineContent = buffer[currentLine];
         // If is pharagraph perform
         if (/\s*perform\s*([\w\-]*)((?:\sthru\s.*)|(?:.+\stimes))?[\.|\,]/.exec(currentLineContent.toLowerCase())) {
@@ -69,7 +70,7 @@ export class PerformHighlight implements HighlightInterface {
      * @param commandColumn
      */
     private findLineOfBlockTerm(text: TextDocument, currentLine: number, term: string, commandColumn: number, forward: boolean) {
-        let buffer = text.getText().split("\n");
+        let buffer = BufferSplitter.split(text.getText());
         let index = currentLine;
         while ((forward && index < buffer.length) || (!forward && index > 0)) {
             let line = buffer[index];

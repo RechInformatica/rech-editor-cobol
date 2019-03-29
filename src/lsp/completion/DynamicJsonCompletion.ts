@@ -162,7 +162,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
             insertText: snippet.body,
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: snippet.prefix,
-            preselect: true,
+            preselect: false,
             kind: CompletionItemKind.Snippet
         };
     }

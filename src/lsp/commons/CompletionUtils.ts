@@ -13,7 +13,6 @@ export class CompletionUtils {
    * @param lineText line text
    */
   public static countSpacesAtBeginning(lineText: string) {
-    //return lineText.length - lineText.trimLeft().length
     for (let index = 0; index < lineText.length; index++) {
       if (lineText.charAt(index) !== " ") {
         return index;
@@ -47,8 +46,7 @@ export class CompletionUtils {
    * @param lastWordReplacement word to replace the last word currently found in currentText
    */
   public static fillSpacesFromWordReplacementEnd(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string, lastWordReplacement: string): string {
-    let lineWithoutEnter = currentLineText.replace("\r", "").replace("\n", "");
-    let futureLine = CompletionUtils.replaceLastWord(lineWithoutEnter, lastWordReplacement);
+    let futureLine = CompletionUtils.replaceLastWord(currentLineText, lastWordReplacement);
     return CompletionUtils.fillSpacesFromWordEnd(targetFinalColumn, currentCursorColumn, futureLine);
   }
 
@@ -220,7 +218,7 @@ export class CompletionUtils {
 
 
   /**
-   * Returns true if the word is a oprator
+   * Returns true if the word is a operator
    *
    * @param word
    */

@@ -10,15 +10,19 @@ const CONFIG_GROUP = "rech.editor.cobol";
 /**
  * Class to manipulate extension settings
  */
-class Configuration {
+export class Configuration {
   /** configuration */
   private configuration: WorkspaceConfiguration;
 
   /**
    * extension settings
    */
-  constructor() {
-    this.configuration = workspace.getConfiguration(CONFIG_GROUP);
+  constructor(configGroup?: string) {
+    if (configGroup) {
+      this.configuration = workspace.getConfiguration(configGroup);
+    } else {
+      this.configuration = workspace.getConfiguration(CONFIG_GROUP);
+    }
   }
 
   /**

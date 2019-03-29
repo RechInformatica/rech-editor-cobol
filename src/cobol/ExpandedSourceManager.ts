@@ -22,12 +22,15 @@ export class ExpandedSourceManager {
    */
   public expandSource(): Promise<string> {
     return new Promise((resolve, reject) => {
+      Log.get().info("ExpandedSourceManager.expandSource() was called");
       if (!ExpandedSourceManager.callbackSourceExpander) {
         Log.get().warning("SourceExpander is undefined");
         return reject()
       }
+      Log.get().info("ExpandedSourceManager has callbackSourceExpander");
       ExpandedSourceManager.callbackSourceExpander(this.source, ExpandedSourceManager.buildExpandedSourceFileName(this.source)).then(() => {
-        let file = new File(ExpandedSourceManager.buildExpandedSourceFileName(this.source));
+        Log.get().info("ExpandedSourceManager.callbackSourceExpander was finality");
+        const file = new File(ExpandedSourceManager.buildExpandedSourceFileName(this.source));
         file.loadBuffer("latin1").then((buffer) => {
           ExpandedSourceManager.expandedSource.set(this.source, buffer);
           Log.get().info("Expanded source loaded successfully");
@@ -64,11 +67,12 @@ export class ExpandedSourceManager {
   public static getExpandedSource(source: string): Promise<string> {
     Log.get().info("Expanded source requested. Source: " + source);
     return new Promise((resolve, reject) => {
-      let expandedSource = ExpandedSourceManager.expandedSource.get(source);
+      const expandedSource = ExpandedSourceManager.expandedSource.get(source);
       if (expandedSource) {
         Log.get().info("Expanded source got from cache. Source: " + source);
         return resolve(expandedSource);
       } else {
+        Log.get().info("PREPROC was called to expand: " + source);
         new ExpandedSourceManager(source).expandSource().then((expandedSource) => {
           Log.get().info("Expanded source got from expanded file. Source: " + source);
           return resolve(expandedSource);

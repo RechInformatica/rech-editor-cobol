@@ -61,12 +61,12 @@ export class VariableDisplayer {
       this.controller.addElement(
         new VariableElement("Documentation")
         .setDetail(variable.getComment()!.join(" | "))
-        .setOnSelection((selectItem) => {
+        .setOnSelection(async (selectItem) => {
           let obj = selectItem.object
           if (obj) {
             let comments = (<CobolVariable>obj).getComment();
             if (comments) {
-              this.insertCommentInEditor((<CobolVariable>obj).getComment()!)
+              await this.insertCommentInEditor((<CobolVariable>obj).getComment()!)
               this.controller.dispose();
             }
           }

@@ -108,6 +108,34 @@ export class CobolCompletionItemFactory {
    * @param lines Cobol source code lines
    */
   public generateCompletionItems(): Promise<CompletionItem[]> {
+    return new Promise((resolve, reject) => {
+      this.generateConditionalCompletionItems().then((result) => {
+        if (result.length > 0) {
+          let items: Promise<CompletionItem[]>[] = [];
+          this.additionalCompletions.forEach(impl => {
+            items = items.concat(this.generate(impl));
+          });
+          this.createWrappingPromise(items).then((item) => {
+            result = result.concat(item);
+            resolve(result);
+          }).catch(() => {
+            resolve([]);
+          })
+        } else {
+          resolve([]);
+        }
+      }).catch(() => {
+        reject();
+      })
+    });
+  }
+
+  /**
+   * Generates completion items for Cobol
+   *
+   * @param lines Cobol source code lines
+   */
+  public generateConditionalCompletionItems(): Promise<CompletionItem[]> {
     return new Promise((resolve) => {
       switch (true) {
         case this.isCommentLine(): {
@@ -538,9 +566,6 @@ export class CobolCompletionItemFactory {
     items = items.concat(this.generate(new PerformUntilExitCompletion()));
     items = items.concat(this.generate(new PerformVaryingCompletion()));
     items = items.concat(this.generate(new EndCompletion()));
-    this.additionalCompletions.forEach(impl => {
-      items = items.concat(this.generate(impl));
-    });
     if (this.isInIfBlock()) {
       items = items.concat(this.generate(new ElseCompletion()));
     }

@@ -2,7 +2,7 @@
 
 export class Path {
   path: string;
-  
+
   constructor(path: any) {
     if (typeof path === "string") {
       this.path = path;
@@ -28,12 +28,12 @@ export class Path {
   }
 
   baseName() {
-    var fileName = this.fileName();
+    const fileName = this.fileName();
     return fileName.substring(0, fileName.lastIndexOf('.'));
   }
 
   extension() {
-    var fileName = this.fileName();
+    const fileName = this.fileName();
     return fileName.substring(fileName.lastIndexOf('.'));
   }
 
@@ -47,7 +47,7 @@ export class Path {
   fullPathWin() {
     return this.path.replace(/\//g, "\\").replace("file:\\\\\\", "").replace("%3A", ":").replace(/%5C/gi, "\\");
   }
-  
+
   /**
    * Return the fullPath in Vscode format
    */

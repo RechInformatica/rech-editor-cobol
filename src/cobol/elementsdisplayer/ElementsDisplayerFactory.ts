@@ -7,6 +7,7 @@ import { VariableDisplayer } from "./variable/VariableDisplayer";
 import { CobolCopy } from "../CobolCopy";
 import { copyDisplayer } from "./copy/CopyDisplayer";
 import { window } from "vscode";
+import { BufferSplitter } from "../../commons/BufferSplitter";
 
 /**
  * Class to build a ElementsDisplayer
@@ -20,13 +21,13 @@ export class ElementsDisplayerFactory {
     window.showInformationMessage(`Analyzing element: ${word}...`);
     Client.getDeclararion(word, fullDocument, uri).then((position) => {
       this.bufferOfDeclaration(position, uri, fullDocument).then((buffer) => {
-        let lines = buffer.split("\n");
+        let lines = BufferSplitter.split(buffer);
         this.buildDisplayer(position, lines, currentLine, uri);
       }).catch(() => {
         window.showWarningMessage(`Element ${word} not found`);
         return
       })
-    })
+    }).catch()
   }
 
   /**

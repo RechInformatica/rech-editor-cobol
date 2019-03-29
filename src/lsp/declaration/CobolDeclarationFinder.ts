@@ -63,9 +63,11 @@ export class CobolDeclarationFinder {
           return resolve(result);
         } else {
           if (expandSource) {
-            new ExpandedSourceManager(uri).expandSource();
+            new ExpandedSourceManager(uri).expandSource().then(()=>{}).catch(() => {});
             this.findDeclarationWithPreproc(term, uri, false).then((result) => {
               return resolve(result);
+            }).catch(() => {
+              return reject();
             })
           } else {
             return reject();
@@ -106,11 +108,17 @@ export class CobolDeclarationFinder {
     let parser = new ParserCobol();
     return new Promise((resolve, reject) => {
       let result = undefined;
+      let file = path.fileName();
+      new Scan(buffer).scan(/\s+\*\>\sOpções:.*/gi, (iterator: any) => {
+        let match = /^\s+\*\>\sOpções:\s([A-Za-z0-9\\:]+\.CBL)/gm.exec(iterator.lineContent)
+        if (match) {
+          file = new Path(match[1]).fileName();
+        }
+      });
       new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
         if (parser.isDeclaration(term, iterator.lineContent)) {
           let match = <RegExpMatchArray>/.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
           let line = parseInt(match[1]) - 1;
-          let file = path.fileName();
           if (match[2]) {
             file = match[2];
           }

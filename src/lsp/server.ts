@@ -40,6 +40,7 @@ import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
 import { VariableCompletion } from "./completion/variable/VariableCompletion";
 import { VariableCompletionFactory } from "./completion/variable/VariableCompletionFactory";
 import { Log } from "../commons/Log";
+import { BufferSplitter } from "../commons/BufferSplitter";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -94,7 +95,7 @@ connection.onRequest("custom/findDeclarationPosition", (word: string, fullDocume
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
-  validateTextDocument(change.document, "onChange");
+  validateTextDocument(change.document, "onChange").then().catch();
   // Clear the folding cache
   // Does this not folding if the source has any changes
   CobolFoldFactory.foldingCache.delete(change.document.uri);
@@ -106,25 +107,25 @@ documents.onDidChangeContent(change => {
 documents.onDidSave(document => {
   let uri = document.document.uri;
   // Validate the document
-  validateTextDocument(document.document, "onSave");
+  validateTextDocument(document.document, "onSave").then().catch();
   // Update the folding
   loadFolding(document);
   connection.client.register(FoldingRangeRequest.type, document);
   // Update the expanded source
-  new ExpandedSourceManager(uri).expandSource()
+  new ExpandedSourceManager(uri).expandSource().then().catch()
   // Clear the variableCompletion cache
   VariableCompletion.removeCache(uri);
 })
 
 // If the document opened
 documents.onDidOpen(document => {
-  configureServerLog();
+  configureServerLog().then().catch();
   // Validate the document
-  validateTextDocument(document.document, true);
+  validateTextDocument(document.document, true).then().catch();
   // Load the folding
   loadFolding(document);
   // Load the expanded source
-  new ExpandedSourceManager(document.document.uri).expandSource();
+  new ExpandedSourceManager(document.document.uri).expandSource().then().catch();
 });
 
 // If the document closed
@@ -158,7 +159,7 @@ export function loadFolding(document: TextDocumentChangeEvent) {
     let text = fullDocument.getText();
     getConfig<boolean>("folding").then(foldingConfig => {
       if (foldingConfig) {
-        new CobolFoldFactory().fold(uri, text.split("\n"));
+        new CobolFoldFactory().fold(uri, BufferSplitter.split(text)).then().catch();
       }
     });
   }
@@ -172,16 +173,19 @@ export function loadFolding(document: TextDocumentChangeEvent) {
 export async function validateTextDocument(textDocument: TextDocument, event: "onSave" | "onChange" | boolean): Promise<void> {
   return getAutoDiagnostic().then(autodiagnostic => {
     if (autodiagnostic && (event === true || autodiagnostic == event)) {
-      let document = documents.get(textDocument.uri)
+      const document = documents.get(textDocument.uri)
       if (document) {
-        let text = document.getText();
+        const text = document.getText();
         Log.get().info("Diagnose from " + document.uri + " starting");
         new Diagnostician(text).diagnose(
           textDocument,
-          fileName => {
+          (fileName) => {
             return sendExternalPreprocessExecution(fileName);
           },
-          message => {
+          (fileName) => {
+            return sendExternalGetCopyHierarchy(fileName);
+          },
+          (message) => {
             return externalDiagnosticFilter(message);
           }
         ).then(diagnostics => {
@@ -212,6 +216,15 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
 export function sendExternalPreprocessExecution(uri: string) {
   var files = [uri];
   return connection.sendRequest<string>("custom/runPreprocessor", [files]);
+}
+
+/**
+ * Sends a request to the client for return the Copy Hierarchy of source
+ *
+ * @param uri current URI of the file open in editor
+ */
+export function sendExternalGetCopyHierarchy(uri: string) {
+  return connection.sendRequest<string>("custom/runCopyHierarchy", uri);
 }
 
 /**
@@ -293,7 +306,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
       let cacheFileName = buildCacheFileName(uri);
       let fullDocument = documents.get(uri);
       if (fullDocument) {
-        new CobolCompletionItemFactory(line, column, fullDocument.getText().split("\n"), uri)
+        new CobolCompletionItemFactory(line, column, BufferSplitter.split(fullDocument.getText()), uri)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
           .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
@@ -421,7 +434,7 @@ export function getLineText(
   line: number,
   column: number
 ) {
-  var currentLine = documentText.split("\n")[line];
+  var currentLine = BufferSplitter.split(documentText)[line];
   return new CobolWordFinder().findWordAt(currentLine, column);
 }
 

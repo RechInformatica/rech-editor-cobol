@@ -5,6 +5,7 @@ import { CompletionInterface } from "./CompletionInterface";
 import { File } from "../../commons/file";
 import { Scan } from "../../commons/Scan";
 import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
+import { BufferSplitter } from "../../commons/BufferSplitter";
 
 /**
  * Class to generate LSP Completion Items for Cobol paragraphs declarations
@@ -72,7 +73,7 @@ export class ParagraphCompletion implements CompletionInterface {
                 }
                 ExpandedSourceManager.getExpandedSource(this.uri).then((buffer) => {
                     ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
-                    ParagraphCompletion.cache = this.generateParagraphCompletion(buffer.toString().split("\n"), true);
+                    ParagraphCompletion.cache = this.generateParagraphCompletion(BufferSplitter.split(buffer.toString()), true);
                     return resolve();
                 }).catch(() => {
                     return reject();

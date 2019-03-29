@@ -89,7 +89,7 @@ export class Log {
   private writeAndOutputsMessage(originalMessage: string): void {
     if (this.active) {
       let finalMessage = this.buildFinalMessage(originalMessage);
-      this.getLogFile().appendBuffer([finalMessage], "latin1");
+      this.getLogFile().appendBuffer([finalMessage], "latin1").then().catch(() => {});
     }
   }
 

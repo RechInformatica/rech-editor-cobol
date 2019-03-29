@@ -1,11 +1,10 @@
-import { ExtensionContext } from 'vscode';
-import * as vscode from 'vscode';
+import { ExtensionContext, TextEditor, window, workspace } from 'vscode';
 import { Parser } from './Parser';
 
 export class CustomDecorator {
 
     public static activate(context: ExtensionContext) {
-        let activeEditor: vscode.TextEditor | undefined;
+        let activeEditor: TextEditor | undefined;
         let parser: Parser = new Parser();
 
         // Called to handle events below
@@ -17,13 +16,13 @@ export class CustomDecorator {
             }
         };
         // Get the active editor for the first time and initialize the regex
-        if (vscode.window.activeTextEditor) {
-            activeEditor = vscode.window.activeTextEditor;
+        if (window.activeTextEditor) {
+            activeEditor = window.activeTextEditor;
             // Trigger first update of decorators
             triggerUpdateDecorations();
         }
         // Handle called when active editor was changed
-        vscode.window.onDidChangeActiveTextEditor(editor => {
+        window.onDidChangeActiveTextEditor(editor => {
             activeEditor = editor;
             if (editor) {
                 // Trigger update to set decorations for newly active file
@@ -32,7 +31,7 @@ export class CustomDecorator {
         }, null, context.subscriptions);
 
         // Handle called when change text content of active editor
-        vscode.workspace.onDidChangeTextDocument(event => {
+        workspace.onDidChangeTextDocument(event => {
             // Trigger updates if the text was changed in the same document
             if (activeEditor && event.document === activeEditor.document) {
                 triggerUpdateDecorations();

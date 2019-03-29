@@ -3,6 +3,7 @@ import 'mocha';
 import { VariableCompletion } from '../../../../lsp/completion/variable/VariableCompletion';
 import { CompletionItem } from 'vscode';
 import { VariableInsertTextBuilder } from '../../../../lsp/completion/variable/VariableInsertTextBuilder';
+import { BufferSplitter } from '../../../../commons/BufferSplitter';
 
 //
 let buffer = "      *>--------------------------------------------------------------------------------------------------------------<*\r\n" +
@@ -20,22 +21,22 @@ let buffer = "      *>----------------------------------------------------------
     "       data                       division.\r\n" +
     "       working-storage            section.\r\n" +
     "      *>-> Nome do programa\r\n" +
-    "       78  w78-nomprg                             value is \"CALICM\".\r\n" +
+    "       78  w78-nomprg                             value is \"CALICM\".\r" +
     "      *>-> Total da venda dos produtos\r\n" +
-    "       01  w-total-venda          pic is 9(06)V99 value is zeros.\r\n" +
+    "       01  w-total-venda          pic is 9(06)V99 value is zeros.\n" +
     "      *>-> Valor do ICMS\r\n" +
-    "       01  w-icms                 pic is 9(06)V99 value is zeros.\r\n" +
+    "       01  w-icms                 pic is 9(06)V99 value is zeros.\n" +
     "      *>-> Categoria do produto\r\n" +
-    "       01  w-categoria            pic is x(01)    value is \"C\".\r\n" +
-    "           88 categoria-cesta-basica              values are \"c\" \"C\".\r\n" +
+    "       01  w-categoria            pic is x(01)    value is \"C\".\n" +
+    "           88 categoria-cesta-basica              values are \"c\" \"C\".\r" +
     "           88 categoria-produtos-normais          values are \"n\" \"N\".\r\n" +
-    "           88 categoria-servicos                  values are \"s\" \"S\".\r\n" +
+    "           88 categoria-servicos                  values are \"s\" \"S\".\r" +
     "      *>-> Variável exemplo para pai de níveis 88\r\n" +
     "       01  w-pai-oito-oito        pic is x(01)    value is \"F\".\r\n" +
     "      *>-> Comentário diferente para o primeiro nível 88\r\n" +
     "           88 pai-oito-oito-pri                   value is \"P\".\r\n" +
     "      *>-> Comentário diferente para o segundo nível 88\r\n" +
-    "           88 pai-oito-oito-seg                   value is \"S\".\r\n" +
+    "           88 pai-oito-oito-seg                   value is \"S\".\r" +
     "           88 pai-oito-oito-ter                   value is \"T\".\r\n" +
     "       01  w-uf                   pic is x(02)    value is \"SP\".\r\n" +
     "      *>-> Tecla auxiliar\r\n" +
@@ -97,7 +98,7 @@ let buffer = "      *>----------------------------------------------------------
     "              end-if,\r\n" +
     "           end-perform.\r\n" +
     "      *>--------------------------------------------- CALICM.cbl -----------------------------------------------------<*";
-let lines = buffer.split("\r\n");
+let lines = BufferSplitter.split(buffer);
 
 describe('Cobol variable completion', () => {
 

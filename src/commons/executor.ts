@@ -75,14 +75,14 @@ export class Executor {
     const channel = this.getOutputChannel(name);
     channel.clear;
     channel.show(true);
-    this.runOnChannel(channel, command, { cwd: vscode.workspace.rootPath },onFinish).catch(err => {
+    this.runOnChannel(channel, command, { }, onFinish).catch(err => {
       if (err.stderr) {
         channel.appendLine(err.stderr);
       }
       if (err.stdout) {
         channel.appendLine(err.stdout);
       }
-      channel.appendLine("executeOutputChannelfailed!\n" + err);
+      channel.appendLine("executeOutputChannelfailed!\n" + err.error);
     });
   }
 

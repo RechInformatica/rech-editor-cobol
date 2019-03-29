@@ -24,6 +24,8 @@ export class CobolVariable {
     private allowNegative: boolean;
     /* Raw variable declaration from source code */
     private raw: string;
+    /** Variable is redefines */
+    private redefines: boolean;
     /** Children of variable */
     private children: CobolVariable[] | undefined;
     /** Parent variable */
@@ -33,7 +35,7 @@ export class CobolVariable {
     /** Comment of variable */
     private comment: string[] | undefined
 
-    private constructor(level: number, name: string, picture: string, type: Type, display: boolean, allowNegative: boolean, raw: string) {
+    private constructor(level: number, name: string, picture: string, type: Type, display: boolean, allowNegative: boolean, raw: string, redefines: boolean) {
         this.level = level;
         this.name = name;
         this.picture = picture;
@@ -41,6 +43,7 @@ export class CobolVariable {
         this.display = display;
         this.allowNegative = allowNegative;
         this.raw = raw;
+        this.redefines = redefines;
     }
 
     /**
@@ -50,14 +53,15 @@ export class CobolVariable {
         let splitted = CobolVariable.splitVariableInfo(line);
         let level = Number.parseInt(splitted[0]);
         let name = splitted[1].replace(".", "");
+        let redefines = line.toLowerCase().includes(" redefines ");
         let picture = CobolVariable.extractPicture(splitted);
         if (picture === "") {
-            return new CobolVariable(level, name, "", Type.Alphanumeric, true, false, line);
+            return new CobolVariable(level, name, "", Type.Alphanumeric, true, false, line, redefines);
         } else {
             let type = CobolVariable.detectType(picture.toUpperCase());
             let display = CobolVariable.isDisplay(picture.toUpperCase());
             let allowNegative = CobolVariable.allowNegative(picture.toUpperCase());
-            return new CobolVariable(level, name, picture, type, display, allowNegative, line);
+            return new CobolVariable(level, name, picture, type, display, allowNegative, line, redefines);
         }
     }
 
@@ -269,10 +273,20 @@ export class CobolVariable {
         let size = this.getBytesFromPicture(this.picture);
         if (this.children) {
             this.children.forEach((children) => {
-                size += children.getByteSize();
+                size += children.getByteSizeIgnoringRedefines();
             })
         }
         return size * this.getOccurs();
+    }
+
+    /**
+     * Returns the size of variable in bytes ignoring redefines
+     */
+    public getByteSizeIgnoringRedefines() {
+        if (this.redefines) {
+            return 0;
+        }
+        return this.getByteSize();
     }
 
     /**

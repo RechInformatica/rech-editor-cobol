@@ -53,7 +53,7 @@ export class Client {
 		Client.client.start();
 		Client.client.onReady().then(() => {
 			Client.configureClientWhenReady();
-		});
+		}).catch();
 	}
 
 	/**
@@ -67,6 +67,9 @@ export class Client {
 			Client.client.onRequest("custom/runPreprocessor", (files: string[]) => {
 				return Client.createPreprocessorExecutionPromise(files);
 			});
+			Client.client.onRequest("custom/runCopyHierarchy", (uri: string) => {
+				return Client.createCopyHierarchyPromise(uri);
+			});
 			Client.client.onRequest("custom/getConfig", (section: string) => {
 				return Client.getConfig(section);
 			});
@@ -77,7 +80,7 @@ export class Client {
 			});
 			Client.client.onRequest("custom/diagnosticFilter", (diagnosticMessage: string) => {
 				return new Promise<Boolean>((resolve) => {
-					let result = cobolDiagnosticFilter.isDiagnosticValid(diagnosticMessage);
+					const result = cobolDiagnosticFilter.isDiagnosticValid(diagnosticMessage);
 					resolve(result);
 				})
 			});
@@ -119,6 +122,26 @@ export class Client {
 	}
 
 	/**
+	 * Creates a promise for Cobol Preprocessor execution
+	 *
+	 * @param files file array with necessary files
+	 */
+	private static createCopyHierarchyPromise(uri: string): Promise<string> {
+		return new Promise<string>((resolve, reject) => {
+			const executor = Editor.getCopyHierarchy();
+			if (executor) {
+				executor.setPath(uri).exec().then((process) => {
+					resolve(process.getStdout());
+				}).catch(() => {
+					reject();
+				});
+			} else {
+				reject();
+			}
+		});
+	}
+
+	/**
 	 * Returns specific setting
 	 *
 	 * @param section
@@ -146,7 +169,7 @@ export class Client {
 	public static getDeclararion(word: string, fullDocument: string, uri: string): Promise<RechPosition> {
 		return new Promise((resolve, reject) => {
 			if (Client.client) {
-				let params = [word, fullDocument, uri];
+				const params = [word, fullDocument, uri];
 				return Client.client.sendRequest<RechPosition | undefined>("custom/findDeclarationPosition", params).then((position) => {
 					if (position) {
 						resolve(position)

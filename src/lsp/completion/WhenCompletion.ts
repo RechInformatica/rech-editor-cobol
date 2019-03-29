@@ -5,6 +5,7 @@ import { ParserCobol } from "../../cobol/parsercobol";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { RechPosition } from "../../commons/rechposition";
 import { File } from "../../commons/file";
+import { BufferSplitter } from "../../commons/BufferSplitter";
 
 /**
  * Class to generate LSP Completion Items for 'when' clause
@@ -233,7 +234,7 @@ export class WhenCompletion implements CompletionInterface {
             finder.findDeclaration(variable, this.uri!).then((position) => {
                 let parentFileLines = lines;
                 if (position.file) {
-                    parentFileLines = new File(position.file).loadBufferSync("latin1").split("\n");
+                    parentFileLines = BufferSplitter.split(new File(position.file).loadBufferSync("latin1"));
                 }
                 let declarationLine = parentFileLines[position.line];
                 for (let i = position.line; i > 0; i--) {

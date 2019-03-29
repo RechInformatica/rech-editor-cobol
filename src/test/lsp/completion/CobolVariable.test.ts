@@ -4,6 +4,7 @@ import * as path from "path";
 import { CobolVariable, Type } from '../../../lsp/completion/CobolVariable';
 import { File } from '../../../commons/file';
 import { Path } from '../../../commons/path';
+import { BufferSplitter } from '../../../commons/BufferSplitter';
 
 describe('Cobol variable declaration parser test', () => {
 
@@ -192,7 +193,7 @@ describe('Cobol variable declaration parser test', () => {
 
 describe('Cobol variable children parser test', () => {
 
-    let lines = new File(new Path(path.resolve(__dirname) + "/../../TestFiles/WORKING.CBL").fullPath()).loadBufferSync("latin1").split("\r\n")
+    let lines = BufferSplitter.split(new File(new Path(path.resolve(__dirname) + "/../../TestFiles/WORKING.CBL").fullPath()).loadBufferSync("latin1"))
     //
     it('Check Cobol variable children parsing level 78', () => {
         let line = 15
@@ -420,5 +421,29 @@ describe('Cobol variable get length test', () => {
         let valiable = CobolVariable.parseLine(lines[line]);
         valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
         expect(10).to.equal(valiable.getByteSize());
+    });
+    it('Check size of variable without redefines clause', () => {
+        let line = 100
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(20).to.equal(valiable.getByteSize());
+    });
+    it('Check size of variable with redefines clause', () => {
+        let line = 101
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(20).to.equal(valiable.getByteSize());
+    });
+    it('Check size of variable with redefines clause but ignoring redefined value', () => {
+        let line = 101
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(0).to.equal(valiable.getByteSizeIgnoringRedefines());
+    });
+    it('Check size of parent variable with redefines of children elements', () => {
+        let line = 102
+        let valiable = CobolVariable.parseLine(lines[line]);
+        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        expect(30).to.equal(valiable.getByteSize());
     });
 });
