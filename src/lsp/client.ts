@@ -21,15 +21,15 @@ export class Client {
      */
 	public static startServerAndEstablishCommunication(context: ExtensionContext) {
 		// The server is implemented in node
-		let serverModule = context.asAbsolutePath(
+		const serverModule = context.asAbsolutePath(
 			path.join('out', 'lsp', 'server.js')
 		);
 		// The debug options for the server
 		// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
-		let debugOptions = { execArgv: ['--nolazy', '--inspect=10999'] };
+		const debugOptions = { execArgv: ['--nolazy', '--inspect=10999'] };
 		// If the extension is launched in debug mode then the debug server options are used
 		// Otherwise the run options are used
-		let serverOptions: ServerOptions = {
+		const serverOptions: ServerOptions = {
 			run: { module: serverModule, transport: TransportKind.ipc },
 			debug: {
 				module: serverModule,
@@ -38,7 +38,7 @@ export class Client {
 			}
 		};
 		// Options to control the language client
-		let clientOptions: LanguageClientOptions = {
+		const clientOptions: LanguageClientOptions = {
 			// Register the server for COBOL documents
 			documentSelector: [{ scheme: 'file', language: 'COBOL' }]
 		};
@@ -62,16 +62,36 @@ export class Client {
 	private static configureClientWhenReady() {
 		if (Client.client) {
 			Client.client.onRequest("custom/runPreprocExpander", (files: string[]) => {
-				return new SourceExpander().createExpanderExecutionPromise(files);
+				return new Promise<any>((resolve, reject) => {
+					new SourceExpander().createExpanderExecutionPromise(files).then((result) => {
+						resolve(result)
+					}).catch(() => {
+						reject();
+					});
+				});
 			});
 			Client.client.onRequest("custom/runPreprocessor", (files: string[]) => {
-				return Client.createPreprocessorExecutionPromise(files);
+				return new Promise<any>((resolve, reject) => {
+					Client.createPreprocessorExecutionPromise(files).then((result) => {
+						resolve(result)
+					}).catch(() => {
+						reject();
+					});
+				});
 			});
 			Client.client.onRequest("custom/runCopyHierarchy", (uri: string) => {
-				return Client.createCopyHierarchyPromise(uri);
+				return new Promise<any>((resolve, reject) => {
+					Client.createCopyHierarchyPromise(uri).then((result) => {
+						resolve(result);
+					}).catch(() => {
+						reject();
+					});
+				});
 			});
 			Client.client.onRequest("custom/getConfig", (section: string) => {
-				return Client.getConfig(section);
+				return new Promise<any>((resolve) => {
+					resolve (Client.getConfig(section))
+				})
 			});
 			Client.client.onRequest("custom/getAutoDiagnostic", () => {
 				return new Promise<any>((resolve) => {
@@ -107,8 +127,8 @@ export class Client {
 	 */
 	private static createPreprocessorExecutionPromise(files: string[]): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
-			let currentFile = files[0];
-			let executor = Editor.getPreprocessor();
+			const currentFile = files[0];
+			const executor = Editor.getPreprocessor();
 			if (executor) {
 				executor.setPath(currentFile).exec().then((process) => {
 					resolve(process.getStdout());
