@@ -41,6 +41,7 @@ import { VariableCompletion } from "./completion/variable/VariableCompletion";
 import { VariableCompletionFactory } from "./completion/variable/VariableCompletionFactory";
 import { Log } from "../commons/Log";
 import { BufferSplitter } from "../commons/BufferSplitter";
+import { CobolDiagnosticParser } from "../cobol/diagnostic/cobolDiagnosticParser";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -105,7 +106,7 @@ documents.onDidChangeContent(change => {
  * If the document saved
  */
 documents.onDidSave(document => {
-  let uri = document.document.uri;
+  const uri = document.document.uri;
   // Validate the document
   validateTextDocument(document.document, "onSave").then().catch();
   // Update the folding
@@ -115,6 +116,8 @@ documents.onDidSave(document => {
   new ExpandedSourceManager(uri).expandSource().then().catch()
   // Clear the variableCompletion cache
   VariableCompletion.removeCache(uri);
+  // Clear the copy hierarchy from cache
+  CobolDiagnosticParser.removeSourceFromCopyCache(new Path(uri).fullPath());
 })
 
 // If the document opened
@@ -130,11 +133,13 @@ documents.onDidOpen(document => {
 
 // If the document closed
 documents.onDidClose(textDocument => {
-  let uri = textDocument.document.uri
+  const uri = textDocument.document.uri
   // Clear the folding cache
   CobolFoldFactory.foldingCache.delete(uri);
   // Clear the expanded source cache
   ExpandedSourceManager.removeSourceOfCache(uri);
+  // Clear the copy hierarchy from cache
+  CobolDiagnosticParser.removeSourceFromCopyCache(new Path(uri).fullPath());
   // Clear the variableCompletion cache
   VariableCompletion.removeCache(uri);
   //Clear the computed diagnostics to VSCode.

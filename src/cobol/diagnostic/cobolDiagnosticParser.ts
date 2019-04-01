@@ -8,8 +8,6 @@ import { Path } from "../../commons/path";
 import { Scan } from "../../commons/Scan";
 import Q from "q";
 import { BufferSplitter } from "../../commons/BufferSplitter";
-import { CobolDiagnosticPreprocManager } from "./CobolDiagnosticPreprocManager";
-import { TreeItem } from "vscode";
 
 /**
  * Class conteiner of diagnostcs of cobol language
@@ -19,11 +17,10 @@ export class CobolDiagnosticParser {
   /** Lines of the source */
   private sourceLines: string;
   /** Lines of the source */
-  private copyHierarchy: string;
+  private static copyHierarchy: Map<string, string> = new Map();
 
   constructor(sourceLines: string) {
     this.sourceLines = sourceLines;
-    this.copyHierarchy = "";
   }
 
   /**
@@ -34,14 +31,22 @@ export class CobolDiagnosticParser {
    */
   parser(preprocResult: string, fileName: string, externalGetCopyHierarchy: (uri: string) => Thenable<string>, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<CobolDiagnostic> {
     return new Promise((resolve, reject) => {
-      externalGetCopyHierarchy(fileName).then((copyHierarchy) => {
-        this.copyHierarchy = copyHierarchy;
+      if (CobolDiagnosticParser.copyHierarchy.get(fileName)) {
         this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter).then((result) => {
           resolve(result);
         }).catch(() => {
           reject();
         })
-      });
+      } else {
+        externalGetCopyHierarchy(fileName).then((resultCopyHierarchy) => {
+          CobolDiagnosticParser.copyHierarchy.set(fileName, resultCopyHierarchy);
+          this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter).then((result) => {
+            resolve(result);
+          }).catch(() => {
+            reject();
+          })
+        });
+      }
     })
   }
 
@@ -213,7 +218,7 @@ export class CobolDiagnosticParser {
         return range;
     }
     let result: any = undefined;
-    const regexp = new RegExp(".*" + this.copyDeclaredInSource(source).replace(".", "\\.") + ".*", "gmi");
+    const regexp = new RegExp(".*" + this.copyDeclaredInSource(fileName, source).replace(".", "\\.") + ".*", "gmi");
     new Scan(this.sourceLines).scan(regexp, (iterator: any) => {
       result =  {
         start: {
@@ -247,8 +252,14 @@ export class CobolDiagnosticParser {
    *
    * @param source
    */
-  private copyDeclaredInSource(source: string): string {
-    const copyArray = this.copyHierarchy.split("\n");
+  private copyDeclaredInSource(fileName: string, source: string): string {
+    const copys = CobolDiagnosticParser.copyHierarchy.get(fileName);
+    let copyArray;
+    if (copys) {
+      copyArray = copys.split("\n");
+    } else {
+      return "Copy not found";
+    }
     let copyFounded = false;
     for (let i = copyArray.length; i > 0 ; i--) {
       const copy = copyArray[i];
@@ -279,6 +290,15 @@ export class CobolDiagnosticParser {
     } else {
       return "F:\\Fontes\\" + source;
     }
+  }
+
+  /**
+   * Remove the source from the copy cache
+   *
+   * @param source
+   */
+  public static removeSourceFromCopyCache(source: string) {
+    CobolDiagnosticParser.copyHierarchy.delete(source);
   }
 
 }
