@@ -7,6 +7,7 @@ import { cobolDiagnosticFilter } from '../cobol/diagnostic/cobolDiagnosticFilter
 import { SourceExpander } from '../editor/SourceExpander';
 import { SourceOfCompletions } from './commons/SourceOfCompletions';
 import { RechPosition } from '../commons/rechposition';
+import { Log } from '../commons/Log';
 
 /**
  * Language Server Provider client
@@ -63,6 +64,7 @@ export class Client {
 		if (Client.client) {
 			Client.client.onRequest("custom/runPreprocExpander", (files: string[]) => {
 				return new Promise<any>((resolve, reject) => {
+					Log.get().info("PreprocExpander was called in client side. Files: " + files);
 					new SourceExpander().createExpanderExecutionPromise(files).then((result) => {
 						resolve(result)
 					}).catch(() => {
@@ -72,6 +74,7 @@ export class Client {
 			});
 			Client.client.onRequest("custom/runPreprocessor", (files: string[]) => {
 				return new Promise<any>((resolve, reject) => {
+					Log.get().info("Preprocessor was called in client side. Files" + files);
 					Client.createPreprocessorExecutionPromise(files).then((result) => {
 						resolve(result)
 					}).catch(() => {
@@ -81,6 +84,7 @@ export class Client {
 			});
 			Client.client.onRequest("custom/runCopyHierarchy", (uri: string) => {
 				return new Promise<any>((resolve, reject) => {
+					Log.get().info("CopyHierarchy was called in client side. Uri: " + uri);
 					Client.createCopyHierarchyPromise(uri).then((result) => {
 						resolve(result);
 					}).catch(() => {

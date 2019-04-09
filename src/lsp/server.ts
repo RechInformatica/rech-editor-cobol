@@ -47,13 +47,13 @@ import { CobolDiagnosticParser } from "../cobol/diagnostic/cobolDiagnosticParser
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
-let connection = createConnection(ProposedFeatures.all);
+const connection = createConnection(ProposedFeatures.all);
 let loggingConfigured: boolean;
 
 let hasDiagnosticRelatedInformationCapability: boolean | undefined = false;
-let documents: TextDocuments = new TextDocuments();
+const documents: TextDocuments = new TextDocuments();
 connection.onInitialize(async (params: InitializeParams) => {
-  let capabilities = params.capabilities;
+  const capabilities = params.capabilities;
   hasDiagnosticRelatedInformationCapability =
     capabilities.textDocument &&
     capabilities.textDocument.publishDiagnostics &&
@@ -158,10 +158,10 @@ export function loadFolding(document: TextDocumentChangeEvent) {
   if (document.document.lineCount > MAX_LINE_IN_SOURCE_TO_FOLDING) {
     return;
   }
-  let uri = document.document.uri;
-  let fullDocument = documents.get(uri);
+  const uri = document.document.uri;
+  const fullDocument = documents.get(uri);
   if (fullDocument) {
-    let text = fullDocument.getText();
+    const text = fullDocument.getText();
     getConfig<boolean>("folding").then(foldingConfig => {
       if (foldingConfig) {
         new CobolFoldFactory().fold(uri, BufferSplitter.split(text)).then().catch();
@@ -219,7 +219,7 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
  * @param uri current URI of the file open in editor
  */
 export function sendExternalPreprocessExecution(uri: string) {
-  var files = [uri];
+  const files = [uri];
   return connection.sendRequest<string>("custom/runPreprocessor", [files]);
 }
 
@@ -282,13 +282,13 @@ connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam)
  */
 connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParams): Thenable<DocumentHighlight[]> => {
   return new Promise((resolve, reject) => {
-    let fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
+    const fullDocument = documents.get(_textDocumentPosition.textDocument.uri);
     if (fullDocument) {
-      let text = fullDocument.getText();
-      let line = _textDocumentPosition.position.line;
-      let character = _textDocumentPosition.position.character
-      let word = getLineText(text, line, character);
-      let result = new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character)
+      const text = fullDocument.getText();
+      const line = _textDocumentPosition.position.line;
+      const character = _textDocumentPosition.position.character
+      const word = getLineText(text, line, character);
+      const result = new HighlightFactory().getHighlightsPositions(fullDocument!, word, line, character)
       if (result) {
         return resolve(result)
       } else {
@@ -305,11 +305,11 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
   Log.get().info(`Called callback of onCompletion. File ${_textDocumentPosition.textDocument.uri}`);
   return new Promise((resolve, reject) => {
     getConfig<string[]>("snippetsRepositories").then(repositories => {
-      let line = _textDocumentPosition.position.line;
-      let column = _textDocumentPosition.position.character;
-      let uri = _textDocumentPosition.textDocument.uri;
-      let cacheFileName = buildCacheFileName(uri);
-      let fullDocument = documents.get(uri);
+      const line = _textDocumentPosition.position.line;
+      const column = _textDocumentPosition.position.character;
+      const uri = _textDocumentPosition.textDocument.uri;
+      const cacheFileName = buildCacheFileName(uri);
+      const fullDocument = documents.get(uri);
       if (fullDocument) {
         new CobolCompletionItemFactory(line, column, BufferSplitter.split(fullDocument.getText()), uri)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
@@ -350,11 +350,11 @@ function getCurrentSourceOfVariableCompletions() {
 connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) => {
   Log.get().info(`Formatting file: ${params.textDocument.uri}`);
   return new Promise((reolve, reject) => {
-    let line = params.position.line;
-    let column = params.position.character;
-    let fullDocument = documents.get(params.textDocument.uri);
+    const line = params.position.line;
+    const column = params.position.character;
+    const fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
-      let formatter = new CobolFormatter(line, column, fullDocument!);
+      const formatter = new CobolFormatter(line, column, fullDocument!);
       switch (true) {
         case hasTypedEnter(params.ch):
            Log.get().info(`Formatting with enter. File: ${params.textDocument.uri}`);
@@ -394,10 +394,10 @@ connection.onInitialized(() => {
 
 connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location | ResponseError<undefined>> => {
   return new Promise((resolve, reject) => {
-    let fullDocument = documents.get(params.textDocument.uri);
+    const fullDocument = documents.get(params.textDocument.uri);
     if (fullDocument) {
-      let text = fullDocument.getText();
-      let word = getLineText(text, params.position.line, params.position.character);
+      const text = fullDocument.getText();
+      const word = getLineText(text, params.position.line, params.position.character);
       Log.get().info(`Found declaration for ${word} starting`);
       createPromiseForWordDeclaration(text, word, params.textDocument.uri).then((location) => {
         Log.get().info("Found declaration for " + word + " in " + location.uri + ". Key pressed in " + params.textDocument.uri);
@@ -495,7 +495,7 @@ export function callCobolFinder(word: string, documentFullText: string, uri: str
  * @param uri current URI of the file open in editor
  */
 export function buildCacheFileName(uri: string) {
-  var path = new Path(uri).fullPathWin();
+  const path = new Path(uri).fullPathWin();
   return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" + new Path(path).fileName();
 }
 
@@ -510,7 +510,7 @@ export function sendExternalPreprocExpanderExecution(
   uri: string,
   cacheFileName: string
 ) {
-  var files = [uri, cacheFileName];
+  const files = [uri, cacheFileName];
   return connection.sendRequest("custom/runPreprocExpander", [files]);
 }
 
@@ -521,11 +521,11 @@ export function sendExternalPreprocExpanderExecution(
  * @param position
  */
 export function createLocation(uri: string, position: RechPosition) {
-  let firstCharRange = Range.create(
+  const firstCharRange = Range.create(
     Position.create(position.line, position.column),
     Position.create(position.line, position.column)
   );
-  let fileUri = uri.replace(/\\\\/g, "/").replace("F:", "file:///F%3A");
+  const fileUri = uri.replace(/\\\\/g, "/").replace("F:", "file:///F%3A");
   return Location.create(fileUri, firstCharRange);
 }
 

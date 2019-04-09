@@ -15,11 +15,12 @@ export class SourceExpander {
 	 */
   public createExpanderExecutionPromise(files: string[]) {
     return new Promise<string>((resolve, reject) => {
-      let currentFile = files[0];
-      let cacheFile = files[1];
-      let executor = Editor.getSourceExpander();
+      const currentFile = files[0];
+      const cacheFile = files[1];
+      const executor = Editor.getSourceExpander();
       if (executor) {
-        executor.setPath(currentFile).exec(cacheFile).then(() => {
+        executor.setPath(currentFile).exec(cacheFile).then((result) => {
+          Log.get().info("Source expanded Files:" + files.toString() + " - " + result);
           resolve();
         }).catch(() => {
           Log.get().error("Fatal error to expand the source");
