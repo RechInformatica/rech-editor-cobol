@@ -60,10 +60,10 @@ export class ParserCobol {
    */
   public getDeclaracaoVariavel(line: string): string | undefined {
     // variable
-    var match = /^\s+\d\d\s+(?:\(.*\))?([\w\-]+)(\s+|\.).*/i.exec(line);
+    var match = /^\s+\d\d\s+(?:\([^\s]+\))?([\w\-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
       // $SET CONSTANT
-      match = /^\s+\$SET\s+CONSTANT\s+(?:\(.*\))?([\w\-]+)\s+.*/i.exec(line);
+      match = /^\s+\$SET\s+CONSTANT\s+(?:\([^\s]+\))?([\w\-]+)\s+.*/i.exec(line);
       if (match == null) {
         return undefined;
       }
