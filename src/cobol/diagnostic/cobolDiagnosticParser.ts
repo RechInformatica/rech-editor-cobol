@@ -230,6 +230,7 @@ export class CobolDiagnosticParser {
           character: 120
         }
       }
+      iterator.stop();
     });
     if (result) {
       return result;

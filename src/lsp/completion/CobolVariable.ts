@@ -102,7 +102,7 @@ export class CobolVariable {
                     break;
                 }
             }
-            if (/^.*(section|division)[\.\,]?\s*$/.test(currentLine)) {
+            if (/^.*(section|division)[\.\,]?\s*$/i.test(currentLine)) {
                 break;
             }
         }
@@ -157,7 +157,7 @@ export class CobolVariable {
      * @param parentVariable parent variable line text
      */
     private static splitVariableInfo(parentVariable: string): string[] {
-        let parentVariableLineText = this.removeDuplicateWhitespaces(parentVariable);
+        const parentVariableLineText = this.removeDuplicateWhitespaces(parentVariable);
         let splittedParent = parentVariableLineText.split(" ");
         if (splittedParent[splittedParent.length - 1] == "") {
             splittedParent = splittedParent.slice(0, splittedParent.length - 2);
@@ -263,7 +263,7 @@ export class CobolVariable {
      * @param picture
      */
     private static hasComp(picture: string): boolean {
-        return /.*comp.*/.test(picture);
+        return /.*comp.*/i.test(picture);
     }
 
     /**
@@ -388,7 +388,7 @@ export class CobolVariable {
      * Returns the occurs of variable
      */
     private getOccurs(): number {
-        let occurs = /.*occurs\s+(\d+)\s+times.*/.exec(this.raw);
+        let occurs = /.*occurs\s+(\d+)\s+times.*/i.exec(this.raw);
         if (!occurs) {
             return 1;
         } else {

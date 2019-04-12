@@ -105,24 +105,26 @@ export class CobolDeclarationFinder {
    * @param buffer
    */
   private findDeclarationInPreprocessedSource(term: string, path: Path, buffer: string): Promise<RechPosition> {
-    let parser = new ParserCobol();
+    const parser = new ParserCobol();
     return new Promise((resolve, reject) => {
       let result = undefined;
       let file = path.fileName();
       new Scan(buffer).scan(/\s+\*\>\sOpções:.*/gi, (iterator: any) => {
-        let match = /^\s+\*\>\sOpções:\s([A-Za-z0-9\\:]+\.CBL)/gm.exec(iterator.lineContent)
+        const match = /^\s+\*\>\sOpções:\s([A-Za-z0-9\\:]+\.CBL)/gm.exec(iterator.lineContent)
         if (match) {
           file = new Path(match[1]).fileName();
+          iterator.stop();
         }
       });
       new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
         if (parser.isDeclaration(term, iterator.lineContent)) {
-          let match = <RegExpMatchArray>/.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
-          let line = parseInt(match[1]) - 1;
-          if (match[2]) {
-            file = match[2];
+          const match = <RegExpMatchArray>/.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
+          const line = parseInt(match[1]) - 1;
+          const filePositionGroup = 2;
+          if (match[filePositionGroup]) {
+            file = match[filePositionGroup];
           }
-          let column = iterator.column;
+          const column = iterator.column;
           // build the result
           result = new RechPosition(<number>line, <number>column, this.getFullPath(file, path));
           iterator.stop();
@@ -140,7 +142,7 @@ export class CobolDeclarationFinder {
    * Return the full path of a file
    */
   private getFullPath(file: string, path: Path): string {
-    let preferredDirectory = new Path(path.fullPathWin()).directory().toUpperCase();
+    const preferredDirectory = new Path(path.fullPathWin()).directory().toUpperCase();
     if (new File(preferredDirectory + file).exists()) {
       return preferredDirectory + file;
     }
