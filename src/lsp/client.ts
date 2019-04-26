@@ -8,6 +8,7 @@ import { SourceExpander } from '../editor/SourceExpander';
 import { SourceOfCompletions } from './commons/SourceOfCompletions';
 import { RechPosition } from '../commons/rechposition';
 import { Log } from '../commons/Log';
+import { reject } from 'q';
 
 /**
  * Language Server Provider client
@@ -93,29 +94,52 @@ export class Client {
 				});
 			});
 			Client.client.onRequest("custom/getConfig", (section: string) => {
-				return new Promise<any>((resolve) => {
-					resolve (Client.getConfig(section))
+				return new Promise<any>((resolve, reject) => {
+					Client.getConfig(section).then((result) => {
+						resolve(result);
+					}).catch(() => {
+						reject();
+					})
 				})
 			});
 			Client.client.onRequest("custom/getAutoDiagnostic", () => {
-				return new Promise<any>((resolve) => {
-					resolve(cobolDiagnosticFilter.getAutoDiagnostic());
+				return new Promise<any>((resolve, reject) => {
+					const result = cobolDiagnosticFilter.getAutoDiagnostic();
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject();
+					}
 				});
 			});
 			Client.client.onRequest("custom/diagnosticFilter", (diagnosticMessage: string) => {
-				return new Promise<Boolean>((resolve) => {
+				return new Promise<Boolean>((resolve, reject) => {
 					const result = cobolDiagnosticFilter.isDiagnosticValid(diagnosticMessage);
-					resolve(result);
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject();
+					}
 				})
 			});
 			Client.client.onRequest("custom/sourceOfParagraphCompletions", () => {
-				return new Promise<string>((resolve) => {
-					resolve(SourceOfCompletions.getSourceOfParagraphCompletions());
+				return new Promise<string>((resolve, reject) => {
+					const result = SourceOfCompletions.getSourceOfParagraphCompletions();
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject();
+					}
 				})
 			});
 			Client.client.onRequest("custom/sourceOfVariableCompletions", () => {
-				return new Promise<string>((resolve) => {
-					resolve(SourceOfCompletions.getSourceOfVariableCompletions());
+				return new Promise<string>((resolve, reject) => {
+					const result = SourceOfCompletions.getSourceOfVariableCompletions();
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject();
+					}
 				})
 			});
 			if (Editor.getSourceExpander()) {
@@ -171,8 +195,13 @@ export class Client {
 	 * @param section
 	 */
 	private static getConfig(section: string, defaultValue?: any): Promise<any> {
-		return new Promise<any>((resolve) => {
-			resolve(configuration.get(section, defaultValue));
+		return new Promise<any>((resolve, reject) => {
+			let result = configuration.get(section, defaultValue);
+			if (result) {
+				resolve(result);
+			} else {
+				reject();
+			}
 		});
 	}
 

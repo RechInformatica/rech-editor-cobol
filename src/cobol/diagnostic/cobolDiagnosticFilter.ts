@@ -7,9 +7,9 @@ import { configuration } from "../../helpers/configuration";
 export class CobolDiagnosticFilter {
 
   /** Wheter auto diagnostic is active */
-  private autoDiagnostic: "onChange" | "onSave" | boolean = false;
+  public autoDiagnostic: "onChange" | "onSave" | boolean = false;
   /** Warnings that should not be considered in diagnostics */
-  private noShowWarnings: string[] | undefined;
+  public noShowWarnings: string[] | undefined;
 
 
   /**

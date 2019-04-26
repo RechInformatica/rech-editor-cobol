@@ -58,21 +58,24 @@ export class CobolDeclarationFinder {
     return new Promise((resolve, reject) => {
       ExpandedSourceManager.getExpandedSource(uri).then((expandedSource) => {
         let path = new Path(uri);
-        let result = this.findDeclarationInPreprocessedSource(term, path, expandedSource);
-        if (result) {
-          return resolve(result);
-        } else {
-          if (expandSource) {
-            new ExpandedSourceManager(uri).expandSource().then(()=>{}).catch(() => {});
-            this.findDeclarationWithPreproc(term, uri, false).then((result) => {
-              return resolve(result);
-            }).catch(() => {
-              return reject();
-            })
+        this.findDeclarationInPreprocessedSource(term, path, expandedSource).then((result) => {
+          if (result) {
+            return resolve(result);
           } else {
-            return reject();
+            if (expandSource) {
+              new ExpandedSourceManager(uri).expandSource().then(()=>{}).catch(() => {});
+              this.findDeclarationWithPreproc(term, uri, false).then((result) => {
+                return resolve(result);
+              }).catch(() => {
+                return reject();
+              })
+            } else {
+              return reject();
+            }
           }
-        }
+        }).catch(() => {
+          return reject();
+        });
       }).catch(() => {
         return reject();
       })
