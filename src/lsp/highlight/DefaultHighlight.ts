@@ -13,8 +13,8 @@ export class DefaultHighlight implements HighlightInterface {
     }
 
     positions(text: TextDocument, word: string, _currentLine: number, _currentCharacter: number): DocumentHighlight[]{
-        let results: DocumentHighlight[] = []
-        let regexp = new RegExp("(?:\\s|\\(|\\)|\\,|\\.|\\>|\\\"|=|^)" + word + "(?:\\s|\\)|\\(|\\,|\\.|\\\"|==|\\:|$)", "g");
+        const results: DocumentHighlight[] = []
+        const regexp = new RegExp("(?:\\s|\\(|\\)|\\,|\\.|\\>|\\\"|=|^)" + word + "(?:\\s|\\)|\\(|\\,|\\.|\\\"|==|\\:|$)", "g");
         new Scan(text.getText()).scan(regexp, (iterator: any) => {
             results.push(this.buildDocumentHighlight(iterator, word))
         });

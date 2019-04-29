@@ -142,8 +142,8 @@ function defineDianosticConfigs() {
     const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("dianosticProperties");
     commands.executeCommand(commandToConfigSourceExpander).then((cobolDiagnosticFilterProperties) => {
         if (cobolDiagnosticFilterProperties) {
-            cobolDiagnosticFilter.setAutoDiagnostic((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).getAutoDiagnostic());
-            cobolDiagnosticFilter.setNoShowWarnings((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).getNoShowWarnings());
+            cobolDiagnosticFilter.setAutoDiagnostic((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).autoDiagnostic);
+            cobolDiagnosticFilter.setNoShowWarnings((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).noShowWarnings);
         }
     });
 }
@@ -186,3 +186,4 @@ export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./lsp/declaration/CobolDeclarationFinder";
 export * from "./cobol/diagnostic/cobolDiagnosticFilter";
 export * from "./cobol/ExpandedSourceManager";
+export * from "./commons/Log";

@@ -9,11 +9,13 @@ describe("Buffer scan functions", () => {
   // Test scan the buffer
   it("Scan the buffer", done => {
     new File(new Path(path.resolve(__dirname) + "/../TestFiles/PROCEDURE.CBL").fullPath()).loadBuffer("latin1").then(buffer => {
-      let term = "PLIS-ACESEL";
+      const term = "PLIS-ACESEL";
+      const expectedLine = 9;
+      const expectedColumn = 34;
       new Scan(buffer).scan(new RegExp(term, "gi"), (iterator: any) => {
         if (iterator.lineContent.includes(term)) {
-          assert.equal(34, iterator.column);
-          assert.equal(9, iterator.row + 1);
+          assert.equal(expectedColumn, iterator.column);
+          assert.equal(expectedLine, iterator.row + 1);
           iterator.stop();
         }
       });

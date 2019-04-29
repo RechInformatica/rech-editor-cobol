@@ -7,6 +7,8 @@ import { cobolDiagnosticFilter } from '../cobol/diagnostic/cobolDiagnosticFilter
 import { SourceExpander } from '../editor/SourceExpander';
 import { SourceOfCompletions } from './commons/SourceOfCompletions';
 import { RechPosition } from '../commons/rechposition';
+import { Log } from '../commons/Log';
+import { reject } from 'q';
 
 /**
  * Language Server Provider client
@@ -21,15 +23,15 @@ export class Client {
      */
 	public static startServerAndEstablishCommunication(context: ExtensionContext) {
 		// The server is implemented in node
-		let serverModule = context.asAbsolutePath(
+		const serverModule = context.asAbsolutePath(
 			path.join('out', 'lsp', 'server.js')
 		);
 		// The debug options for the server
 		// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
-		let debugOptions = { execArgv: ['--nolazy', '--inspect=10999'] };
+		const debugOptions = { execArgv: ['--nolazy', '--inspect=10999'] };
 		// If the extension is launched in debug mode then the debug server options are used
 		// Otherwise the run options are used
-		let serverOptions: ServerOptions = {
+		const serverOptions: ServerOptions = {
 			run: { module: serverModule, transport: TransportKind.ipc },
 			debug: {
 				module: serverModule,
@@ -38,7 +40,7 @@ export class Client {
 			}
 		};
 		// Options to control the language client
-		let clientOptions: LanguageClientOptions = {
+		const clientOptions: LanguageClientOptions = {
 			// Register the server for COBOL documents
 			documentSelector: [{ scheme: 'file', language: 'COBOL' }]
 		};
@@ -62,36 +64,82 @@ export class Client {
 	private static configureClientWhenReady() {
 		if (Client.client) {
 			Client.client.onRequest("custom/runPreprocExpander", (files: string[]) => {
-				return new SourceExpander().createExpanderExecutionPromise(files);
+				return new Promise<any>((resolve, reject) => {
+					Log.get().info("PreprocExpander was called in client side. Files: " + files);
+					new SourceExpander().createExpanderExecutionPromise(files).then((result) => {
+						resolve(result)
+					}).catch(() => {
+						reject();
+					});
+				});
 			});
 			Client.client.onRequest("custom/runPreprocessor", (files: string[]) => {
-				return Client.createPreprocessorExecutionPromise(files);
+				return new Promise<any>((resolve, reject) => {
+					Log.get().info("Preprocessor was called in client side. Files" + files);
+					Client.createPreprocessorExecutionPromise(files).then((result) => {
+						resolve(result)
+					}).catch(() => {
+						reject();
+					});
+				});
 			});
 			Client.client.onRequest("custom/runCopyHierarchy", (uri: string) => {
-				return Client.createCopyHierarchyPromise(uri);
+				return new Promise<any>((resolve, reject) => {
+					Log.get().info("CopyHierarchy was called in client side. Uri: " + uri);
+					Client.createCopyHierarchyPromise(uri).then((result) => {
+						resolve(result);
+					}).catch(() => {
+						reject();
+					});
+				});
 			});
 			Client.client.onRequest("custom/getConfig", (section: string) => {
-				return Client.getConfig(section);
+				return new Promise<any>((resolve, reject) => {
+					Client.getConfig(section).then((result) => {
+						resolve(result);
+					}).catch(() => {
+						reject();
+					})
+				})
 			});
 			Client.client.onRequest("custom/getAutoDiagnostic", () => {
-				return new Promise<any>((resolve) => {
-					resolve(cobolDiagnosticFilter.getAutoDiagnostic());
+				return new Promise<any>((resolve, reject) => {
+					const result = cobolDiagnosticFilter.getAutoDiagnostic();
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject();
+					}
 				});
 			});
 			Client.client.onRequest("custom/diagnosticFilter", (diagnosticMessage: string) => {
-				return new Promise<Boolean>((resolve) => {
+				return new Promise<Boolean>((resolve, reject) => {
 					const result = cobolDiagnosticFilter.isDiagnosticValid(diagnosticMessage);
-					resolve(result);
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject();
+					}
 				})
 			});
 			Client.client.onRequest("custom/sourceOfParagraphCompletions", () => {
-				return new Promise<string>((resolve) => {
-					resolve(SourceOfCompletions.getSourceOfParagraphCompletions());
+				return new Promise<string>((resolve, reject) => {
+					const result = SourceOfCompletions.getSourceOfParagraphCompletions();
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject();
+					}
 				})
 			});
 			Client.client.onRequest("custom/sourceOfVariableCompletions", () => {
-				return new Promise<string>((resolve) => {
-					resolve(SourceOfCompletions.getSourceOfVariableCompletions());
+				return new Promise<string>((resolve, reject) => {
+					const result = SourceOfCompletions.getSourceOfVariableCompletions();
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject();
+					}
 				})
 			});
 			if (Editor.getSourceExpander()) {
@@ -107,8 +155,8 @@ export class Client {
 	 */
 	private static createPreprocessorExecutionPromise(files: string[]): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
-			let currentFile = files[0];
-			let executor = Editor.getPreprocessor();
+			const currentFile = files[0];
+			const executor = Editor.getPreprocessor();
 			if (executor) {
 				executor.setPath(currentFile).exec().then((process) => {
 					resolve(process.getStdout());
@@ -147,8 +195,13 @@ export class Client {
 	 * @param section
 	 */
 	private static getConfig(section: string, defaultValue?: any): Promise<any> {
-		return new Promise<any>((resolve) => {
-			resolve(configuration.get(section, defaultValue));
+		return new Promise<any>((resolve, reject) => {
+			let result = configuration.get(section, defaultValue);
+			if (result) {
+				resolve(result);
+			} else {
+				reject();
+			}
 		});
 	}
 

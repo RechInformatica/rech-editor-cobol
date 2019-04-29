@@ -88,8 +88,8 @@ export class Log {
    */
   private writeAndOutputsMessage(originalMessage: string): void {
     if (this.active) {
-      let finalMessage = this.buildFinalMessage(originalMessage);
-      this.getLogFile().appendBuffer([finalMessage], "latin1").then().catch(() => {});
+      const finalMessage = this.buildFinalMessage(originalMessage);
+      this.getLogFile().appendBufferSync([finalMessage], "latin1");
     }
   }
 
@@ -99,7 +99,7 @@ export class Log {
    * @param message message to be written
    */
   private buildFinalMessage(message: string): string {
-    let date = new Date();
+    const date = new Date();
     return date.toLocaleString() + " " + message + "\n";
   }
 
@@ -119,7 +119,7 @@ export class Log {
    * Create log directory if needed
    */
   private createLogDirectoryIfNeeded(): void {
-    let directory = new File(LOG_DIR);
+    const directory = new File(LOG_DIR);
     if (!directory.exists()) {
       directory.mkdir();
     }
@@ -129,8 +129,8 @@ export class Log {
    * Builds the log file name
    */
   private buildsLogName(): string {
-    let timestamp = Date.now().toString();
-    let name = LOG_DIR + "RechCobol_Log_" + timestamp + ".log";
+    const timestamp = Date.now().toString();
+    const name = LOG_DIR + "RechCobol_Log_" + timestamp + ".log";
     return name;
   }
 

@@ -28,7 +28,7 @@ export class File {
    * Create a new temporary file
    */
   public static tmpFile(): File {
-    let timestamp = Date.now().toString();
+    const timestamp = Date.now().toString();
     return new File("C:\\tmp\\" + timestamp + ".txt");
   }
 
@@ -57,6 +57,13 @@ export class File {
    */
   public appendBuffer(buffer: string[], encoding?: string): Q.Promise<{}> {
     return appendFile(this.fileName, buffer, { encoding: encoding });
+  }
+
+  /**
+   * Append a buffer in file Synchronously
+   */
+  public appendBufferSync(buffer: string[], encoding?: string): void {
+    fs.appendFileSync(this.fileName, buffer, { encoding: encoding });
   }
 
   /**
