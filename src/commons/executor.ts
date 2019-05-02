@@ -5,7 +5,7 @@ import * as stream from "stream";
 import * as iconv_lite from 'iconv-lite';
 
 // Map of created channels by name
-let channels = new Map<string, vscode.OutputChannel>();
+const channels = new Map<string, vscode.OutputChannel>();
 
 /**
  * Class to run external processes
@@ -50,7 +50,7 @@ export class Executor {
     onFinish: (errorLevel: number) => void): Promise<{ stdout: string; stderr: string }> {
     return new Promise<{ stdout: string; stderr: string }>(
       (resolve, reject) => {
-        let proc = cp.exec(command, options, (error, stdout, stderr) => {
+        const proc = cp.exec(command, options, (error, stdout, stderr) => {
           if (error) {
             reject({ error, stdout, stderr });
           }
@@ -126,7 +126,7 @@ export class Executor {
    * @param callback optional callback executed after the process execution is completed
    */
   runSync(command: string) {
-    let exec = cp.execSync(command);
+    const exec = cp.execSync(command);
     return exec.toString();
   }
 

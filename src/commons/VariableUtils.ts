@@ -17,8 +17,8 @@ export class VariableUtils {
      * @param variableLine current variable line within buffer lines
      */
     public static findVariableDocArray(lines: string[], variableLine: number): string[] {
-        let enumVar = VariableUtils.isBooleanFlag(lines[variableLine]);
-        let docArray = new ElementDocumentationExtractor().getElementDocumentation(lines, variableLine);
+        const enumVar = VariableUtils.isBooleanFlag(lines[variableLine]);
+        const docArray = new ElementDocumentationExtractor().getElementDocumentation(lines, variableLine);
         if (docArray.length == 0 && enumVar) {
             return this.findParentDocArray(lines, variableLine);
         }
@@ -32,7 +32,7 @@ export class VariableUtils {
      * @param variableLine current variable line within buffer lines
      */
     private static findParentDocArray(lines: string[], variableLine: number): string[] {
-        let parentLine = VariableUtils.findBooleanParentVariableLine(variableLine, lines);
+        const parentLine = VariableUtils.findBooleanParentVariableLine(variableLine, lines);
         return new ElementDocumentationExtractor().getElementDocumentation(lines, parentLine);
     }
 
@@ -47,7 +47,7 @@ export class VariableUtils {
             return lineNumber;
         }
         for (let i = 1; i <= VariableUtils.MAX_LINES_FLAG_PARENT; i++) {
-            let currentLine = bufferLines[lineNumber - i];
+            const currentLine = bufferLines[lineNumber - i];
             if (!VariableUtils.isBooleanFlag(currentLine) && !currentLine.trim().startsWith("*>")) {
                 return lineNumber - i;
             }
@@ -61,7 +61,7 @@ export class VariableUtils {
      * @param currentLine current line text
      */
     private static isBooleanFlag(currentLine: string): boolean {
-        let upperLine = currentLine.toUpperCase();
+        const upperLine = currentLine.toUpperCase();
         if (/\s+(88).*/.exec(upperLine)) {
             return true;
         }

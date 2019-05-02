@@ -101,7 +101,7 @@ export class File {
    * Create a new directory
    */
   public mkdir() {
-    let partsOfFileName = this.fileName.split("\\");
+    const partsOfFileName = this.fileName.split("\\");
     let directory = "";
     partsOfFileName.forEach((currentPart) => {
       directory == "" ? directory = currentPart : directory = directory + "\\" + currentPart;
@@ -134,11 +134,11 @@ export class File {
    * @param extensionFilter file extension to be filtered
    */
   public dirFiles(extensionFilter?: string): string[] {
-    let files = fs.readdirSync(this._fileName);
+    const files = fs.readdirSync(this._fileName);
     if (!extensionFilter) {
       return files;
     }
-    let filtered: string[] = [];
+    const filtered: string[] = [];
     files.forEach(currentFile => {
       if (currentFile.endsWith(extensionFilter)) {
         filtered.push(currentFile);
@@ -153,8 +153,8 @@ export class File {
    * @returns Date
    */
   public lastModified(): Date {
-    let stats = fs.statSync(this.fileName);
-    let mtime = new Date(stats.mtime);
+    const stats = fs.statSync(this.fileName);
+    const mtime = new Date(stats.mtime);
     return mtime;
   }
 
