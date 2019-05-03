@@ -11,7 +11,7 @@ export class ExpandedSourceManager {
   /** callback to expander the source */
   private static callbackSourceExpander: ((uri: string, cacheFileName: string) => Thenable<{}>) | undefined;
   /** callback to show SatusBar from SourceExpander */
-  private static callbackShowStatusBarFromSourceExpander: (() => void) | undefined;
+  private static callbackShowStatusBarFromSourceExpander: ((file?: string) => void) | undefined;
   /** callback to hide SatusBar from SourceExpander */
   private static callbackHideStatusBarFromSourceExpander: (() => void) | undefined;
   /** Source to expand*/
@@ -26,7 +26,7 @@ export class ExpandedSourceManager {
    */
   public expandSource(): Promise<string> {
     if (ExpandedSourceManager.callbackShowStatusBarFromSourceExpander) {
-      ExpandedSourceManager.callbackShowStatusBarFromSourceExpander();
+      ExpandedSourceManager.callbackShowStatusBarFromSourceExpander(this.source);
     }
     return new Promise((resolve, reject) => {
       Log.get().info("ExpandedSourceManager.expandSource() was called");
@@ -74,7 +74,7 @@ export class ExpandedSourceManager {
    * @param callbackSourceExpander
    * @param callbackSourceExpander
    */
-  public static setStatusBarFromSourceExpander(callbackShowStatusBarFromSourceExpander: () => void, callbackHideStatusBarFromSourceExpander: () => void) {
+  public static setStatusBarFromSourceExpander(callbackShowStatusBarFromSourceExpander: (file?: string) => void, callbackHideStatusBarFromSourceExpander: () => void) {
     ExpandedSourceManager.callbackShowStatusBarFromSourceExpander = callbackShowStatusBarFromSourceExpander;
     ExpandedSourceManager.callbackHideStatusBarFromSourceExpander = callbackHideStatusBarFromSourceExpander;
   }

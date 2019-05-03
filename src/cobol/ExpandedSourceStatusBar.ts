@@ -18,12 +18,17 @@ export class ExpandedSourceStatusBar {
     /**
      * Show the statusBar from expandedSource
      */
-    public static show() {
+    public static show(file?: string) {
         if (ExpandedSourceStatusBar.isVisible) {
             return;
         }
         ExpandedSourceStatusBar.isVisible = true;
         if (ExpandedSourceStatusBar.expandedSourceStatusBar) {
+            if (file) {
+                ExpandedSourceStatusBar.expandedSourceStatusBar.tooltip = file;
+            } else {
+                ExpandedSourceStatusBar.expandedSourceStatusBar.tooltip = undefined;
+            }
             ExpandedSourceStatusBar.expandedSourceStatusBar.show();
         }
     }

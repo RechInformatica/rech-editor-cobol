@@ -80,8 +80,8 @@ connection.onInitialize(async (params: InitializeParams) => {
 });
 
 /** Sets the ExpanderSource Statusbar controll callback */
-ExpandedSourceManager.setStatusBarFromSourceExpander(() => {
-  return connection.sendRequest("custom/showStatusBarFromSourceExpander");
+ExpandedSourceManager.setStatusBarFromSourceExpander((file?: string) => {
+  return connection.sendRequest("custom/showStatusBarFromSourceExpander", file);
 }, () => {
   return connection.sendRequest("custom/hideStatusBarFromSourceExpander");
 });
@@ -175,7 +175,7 @@ export function loadFolding(document: TextDocumentChangeEvent) {
           .fold(
             uri,
             BufferSplitter.split(text),
-            () => sendRequestToShowFoldStatusBar(),
+            () => sendRequestToShowFoldStatusBar(uri),
             () => sendRequestToHideFoldStatusBar()
           )
           .then()
@@ -277,7 +277,7 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
 
 connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[] | ResponseError<undefined>> => {
   Log.get().info(`Called callback of onFoldingRanges. File ${_foldingRangeRequestParam.textDocument.uri}`);
-  sendRequestToShowFoldStatusBar();
+  sendRequestToShowFoldStatusBar("Applying Folding from: " + _foldingRangeRequestParam.textDocument.uri);
   return new Promise((resolve, reject) => {
     const uri = _foldingRangeRequestParam.textDocument.uri;
     const folding = CobolFoldFactory.foldingCache.get(uri);
@@ -365,8 +365,8 @@ function getCurrentSourceOfVariableCompletions() {
 /**
  * Send request to show folding status bar
  */
-function sendRequestToShowFoldStatusBar() {
-  return connection.sendRequest("custom/showFoldinStatusBar")
+function sendRequestToShowFoldStatusBar(file?: string) {
+  return connection.sendRequest("custom/showFoldinStatusBar", file)
 }
 
 /**

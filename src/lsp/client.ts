@@ -134,14 +134,14 @@ export class Client {
 					}
 				})
 			});
-			Client.client.onRequest("custom/showFoldinStatusBar", () => {
-				FoldStatusBar.show();
+			Client.client.onRequest("custom/showFoldinStatusBar", (file?: string) => {
+				FoldStatusBar.show(file);
 			});
 			Client.client.onRequest("custom/hideFoldinStatusBar", () => {
 				FoldStatusBar.hide();
 			});
-			Client.client.onRequest("custom/showStatusBarFromSourceExpander", () => {
-				ExpandedSourceStatusBar.show();
+			Client.client.onRequest("custom/showStatusBarFromSourceExpander", (file?: string) => {
+				ExpandedSourceStatusBar.show(file);
 			});
 			Client.client.onRequest("custom/hideStatusBarFromSourceExpander", () => {
 				ExpandedSourceStatusBar.hide();
