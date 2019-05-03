@@ -10,6 +10,10 @@ export class ExpandedSourceManager {
   private static expandedSource: Map<string, string> = new Map();
   /** callback to expander the source */
   private static callbackSourceExpander: ((uri: string, cacheFileName: string) => Thenable<{}>) | undefined;
+  /** callback to show SatusBar from SourceExpander */
+  private static callbackShowStatusBarFromSourceExpander: (() => void) | undefined;
+  /** callback to hide SatusBar from SourceExpander */
+  private static callbackHideStatusBarFromSourceExpander: (() => void) | undefined;
   /** Source to expand*/
   private source: string;
 
@@ -21,10 +25,16 @@ export class ExpandedSourceManager {
    * Expand the source and load the cache
    */
   public expandSource(): Promise<string> {
+    if (ExpandedSourceManager.callbackShowStatusBarFromSourceExpander) {
+      ExpandedSourceManager.callbackShowStatusBarFromSourceExpander();
+    }
     return new Promise((resolve, reject) => {
       Log.get().info("ExpandedSourceManager.expandSource() was called");
       if (!ExpandedSourceManager.callbackSourceExpander) {
         Log.get().warning("SourceExpander is undefined");
+        if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
+          ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
+        }
         return reject()
       }
       Log.get().info("ExpandedSourceManager has callbackSourceExpander");
@@ -34,9 +44,15 @@ export class ExpandedSourceManager {
         file.loadBuffer("latin1").then((buffer) => {
           ExpandedSourceManager.expandedSource.set(this.source, buffer);
           Log.get().info("Expanded source loaded successfully");
+          if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
+            ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
+          }
           resolve(buffer)
         }).catch(() => {
           Log.get().error("Error to load expanded source");
+          if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
+            ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
+          }
           reject();
         });
       });
@@ -50,6 +66,17 @@ export class ExpandedSourceManager {
    */
   public static setSourceExpander(callbackSourceExpander: (uri: string, cacheFileName: string) => Thenable<{}>) {
     ExpandedSourceManager.callbackSourceExpander = callbackSourceExpander;
+  }
+
+  /**
+   * Defines show and hide StatusBar callbacks
+   *
+   * @param callbackSourceExpander
+   * @param callbackSourceExpander
+   */
+  public static setStatusBarFromSourceExpander(callbackShowStatusBarFromSourceExpander: () => void, callbackHideStatusBarFromSourceExpander: () => void) {
+    ExpandedSourceManager.callbackShowStatusBarFromSourceExpander = callbackShowStatusBarFromSourceExpander;
+    ExpandedSourceManager.callbackHideStatusBarFromSourceExpander = callbackHideStatusBarFromSourceExpander;
   }
 
   /**

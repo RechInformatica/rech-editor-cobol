@@ -9,6 +9,8 @@ import { SourceOfCompletions } from './commons/SourceOfCompletions';
 import { RechPosition } from '../commons/rechposition';
 import { Log } from '../commons/Log';
 import { reject } from 'q';
+import { FoldStatusBar } from './fold/FoldStatusBar';
+import { ExpandedSourceStatusBar } from '../cobol/ExpandedSourceStatusBar';
 
 /**
  * Language Server Provider client
@@ -132,6 +134,18 @@ export class Client {
 					}
 				})
 			});
+			Client.client.onRequest("custom/showFoldinStatusBar", () => {
+				FoldStatusBar.show();
+			});
+			Client.client.onRequest("custom/hideFoldinStatusBar", () => {
+				FoldStatusBar.hide();
+			});
+			Client.client.onRequest("custom/showStatusBarFromSourceExpander", () => {
+				ExpandedSourceStatusBar.show();
+			});
+			Client.client.onRequest("custom/hideStatusBarFromSourceExpander", () => {
+				ExpandedSourceStatusBar.hide();
+			});
 			Client.client.onRequest("custom/sourceOfVariableCompletions", () => {
 				return new Promise<string>((resolve, reject) => {
 					const result = SourceOfCompletions.getSourceOfVariableCompletions();
@@ -196,7 +210,7 @@ export class Client {
 	 */
 	private static getConfig(section: string, defaultValue?: any): Promise<any> {
 		return new Promise<any>((resolve, reject) => {
-			let result = configuration.get(section, defaultValue);
+			const result = configuration.get(section, defaultValue);
 			if (result) {
 				resolve(result);
 			} else {
