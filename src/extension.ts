@@ -13,17 +13,23 @@ import { Log } from './commons/Log';
 import { configuration, Configuration } from './helpers/configuration';
 import { GenericExecutor } from './commons/genericexecutor';
 import { cobolDiagnosticFilter, CobolDiagnosticFilter } from './cobol/diagnostic/cobolDiagnosticFilter';
+import { FoldStatusBar } from './lsp/fold/FoldStatusBar';
+import { ExpandedSourceStatusBar } from './cobol/ExpandedSourceStatusBar';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(_context: any) {
-    let context = <ExtensionContext>_context;
+    const context = <ExtensionContext>_context;
     // Starts the LSP Client
     Client.startServerAndEstablishCommunication(_context);
     // Custom decorators beyond language syntax highlight
     CustomDecorator.activate(_context);
     // Build the statusBar to control the source of completions suggested in the server side
     SourceOfCompletions.buildStatusBar();
+    // Build the statusBar from folding
+    FoldStatusBar.buildStatusBar();
+    // Build the statusBar from SourceExpander
+    ExpandedSourceStatusBar.buildStatusBar();
     // Configures the Logging instance on client side
     Log.get().setActive(configuration.get<boolean>("log"));
     //
@@ -74,11 +80,11 @@ export function activate(_context: any) {
         new Editor().setColumn(COLUNA_VALUE - 1).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.showElementProperties', () => {
-        let editor = new Editor();
-        let word = editor.getCurrentWord();
-        let buffer = editor.getEditorBuffer();
-        let uri = editor.getPath().fullPathVscode();
-        let line = editor.getCurrentRow();
+        const editor = new Editor();
+        const word = editor.getCurrentWord();
+        const buffer = editor.getEditorBuffer();
+        const uri = editor.getPath().fullPathVscode();
+        const line = editor.getCurrentRow();
         new ElementsDisplayerFactory().show(word, buffer, uri, line);
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos12', () => {

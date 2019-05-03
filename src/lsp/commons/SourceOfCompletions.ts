@@ -1,5 +1,10 @@
 import { StatusBarItem, window, StatusBarAlignment } from "vscode";
 
+/** Paragraph status bar priority */
+const PARAGRAPHSTATUSBARPRIORITY = 200;
+/** Variable status bar priority */
+const VARIABLESTATUSBARPRIORITY = 199;
+
 export class SourceOfCompletions {
 
     private static paragraphStatusBar: StatusBarItem | undefined;
@@ -12,11 +17,11 @@ export class SourceOfCompletions {
      * Build the statusBar to controll the source of completions
      */
     public static buildStatusBar() {
-        SourceOfCompletions.paragraphStatusBar = window.createStatusBarItem(StatusBarAlignment.Right)
+        SourceOfCompletions.paragraphStatusBar = window.createStatusBarItem(StatusBarAlignment.Right, PARAGRAPHSTATUSBARPRIORITY)
         SourceOfCompletions.paragraphStatusBar.command = "rech.editor.cobol.changeParagraphSource"
         SourceOfCompletions.paragraphStatusBar.text = "ParagraphSource - Local File"
         //
-        SourceOfCompletions.variableStatusBar = window.createStatusBarItem(StatusBarAlignment.Right)
+        SourceOfCompletions.variableStatusBar = window.createStatusBarItem(StatusBarAlignment.Right, VARIABLESTATUSBARPRIORITY)
         SourceOfCompletions.variableStatusBar.command = "rech.editor.cobol.changeVariableSource"
         SourceOfCompletions.variableStatusBar.text = "VariableSource - Local File"
     }

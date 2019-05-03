@@ -34,8 +34,8 @@ export class CobolWordFinder {
     private findWordWithRegex(lineText: string, column: number, cobolWordRegex: RegExp) {
         var result: any;
         while ((result = cobolWordRegex.exec(lineText)) !== null) {
-            let start = result.index;
-            let end = start + result[0].length;
+            const start = result.index;
+            const end = start + result[0].length;
             if (start <= column && column <= end) {
                 return result[0];
             }
@@ -50,10 +50,10 @@ export class CobolWordFinder {
      * @param column initial column
      */
     public getNextWordColumn(lineText: string, column: number): number {
-        var cobolWordRegex = this.getCobolWordRegex();
-        var result: any;
+        const cobolWordRegex = this.getCobolWordRegex();
+        let result: any;
         while ((result = cobolWordRegex.exec(lineText)) !== null) {
-            let start = result.index;
+            const start = result.index;
             if (start > column) {
                 return start;
             }

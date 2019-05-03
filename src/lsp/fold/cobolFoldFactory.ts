@@ -19,12 +19,21 @@ export class CobolFoldFactory {
   /** Folding cache */
   public static foldingCache: Map<string, FoldingRange[]> = new Map()
 
-  public fold(uri: string, buffer: string[]): Promise<FoldingRange[]> {
+  public fold(uri: string, buffer: string[], requestToShowFoldStatusBar?: () => void, requestToHideFoldStatusBar?: () => void): Promise<FoldingRange[]> {
+    if (requestToShowFoldStatusBar) {
+      requestToShowFoldStatusBar();
+    }
     return new Promise((resolve, reject) => {
-      this.breakBlocks(buffer).then ((result) => {
+      this.breakBlocks(buffer).then((result) => {
         CobolFoldFactory.foldingCache.set(uri, result);
+        if (requestToHideFoldStatusBar) {
+          requestToHideFoldStatusBar();
+        }
         resolve(result);
       }).catch(() => {
+        if (requestToHideFoldStatusBar) {
+          requestToHideFoldStatusBar();
+        }
         reject();
       });
     });
@@ -37,8 +46,8 @@ export class CobolFoldFactory {
    */
   private breakBlocks(text: string[]): Promise<FoldingRange[]> {
     return new Promise((resolve, reject) => {
-      let promiseFoldings: Promise<FoldingRange>[] = [];
-      let foldings: FoldingRange[] = [];
+      const promiseFoldings: Promise<FoldingRange>[] = [];
+      const foldings: FoldingRange[] = [];
       for (let index = 0; index < text.length; index++) {
         promiseFoldings.push(this.foldingRange(index, text));
       }
@@ -62,8 +71,8 @@ export class CobolFoldFactory {
    */
   private foldingRange(line: number, lines: string[]): Promise<FoldingRange> {
     return new Promise((resolve, reject) => {
-      let currentLine = lines[line];
-      let cobolFolders: CobolFoldInterface[] = [
+      const currentLine = lines[line];
+      const cobolFolders: CobolFoldInterface[] = [
         new CopyFolding(),
         new VariableFolding(),
         new IfFolding(),

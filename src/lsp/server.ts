@@ -79,6 +79,13 @@ connection.onInitialize(async (params: InitializeParams) => {
   };
 });
 
+/** Sets the ExpanderSource Statusbar controll callback */
+ExpandedSourceManager.setStatusBarFromSourceExpander(() => {
+  return connection.sendRequest("custom/showStatusBarFromSourceExpander");
+}, () => {
+  return connection.sendRequest("custom/hideStatusBarFromSourceExpander");
+});
+
 /** When requesto to return the declaration position of term */
 connection.onRequest("custom/findDeclarationPosition", (word: string, fullDocument: string, uri: string) => {
   return new Promise((resolve, reject) => {
@@ -164,7 +171,15 @@ export function loadFolding(document: TextDocumentChangeEvent) {
     const text = fullDocument.getText();
     getConfig<boolean>("folding").then(foldingConfig => {
       if (foldingConfig) {
-        new CobolFoldFactory().fold(uri, BufferSplitter.split(text)).then().catch();
+        new CobolFoldFactory()
+          .fold(
+            uri,
+            BufferSplitter.split(text),
+            () => sendRequestToShowFoldStatusBar(),
+            () => sendRequestToHideFoldStatusBar()
+          )
+          .then()
+          .catch();
       }
     });
   }
@@ -262,15 +277,18 @@ export function externalDiagnosticFilter(diagnosticMessage: string) {
 
 connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[] | ResponseError<undefined>> => {
   Log.get().info(`Called callback of onFoldingRanges. File ${_foldingRangeRequestParam.textDocument.uri}`);
+  sendRequestToShowFoldStatusBar();
   return new Promise((resolve, reject) => {
-    let uri = _foldingRangeRequestParam.textDocument.uri;
-    let folding = CobolFoldFactory.foldingCache.get(uri);
+    const uri = _foldingRangeRequestParam.textDocument.uri;
+    const folding = CobolFoldFactory.foldingCache.get(uri);
     getConfig<boolean>("folding").then(foldingConfig => {
       if (foldingConfig && folding) {
         Log.get().info("Called callback of onFoldingRanges");
+        sendRequestToHideFoldStatusBar();
         return resolve(folding)
       } else {
         Log.get().warning(`Error on folding. File ${uri}`);
+        sendRequestToHideFoldStatusBar();
         return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error on folding"));
       }
     })
@@ -342,6 +360,20 @@ function getCurrentSourceOfParagraphCompletions() {
  */
 function getCurrentSourceOfVariableCompletions() {
   return connection.sendRequest<string>("custom/sourceOfVariableCompletions")
+}
+
+/**
+ * Send request to show folding status bar
+ */
+function sendRequestToShowFoldStatusBar() {
+  return connection.sendRequest("custom/showFoldinStatusBar")
+}
+
+/**
+ * Send request to hide folding status bar
+ */
+function sendRequestToHideFoldStatusBar() {
+  return connection.sendRequest("custom/hideFoldinStatusBar")
 }
 
 /**
@@ -439,7 +471,7 @@ export function getLineText(
   line: number,
   column: number
 ) {
-  var currentLine = BufferSplitter.split(documentText)[line];
+  const currentLine = BufferSplitter.split(documentText)[line];
   return new CobolWordFinder().findWordAt(currentLine, column);
 }
 
@@ -536,7 +568,7 @@ export async function configureServerLog() {
   if (loggingConfigured) {
     return;
   }
-  let loggingActive = await getConfig<boolean>("log");
+  const loggingActive = await getConfig<boolean>("log");
   if (loggingActive) {
     Log.get().setActive(true);
   }

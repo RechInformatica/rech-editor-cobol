@@ -12,9 +12,9 @@ export class IfFolding implements CobolFoldInterface {
     }
 
     fold(line: number, lines: string[]): FoldingRange {
-        let startLine = this.findStartLine(line, lines);
-        let startColumn = lines[startLine].length;
-        let endLine = this.findEndOfIfDeclaration(line, lines)
+        const startLine = this.findStartLine(line, lines);
+        const startColumn = lines[startLine].length;
+        const endLine = this.findEndOfIfDeclaration(line, lines)
         return {
             startLine: startLine,
             startCharacter: startColumn,
@@ -31,12 +31,12 @@ export class IfFolding implements CobolFoldInterface {
      */
     private findStartLine(line: number, lines: string[]): number {
         for (let index = line; index <= lines.length; index++) {
-            let currentLine  = lines[index];
-            let nextLine  = lines[index + 1];
-            let words = currentLine.trim().split(" ");
-            let nextWords = nextLine.trim().split(" ");
-            let firtsWordOfTheNextLine = nextWords[0]
-            let lastWord = words[words.length - 1]
+            const currentLine  = lines[index];
+            const nextLine  = lines[index + 1];
+            const words = currentLine.trim().split(" ");
+            const nextWords = nextLine.trim().split(" ");
+            const firtsWordOfTheNextLine = nextWords[0]
+            const lastWord = words[words.length - 1]
             if (CompletionUtils.isOperator(firtsWordOfTheNextLine) || CompletionUtils.isOperator(lastWord)) {
                 continue;
             }
@@ -52,13 +52,13 @@ export class IfFolding implements CobolFoldInterface {
      * @param lines
      */
     private findEndOfIfDeclaration(line: number, lines: string[]): number {
-        let ifDeclarationLine = lines[line];
-        let ifDeclarationColumn = CompletionUtils.countSpacesAtBeginning(ifDeclarationLine);
+        const ifDeclarationLine = lines[line];
+        const ifDeclarationColumn = CompletionUtils.countSpacesAtBeginning(ifDeclarationLine);
         for (let index = line; index < lines.length; index++) {
-            let currentLine = lines[index];
-            let formatedCurrentLine = currentLine.trimLeft().toLowerCase();
+            const currentLine = lines[index];
+            const formatedCurrentLine = currentLine.trimLeft().toLowerCase();
             if (formatedCurrentLine.startsWith("end-if") || formatedCurrentLine.startsWith("else")) {
-                let currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+                const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == ifDeclarationColumn) {
                     return index - 1;
                 }
