@@ -5,6 +5,9 @@ import { ParserCobol } from '../../cobol/parsercobol'
 import { RechPosition } from '../../commons/rechposition'
 import { ExpandedSourceManager } from '../../cobol/ExpandedSourceManager';
 
+/** Minimum word size */
+const MIN_WORD_SIZE = 3;
+
 /**
  * Class to find Cobol declarations
  */
@@ -30,12 +33,12 @@ export class CobolDeclarationFinder {
   public findDeclaration(term: string, uri: string): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       // If the word is too small
-      if (term.length < 3) {
+      if (term.length < MIN_WORD_SIZE) {
         reject();
         return;
       }
       // Busca declaração no próprio documento
-      let result = this.findDeclarationInBuffer(term, this.text);
+      const result = this.findDeclarationInBuffer(term, this.text);
       if (result) {
         return resolve(result);
       }
@@ -57,7 +60,7 @@ export class CobolDeclarationFinder {
   private findDeclarationWithPreproc(term: string, uri: string, expandSource: boolean): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       ExpandedSourceManager.getExpandedSource(uri).then((expandedSource) => {
-        let path = new Path(uri);
+        const path = new Path(uri);
         this.findDeclarationInPreprocessedSource(term, path, expandedSource).then((result) => {
           if (result) {
             return resolve(result);
@@ -89,7 +92,7 @@ export class CobolDeclarationFinder {
    * @param buffer
    */
   private findDeclarationInBuffer(term: string, buffer: string): RechPosition | undefined {
-    let parser = new ParserCobol();
+    const parser = new ParserCobol();
     let result = undefined;
     new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
       if (parser.isDeclaration(term, iterator.lineContent)) {

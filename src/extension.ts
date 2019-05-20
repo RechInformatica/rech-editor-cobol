@@ -122,6 +122,7 @@ export function activate(_context: any) {
  */
 function defineSourceExpander() {
     const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("sourceExpanderFunction");
+    console.log("oi");
     commands.executeCommand(commandToConfigSourceExpander).then((sourceExpander) => {
         if (sourceExpander) {
             Editor.setSourceExpander(<GenericExecutor>sourceExpander)

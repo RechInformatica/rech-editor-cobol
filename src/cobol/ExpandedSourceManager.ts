@@ -55,6 +55,12 @@ export class ExpandedSourceManager {
           }
           reject();
         });
+      }, () => {
+        Log.get().error("callbackSourceExpander has returned a error to load expanded source");
+        if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
+          ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
+        }
+        reject();
       });
     });
   }
@@ -126,7 +132,7 @@ export class ExpandedSourceManager {
    * @param source
    */
   public static buildExpandedSourceFileName(source: string): string {
-    var path = new Path(source).fullPathWin();
+    const path = new Path(source).fullPathWin();
     return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" +  new Path(path).fileName();
   }
 }

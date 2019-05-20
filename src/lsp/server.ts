@@ -175,7 +175,7 @@ export function loadFolding(document: TextDocumentChangeEvent) {
           .fold(
             uri,
             BufferSplitter.split(text),
-            () => sendRequestToShowFoldStatusBar(uri),
+            () => sendRequestToShowFoldStatusBar("Load folding from: " + uri),
             () => sendRequestToHideFoldStatusBar()
           )
           .then()
