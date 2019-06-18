@@ -1,4 +1,4 @@
-import { workspace, ExtensionContext, DocumentFilter } from 'vscode';
+import { ExtensionContext } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
 import { Editor } from '../editor/editor';
 import * as path from 'path';
@@ -8,9 +8,9 @@ import { SourceExpander } from '../editor/SourceExpander';
 import { SourceOfCompletions } from './commons/SourceOfCompletions';
 import { RechPosition } from '../commons/rechposition';
 import { Log } from '../commons/Log';
-import { reject } from 'q';
 import { FoldStatusBar } from './fold/FoldStatusBar';
 import { ExpandedSourceStatusBar } from '../cobol/ExpandedSourceStatusBar';
+import * as dj from '../dependencieInjection';
 
 /**
  * Language Server Provider client
@@ -57,6 +57,11 @@ export class Client {
 		Client.client.start();
 		Client.client.onReady().then(() => {
 			Client.configureClientWhenReady();
+			// Injects the dependencies
+			dj.defineSourceExpander();
+			dj.definePreprocessor();
+			dj.defineDianosticConfigs();
+			dj.defineCopyHierarchyFunction();
 		}).catch();
 	}
 

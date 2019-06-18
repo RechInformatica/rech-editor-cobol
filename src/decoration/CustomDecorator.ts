@@ -5,10 +5,10 @@ export class CustomDecorator {
 
     public static activate(context: ExtensionContext) {
         let activeEditor: TextEditor | undefined;
-        let parser: Parser = new Parser();
+        const parser: Parser = new Parser();
 
         // Called to handle events below
-        let updateDecorations = function () {
+        const updateDecorations = function () {
             // If active window is open and language is supported
             if (activeEditor && activeEditor.document.languageId == "COBOL") {
                 parser.FindRechDocComments(activeEditor);
@@ -44,7 +44,7 @@ export class CustomDecorator {
             if (timeout) {
                 clearTimeout(timeout);
             }
-            timeout = setTimeout(updateDecorations, 200);
+            timeout = setTimeout(updateDecorations, 9999);
         }
     }
 

@@ -1,6 +1,4 @@
-import { RechPosition } from "../commons/rechposition";
 import { ParserCobol } from "./parsercobol";
-import { puts } from "util";
 import { CobolDocParser } from "./rechdoc/CobolDocParser";
 import { Path } from "../commons/path";
 import { File } from "../commons/file";

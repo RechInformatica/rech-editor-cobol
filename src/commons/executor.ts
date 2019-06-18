@@ -56,10 +56,10 @@ export class Executor {
           }
           resolve({ stdout, stderr });
         });
-        this.streamToChannel(proc.stdout, channel);
-        this.streamToChannel(proc.stderr, channel);
-        proc.on("exit", code => {
-          if (onFinish) onFinish(code.valueOf());
+        if (proc.stdout) this.streamToChannel(proc.stdout, channel);
+        if (proc.stderr) this.streamToChannel(proc.stderr, channel);
+        proc.on("exit", (code) => {
+          if (code && onFinish) onFinish(code.valueOf());
         });
       }
     );
@@ -123,7 +123,6 @@ export class Executor {
    * Executes asynchronously a new process using the specified command-line
    *
    * @param command command-line to be executed
-   * @param callback optional callback executed after the process execution is completed
    */
   runSync(command: string) {
     const exec = cp.execSync(command);

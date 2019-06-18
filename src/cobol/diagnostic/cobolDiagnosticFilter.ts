@@ -1,5 +1,4 @@
 "use babel";
-import { configuration } from "../../helpers/configuration";
 
 /**
  * Class to filter and configure diagnostics

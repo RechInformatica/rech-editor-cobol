@@ -12,7 +12,7 @@ export class ElementDocumentationExtractor {
     public getElementDocumentation(lines: string[], lineIndex: number): string[] {
         let documentation: string[] = [];
         for (let index = lineIndex - 1; index >= 0; index--) {
-            let currentLineText = lines[index];
+            const currentLineText = lines[index];
             if (currentLineText.startsWith("      *>") && !this.isSeparatorComment(currentLineText)) {
                 documentation.push(currentLineText);
             } else {

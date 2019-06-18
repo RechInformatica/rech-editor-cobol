@@ -70,7 +70,7 @@ export class ExpandedSourceManager {
    *
    * @param callbackSourceExpander
    */
-  public static setSourceExpander(callbackSourceExpander: (uri: string, cacheFileName: string) => Thenable<{}>) {
+  public static setSourceExpander(callbackSourceExpander: (uri: string, cacheFileName: string) => Thenable<any>) {
     ExpandedSourceManager.callbackSourceExpander = callbackSourceExpander;
   }
 
