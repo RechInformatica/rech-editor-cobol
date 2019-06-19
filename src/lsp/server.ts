@@ -281,7 +281,7 @@ connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam)
   return new Promise((resolve, reject) => {
     const uri = _foldingRangeRequestParam.textDocument.uri;
     const folding = CobolFoldFactory.foldingCache.get(uri);
-    getConfig<boolean>("folding").then(foldingConfig => {
+    getConfig<boolean>("folding").then((foldingConfig) => {
       if (foldingConfig && folding) {
         Log.get().info("Called callback of onFoldingRanges");
         sendRequestToHideFoldStatusBar();
@@ -291,6 +291,9 @@ connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam)
         sendRequestToHideFoldStatusBar();
         return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error on folding"));
       }
+    }, () => {
+      sendRequestToHideFoldStatusBar();
+      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error on folding"));
     })
   });
 });
