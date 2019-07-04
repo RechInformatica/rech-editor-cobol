@@ -2,10 +2,7 @@ import { CompletionItemKind, CompletionItem, InsertTextFormat, MarkupKind } from
 import { CompletionInterface } from "../CompletionInterface";
 import { Scan } from "../../../commons/Scan";
 import { CobolVariable } from "../CobolVariable";
-import { CobolDocParser } from "../../../cobol/rechdoc/CobolDocParser";
-import { VariableUtils } from "../../../commons/VariableUtils";
 import { ExpandedSourceManager } from "../../../cobol/ExpandedSourceManager";
-import { CompletionUtils } from "../../commons/CompletionUtils";
 import { VariableInsertTextBuilder } from "./VariableInsertTextBuilder";
 import { VariableNameInsertTextBuilder } from "./VariableNameInsertTextBuilder";
 import { BufferSplitter } from "../../../commons/BufferSplitter";
@@ -39,19 +36,19 @@ export class VariableCompletion implements CompletionInterface {
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve, reject) => {
             this.currentLines = lines;
-            let items: CompletionItem[] = [];
+            const items: CompletionItem[] = [];
             this.loadCache().catch(() => {
                 reject();
             });
-            let uri = this.uri ? this.uri : "";
-            let cache = VariableCompletion.cache.get(uri);
+            const uri = this.uri ? this.uri : "";
+            const cache = VariableCompletion.cache.get(uri);
             if (cache) {
-                for (let value of cache.values()){
+                for (const value of cache.values()){
                     value.insertText = this.insertTextBuilder.buildInsertText(value.label, lines[line], column);
                     items.push(value);
                 }
             } else {
-                for (let value of this.generateItemsFromCurrentBuffer(this.currentLines, false).values()) {
+                for (const value of this.generateItemsFromCurrentBuffer(this.currentLines, false).values()) {
                     value.insertText = this.insertTextBuilder.buildInsertText(value.label, lines[line], column);
                     items.push(value);
                 }
@@ -104,7 +101,7 @@ export class VariableCompletion implements CompletionInterface {
                 this.sourceOfCompletions.then((sourceOfCompletions) => {
                     if (sourceOfCompletions == "expanded") {
                         ExpandedSourceManager.getExpandedSource(this.uri!).then((buffer) => {
-                            let result = this.generateItemsFromCurrentBuffer(BufferSplitter.split(buffer.toString()), true);
+                            const result = this.generateItemsFromCurrentBuffer(BufferSplitter.split(buffer.toString()), true);
                             VariableCompletion.cache.set(this.uri!, result);
                             return resolve();
                         }).catch(() => {
@@ -129,13 +126,13 @@ export class VariableCompletion implements CompletionInterface {
      * @param lines buffer lines
      */
     private generateItemsFromCurrentBuffer(lines: string[], useCache: boolean): Map<string, CompletionItem> {
-        let itemsMap: Map<string, CompletionItem> = new Map;
-        let buffer = lines.join("\n");
+        const itemsMap: Map<string, CompletionItem> = new Map;
+        const buffer = lines.join("\n");
         new Scan(buffer).scan(/^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm, (iterator: any) => {
-            let variable = CobolVariable.parseLine(iterator.lineContent.toString());
-            variable = CobolVariable.parserAndSetComment(variable, iterator.row, lines);
+            const variable = CobolVariable.parseLines(iterator.row, lines);
+            //variable = CobolVariable.parserAndSetComment(variable, iterator.row, lines);
             if (!this.shouldIgnoreVariable(variable)) {
-                let variableItem = this.createVariableCompletion(variable);
+                const variableItem = this.createVariableCompletion(variable);
                 itemsMap.set(variable.getName(), variableItem);
             }
         });
@@ -181,7 +178,7 @@ export class VariableCompletion implements CompletionInterface {
      * @param docArray variable documentation array
      */
     private createVariableCompletion(variable: CobolVariable): CompletionItem {
-        let variableKind = this.getAppropriateKind(variable);
+        const variableKind = this.getAppropriateKind(variable);
         let comments = variable.getComment()
         if (!comments) {
             comments = [""];

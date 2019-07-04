@@ -30,19 +30,20 @@ export class CobolDeclarationFinder {
    *
    * @param term Term to find
    */
-  public findDeclaration(term: string, uri: string): Promise<RechPosition> {
+  public findDeclaration(term: string, uri: string, referenceLine: number): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       // If the word is too small
       if (term.length < MIN_WORD_SIZE) {
         reject();
         return;
       }
+
       // Busca declaração no próprio documento
-      const result = this.findDeclarationInBuffer(term, this.text);
+      const result = this.findDeclarationInBuffer(term, this.text, referenceLine);
       if (result) {
         return resolve(result);
       }
-      this.findDeclarationWithPreproc(term, uri, true).then((result) => {
+      this.findDeclarationWithPreproc(term, uri, referenceLine, true).then((result) => {
         return resolve(result)
       }).catch(() => {
         return reject();
@@ -57,17 +58,17 @@ export class CobolDeclarationFinder {
    * @param uri uri of the file
    * @param expandSource can expand the source?
    */
-  private findDeclarationWithPreproc(term: string, uri: string, expandSource: boolean): Promise<RechPosition> {
+  private findDeclarationWithPreproc(term: string, uri: string, referenceLine: number, expandSource: boolean): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
       ExpandedSourceManager.getExpandedSource(uri).then((expandedSource) => {
         const path = new Path(uri);
-        this.findDeclarationInPreprocessedSource(term, path, expandedSource).then((result) => {
+        this.findDeclarationInPreprocessedSource(term, path, expandedSource, referenceLine).then((result) => {
           if (result) {
             return resolve(result);
           } else {
             if (expandSource) {
               new ExpandedSourceManager(uri).expandSource().then(()=>{}).catch(() => {});
-              this.findDeclarationWithPreproc(term, uri, false).then((result) => {
+              this.findDeclarationWithPreproc(term, uri, referenceLine, false).then((result) => {
                 return resolve(result);
               }).catch(() => {
                 return reject();
@@ -91,10 +92,10 @@ export class CobolDeclarationFinder {
    * @param term
    * @param buffer
    */
-  private findDeclarationInBuffer(term: string, buffer: string): RechPosition | undefined {
+  private findDeclarationInBuffer(term: string, buffer: string, referenceLine: number): RechPosition | undefined {
     const parser = new ParserCobol();
     let result = undefined;
-    new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
+    new Scan(buffer).reverseScan(new RegExp(term, 'gi'), referenceLine, (iterator: any) => {
       if (parser.isDeclaration(term, iterator.lineContent)) {
         result = new RechPosition(iterator.row, iterator.column);
         iterator.stop();
@@ -110,7 +111,7 @@ export class CobolDeclarationFinder {
    * @param path
    * @param buffer
    */
-  private findDeclarationInPreprocessedSource(term: string, path: Path, buffer: string): Promise<RechPosition> {
+  private findDeclarationInPreprocessedSource(term: string, path: Path, buffer: string, referenceLine: number): Promise<RechPosition> {
     const parser = new ParserCobol();
     return new Promise((resolve, reject) => {
       let result = undefined;
@@ -122,7 +123,14 @@ export class CobolDeclarationFinder {
           iterator.stop();
         }
       });
-      new Scan(buffer).scan(new RegExp(term, 'gi'), (iterator: any) => {
+      const linesFromText = this.text.split("\n");
+      const line = linesFromText[referenceLine].trim();
+      let referenceLineForScan: number;
+      new Scan(buffer).scan(new RegExp(`${line}\\s*\\*\\>\\s+\\d+\\s+\\d+$`, 'gi'), (iterator: any) => {
+        referenceLineForScan = iterator.row;
+      });
+      referenceLineForScan = linesFromText.length;
+      new Scan(buffer).reverseScan(new RegExp(term, 'gi'), referenceLineForScan, (iterator: any) => {
         if (parser.isDeclaration(term, iterator.lineContent)) {
           const match = <RegExpMatchArray>/.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(iterator.lineContent);
           const line = parseInt(match[1]) - 1;

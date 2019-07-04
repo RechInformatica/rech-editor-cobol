@@ -22,6 +22,31 @@ export class Scan {
     };
   }
 
+/**
+   * Scan the buffer
+   */
+  public reverseScan(regexp: RegExp,  startLine: number, iterator: any) {
+    const bufferLines = this.buffer.split("\n");
+    let buffer = "";
+    buffer = bufferLines.slice(0, startLine + 1).reverse().join("\n") + "\n";
+    buffer += bufferLines.slice(startLine + 1, bufferLines.length).join("\n");
+    var match = regexp.exec(buffer);
+    var interrupt = false;
+    while (match != null && !interrupt) {
+      // callback of iteration
+      iterator({
+        match: match,
+        row: this.countLinesTo(match.index, buffer, startLine),
+        column: match.index - this.lastLine.index,
+        lineContent: buffer.substring(this.lastLine.index, buffer.indexOf('\n', this.lastLine.index)).replace("\r", ""),
+        stop: function() {
+          interrupt = true;
+        }
+      });
+      match = regexp.exec(buffer);
+    }
+  }
+
   /**
    * Scan the buffer
    */
@@ -32,7 +57,7 @@ export class Scan {
       // callback of iteration
       iterator({
         match: match,
-        row: this.countLinesTo(match.index),
+        row: this.countLinesTo(match.index, this.buffer, 0),
         column: match.index - this.lastLine.index,
         lineContent: this.buffer.substring(this.lastLine.index, this.buffer.indexOf('\n', this.lastLine.index)).replace("\r", ""),
         stop: function() {
@@ -46,11 +71,11 @@ export class Scan {
   /**
    * Count lines to the specified index
    */
-  private countLinesTo(index: number) {
-    var notProcessed = this.buffer.substring(this.lastLine.index);
-    var patt = /\n/g;
-    var match = patt.exec(notProcessed);
-    var lastIndex = this.lastLine.index;
+  private countLinesTo(index: number, buffer: string, startLine: number) {
+    const notProcessed = buffer.substring(this.lastLine.index);
+    const patt = /\n/g;
+    let match = patt.exec(notProcessed);
+    let lastIndex = this.lastLine.index;
     while (match != null) {
       if (this.lastLine.index + match.index > index) {
         break;
@@ -60,7 +85,13 @@ export class Scan {
       match = patt.exec(notProcessed);
     }
     this.lastLine.index = lastIndex;
-    return this.lastLine.row;
+
+    if (this.lastLine.row > startLine) {
+      return this.lastLine.row;
+    } else {
+      return startLine - this.lastLine.row;
+    }
+
   }
 
 }

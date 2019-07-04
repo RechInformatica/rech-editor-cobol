@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit Cobol files with Visual Studio Code",
-	"version": "1.0.32",
+	"version": "1.0.33",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.35.0"
@@ -85,6 +85,15 @@
 					"type": "boolean",
 					"description": "Controls whether Rech Cobol extension logging is active.",
 					"default": false
+				},
+				"rech.editor.cobol.especialColors": {
+					"type": "object",
+					"description": "Special color settings for terms interpreted by the Rech Cobol extension.",
+					"default": {
+						"rechdocToken": "#b294bb",
+						"rechdocVariable": "#c5c8c6",
+						"localScopeVariable": "#a3e4c1"
+					}
 				}
 			}
 		},

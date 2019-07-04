@@ -25,8 +25,8 @@ export class WhenCompletion implements CompletionInterface {
                 resolve([]);
                 return;
             }
-            let currentLine = lines[line];
-            let variable = this.getVariable(currentLine);
+            const currentLine = lines[line];
+            const variable = this.getVariable(currentLine);
             if (!variable) {
                 resolve([]);
                 return;
@@ -82,7 +82,7 @@ export class WhenCompletion implements CompletionInterface {
      * @param currentLine
      */
     private getVariable(currentLine: string) {
-        let match = /\s+when ([a-zA-Z0-9-]+)/gi.exec(currentLine);
+        const match = /\s+when ([a-zA-Z0-9-]+)/gi.exec(currentLine);
         if (match) {
             return match[1]
         }
@@ -98,10 +98,10 @@ export class WhenCompletion implements CompletionInterface {
      */
     private buildCompletionItem(variable: string, currentLine: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve, reject) => {
-            this.getVariables88(variable, lines).then((variables88) => {
-                let currentLineText = lines[currentLine];
-                let whenStartColumn = CompletionUtils.countSpacesAtBeginning(currentLineText) + 1;
-                let textEdit = this.build88WhensTextEdit(variable, variables88, whenStartColumn, currentLine);
+            this.getVariables88(variable, currentLine, lines).then((variables88) => {
+                const currentLineText = lines[currentLine];
+                const whenStartColumn = CompletionUtils.countSpacesAtBeginning(currentLineText) + 1;
+                const textEdit = this.build88WhensTextEdit(variable, variables88, whenStartColumn, currentLine);
                 resolve([{
                     label: 'Complete EVALUATE with the other 88 variables',
                     detail: 'Complete EVALUATE with the other 88 variables of the same group',
@@ -167,16 +167,16 @@ export class WhenCompletion implements CompletionInterface {
      * @param variable
      * @param lines
      */
-    private getVariables88(variable: string, lines: string[]): Promise<string[]> {
+    private getVariables88(variable: string, line: number, lines: string[]): Promise<string[]> {
         return new Promise((resolve, reject) => {
-            let result: string[] = [];
-            this.getLineOfParentDeclaration(variable, lines).then((parentLineResult) => {
+            const result: string[] = [];
+            this.getLineOfParentDeclaration(variable, line, lines).then((parentLineResult) => {
                 let parentPosition: RechPosition;
                 let parentFileLines: string[];
                 let declarationLine: string;
                 [parentPosition, parentFileLines, declarationLine] = parentLineResult;
                 for (let i = parentPosition.line + 1; i < parentFileLines.length; i++) {
-                    let currentLine = parentFileLines[i];
+                    const currentLine = parentFileLines[i];
                     if (this.isCommentary(currentLine)) {
                         continue;
                     }
@@ -201,21 +201,21 @@ export class WhenCompletion implements CompletionInterface {
      * @param declarationLine
      */
     private resolveReplacing(variable: string, lineText: string, declarationLine: string): string {
-        let replacing = this.hasReplacing(declarationLine);
+        const replacing = this.hasReplacing(declarationLine);
         if (replacing) {
-            let prefix = replacing[1];
-            let replacingToken = replacing[2];
-            let name = replacing[3];
+            const prefix = replacing[1];
+            const replacingToken = replacing[2];
+            const name = replacing[3];
             let regex;
             if (prefix) {
                 regex = prefix + "(.*)" + name;
             } else {
                 regex = "(.*)" + name;
             }
-            let variableParts = new RegExp(regex, "gi").exec(variable);
+            const variableParts = new RegExp(regex, "gi").exec(variable);
             lineText = lineText.replace(replacingToken, variableParts![1]);
         }
-        let parser = new ParserCobol();
+        const parser = new ParserCobol();
         return parser.getDeclaracaoVariavel(lineText)!
     }
 
@@ -225,20 +225,20 @@ export class WhenCompletion implements CompletionInterface {
      * @param variable
      * @param lines
      */
-    private getLineOfParentDeclaration(variable: string, lines: string[]): Promise<any[]> {
+    private getLineOfParentDeclaration(variable: string, line: number, lines: string[]): Promise<any[]> {
         return new Promise((resolve, reject) => {
             if (!this.uri) {
                 reject();
             }
-            let finder = new CobolDeclarationFinder(lines.join("\n"));
-            finder.findDeclaration(variable, this.uri!).then((position) => {
+            const finder = new CobolDeclarationFinder(lines.join("\n"));
+            finder.findDeclaration(variable, this.uri!, line).then((position) => {
                 let parentFileLines = lines;
                 if (position.file) {
                     parentFileLines = BufferSplitter.split(new File(position.file).loadBufferSync("latin1"));
                 }
-                let declarationLine = parentFileLines[position.line];
+                const declarationLine = parentFileLines[position.line];
                 for (let i = position.line; i > 0; i--) {
-                    let currentLine = parentFileLines[i];
+                    const currentLine = parentFileLines[i];
                     if (new ParserCobol().getDeclaracaoVariavelIgnoreReplace(currentLine)) {
                         if (!this.is88LevelDeclaration(currentLine)) {
                             resolve([new RechPosition(i, 0, position.file), parentFileLines, declarationLine]);

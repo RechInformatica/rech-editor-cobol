@@ -120,7 +120,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  private getDeclaracaoClasse(line: string): string | undefined {
+  public getDeclaracaoClasse(line: string): string | undefined {
     // IS Format
     var match = /^\s+CLASS\s+([\w]+)\s+AS.*/i.exec(line);
     if (match == null) {

@@ -26,8 +26,6 @@ export async function activate(context: any) {
  * @param context
  */
 async function _activate(context: any) {
-    // Custom decorators beyond language syntax highlight
-    CustomDecorator.activate(context);
     // Build the statusBar to control the source of completions suggested in the server side
     SourceOfCompletions.buildStatusBar();
     // Build the statusBar from folding
@@ -38,6 +36,8 @@ async function _activate(context: any) {
     Log.get().setActive(configuration.get<boolean>("log"));
     // Starts the LSP Client
     Client.startServerAndEstablishCommunication(context);
+    // Custom decorators beyond language syntax highlight
+    CustomDecorator.activate(context);
     //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand

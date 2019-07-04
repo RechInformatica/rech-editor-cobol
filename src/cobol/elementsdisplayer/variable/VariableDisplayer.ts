@@ -30,9 +30,9 @@ export class VariableDisplayer {
    */
   private createItemsFromVariable(variable: CobolVariable) {
     this.addTheBasicInformation(variable);
-    let children = variable.getChildren()
+    const children = variable.getChildren()
     if (children && children.length > 0) {
-      let childrenItems = new VariableElement("Children");
+      const childrenItems = new VariableElement("Children");
       this.controller.addElement(this.insertChildren(childrenItems, children));
     }
   }
@@ -47,13 +47,13 @@ export class VariableDisplayer {
     .setDescription(variable.getPicture() + " - Size: " + variable.getByteSize().toString())
     .setDetail(variable.getRaw())
     .setOnSelection((selectItem) => {
-      let obj = selectItem.object
+      const obj = selectItem.object
       if (obj) {
-        let position = (<CobolVariable>obj).getDeclarationPosition()
+        const position = (<CobolVariable>obj).getDeclarationPosition()
         if (position) {
-          new Editor().setCursor(position.line, position.column);
-          this.controller.dispose();
+          new Editor().openFileAndSetPosition(position);
         }
+        this.controller.dispose();
       }
     })
     .setObject(variable));
@@ -62,9 +62,9 @@ export class VariableDisplayer {
         new VariableElement("Documentation")
         .setDetail(variable.getComment()!.join(" | "))
         .setOnSelection(async (selectItem) => {
-          let obj = selectItem.object
+          const obj = selectItem.object
           if (obj) {
-            let comments = (<CobolVariable>obj).getComment();
+            const comments = (<CobolVariable>obj).getComment();
             if (comments) {
               await this.insertCommentInEditor((<CobolVariable>obj).getComment()!)
               this.controller.dispose();
@@ -72,6 +72,30 @@ export class VariableDisplayer {
           }
         })
         .setObject(variable));
+    }
+    if (variable.getScope()) {
+      this.controller.addElement(
+        new VariableElement("Scope")
+        .setDetail(variable.getScope()!)
+        .setOnSelection(async () => {
+          this.controller.dispose();
+        }));
+    }
+    if (variable.getSection()) {
+      this.controller.addElement(
+        new VariableElement("Section")
+        .setDetail(variable.getSection()!)
+        .setOnSelection(async () => {
+          this.controller.dispose();
+        }));
+    }
+    if (variable.isMethodReturn()) {
+      this.controller.addElement(
+        new VariableElement("Returning")
+        .setDetail("This variable is the Returning from " + variable.getScope())
+        .setOnSelection(async () => {
+          this.controller.dispose();
+        }));
     }
   }
 
@@ -81,8 +105,8 @@ export class VariableDisplayer {
    * @param comments
    */
   private async insertCommentInEditor(comments: string[]) {
-    let editor = new Editor();
-    let cursor = editor.getCursors()[0]
+    const editor = new Editor();
+    const cursor = editor.getCursors()[0]
     for (let i = comments.length - 1; i >= 0; i--) {
       await new GeradorCobol().insertCommentLineWithText(comments[i]);
     }
@@ -97,11 +121,11 @@ export class VariableDisplayer {
    */
   private insertChildren(childrenItems: VariableElement, children: CobolVariable[]): VariableElement {
     children.forEach((children) => {
-      let childrenItem = new VariableElement(children.getName())
+      const childrenItem = new VariableElement(children.getName())
       .setDescription(children.getPicture() + " - Size: " + children.getByteSize())
       .setDetail(children.getRaw())
       .setOnSelection((selectItem) => {
-        let chi = children.getChildren();
+        const chi = children.getChildren();
         if (chi) {
           this.controller.clearElements();
           this.createItemsFromVariable(<CobolVariable>selectItem.object)

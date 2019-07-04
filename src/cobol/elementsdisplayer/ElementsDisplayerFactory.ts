@@ -8,6 +8,7 @@ import { CobolCopy } from "../CobolCopy";
 import { copyDisplayer } from "./copy/CopyDisplayer";
 import { window } from "vscode";
 import { BufferSplitter } from "../../commons/BufferSplitter";
+import { ClassDisplayer } from "./class/ClassDisplayer";
 
 /**
  * Class to build a ElementsDisplayer
@@ -19,9 +20,9 @@ export class ElementsDisplayerFactory {
    */
   public show(word: string, fullDocument: string, uri: string, currentLine: number) {
     window.showInformationMessage(`Analyzing element: ${word}...`);
-    Client.getDeclararion(word, fullDocument, uri).then((position) => {
+    Client.getDeclararion(word, currentLine, fullDocument, uri).then((position) => {
       this.bufferOfDeclaration(position, uri, fullDocument).then((buffer) => {
-        let lines = BufferSplitter.split(buffer);
+        const lines = BufferSplitter.split(buffer);
         this.buildDisplayer(position, lines, currentLine, uri);
       }).catch(() => {
         window.showWarningMessage(`Element ${word} not found`);
@@ -39,14 +40,17 @@ export class ElementsDisplayerFactory {
   private buildDisplayer(position: RechPosition, lines: string[], currentLine: number, uri: string) {
     switch(true) {
       case this.isVariable(lines[position.line]):
-        let variable = CobolVariable.parseLine(lines[position.line])
-        variable = CobolVariable.parseAndSetChildren(variable, position.line, lines)
-        variable = CobolVariable.parserAndSetComment(variable, position.line, lines)
+        const variable = CobolVariable.parseLines(position.line, lines)
         variable.setDeclarationPosition(position);
         new VariableDisplayer().show(variable)
         break;
+      case this.isClass(lines[position.line]):
+        const classs = CobolVariable.parseLines(position.line, lines)
+        classs.setDeclarationPosition(position);
+        new ClassDisplayer().show(classs)
+        break;
       case this.isCopy(lines[currentLine]):
-        let copy = CobolCopy.parseLine(currentLine, lines, uri);
+        const copy = CobolCopy.parseLine(currentLine, lines, uri);
         if (copy) {
           new copyDisplayer().show(copy)
         }
@@ -83,6 +87,18 @@ export class ElementsDisplayerFactory {
    */
   private isVariable(line: string) {
     if (new ParserCobol().getDeclaracaoVariavelIgnoreReplace(line)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the linhe is a class delcaration
+   *
+   * @param line
+   */
+  private isClass(line: string) {
+    if (new ParserCobol().getDeclaracaoClasse(line)) {
       return true;
     }
     return false;

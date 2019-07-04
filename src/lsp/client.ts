@@ -238,10 +238,10 @@ export class Client {
 	/**
 	 * Request the server and return the RechPosition of word declaration
 	 */
-	public static getDeclararion(word: string, fullDocument: string, uri: string): Promise<RechPosition> {
+	public static getDeclararion(word: string, referenceLine: number, fullDocument: string, uri: string): Promise<RechPosition> {
 		return new Promise((resolve, reject) => {
 			if (Client.client) {
-				const params = [word, fullDocument, uri];
+				const params = [word, referenceLine, fullDocument, uri];
 				return Client.client.sendRequest<RechPosition | undefined>("custom/findDeclarationPosition", params).then((position) => {
 					if (position) {
 						resolve(position)

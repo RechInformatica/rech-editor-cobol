@@ -128,7 +128,7 @@ export class Editor {
    * Returns the current word
    */
   getCurrentWord() {
-    const range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÞÂÀãÃÊËÈÞÞÞÌÓÔÒõÕÚÛÙüÉì_\-])+/g);
+    const range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-9ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÞÂÀãÃÊËÈÞÞÞÌÓÔÒõÕÚÛÙüÉì_\-])+/g);
     if (range === undefined) {
       return '';
     }
@@ -374,6 +374,21 @@ export class Editor {
     });
     if (!alreadyOpen) {
         this.openFile(file, callback);
+    }
+  }
+
+  /**
+   * Opens the specificied file and set the cursor position
+   *
+   * @param position
+   */
+  public openFileAndSetPosition(position: RechPosition) {
+    if (position.file) {
+      this.openFile(position.file, () => {
+        new Editor().setCursor(position.line, position.column);
+      });
+    } else {
+      this.setCursor(position.line, position.column);
     }
   }
 

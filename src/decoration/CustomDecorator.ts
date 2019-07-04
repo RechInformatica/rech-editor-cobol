@@ -11,8 +11,9 @@ export class CustomDecorator {
         const updateDecorations = function () {
             // If active window is open and language is supported
             if (activeEditor && activeEditor.document.languageId == "COBOL") {
-                parser.FindRechDocComments(activeEditor);
-                parser.ApplyDecorations(activeEditor);
+                parser.findLocalVariables(activeEditor);
+                parser.findRechDocComments(activeEditor);
+                parser.applyDecorations(activeEditor);
             }
         };
         // Get the active editor for the first time and initialize the regex
@@ -44,7 +45,7 @@ export class CustomDecorator {
             if (timeout) {
                 clearTimeout(timeout);
             }
-            timeout = setTimeout(updateDecorations, 9999);
+            timeout = setTimeout(updateDecorations, 200);
         }
     }
 
