@@ -584,7 +584,7 @@ export class Editor {
       return;
     }
     //Indent the selection range
-    await indenter.indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), (buffer) => {
+    await indenter.indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), this.editor.selection.start.line, (buffer) => {
       this.replaceBuffer(buffer, restoreCursor);
     }, (bufferErr) => { this.showWarningMessage(bufferErr); });
   }
