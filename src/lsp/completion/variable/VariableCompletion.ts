@@ -1,4 +1,4 @@
-import { CompletionItemKind, CompletionItem, InsertTextFormat, MarkupKind } from "vscode-languageserver";
+import { CompletionItemKind, CompletionItem, MarkupKind } from "vscode-languageserver";
 import { CompletionInterface } from "../CompletionInterface";
 import { Scan } from "../../../commons/Scan";
 import { CobolVariable } from "../CobolVariable";
@@ -129,8 +129,7 @@ export class VariableCompletion implements CompletionInterface {
         const itemsMap: Map<string, CompletionItem> = new Map;
         const buffer = lines.join("\n");
         new Scan(buffer).scan(/^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm, (iterator: any) => {
-            const variable = CobolVariable.parseLines(iterator.row, lines);
-            //variable = CobolVariable.parserAndSetComment(variable, iterator.row, lines);
+            const variable = CobolVariable.parseLines(iterator.row, lines, {noChildren: true, noScope: true, noSection: true, ignoreMethodReturn: true});
             if (!this.shouldIgnoreVariable(variable)) {
                 const variableItem = this.createVariableCompletion(variable);
                 itemsMap.set(variable.getName(), variableItem);

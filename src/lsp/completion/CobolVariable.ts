@@ -53,7 +53,7 @@ export class CobolVariable {
                         children: CobolVariable[],
                         declarationPosition: RechPosition,
                         scope?: string,
-                        section?: "working-storage" | "linkage" | "file",
+                        section?: "working-storage" | "linkage" | "file" | undefined,
                         methodReturn?: boolean) {
         this.level = level;
         this.name = name;
@@ -76,21 +76,34 @@ export class CobolVariable {
      *
      * @param lineNumber
      * @param buffer
+     * @param noChildren
      */
-    public static parseLines(lineNumber: number, buffer: string[]): CobolVariable {
+    public static parseLines(lineNumber: number, buffer: string[], special?:{noChildren?: boolean, noScope?: boolean, noSection?: boolean, ignoreMethodReturn?: boolean}): CobolVariable {
         const line = buffer[lineNumber];
         const splitted = CobolVariable.splitVariableInfo(line);
         const level = Number.parseInt(splitted[0]);
         const name = splitted[1].replace(".", "");
         const redefines = line.toLowerCase().includes(" redefines ");
         const picture = CobolVariable.extractPicture(splitted);
-        const children = CobolVariable.parseAndGetChildren(level, lineNumber, buffer);
+        let children = new Array();
+        if (special && !special.noChildren) {
+            children = CobolVariable.parseAndGetChildren(level, lineNumber, buffer);
+        }
         const comment = CobolVariable.parserAndGetComment(lineNumber, buffer);
         const startDeclarationColumn = line.length - line.trimLeft().length
         const declarationPosition = new RechPosition(lineNumber, startDeclarationColumn);
-        const section = VariableUtils.findVariableSection(buffer, lineNumber);
-        const scope = VariableUtils.findVariableScope(buffer, lineNumber);
-        const methodReturn = VariableUtils.isMethodReturn(name, buffer, lineNumber);
+        let section: "working-storage" | "linkage" | "file" | undefined;
+        if (special && !special.noSection) {
+            section = VariableUtils.findVariableSection(buffer, lineNumber);
+        }
+        let scope;
+        if (special && !special.noScope) {
+            scope = VariableUtils.findVariableScope(buffer, lineNumber);
+        }
+        let methodReturn = false;
+        if (special && !special.ignoreMethodReturn) {
+            methodReturn = VariableUtils.isMethodReturn(name, buffer, lineNumber);
+        }
         if (picture === "") {
             return new CobolVariable(level, name, "", Type.Alphanumeric, true, false, line, redefines, comment, children, declarationPosition, scope, section, methodReturn);
         } else {
