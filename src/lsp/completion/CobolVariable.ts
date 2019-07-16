@@ -86,22 +86,22 @@ export class CobolVariable {
         const redefines = line.toLowerCase().includes(" redefines ");
         const picture = CobolVariable.extractPicture(splitted);
         let children = new Array();
-        if (special && !special.noChildren) {
+        if (!special || !special.noChildren) {
             children = CobolVariable.parseAndGetChildren(level, lineNumber, buffer);
         }
         const comment = CobolVariable.parserAndGetComment(lineNumber, buffer);
         const startDeclarationColumn = line.length - line.trimLeft().length
         const declarationPosition = new RechPosition(lineNumber, startDeclarationColumn);
         let section: "working-storage" | "linkage" | "file" | undefined;
-        if (special && !special.noSection) {
+        if (!special || !special.noSection) {
             section = VariableUtils.findVariableSection(buffer, lineNumber);
         }
         let scope;
-        if (special && !special.noScope) {
+        if (!special || !special.noScope) {
             scope = VariableUtils.findVariableScope(buffer, lineNumber);
         }
         let methodReturn = false;
-        if (special && !special.ignoreMethodReturn) {
+        if (!special || !special.ignoreMethodReturn) {
             methodReturn = VariableUtils.isMethodReturn(name, buffer, lineNumber);
         }
         if (picture === "") {
