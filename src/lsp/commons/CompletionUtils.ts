@@ -1,5 +1,3 @@
-import { CobolWordFinder } from "../../commons/CobolWordFinder";
-
 /** Maximum number of interpreted lines */
 const MAX_INTERPRETED_LINES = 100;
 

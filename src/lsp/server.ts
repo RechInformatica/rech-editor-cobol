@@ -183,7 +183,12 @@ export function loadFolding(document: TextDocumentChangeEvent) {
           )
           .then()
           .catch();
+      } else {
+        sendRequestToHideFoldStatusBar();
       }
+    }).catch(() => {
+      sendRequestToHideFoldStatusBar();
+      return;
     });
   }
 }
@@ -256,7 +261,13 @@ export function sendExternalGetCopyHierarchy(uri: string) {
  * @param section
  */
 export function getConfig<T>(section: string) {
-  return connection.sendRequest<T>("custom/getConfig", section);
+  return new Promise<T>((resolve, reject) => {
+    return connection.sendRequest<T>("custom/getConfig", section).then((config) => {
+      return resolve(config);
+    }, ()=> {
+      reject();
+    });
+  })
 }
 
 /**
@@ -294,7 +305,7 @@ connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam)
         sendRequestToHideFoldStatusBar();
         return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error on folding"));
       }
-    }, () => {
+    }).catch(() => {
       sendRequestToHideFoldStatusBar();
       return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error on folding"));
     })
@@ -328,7 +339,7 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
   Log.get().info(`Called callback of onCompletion. File ${_textDocumentPosition.textDocument.uri}`);
   return new Promise((resolve, reject) => {
-    getConfig<string[]>("snippetsRepositories").then(repositories => {
+    getConfig<string[]>("snippetsRepositories").then((repositories) => {
       const line = _textDocumentPosition.position.line;
       const column = _textDocumentPosition.position.character;
       const uri = _textDocumentPosition.textDocument.uri;
@@ -350,6 +361,9 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
         Log.get().error(`Error loading Completion Items. fullDocument is undefined. File: ${_textDocumentPosition.textDocument.uri}`);
         reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
       };
+    }).catch(() => {
+      Log.get().error(`Error loading Completion Items. Error to getConfig snippetsRepositories. File: ${_textDocumentPosition.textDocument.uri}`);
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
     });
   });
 });
@@ -570,13 +584,19 @@ export function createLocation(uri: string, position: RechPosition) {
 /**
  * Configures the server logger instance
  */
-export async function configureServerLog() {
-  if (loggingConfigured) {
-    return;
-  }
-  const loggingActive = await getConfig<boolean>("log");
-  if (loggingActive) {
-    Log.get().setActive(true);
-  }
-  loggingConfigured = true;
+export function configureServerLog() {
+  return new Promise((resolve, reject) => {
+    if (loggingConfigured) {
+      return resolve();
+    }
+    getConfig<boolean>("log").then((loggingActive) => {
+      if (loggingActive) {
+        Log.get().setActive(true);
+      }
+    }).catch(() => {
+      return reject();
+    });
+    loggingConfigured = true;
+    return resolve();
+  })
 }

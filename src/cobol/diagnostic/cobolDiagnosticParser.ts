@@ -33,17 +33,17 @@ export class CobolDiagnosticParser {
     return new Promise((resolve, reject) => {
       if (CobolDiagnosticParser.copyHierarchy.get(fileName)) {
         this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter).then((result) => {
-          resolve(result);
+          return resolve(result);
         }).catch(() => {
-          reject();
+          return reject();
         })
       } else {
         externalGetCopyHierarchy(fileName).then((resultCopyHierarchy) => {
           CobolDiagnosticParser.copyHierarchy.set(fileName, resultCopyHierarchy);
           this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter).then((result) => {
-            resolve(result);
+            return resolve(result);
           }).catch(() => {
-            reject();
+            return reject();
           })
         });
       }
@@ -71,9 +71,9 @@ export class CobolDiagnosticParser {
             diagnostics.push(result.value!);
           }
         });
-        resolve(this.buildCobolDiagnostic(diagnostics));
+        return resolve(this.buildCobolDiagnostic(diagnostics));
       }).catch(() => {
-        reject();
+        return reject();
       })
     });
   }
@@ -110,21 +110,20 @@ export class CobolDiagnosticParser {
     return new Promise((resolve, reject) => {
       const match = pattern.exec(currentLine);
       if (!match) {
-        reject();
-        return;
+        return reject();
       }
       let fullError, message: any, file: any, line: any, error: any;
       [fullError, message, file, line, error] = match;
       if (externalDiagnosticFilter) {
         externalDiagnosticFilter(message).then((result) => {
           if (result) {
-            resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
+            return resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
           } else {
-            resolve();
+            return resolve();
           }
         });
       } else {
-        resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
+        return resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
       }
     });
   }

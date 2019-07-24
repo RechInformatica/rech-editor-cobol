@@ -37,16 +37,15 @@ export class Diagnostician {
     return new Promise((resolve, reject) => {
       this.findErrorsAndWarnings(textDocument, PreprocessCallback, externalGetCopyHierarchy, externalDiagnosticFilter).then(cobolDiagnostic => {
           if (!cobolDiagnostic) {
-            reject();
-            return;
+            return reject();
           }
           this.extractDiagnostics(cobolDiagnostic).then(diagnostics => {
-            resolve(diagnostics);
+            return resolve(diagnostics);
           }).catch(() => {
-            reject();
+            return reject();
           });
         }).catch(() => {
-          reject();
+          return reject();
         });
     });
   }
@@ -66,32 +65,33 @@ export class Diagnostician {
   ): Promise<CobolDiagnostic | undefined> {
     return new Promise<CobolDiagnostic>((resolve, reject) => {
       // If not a cobol processable source
-      if (new Path(textDocument.uri).extension().toUpperCase() != ".CBL") {
-        reject();
+      const documentPath = new Path(textDocument.uri);
+      if (documentPath.extension().toUpperCase() != ".CBL") {
+        return reject();
       }
       const dir = new File(DIAGNOSTIC_ROOT_DIR + require("os").userInfo().username + "\\");
       if (!dir.exists()) {
         dir.mkdir();
       }
       const tmpFile = new File(
-        dir.fileName + new Path(textDocument.uri).fileName()
+        dir.fileName + documentPath.fileName()
       );
       CobolDiagnosticPreprocManager.runWhenPossible(
         PreprocessCallback,
         tmpFile,
         [textDocument.getText()],
         (buffer) => {
-          const fileName = new Path(textDocument.uri).fullPath();
+          const fileName = documentPath.fullPath();
           new CobolDiagnosticParser(this.sourceLines)
             .parser(buffer, fileName, externalGetCopyHierarchy, externalDiagnosticFilter)
             .then(cobolDiagnostic => {
-              resolve(cobolDiagnostic);
+              return resolve(cobolDiagnostic);
             })
             .catch(() => {
-              reject();
+              return reject();
             });
         },
-        () => reject()
+        () => {return reject()}
       );
     });
   }
