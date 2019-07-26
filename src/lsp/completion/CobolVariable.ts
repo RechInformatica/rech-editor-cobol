@@ -78,7 +78,7 @@ export class CobolVariable {
      * @param buffer
      * @param noChildren
      */
-    public static parseLines(lineNumber: number, buffer: string[], special?:{noChildren?: boolean, noScope?: boolean, noSection?: boolean, ignoreMethodReturn?: boolean}): CobolVariable {
+    public static parseLines(lineNumber: number, buffer: string[], special?:{noChildren?: boolean, noScope?: boolean, noSection?: boolean, ignoreMethodReturn?: boolean, noComment?: boolean}): CobolVariable {
         const line = buffer[lineNumber];
         const splitted = CobolVariable.splitVariableInfo(line);
         const level = Number.parseInt(splitted[0]);
@@ -89,7 +89,10 @@ export class CobolVariable {
         if (!special || !special.noChildren) {
             children = CobolVariable.parseAndGetChildren(level, lineNumber, buffer);
         }
-        const comment = CobolVariable.parserAndGetComment(lineNumber, buffer);
+        let comment = [""]
+        if (!special || !special.noComment) {
+           comment = CobolVariable.parserAndGetComment(lineNumber, buffer);
+        }
         const startDeclarationColumn = line.length - line.trimLeft().length
         const declarationPosition = new RechPosition(lineNumber, startDeclarationColumn);
         let section: "working-storage" | "linkage" | "file" | undefined;
@@ -159,7 +162,7 @@ export class CobolVariable {
      * @param line
      * @param lines
      */
-    public static parserAndGetComment(line: number, lines: string[]) {
+    private static parserAndGetComment(line: number, lines: string[]) {
         const docArray = VariableUtils.findVariableDocArray(lines, line);
         const doc = new CobolDocParser().parseCobolDoc(docArray);
         return doc.comment;

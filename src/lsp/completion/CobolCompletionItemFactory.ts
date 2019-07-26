@@ -117,15 +117,15 @@ export class CobolCompletionItemFactory {
           });
           this.createWrappingPromise(items).then((item) => {
             result = result.concat(item);
-            resolve(result);
+            return resolve(result);
           }).catch(() => {
-            resolve([]);
+            return resolve([]);
           })
         } else {
-          resolve([]);
+          return resolve([]);
         }
       }).catch(() => {
-        reject();
+        return reject();
       })
     });
   }
@@ -139,52 +139,40 @@ export class CobolCompletionItemFactory {
     return new Promise((resolve) => {
       switch (true) {
         case this.isCommentLine(): {
-          resolve([]);
-          return;
+          return resolve([]);
         }
         case this.isDisplay() || this.isAccept(): {
-          resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
-          return;
+          return resolve(this.generate(this.createVariableSuggestionWithoutEnum()));
         }
         case this.isIf(): {
-          resolve(this.generate(this.createVariableSuggestionWithEnum()));
-          return;
+          return resolve(this.generate(this.createVariableSuggestionWithEnum()));
         }
         case this.isCompute(): {
-          resolve(this.generate(this.createVariableSuggestionWithoutEnumAndDisplay()));
-          return;
+          return resolve(this.generate(this.createVariableSuggestionWithoutEnumAndDisplay()));
         }
         case this.isInitialize(): {
-          resolve(this.generate(this.createVariableSuggestionWithEnum()));
-          return;
+          return resolve(this.generate(this.createVariableSuggestionWithEnum()));
         }
         case this.isWhen(): {
-          resolve(this.createWhenCompletions());
-          return;
+          return resolve(this.createWhenCompletions());
         }
         case this.isVarDeclaration(): {
-          resolve(this.createVariableCompletions());
-          return;
+          return resolve(this.createVariableCompletions());
         }
         case this.isMove() || this.isAdd() || this.isSet(): {
-          resolve(this.createCompletionsForToCommands());
-          return;
+          return resolve(this.createCompletionsForToCommands());
         }
         case this.isSubtract(): {
-          resolve(this.createCompletionsForSubtract());
-          return;
+          return resolve(this.createCompletionsForSubtract());
         }
         case this.isParagraphPerform(): {
-          resolve(this.generate(this.paragraphCompletion));
-          return;
+          return resolve(this.generate(this.paragraphCompletion));
         }
         case this.isUnhandledCommand(): {
-          resolve([]);
-          return;
+          return resolve([]);
         }
         default: {
-          resolve(this.createDefaultCompletions());
-          return;
+          return resolve(this.createDefaultCompletions());
         }
       }
     })
@@ -301,20 +289,16 @@ export class CobolCompletionItemFactory {
     return new Promise((resolve) => {
       if (!this.isVariableDeclarationFinalized()) {
         if (!this.isPictureDeclared()) {
-          resolve(this.generate(new PictureCompletion()));
-          return;
+          return resolve(this.generate(new PictureCompletion()));
         }
         if (!this.isValueDeclared()) {
-          resolve(this.generate(new ValueCompletion()));
-          return;
+          return resolve(this.generate(new ValueCompletion()));
         }
       }
       if (this.isFlagParent()) {
-        resolve(this.generate(new FlagCompletion()));
-        return;
+        return resolve(this.generate(new FlagCompletion()));
       }
-      resolve([]);
-      return;
+      return resolve([]);
     })
   }
 
@@ -581,12 +565,11 @@ export class CobolCompletionItemFactory {
     return new Promise((resolve, reject) => {
       completion.generate(this.line, this.column, this.lines).then((result) => {
         if (!CompletionUtils.isLowerCaseSource(this.lines)) {
-          resolve(this.toUpperCase(result));
-          return;
+          return resolve(this.toUpperCase(result));
         }
-        resolve(result);
+        return resolve(result);
       }).catch(() => {
-        reject();
+        return reject();
       });
     });
   }
@@ -633,9 +616,9 @@ export class CobolCompletionItemFactory {
         result.forEach((element) => {
           completions = completions.concat(element);
         });
-        resolve(completions);
+        return resolve(completions);
       }).catch(() => {
-        reject();
+        return reject();
       })
     });
   }

@@ -339,7 +339,7 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
   Log.get().info(`Called callback of onCompletion. File ${_textDocumentPosition.textDocument.uri}`);
   return new Promise((resolve, reject) => {
-    getConfig<string[]>("snippetsRepositories").then((repositories) => {
+    getSnippetsRepositories().then((repositories) => {
       const line = _textDocumentPosition.position.line;
       const column = _textDocumentPosition.position.character;
       const uri = _textDocumentPosition.textDocument.uri;
@@ -367,6 +367,22 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
     });
   });
 });
+
+let snippetsRepositories: string[] | undefined;
+function getSnippetsRepositories(): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    if (snippetsRepositories) {
+      resolve (snippetsRepositories)
+    } else {
+      getConfig<string[]>("snippetsRepositories").then((repositories) => {
+        snippetsRepositories = repositories;
+        resolve(repositories);
+      }).catch(() => {
+        reject();
+      })
+    }
+  })
+}
 
 /**
  * Returns the current source of completionsItems

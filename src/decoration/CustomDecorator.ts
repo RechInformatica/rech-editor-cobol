@@ -11,11 +11,14 @@ export class CustomDecorator {
         const updateDecorations = function () {
             // If active window is open and language is supported
             if (activeEditor && activeEditor.document.languageId == "COBOL") {
-                parser.findLocalVariables(activeEditor);
-                parser.findRechDocComments(activeEditor);
-                parser.applyDecorations(activeEditor);
+                parser.findLocalVariables(activeEditor).then(() => {
+                    parser.findRechDocComments(activeEditor!).then(() => {
+                        parser.applyDecorations(activeEditor!);
+                    }).catch();
+                }).catch();
             }
         };
+
         // Get the active editor for the first time and initialize the regex
         if (window.activeTextEditor) {
             activeEditor = window.activeTextEditor;
@@ -39,13 +42,13 @@ export class CustomDecorator {
             }
         }, null, context.subscriptions);
 
-        // This timer waits 200ms before updating decorations, avoiding calling update too often
+        // This timer waits 50ms before updating decorations, avoiding calling update too often
         var timeout: NodeJS.Timer;
         function triggerUpdateDecorations() {
             if (timeout) {
                 clearTimeout(timeout);
             }
-            timeout = setTimeout(updateDecorations, 200);
+            timeout = setTimeout(updateDecorations, 50);
         }
     }
 
