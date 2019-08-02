@@ -39,6 +39,8 @@ async function _activate(context: any) {
     // Custom decorators beyond language syntax highlight
     CustomDecorator.activate(context);
     //
+    SourceOfCompletions.show();
+    //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
