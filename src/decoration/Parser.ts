@@ -100,7 +100,7 @@ export class Parser {
               const endCharacter = iterator.column;
               let endPos = new Position(endLine, endCharacter + variable.getName().length + 1);
               // Adjust the start/end line and add the range in list to decorate
-              startPos = new Position(startPos.line + variableDeclarationPosition.line, startPos.character)
+              startPos = new Position(startPos.line + variableDeclarationPosition.line, startPos.character + 1)
               endPos = new Position(endPos.line + variableDeclarationPosition.line, endPos.character)
               this.localVariableRangeList.push(new Range(startPos, endPos));
             }
