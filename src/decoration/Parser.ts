@@ -139,16 +139,21 @@ export class Parser {
         // Find all parameter lines inside a block
         let line;
         while (line = lineParameterRegEx.exec(commentBlock)) {
+          // Parts from line
+          const fisrtPart = 1;
+          const token = 2;
+          const variable = 3;
+          const comment = 4;
           // Range of parameter description type
-          let startPos = activeEditor.document.positionAt(match.index + line.index + line[1].length);
-          let endPos = activeEditor.document.positionAt(match.index + line.index + line[1].length + line[2].length);
+          let startPos = activeEditor.document.positionAt(match.index + line.index + line[fisrtPart].length);
+          let endPos = activeEditor.document.positionAt(match.index + line.index + line[fisrtPart].length + line[token].length);
           // Add the range in list to decorate
           this.rechDocTypeRangeList.push(new Range(startPos, endPos));
           // If documentation line have variable after type
-          if (line[4].length != 0) {
+          if (line[comment].length != 0) {
             // Range of parameter variable
-            startPos = activeEditor.document.positionAt(match.index + line.index + line[1].length + line[2].length + line[3].length);
-            endPos = activeEditor.document.positionAt(match.index + line.index + line[1].length + line[2].length + line[3].length + line[4].length);
+            startPos = activeEditor.document.positionAt(match.index + line.index + line[fisrtPart].length + line[token].length + line[variable].length);
+            endPos = activeEditor.document.positionAt(match.index + line.index + line[fisrtPart].length + line[token].length + line[variable].length + line[comment].length);
             // Add the range in list to decorate
             this.rechDocVariableRangeList.push(new Range(startPos, endPos));
           }
@@ -165,7 +170,9 @@ export class Parser {
   public applyDecorations(activeEditor: TextEditor): void {
     const colors = new Configuration("rech.editor.cobol").get<any>("especialColors");
     // Create decorator to RechDoc type of documentation and aply on Ranges
-    let color: DecorationRenderOptions = { color: colors.rechdocToken, backgroundColor: "transparent" };
+    let color: DecorationRenderOptions;
+    color = {dark: { color: colors.rechdocToken, backgroundColor: "transparent" },
+            light: { color: this.invertHex(colors.rechdocToken), backgroundColor: "transparent" }};
     let decorator = window.createTextEditorDecorationType(color);
     activeEditor.setDecorations(decorator, this.rechDocTypeRangeList);
     if (Parser.lastRechDocTypeDecorator) {
@@ -174,7 +181,8 @@ export class Parser {
     Parser.lastRechDocTypeDecorator = decorator;
     this.rechDocTypeRangeList.length = 0;
     // Create decorator to RechDoc variable documentation and aply on Ranges
-    color = { color: colors.rechdocVariable, backgroundColor: "transparent" };
+    color = { dark: { color: colors.rechdocVariable, backgroundColor: "transparent" },
+             light: { color: this.invertHex(colors.rechdocVariable), backgroundColor: "transparent" }};
     decorator = window.createTextEditorDecorationType(color);
     activeEditor.setDecorations(decorator, this.rechDocVariableRangeList);
     if (Parser.lastRechDocVariableDecorator) {
@@ -183,7 +191,8 @@ export class Parser {
     Parser.lastRechDocVariableDecorator = decorator;
     this.rechDocVariableRangeList.length = 0;
     // Create decorator to local variable and aply on Ranges
-    color = { color: colors.localScopeVariable, backgroundColor: "transparent" };
+    color = { dark: {color: colors.localScopeVariable, backgroundColor: "transparent"},
+             light: {color: this.invertHex(colors.localScopeVariable), backgroundColor: "transparent"} };
     decorator = window.createTextEditorDecorationType(color);
     activeEditor.setDecorations(decorator, this.localVariableRangeList);
     if (Parser.lastLocalVariableDecorator) {
@@ -193,4 +202,19 @@ export class Parser {
     this.localVariableRangeList.length = 0;
   }
 
+  /**
+   * Invert the hex color
+   *
+   * @param hex
+   */
+  private invertHex(hex: string) {
+    const invertEspecialColorsInLightTheme = new Configuration("rech.editor.cobol").get<any>("invertEspecialColorsInLightTheme");
+    if (!invertEspecialColorsInLightTheme) {
+      return hex;
+    }
+    const numberFromHex = Number(`0x1${hex.substr(1)}`);
+    return `#${(numberFromHex ^ 0xFFFFFF).toString(16).substr(1).toUpperCase()}`
+  }
+
 }
+
