@@ -424,9 +424,11 @@ export class CobolDeclarationFinder {
         }
       });
       const linesFromText = this.text.split("\n");
-      const line = linesFromText[referenceLine].trim();
+      let line = linesFromText[referenceLine].trim();
+      line = line.replace(/([\*\.\,\\\+\=\>\:])/g, "\\$1");
       let referenceLineForScan: number;
-      new Scan(buffer).scan(new RegExp(`${line}\\s*\\*\\>\\s+\\d+\\s+\\d+$`, 'gi'), (iterator: any) => {
+      const patter = new RegExp(`${line}\\s*\\*\\>\\:\\s+\\d+\\s+\\d+$`, 'gi');
+      new Scan(buffer).scan(patter, (iterator: any) => {
         referenceLineForScan = iterator.row;
       });
       referenceLineForScan = linesFromText.length;
