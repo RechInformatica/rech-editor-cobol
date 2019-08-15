@@ -10,7 +10,7 @@ export class ToTrueCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let currentText = lines[line];
+            const currentText = lines[line];
             let text = "";
             text = new ToCompletion().buildToTextWithIndent(currentText, column);
             text = text.concat("true");

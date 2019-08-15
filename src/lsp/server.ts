@@ -44,6 +44,8 @@ import { VariableCompletionFactory } from "./completion/variable/VariableComplet
 import { Log } from "../commons/Log";
 import { BufferSplitter } from "../commons/BufferSplitter";
 import { CobolDiagnosticParser } from "../cobol/diagnostic/cobolDiagnosticParser";
+import { ClassCompletion } from "./completion/ClassCompletion";
+import { MethodCompletion } from "./completion/method/MethodCompletion";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -90,10 +92,10 @@ ExpandedSourceManager.setStatusBarFromSourceExpander((file?: string) => {
 });
 
 /** When requesto to return the declaration position of term */
-connection.onRequest("custom/findDeclarationPosition", (word: string, referenceLine: number, fullDocument: string, uri: string) => {
+connection.onRequest("custom/findDeclarationPosition", (word: string, referenceLine: number, referenceColumn: number, fullDocument: string, uri: string) => {
   return new Promise((resolve, reject) => {
     Log.get().info("Found declaration position request for " + word + " starting");
-    callCobolFinder(word, referenceLine, fullDocument, uri).then((position) => {
+    callCobolFinder(word, referenceLine, referenceColumn, fullDocument, uri).then((position) => {
       Log.get().info("Found declaration position request for " + word + " in " + position.file + " request on " + uri);
       resolve(position);
     }).catch(() => {
@@ -349,6 +351,8 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
         new CobolCompletionItemFactory(line, column, BufferSplitter.split(fullDocument.getText()), uri)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
+          .setClassCompletion(new ClassCompletion(cacheFileName, uri, getCurrentSourceOfClassCompletions()))
+          .setMethodCompletion(new MethodCompletion(uri))
           .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
           .generateCompletionItems().then((items) => {
             Log.get().info(`Generated ${items.length} CompletionItems. File: ${_textDocumentPosition.textDocument.uri}`);
@@ -389,6 +393,13 @@ function getSnippetsRepositories(): Promise<string[]> {
  */
 function getCurrentSourceOfParagraphCompletions() {
   return connection.sendRequest<string>("custom/sourceOfParagraphCompletions")
+}
+
+/**
+ * Returns the current source of completionsItems
+ */
+function getCurrentSourceOfClassCompletions() {
+  return connection.sendRequest<string>("custom/sourceOfClassCompletions")
 }
 
 /**
@@ -467,7 +478,7 @@ connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location 
       const text = fullDocument.getText();
       const word = getLineText(text, params.position.line, params.position.character);
       Log.get().info(`Found declaration for ${word} starting`);
-      createPromiseForWordDeclaration(text, params.position.line, word, params.textDocument.uri).then((location) => {
+      createPromiseForWordDeclaration(text, params.position.line, params.position.character, word, params.textDocument.uri).then((location) => {
         Log.get().info("Found declaration for " + word + " in " + location.uri + ". Key pressed in " + params.textDocument.uri);
         resolve(location);
       }).catch(() => {
@@ -518,11 +529,11 @@ export function getLineText(
  * @param word the target word which declaration will be searched
  * @param uri URI of the current file open in editor
  */
-export function createPromiseForWordDeclaration(documentFullText: string, referenceLine: number, word: string, uri: string) {
+export function createPromiseForWordDeclaration(documentFullText: string, referenceLine: number, referenceColumn: number, word: string, uri: string) {
   // Creates an external promise so the reject function can be called when no definition
   // is found for the specified word
   return new Promise<Location>((resolve, reject) => {
-    callCobolFinder(word, referenceLine, documentFullText, uri).then((position) => {
+    callCobolFinder(word, referenceLine, referenceColumn, documentFullText, uri).then((position) => {
       // If the delcaration was found on an external file
       if (position.file) {
         // Retrieves the location on the external file
@@ -545,10 +556,10 @@ export function createPromiseForWordDeclaration(documentFullText: string, refere
  * @param documentFullText
  * @param uri
  */
-export function callCobolFinder(word: string, referenceLine: number, documentFullText: string, uri: string): Promise<RechPosition> {
+export function callCobolFinder(word: string, referenceLine: number, referenceColumn: number, documentFullText: string, uri: string): Promise<RechPosition> {
   return new Promise((resolve, reject) => {
     new CobolDeclarationFinder(documentFullText)
-      .findDeclaration(word, uri, referenceLine)
+      .findDeclaration(word, uri, referenceLine, referenceColumn)
       .then((position: RechPosition) => {
         return resolve(position);
       }).catch(() => {

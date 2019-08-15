@@ -8,6 +8,8 @@ import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
 export class CobolVariable {
     /* Level representing a constant */
     public static CONSTANT_LEVEL: number = 78;
+    /* Level representing a variable without children */
+    public static CONSTANT_WITHOUT_CHILDREN: number = 77;
     /* Level representing a 'enum' */
     public static ENUM_LEVEL: number = 88;
     /* Variable level */
@@ -40,6 +42,8 @@ export class CobolVariable {
     private comment: string[]
     /** Method return */
     private methodReturn: boolean | undefined;
+    /** Represents a dummy variable */
+    private dummy: boolean | undefined;
 
     private constructor(level: number,
                         name: string,
@@ -52,6 +56,7 @@ export class CobolVariable {
                         comment: string[],
                         children: CobolVariable[],
                         declarationPosition: RechPosition,
+                        dummy: boolean,
                         scope?: string,
                         section?: "working-storage" | "linkage" | "file" | undefined,
                         methodReturn?: boolean) {
@@ -66,9 +71,19 @@ export class CobolVariable {
         this.comment = comment;
         this.children = children;
         this.declarationPosition = declarationPosition;
+        this.dummy = dummy;
         this.scope = scope;
         this.section = section;
         this.methodReturn = methodReturn;
+    }
+
+    /**
+     * Return a dummy Cobol Variable
+     *
+     * @param name
+     */
+    public static dummyCobolVariable(name: string) {
+        return new CobolVariable(0, name, "", Type.Alphanumeric, false, false, "", false, [""], [], new RechPosition(1, 1), true);
     }
 
     /**
@@ -76,7 +91,7 @@ export class CobolVariable {
      *
      * @param lineNumber
      * @param buffer
-     * @param noChildren
+     * @param special
      */
     public static parseLines(lineNumber: number, buffer: string[], special?:{noChildren?: boolean, noScope?: boolean, noSection?: boolean, ignoreMethodReturn?: boolean, noComment?: boolean}): CobolVariable {
         const line = buffer[lineNumber];
@@ -108,12 +123,12 @@ export class CobolVariable {
             methodReturn = VariableUtils.isMethodReturn(name, buffer, lineNumber);
         }
         if (picture === "") {
-            return new CobolVariable(level, name, "", Type.Alphanumeric, true, false, line, redefines, comment, children, declarationPosition, scope, section, methodReturn);
+            return new CobolVariable(level, name, "", Type.Alphanumeric, true, false, line, redefines, comment, children, declarationPosition, false, scope, section, methodReturn);
         } else {
             const type = CobolVariable.detectType(picture.toUpperCase());
             const display = CobolVariable.isDisplay(picture.toUpperCase());
             const allowNegative = CobolVariable.allowNegative(picture.toUpperCase());
-            return new CobolVariable(level, name, picture, type, display, allowNegative, line, redefines, comment, children, declarationPosition, scope, section, methodReturn);
+            return new CobolVariable(level, name, picture, type, display, allowNegative, line, redefines, comment, children, declarationPosition, false, scope, section, methodReturn);
         }
     }
 
@@ -584,12 +599,27 @@ export class CobolVariable {
     }
 
     /**
+     * Returns true if the variable is a object reference
+     */
+    public getObjectReferenceOf(): string | undefined {
+        const match = this.raw.match(/.*\sobject\sreference\s+(.*)\./);
+        return match ? match[1] : undefined;
+    }
+
+    /**
      * Defines the variable as method return
      *
      * @param methodReturn
      */
     public setMethodReturn(methodReturn: boolean) {
         this.methodReturn = methodReturn;
+    }
+
+    /**
+     * Returns true if this is a dummy variable
+     */
+    public isDummy(): boolean {
+        return this.dummy ? true : false;
     }
 
 }

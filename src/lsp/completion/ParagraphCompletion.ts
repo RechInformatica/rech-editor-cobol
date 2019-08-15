@@ -2,7 +2,6 @@ import { ParserCobol } from "../../cobol/parsercobol";
 import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
 import { MarkupKind, CompletionItemKind, CompletionItem } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
-import { File } from "../../commons/file";
 import { Scan } from "../../commons/Scan";
 import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
 import { BufferSplitter } from "../../commons/BufferSplitter";
@@ -43,13 +42,13 @@ export class ParagraphCompletion implements CompletionInterface {
             this.loadCache().catch(() => {
                 reject();
             });
-            let items: CompletionItem[] = [];
+            const items: CompletionItem[] = [];
             if (ParagraphCompletion.cache && ParagraphCompletion.cacheSourceFileName == this.cacheFileName) {
-                for (let value of ParagraphCompletion.cache.values()){
+                for (const value of ParagraphCompletion.cache.values()){
                     items.push(value);
                 }
             } else {
-                for (let value of this.generateParagraphCompletion(this.currentLines, false).values()) {
+                for (const value of this.generateParagraphCompletion(this.currentLines, false).values()) {
                     items.push(value);
                 }
             }
@@ -91,13 +90,13 @@ export class ParagraphCompletion implements CompletionInterface {
      * @param useCache
      */
     private generateParagraphCompletion(lines: string[], useCache: boolean): Map<string, CompletionItem> {
-        let items: Map<string, CompletionItem> = new Map;
-        let buffer = lines.join("\n");
+        const items: Map<string, CompletionItem> = new Map;
+        const buffer = lines.join("\n");
         new Scan(buffer).scan(/^\s\s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm, (iterator: any) => {
-            let paragraphName = this.parserCobol.getDeclaracaoParagrafo(iterator.lineContent.toString());
-            let docArray = this.getElementDocumentation(lines, iterator.row);
+            const paragraphName = this.parserCobol.getDeclaracaoParagrafo(iterator.lineContent.toString());
+            const docArray = this.getElementDocumentation(lines, iterator.row);
             if (paragraphName) {
-                let paragraphItem = this.createParagraphCompletion(paragraphName, docArray);
+                const paragraphItem = this.createParagraphCompletion(paragraphName, docArray);
                 items.set(paragraphName, paragraphItem);
             }
         });
@@ -119,7 +118,7 @@ export class ParagraphCompletion implements CompletionInterface {
      * @param docArray documentation array
      */
     private createParagraphCompletion(paragraph: string, docArray: string[]): CompletionItem {
-        let cobolDoc = this.cobolDocParser.parseCobolDoc(docArray);
+        const cobolDoc = this.cobolDocParser.parseCobolDoc(docArray);
         return {
             label: paragraph,
             detail: cobolDoc.comment.join(" "),
@@ -140,7 +139,7 @@ export class ParagraphCompletion implements CompletionInterface {
     private getElementDocumentation(lines: string[], lineIndex: number): string[] {
         let documentation: string[] = [];
         for (let index = lineIndex - 1; index >= 0; index--) {
-            let currentLineText = lines[index];
+            const currentLineText = lines[index];
             if (currentLineText.startsWith("      *>")) {
                 documentation.push(currentLineText);
             } else {

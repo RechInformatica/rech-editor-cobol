@@ -17,7 +17,7 @@ export class CommaDotInsertTextBuilder implements VariableInsertTextBuilder {
         if (column < currentCommand.length) {
             return variableName;
         }
-        let separator = CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentCommand));
+        const separator = CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentCommand));
         if (currentCommand.endsWith(separator)) {
             return variableName;
         }

@@ -139,6 +139,16 @@ export class Client {
 					}
 				})
 			});
+			Client.client.onRequest("custom/sourceOfClassCompletions", () => {
+				return new Promise<string>((resolve, reject) => {
+					const result = SourceOfCompletions.getSourceOfClassCompletions();
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject();
+					}
+				})
+			});
 			Client.client.onRequest("custom/showFoldinStatusBar", (file?: string) => {
 				FoldStatusBar.show(file);
 			});
@@ -238,10 +248,10 @@ export class Client {
 	/**
 	 * Request the server and return the RechPosition of word declaration
 	 */
-	public static getDeclararion(word: string, referenceLine: number, fullDocument: string, uri: string): Promise<RechPosition> {
+	public static getDeclararion(word: string, referenceLine: number, referenceColumn: number, fullDocument: string, uri: string): Promise<RechPosition> {
 		return new Promise((resolve, reject) => {
 			if (Client.client) {
-				const params = [word, referenceLine, fullDocument, uri];
+				const params = [word, referenceLine, referenceColumn, fullDocument, uri];
 				return Client.client.sendRequest<RechPosition | undefined>("custom/findDeclarationPosition", params).then((position) => {
 					if (position) {
 						resolve(position)

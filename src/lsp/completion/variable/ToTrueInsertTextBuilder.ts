@@ -16,7 +16,7 @@ export class ToTrueInsertTextBuilder implements VariableInsertTextBuilder {
      * @param column column where cursor is currently positioned
      */
     buildInsertText(variableName: string, currentCommand: string, column: number): string {
-        let commandSeparator = new CommandSeparatorInsertTextBuilder("to").buildInsertText(variableName, currentCommand, column);
+        const commandSeparator = new CommandSeparatorInsertTextBuilder("to").buildInsertText(variableName, currentCommand, column);
         return commandSeparator + "true" + CompletionUtils.separatorForColumn(CompletionUtils.getFirstCharacterColumn(currentCommand));
     }
 }

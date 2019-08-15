@@ -19,7 +19,7 @@ export class WhenCompletion implements CompletionInterface {
         this.uri = uri;
     }
 
-    public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
             if (!this.isFirstWhen(line, lines)) {
                 resolve([]);
@@ -31,7 +31,7 @@ export class WhenCompletion implements CompletionInterface {
                 resolve([]);
                 return;
             }
-            this.buildCompletionItem(variable, line, lines).then((completionItem) => {
+            this.buildCompletionItem(variable, line, column, lines).then((completionItem) => {
                 resolve(completionItem);
             }).catch(() => {
                 resolve([]);
@@ -96,9 +96,9 @@ export class WhenCompletion implements CompletionInterface {
      * @param currentLine
      * @param lines
      */
-    private buildCompletionItem(variable: string, currentLine: number, lines: string[]): Promise<CompletionItem[]> {
+    private buildCompletionItem(variable: string, currentLine: number, currentColumn: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve, reject) => {
-            this.getVariables88(variable, currentLine, lines).then((variables88) => {
+            this.getVariables88(variable, currentLine, currentColumn, lines).then((variables88) => {
                 const currentLineText = lines[currentLine];
                 const whenStartColumn = CompletionUtils.countSpacesAtBeginning(currentLineText) + 1;
                 const textEdit = this.build88WhensTextEdit(variable, variables88, whenStartColumn, currentLine);
@@ -167,10 +167,10 @@ export class WhenCompletion implements CompletionInterface {
      * @param variable
      * @param lines
      */
-    private getVariables88(variable: string, line: number, lines: string[]): Promise<string[]> {
+    private getVariables88(variable: string, line: number, column: number, lines: string[]): Promise<string[]> {
         return new Promise((resolve, reject) => {
             const result: string[] = [];
-            this.getLineOfParentDeclaration(variable, line, lines).then((parentLineResult) => {
+            this.getLineOfParentDeclaration(variable, line, column, lines).then((parentLineResult) => {
                 let parentPosition: RechPosition;
                 let parentFileLines: string[];
                 let declarationLine: string;
@@ -225,13 +225,13 @@ export class WhenCompletion implements CompletionInterface {
      * @param variable
      * @param lines
      */
-    private getLineOfParentDeclaration(variable: string, line: number, lines: string[]): Promise<any[]> {
+    private getLineOfParentDeclaration(variable: string, line: number, column: number, lines: string[]): Promise<any[]> {
         return new Promise((resolve, reject) => {
             if (!this.uri) {
                 reject();
             }
             const finder = new CobolDeclarationFinder(lines.join("\n"));
-            finder.findDeclaration(variable, this.uri!, line).then((position) => {
+            finder.findDeclaration(variable, this.uri!, line, column).then((position) => {
                 let parentFileLines = lines;
                 if (position.file) {
                     parentFileLines = BufferSplitter.split(new File(position.file).loadBufferSync("latin1"));

@@ -161,6 +161,13 @@ export class Editor {
   }
 
   /**
+   * Return current line
+   */
+  getCurrentColumn() {
+    return this.editor.selection.start.character;
+  }
+
+  /**
    * Replaces current line with a string
    */
   setCurrentLine(text: String) {

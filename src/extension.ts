@@ -93,7 +93,8 @@ async function _activate(context: any) {
         const buffer = editor.getEditorBuffer();
         const uri = editor.getPath().fullPathVscode();
         const line = editor.getCurrentRow();
-        new ElementsDisplayerFactory().show(word, buffer, uri, line);
+        const column = editor.getCurrentColumn();
+        new ElementsDisplayerFactory().show(word, buffer, uri, line, column);
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos12', () => {
         new Editor().setColumn(AREA_B - 1).then().catch();
