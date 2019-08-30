@@ -187,8 +187,8 @@ export class Client {
 			const currentFile = files[0];
 			const executor = Editor.getPreprocessor();
 			if (executor) {
-				executor.setPath(currentFile).exec().then((process) => {
-					resolve(process.getStdout());
+				executor.setPath(currentFile).exec().then((output) => {
+					resolve(output);
 				}).catch(() => {
 					reject();
 				});
@@ -207,8 +207,8 @@ export class Client {
 		return new Promise<string>((resolve, reject) => {
 			const executor = Editor.getCopyHierarchy();
 			if (executor) {
-				executor.setPath(uri).exec().then((process) => {
-					resolve(process.getStdout());
+				executor.setPath(uri).exec().then((buffer) => {
+					resolve(buffer);
 				}).catch(() => {
 					reject();
 				});
