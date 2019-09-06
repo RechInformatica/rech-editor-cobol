@@ -26,16 +26,16 @@ export class ClassCompletion implements CompletionInterface {
   private uri: string;
   /** Current lines in the source */
   private currentLines: string[] | undefined;
-  /** Source of completions */
-  private sourceOfCompletions: Thenable<string>;
+  /** Special class puller  */
+  private specialClassPuller: Thenable<string>;
 
 
-  constructor(cacheFileName: string, uri: string, sourceOfCompletions: Thenable<string>) {
+  constructor(cacheFileName: string, uri: string, specialClassPuller: Thenable<string>) {
     this.parserCobol = new ParserCobol();
     this.cobolDocParser = new CobolDocParser();
     this.cacheFileName = cacheFileName;
     this.uri = uri;
-    this.sourceOfCompletions = sourceOfCompletions;
+    this.specialClassPuller = specialClassPuller;
   }
 
   public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
@@ -61,22 +61,39 @@ export class ClassCompletion implements CompletionInterface {
    * @param _column
    */
   private loadCache() {
-    return new Promise((resolve, reject) => {
-      this.sourceOfCompletions.then((sourceOfCompletions) => {
-        if (sourceOfCompletions == "local") {
-          ClassCompletion.cache = this.generateClassCompletion(<string[]>this.currentLines, false)
-          ClassCompletion.cacheSourceFileName = this.cacheFileName;
-          return resolve();
-        }
-        ExpandedSourceManager.getExpandedSource(this.uri).then((buffer) => {
-          ClassCompletion.cacheSourceFileName = this.cacheFileName;
-          ClassCompletion.cache = this.generateClassCompletion(BufferSplitter.split(buffer.toString()), true);
-          return resolve();
-        }).catch(() => {
-          return reject();
-        })
+    return new Promise((resolve, _reject) => {
+      this.specialClassPuller.then((classes: string) => {
+        ClassCompletion.cache = this.parserSpecialClasses(classes)
+        ClassCompletion.cacheSourceFileName = this.cacheFileName;
+
+      }, ()=> {
+        ClassCompletion.cache = this.generateClassCompletion(<string[]>this.currentLines)
+        ClassCompletion.cacheSourceFileName = this.cacheFileName;
+        return resolve();
       });
     });
+  }
+
+  /**
+   * Parser the special class result
+   *
+   * @param classes
+   */
+  private parserSpecialClasses(classes: string): Map<string, CompletionItem> {
+    const items: Map<string, CompletionItem> = new Map;
+    const buffer = classes.split("\n");
+    for (let i = 0; i < buffer.length; i++) {
+      const linha = buffer[i];
+      if (!linha.trim().startsWith("#")) {
+        const parts = linha.split("=");
+        const className = parts[0];
+        const packagex = parts[1] ? parts[1] : ""
+        const documentation = "*>-> " + packagex.replace("\r", "");
+        const classItem = this.createClassCompletion(className, [documentation]);
+        items.set(className, classItem);
+      }
+    }
+    return items;
   }
 
   /**
@@ -87,7 +104,7 @@ export class ClassCompletion implements CompletionInterface {
    * @param lines
    * @param useCache
    */
-  private generateClassCompletion(lines: string[], useCache: boolean): Map<string, CompletionItem> {
+  private generateClassCompletion(lines: string[]): Map<string, CompletionItem> {
     const items: Map<string, CompletionItem> = new Map;
     const buffer = lines.join("\n");
     new Scan(buffer).scan(/(?:^\s+CLASS\s+([\w]+)\s+AS.*|^\s+([\w]+)\s+IS\s+CLASS.*)/gim, (iterator: any) => {
@@ -97,14 +114,6 @@ export class ClassCompletion implements CompletionInterface {
         items.set(classs.getName(), classItem);
       }
     });
-    // Merge the cache with the local class
-    if (useCache) {
-      this.generateClassCompletion(<string[]>this.currentLines, false).forEach((value, key) => {
-        if (!items.has(key)){
-          items.set(key, value);
-        }
-      })
-    }
     return items;
   }
 

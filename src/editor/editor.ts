@@ -19,6 +19,8 @@ export class Editor {
   private static copyHierarchy: GenericExecutor;
   /** Source preprocessor function */
   private static preprocessor: GenericExecutor;
+  /** Special class puller */
+  private static specialClassPuller: GenericExecutor;
 
   constructor() {
     this.editor = <TextEditor>this.getActiveEditor();
@@ -721,6 +723,22 @@ export class Editor {
    */
   public static getCopyHierarchy() {
     return Editor.copyHierarchy
+  }
+
+  /**
+   * Define the function to return the available classes
+   *
+   * @param specialClassPuller
+   */
+  public static setSpecialClassPuller(specialClassPuller: GenericExecutor) {
+    Editor.specialClassPuller = specialClassPuller
+  }
+
+  /**
+   * Define the function to return the available classes
+   */
+  public static getSpecialClassPuller() {
+    return Editor.specialClassPuller;
   }
 
   /**

@@ -11,10 +11,8 @@ export class SourceOfCompletions {
 
     private static paragraphStatusBar: StatusBarItem | undefined;
     private static variableStatusBar: StatusBarItem | undefined;
-    private static classStatusBar: StatusBarItem | undefined;
     private static paragraphSource: "local" | "expanded" = "local";
     private static variableSource: "local" | "expanded" = "local";
-    private static classSource: "local" | "expanded" = "expanded";
     private static isVisible: boolean = false;
 
     /**
@@ -28,10 +26,6 @@ export class SourceOfCompletions {
         SourceOfCompletions.variableStatusBar = window.createStatusBarItem(StatusBarAlignment.Right, VARIABLESTATUSBARPRIORITY)
         SourceOfCompletions.variableStatusBar.command = "rech.editor.cobol.changeVariableSource"
         SourceOfCompletions.variableStatusBar.text = "VariableSource - Local File"
-        //
-        SourceOfCompletions.classStatusBar = window.createStatusBarItem(StatusBarAlignment.Right, CLASSSTATUSBARPRIORITY)
-        SourceOfCompletions.classStatusBar.command = "rech.editor.cobol.changeClassSource"
-        SourceOfCompletions.classStatusBar.text = "ClassSource - Expanded File"
     }
 
     /**
@@ -47,9 +41,6 @@ export class SourceOfCompletions {
         }
         if (SourceOfCompletions.variableStatusBar) {
             SourceOfCompletions.variableStatusBar.show()
-        }
-        if (SourceOfCompletions.classStatusBar) {
-            SourceOfCompletions.classStatusBar.show()
         }
     }
 
@@ -80,30 +71,10 @@ export class SourceOfCompletions {
     }
 
     /**
-     * Toggle the class source
-     */
-    public static toggleTheClassSource() {
-        if (SourceOfCompletions.classSource == "local") {
-            SourceOfCompletions.classSource = "expanded";
-            SourceOfCompletions.classStatusBar!.text = "classSource - Expanded File"
-        } else {
-            SourceOfCompletions.classSource = "local";
-            SourceOfCompletions.classStatusBar!.text = "classSource - Local File"
-        }
-    }
-
-    /**
      * Returns the selected source of paragraphs completions
      */
     public static getSourceOfParagraphCompletions() {
         return SourceOfCompletions.paragraphSource;
-    }
-
-    /**
-     * Returns the selected source of paragraphs completions
-     */
-    public static getSourceOfClassCompletions() {
-        return SourceOfCompletions.classSource;
     }
 
     /**

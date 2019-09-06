@@ -54,3 +54,15 @@ export function defineCopyHierarchyFunction() {
         }
     });
 }
+
+/**
+ * Sets special Class puller for Cobol source
+ */
+export function defineSpecialClassPullerFunction() {
+    const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("specialClassPuller");
+    commands.executeCommand(commandToConfigSourceExpander).then((specialClassPuller) => {
+        if (specialClassPuller) {
+            Editor.setSpecialClassPuller(<GenericExecutor>specialClassPuller);
+        }
+    });
+}

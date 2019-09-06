@@ -62,6 +62,7 @@ export class Client {
 			dj.definePreprocessor();
 			dj.defineDianosticConfigs();
 			dj.defineCopyHierarchyFunction();
+			dj.defineSpecialClassPullerFunction();
 		}).catch();
 	}
 
@@ -139,14 +140,13 @@ export class Client {
 					}
 				})
 			});
-			Client.client.onRequest("custom/sourceOfClassCompletions", () => {
+			Client.client.onRequest("custom/specialClassPuller", (uri: string) => {
 				return new Promise<string>((resolve, reject) => {
-					const result = SourceOfCompletions.getSourceOfClassCompletions();
-					if (result !== undefined) {
+					Client.createSpecialClassPullerPromise(uri).then((result) => {
 						resolve(result);
-					} else {
+					}).catch(() => {
 						reject();
-					}
+					});
 				})
 			});
 			Client.client.onRequest("custom/showFoldinStatusBar", (file?: string) => {
@@ -209,6 +209,24 @@ export class Client {
 			if (executor) {
 				executor.setPath(uri).exec().then((buffer) => {
 					resolve(buffer);
+				}).catch(() => {
+					reject();
+				});
+			} else {
+				reject();
+			}
+		});
+	}
+
+	/**
+	 * Creates a promise for return the avaliable class
+	 */
+	private static createSpecialClassPullerPromise(uri: string): Promise<string> {
+		return new Promise<string>((resolve, reject) => {
+			const executor = Editor.getSpecialClassPuller();
+			if (executor) {
+				executor.setPath(uri).exec().then((classes: string) => {
+					resolve(classes);
 				}).catch(() => {
 					reject();
 				});

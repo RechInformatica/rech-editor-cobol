@@ -351,7 +351,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
         new CobolCompletionItemFactory(line, column, BufferSplitter.split(fullDocument.getText()), uri)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
-          .setClassCompletion(new ClassCompletion(cacheFileName, uri, getCurrentSourceOfClassCompletions()))
+          .setClassCompletion(new ClassCompletion(cacheFileName, uri, getSpecialClassPuller(uri)))
           .setMethodCompletion(new MethodCompletion(uri))
           .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
           .generateCompletionItems().then((items) => {
@@ -398,15 +398,15 @@ function getCurrentSourceOfParagraphCompletions() {
 /**
  * Returns the current source of completionsItems
  */
-function getCurrentSourceOfClassCompletions() {
-  return connection.sendRequest<string>("custom/sourceOfClassCompletions")
+function getCurrentSourceOfVariableCompletions() {
+  return connection.sendRequest<string>("custom/sourceOfVariableCompletions")
 }
 
 /**
  * Returns the current source of completionsItems
  */
-function getCurrentSourceOfVariableCompletions() {
-  return connection.sendRequest<string>("custom/sourceOfVariableCompletions")
+function getSpecialClassPuller(uri: string): Thenable<string> {
+  return connection.sendRequest<string>("custom/specialClassPuller", uri)
 }
 
 /**
