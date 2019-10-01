@@ -14,7 +14,7 @@ const WHENTERM = "when"
 export class EvaluateHighlight implements HighlightInterface {
 
     isABlockTerm(word: string): boolean {
-        let match = /(evaluate|when|end-evaluate)/i.exec(word);
+        const match = /(evaluate|when|end-evaluate)/i.exec(word);
         if (match) {
             return true
         }
@@ -22,10 +22,10 @@ export class EvaluateHighlight implements HighlightInterface {
     }
 
     positions(text: TextDocument, word: string, currentLine: number, _currentCharacter: number): DocumentHighlight[]{
-        let results: DocumentHighlight[] = []
-        let commandColumn = this.findTheCommandColumn(text, word, currentLine)
-        let beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
-        let endLine = this.findTheEndOfBlock(text, currentLine, commandColumn);
+        const results: DocumentHighlight[] = []
+        const commandColumn = this.findTheCommandColumn(text, word, currentLine)
+        const beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
+        const endLine = this.findTheEndOfBlock(text, currentLine, commandColumn);
         if (beginLine && endLine) {
             for (let whenLine = beginLine; whenLine < endLine;) {
                 whenLine = this.findLineOfBlockTerm(text, whenLine, WHENTERM, commandColumn + 3, true)!
@@ -50,8 +50,8 @@ export class EvaluateHighlight implements HighlightInterface {
      * @param currentLine
      */
     private findTheCommandColumn(text: TextDocument, word: string, currentLine: number,) {
-        let buffer = BufferSplitter.split(text.getText());
-        let currentLineContent = buffer[currentLine];
+        const buffer = BufferSplitter.split(text.getText());
+        const currentLineContent = buffer[currentLine];
         let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
         // Considers indentation of term
         if (word == WHENTERM) {
@@ -91,10 +91,10 @@ export class EvaluateHighlight implements HighlightInterface {
      * @param commandColumn
      */
     private findLineOfBlockTerm(text: TextDocument, currentLine: number, term: string, commandColumn: number, forward: boolean) {
-        let buffer = BufferSplitter.split(text.getText());
+        const buffer = BufferSplitter.split(text.getText());
         let index = currentLine;
         while ((forward && index < buffer.length) || (!forward && index > 0)) {
-            let line = buffer[index];
+            const line = buffer[index];
             if (line.trimLeft().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
                 return index
             }
