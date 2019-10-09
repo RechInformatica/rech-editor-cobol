@@ -88,7 +88,11 @@ export class CobolDoc {
     private elementArrayAsMarkdown(elements: DocElement[], metaName: string): string {
         let markdown = "";
         elements.forEach(currentParam => {
-            markdown = markdown.concat("*" + metaName + "* `" + currentParam.name + "` - " + currentParam.description + "\n\n");
+            markdown = markdown.concat("*" + metaName + "* `" + currentParam.name + "`");
+            if (currentParam.description) {
+                markdown = markdown.concat(" - " + currentParam.description);
+            }
+            markdown = markdown.concat("\n\n");
         });
         return markdown;
     }
