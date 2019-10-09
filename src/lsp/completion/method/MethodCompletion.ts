@@ -265,8 +265,11 @@ export class MethodCompletion implements CompletionInterface {
         Q.allSettled(methodsPromise).then((results) => {
           const methods: CobolMethod[] = [];
           results.forEach((result) => {
-            if (result.state === "fulfilled") {
-              methods.push(result.value!);
+            if (result.state === "fulfilled" && result.value) {
+              const method = <CobolMethod> result.value;
+              if (!method.isPrivate()) {
+                methods.push(method);
+              }
             }
           });
           methods.forEach((method) => {

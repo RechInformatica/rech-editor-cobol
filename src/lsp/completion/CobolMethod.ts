@@ -9,7 +9,7 @@ import { File } from "../../commons/file";
 import Q from "q";
 
 /**
- * Class representing a Cobol variable
+ * Class representing a Cobol method
  */
 export class CobolMethod {
 
@@ -34,12 +34,14 @@ export class CobolMethod {
 	private columnFromDeclaration: number;
 	/** Class from Method */
 	private classs: string;
-
+	/** Method visibility */
+	private visibility: "private" | "protected" | "public";
 
 	private constructor(name: string,
 		                lineFromDeclaration: number,
 		                columnFromDeclaration: number,
-		                classs: string,
+						classs: string,
+						visibility: "private" | "protected" | "public",
 						params: CobolVariable[],
 						documentation: CobolDoc,
 						throws: CobolVariable[],
@@ -47,6 +49,7 @@ export class CobolMethod {
 		this.name = name;
 		this.lineFromDeclaration = lineFromDeclaration;
 		this.columnFromDeclaration = columnFromDeclaration;
+		this.visibility = visibility;
 		this.classs = classs;
 		this.params = params;
 		this.documentation = documentation;
@@ -73,6 +76,7 @@ export class CobolMethod {
 			if (!methodName) {
 				return reject();
 			}
+			const visibility = CobolMethod.extractVisibility(line);
 			let params = CobolMethod.extractParams(lineNumber, buffer);
 			params = params.filter((variable) => {
 				return variable.getLevel() == 1 || variable.getLevel() == CobolVariable.CONSTANT_WITHOUT_CHILDREN;
@@ -80,7 +84,7 @@ export class CobolMethod {
 			CobolMethod.extractReturn(lineNumber, column, buffer).then((returns) => {
 				CobolMethod.extractThrows(lineNumber, column, buffer).then((throws) => {
 					const documentation = CobolMethod.extractDocumentation(lineNumber, buffer, params, returns, throws);
-					return resolve(new CobolMethod(methodName, lineNumber, column, classs, params, documentation, throws, returns));
+					return resolve(new CobolMethod(methodName, lineNumber, column, classs, visibility, params, documentation, throws, returns));
 				}).catch(() => {
 					return reject()
 				});
@@ -88,6 +92,19 @@ export class CobolMethod {
 				return reject()
 			});
 		});
+	}
+
+	/**
+	 * * Returns the visibility from method
+	 *
+	 * @param line
+	 */
+	private static extractVisibility(line: string): "private" | "protected" | "public" {
+		const match = /.*(private|protected|public)\s*\./gi.exec(line);
+		if (match && match[1]) {
+			return <"private" | "protected" | "public"> match[1];
+		}
+		return "public";
 	}
 
 	/**
@@ -317,6 +334,13 @@ export class CobolMethod {
 	 */
 	public getColumnFromDeclaration(): number {
 		return this.columnFromDeclaration;
+	}
+
+	/**
+	 * Returns true if the method visibility is private
+	 */
+	public isPrivate(): boolean {
+		return this.visibility == "private";
 	}
 
 }
