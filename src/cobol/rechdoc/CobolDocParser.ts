@@ -74,11 +74,7 @@ export class CobolDocParser {
                     }
                     if (extractingComment) {
                         const currentComment = currentLine.replace("*>", "").trim();
-                        if (currentComment.length == 0) {
-                            comment.concat("\n\n");
-                        } else {
-                            comment = comment.concat(this.removeLineCommentIfNeed(currentComment));
-                        }
+                        comment = comment.concat(this.removeLineCommentIfNeed(currentComment));
                     }
 
                 }

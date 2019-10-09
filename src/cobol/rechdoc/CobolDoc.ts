@@ -62,7 +62,8 @@ export class CobolDoc {
      */
     public asMarkdown(): string {
         let markdown = "";
-        markdown = markdown.concat(this._comment.join(" ")).concat("\n\n\n");
+        const joined = this._comment.join("\n");
+        markdown = markdown.concat(joined).concat("\n\n\n");
         markdown += this.elementsAsMarkdown();
         return markdown;
     }
