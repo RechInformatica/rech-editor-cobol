@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit Cobol files with Visual Studio Code",
-	"version": "1.0.46",
+	"version": "1.0.47",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.35.0"
@@ -153,83 +153,83 @@
 		"commands": [
 			{
 				"command": "rech.editor.cobol.cobolInsertStartComment",
-				"title": "Inserts a '*>->' comment at the begginig of the current line"
+				"title": "Rech COBOL: Inserts a '*>->' comment at the begginig of the current line"
 			},
 			{
 				"command": "rech.editor.cobol.cobolInsertEndComment",
-				"title": "Inserts a '<-<*' comment at the end of the current line"
+				"title": "Rech COBOL: Inserts a '<-<*' comment at the end of the current line"
 			},
 			{
 				"command": "rech.editor.cobol.cobolInsertCommentLine",
-				"title": "Inserts a new comment line starting with '*>->'"
+				"title": "Rech COBOL: Inserts a new comment line starting with '*>->'"
 			},
 			{
 				"command": "rech.editor.cobol.cobolInsertLineSeparator",
-				"title": "Inserts Cobol-separator line comment"
+				"title": "Rech COBOL: Inserts Cobol-separator line comment"
 			},
 			{
 				"command": "rech.editor.cobol.tab",
-				"title": "Performs a tab and sets the cursor on the most appropriate Cobol column"
+				"title": "Rech COBOL: Performs a tab and sets the cursor on the most appropriate Cobol column"
 			},
 			{
 				"command": "rech.editor.cobol.revtab",
-				"title": "Performs a reverse-tab and sets the cursor on the most appropriate Cobol column"
+				"title": "Rech COBOL: Performs a reverse-tab and sets the cursor on the most appropriate Cobol column"
 			},
 			{
 				"command": "rech.editor.cobol.findNextParagraph",
-				"title": "Sets cursor on the previous paragraph declaration"
+				"title": "Rech COBOL: Sets cursor on the previous paragraph declaration"
 			},
 			{
 				"command": "rech.editor.cobol.findPreviousParagraph",
-				"title": "Sets cursor on the next paragraph declaration"
+				"title": "Rech COBOL: Sets cursor on the next paragraph declaration"
 			},
 			{
 				"command": "rech.editor.cobol.cursorPos51",
-				"title": "Sets cursor at position 51"
+				"title": "Rech COBOL: Sets cursor at position 51"
 			},
 			{
 				"command": "rech.editor.cobol.cursorPos12",
-				"title": "Sets cursor at position 12"
+				"title": "Rech COBOL: Sets cursor at position 12"
 			},
 			{
 				"command": "rech.editor.cobol.cursorPos30",
-				"title": "Sets cursor at position 30"
+				"title": "Rech COBOL: Sets cursor at position 30"
 			},
 			{
 				"command": "rech.editor.cobol.cursorPos20",
-				"title": "Sets cursor at position 20"
+				"title": "Rech COBOL: Sets cursor at position 20"
 			},
 			{
 				"command": "rech.editor.cobol.cursorPos35",
-				"title": "Sets cursor at position 35"
+				"title": "Rech COBOL: Sets cursor at position 35"
 			},
 			{
 				"command": "rech.editor.cobol.cursorPos08",
-				"title": "Sets cursor at position 08"
+				"title": "Rech COBOL: Sets cursor at position 08"
 			},
 			{
 				"command": "rech.editor.cobol.insertTodo",
-				"title": "Inserts a Cobol 'TODO' comment line"
+				"title": "Rech COBOL: Inserts a Cobol 'TODO' comment line"
 			},
 			{
 				"command": "rech.editor.cobol.cobolLineEndDot",
-				"title": "Inserts a '.' at the end of the line if missing"
+				"title": "Rech COBOL: Inserts a '.' at the end of the line if missing"
 			},
 			{
 				"command": "rech.editor.cobol.cobolLineEndComma",
-				"title": "Inserts a ',' at the end of the line if missing"
+				"title": "Rech COBOL: Inserts a ',' at the end of the line if missing"
 			},
 			{
 				"command": "rech.editor.cobol.cobolInvertMoveOperators",
-				"title": "Invert variables on the 'move' command"
+				"title": "Rech COBOL: Invert variables on the 'move' command"
 			},
 			{
 				"command": "rech.editor.cobol.centralizeComment",
-				"title": "Centers the Cobol comment"
+				"title": "Rech COBOL: Centers Cobol comment"
 			},
 			{
 				"command": "rech.editor.cobol.showElementProperties",
-				"title": "Show the cobol element properties"
+				"title": "Rech COBOL: Shows Cobol element properties"
 			}
 		],
 		"keybindings": [
