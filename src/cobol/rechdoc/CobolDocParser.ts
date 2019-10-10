@@ -163,6 +163,9 @@ export class CobolDocParser {
      */
     private extractDefaultDoc(documentation: string[]): CobolDoc {
         let comment: string[] = [];
+        const params: DocElement[] = [];
+        const returns: DocElement[] = [];
+        const throws: DocElement[] = [];
         documentation.forEach((currentLine) => {
             if (currentLine.trim().startsWith("*>->")) {
                 let currentComment = "";
@@ -171,7 +174,10 @@ export class CobolDocParser {
                 comment = comment.concat(this.removeLineCommentIfNeed(currentComment));
             }
         });
-        return new CobolDoc(comment, [], [], []);
+        this.parsePreTerms(params, this.preParams);
+        this.parsePreTerms(returns, this.preReturns);
+        this.parsePreTerms(throws, this.preThrows);
+        return new CobolDoc(comment, params, returns, throws);
     }
 
     /**
