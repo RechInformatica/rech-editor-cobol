@@ -14,6 +14,8 @@ export class VariableCompletion implements CompletionInterface {
 
     /** Cache of CompletionItems results */
     private static cache: Map<string, Map<string, CompletionItem>> = new Map()
+    /** Consider only object reference */
+    private considerOnlyObjectReference: boolean = false;
     /** Ignore enumerations (88 variables) */
     private ignoreEnums: boolean = false;
     /** Ignore display variables */
@@ -55,6 +57,16 @@ export class VariableCompletion implements CompletionInterface {
             }
             return resolve(items);
         });
+    }
+
+    /**
+     * Sets wheter this completion should consider only object reference variables
+     *
+     * @param considerOnlyObjectReference should consider only object reference
+     */
+    public setConsiderOnlyObjectReference(considerOnlyObjectReference: boolean): VariableCompletion {
+        this.considerOnlyObjectReference = considerOnlyObjectReference;
+        return this;
     }
 
     /**
@@ -156,6 +168,13 @@ export class VariableCompletion implements CompletionInterface {
         if (variable.getName().toUpperCase() === "FILLER") {
             return true;
         }
+        if (this.considerOnlyObjectReference) {
+            if (variable.getObjectReferenceOf()) {
+                return false;
+            } else {
+                return true;
+            }
+        }
         if (this.ignoreDisplay && variable.isDisplay()) {
             // For now we don't parse constant values and since some constantes can have
             // numeric values we never filter them
@@ -164,6 +183,8 @@ export class VariableCompletion implements CompletionInterface {
             }
             return true;
         }
+
+        variable.getObjectReferenceOf()
         if (this.ignoreEnums && variable.getLevel() == CobolVariable.ENUM_LEVEL) {
             return true;
         }

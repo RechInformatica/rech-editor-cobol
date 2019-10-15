@@ -327,6 +327,13 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Creates a variable completion interface ignoring enum variables and displays
+   */
+  private createVariableSuggestionForObjectReference(): VariableCompletion {
+    return this.variableCompletionFactory!.create().setConsiderOnlyObjectReference(true);
+  }
+
+  /**
    * Creates completion items form when clauses
    */
   private createWhenCompletions(): Promise<CompletionItem[]> {
@@ -619,6 +626,7 @@ export class CobolCompletionItemFactory {
     if (this.isInIfBlock()) {
       items = items.concat(this.generate(new ElseCompletion()));
     }
+    items = items.concat(this.generate(this.createVariableSuggestionForObjectReference()));
     return this.createWrappingPromise(items);
   }
 
