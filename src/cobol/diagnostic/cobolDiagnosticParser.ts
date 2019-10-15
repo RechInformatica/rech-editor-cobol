@@ -8,6 +8,7 @@ import { Path } from "../../commons/path";
 import { Scan } from "../../commons/Scan";
 import Q from "q";
 import { BufferSplitter } from "../../commons/BufferSplitter";
+import { CompletionUtils } from "../../lsp/commons/CompletionUtils";
 
 /**
  * Class conteiner of diagnostcs of cobol language
@@ -16,6 +17,8 @@ export class CobolDiagnosticParser {
 
   /** Lines of the source */
   private sourceLines: string;
+  /** Splitted lines of source code */
+  private splittedSource: string[] | undefined;
   /** Lines of the source */
   private static copyHierarchy: Map<string, string> = new Map();
 
@@ -145,11 +148,12 @@ export class CobolDiagnosticParser {
     } else {
       diagnosticSeverity = DiagnosticSeverity.Warning;
     }
+    const beginningOfLine = CompletionUtils.countSpacesAtBeginning(this.getSplittedSouce()[nLine]);
     return this.createDiagnostic(
       fileName,
       diagnosticSeverity,
       new TextRange(
-        new TextPosition(nLine, 1),
+        new TextPosition(nLine, beginningOfLine),
         new TextPosition(nLine, 120)
       ),
       message,
@@ -234,7 +238,7 @@ export class CobolDiagnosticParser {
     if (result) {
       return result;
     }
-    const length = BufferSplitter.split(this.sourceLines).length
+    const length = this.getSplittedSouce().length
     return {
       start: {
         line: length,
@@ -299,6 +303,16 @@ export class CobolDiagnosticParser {
    */
   public static removeSourceFromCopyCache(source: string) {
     CobolDiagnosticParser.copyHierarchy.delete(source);
+  }
+
+  /**
+   * Returns the source code splitted into an array
+   */
+  private getSplittedSouce(): string[] {
+    if (!this.splittedSource) {
+      this.splittedSource = BufferSplitter.split(this.sourceLines);
+    }
+    return this.splittedSource;
   }
 
 }
