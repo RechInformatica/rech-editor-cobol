@@ -148,7 +148,7 @@ export class CobolDiagnosticParser {
     } else {
       diagnosticSeverity = DiagnosticSeverity.Warning;
     }
-    const beginningOfLine = CompletionUtils.countSpacesAtBeginning(this.getSplittedSouce()[nLine]);
+    const beginningOfLine = CompletionUtils.countSpacesAtBeginning(this.getSplittedSource()[nLine]);
     return this.createDiagnostic(
       fileName,
       diagnosticSeverity,
@@ -238,7 +238,7 @@ export class CobolDiagnosticParser {
     if (result) {
       return result;
     }
-    const length = this.getSplittedSouce().length
+    const length = this.getSplittedSource().length
     return {
       start: {
         line: length,
@@ -308,7 +308,7 @@ export class CobolDiagnosticParser {
   /**
    * Returns the source code splitted into an array
    */
-  private getSplittedSouce(): string[] {
+  private getSplittedSource(): string[] {
     if (!this.splittedSource) {
       this.splittedSource = BufferSplitter.split(this.sourceLines);
     }
