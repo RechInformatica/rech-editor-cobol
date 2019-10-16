@@ -46,12 +46,12 @@ export class VariableCompletion implements CompletionInterface {
             const cache = VariableCompletion.cache.get(uri);
             if (cache) {
                 for (const value of cache.values()){
-                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lines[line], column);
+                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, value.kind === CompletionItemKind.EnumMember, lines[line], column);
                     items.push(value);
                 }
             } else {
                 for (const value of this.generateItemsFromCurrentBuffer(this.currentLines, false).values()) {
-                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, lines[line], column);
+                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, value.kind === CompletionItemKind.EnumMember, lines[line], column);
                     items.push(value);
                 }
             }

@@ -1,3 +1,4 @@
+import { CompletionItemKind } from "vscode-languageserver";
 import { expect } from 'chai';
 import 'mocha';
 import { VariableCompletion } from '../../../../lsp/completion/variable/VariableCompletion';
@@ -264,7 +265,7 @@ describe('Cobol variable completion', () => {
  */
 class DummyInsertTextBuilder implements VariableInsertTextBuilder {
 
-    buildInsertText(variableName: string, _currentCommand: string): string {
+    buildInsertText(variableName: string, _isEnum: boolean, _currentCommand: string): string {
         return "antes " + variableName + " dummy";
     }
 
