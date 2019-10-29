@@ -426,7 +426,7 @@ export class CobolDeclarationFinder {
       const linesFromText = this.text.split("\n");
       let line = linesFromText[referenceLine].trim();
       // Escape some COBOL characters which are Regex reserved symbols
-      line = line.replace(/([\*\.\,\(\\)\\+\=\>\:])/g, "\\$1");
+      line = line.replace(/([*.,()\\+=>:])/g, "\\$1");
       let referenceLineForScan: number;
       const patter = new RegExp(`${line}\\s*\\*\\>\\:\\s+\\d+\\s+\\d+$`, 'gi');
       new Scan(buffer).scan(patter, (iterator: any) => {
