@@ -50,19 +50,36 @@ export class DynamicJsonCompletion implements CompletionInterface {
      *
      * @param line line number where cursor is positioned
      * @param column column number where cursor is positioned
-     * @param lineText document lines
+     * @param lines document lines
      */
-    public generate(_line: number, _column: number, _lines: string[]): Promise<CompletionItem[]> {
+    public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
             let items: CompletionItem[] = [];
-            this.repositories.forEach(currentRepo => {
-                let jsonFiles = this.retrieveJsonFilesForRepo(currentRepo);
-                jsonFiles.forEach(currentFile => {
-                    items = items.concat(this.handleJsonFile(currentRepo + currentFile));
+            if (this.shouldSuggestJsonCompletions(line, lines)) {
+                this.repositories.forEach(currentRepo => {
+                    let jsonFiles = this.retrieveJsonFilesForRepo(currentRepo);
+                    jsonFiles.forEach(currentFile => {
+                        items = items.concat(this.handleJsonFile(currentRepo + currentFile));
+                    });
                 });
-            });
+            }
             resolve(items)
+
         });
+    }
+
+    /**
+     * Returns true if JSON completions should be suggested
+     *
+     * @param line line number where cursor is positioned
+     * @param lines document lines
+     */
+    private shouldSuggestJsonCompletions(line: number, lines: string[]): boolean {
+        let currentLine = lines[line].trimLeft();
+        if (!currentLine.includes(" ")) {
+            return true;
+        }
+        return false;
     }
 
     /**
