@@ -185,9 +185,10 @@ export class Client {
 	private static createPreprocessorExecutionPromise(files: string[]): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
 			const currentFile = files[0];
+			const extraCopyDirectory = files[1];
 			const executor = Editor.getPreprocessor();
 			if (executor) {
-				executor.setPath(currentFile).exec().then((output) => {
+				executor.setPath(currentFile).setExtraParams([extraCopyDirectory]).exec().then((output) => {
 					resolve(output);
 				}).catch(() => {
 					reject();

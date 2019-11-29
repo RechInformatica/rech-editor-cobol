@@ -210,7 +210,7 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
         new Diagnostician(text).diagnose(
           textDocument,
           (fileName) => {
-            return sendExternalPreprocessExecution(fileName);
+            return sendExternalPreprocessExecution(fileName, new Path(new Path(document.uri).fullPathWin()).directory());
           },
           (fileName) => {
             return sendExternalGetCopyHierarchy(fileName);
@@ -243,8 +243,8 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
  *
  * @param uri current URI of the file open in editor
  */
-export function sendExternalPreprocessExecution(uri: string) {
-  const files = [uri];
+export function sendExternalPreprocessExecution(uri: string, path: string) {
+  const files = [uri, path];
   return connection.sendRequest<string>("custom/runPreprocessor", [files]);
 }
 
