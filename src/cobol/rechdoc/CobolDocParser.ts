@@ -93,11 +93,26 @@ export class CobolDocParser {
         items.forEach((variable) => {
             let variableDocumentation: any = variable.getComment();
             variableDocumentation = variableDocumentation ? variableDocumentation.join(" ") : "";
-            const element = new DocElement(variable.getName(), variableDocumentation);
+            const element = new DocElement(variable.getName(), this.getVariableType(variable), variableDocumentation);
             if (element) {
                 elements.push(element);
             }
         })
+    }
+
+    /**
+     * Returns the appropriate type for the specified variable
+     *
+     * @param variable variable to have it's type returned
+     */
+    private getVariableType(variable: CobolVariable): string {
+        let objectReferenceType = variable.getObjectReferenceOf();
+        if (objectReferenceType) {
+            return objectReferenceType;
+        } else {
+            let picture = variable.getPicture();
+            return picture;
+        }
     }
 
     /**
@@ -123,10 +138,10 @@ export class CobolDocParser {
         if (docElementRegex) {
             if (docElementRegex[3]) {
                 docElementRegex[3]
-                return new DocElement(docElementRegex[2], this.removeLineCommentIfNeed(docElementRegex[3]));
+                return new DocElement(docElementRegex[2], "", this.removeLineCommentIfNeed(docElementRegex[3]));
             }
             if (docElementRegex[2]) {
-                return new DocElement(docElementRegex[2], "");
+                return new DocElement(docElementRegex[2], "", "");
             }
         }
         return undefined;

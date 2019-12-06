@@ -89,6 +89,9 @@ export class CobolDoc {
         let markdown = "";
         elements.forEach(currentParam => {
             markdown = markdown.concat("*" + metaName + "* `" + currentParam.name + "`");
+            if (currentParam.type) {
+                markdown = markdown.concat(" : `" + currentParam.type + "`");
+            }
             if (currentParam.description) {
                 markdown = markdown.concat(" - " + currentParam.description);
             }
