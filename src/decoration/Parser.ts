@@ -4,6 +4,7 @@ import { VariableUtils } from "../commons/VariableUtils";
 import { Scan } from "../commons/Scan";
 import { Configuration } from "../helpers/configuration";
 import Q from "q";
+import { CobolRegexUtils } from "../cobol/CobolRegexUtils";
 
 export class Parser {
   private static lastLocalVariableDecorator: TextEditorDecorationType
@@ -81,7 +82,7 @@ export class Parser {
         return reject();
       }
       let shortText = text.split("\n").slice(variableDeclarationPosition.line).join("\n")
-      const variableUseRegex = new RegExp(`[\\s\\.\\,\\:\\)\\(](${variable.getName()})[\\s\\t\\n\\r\\.\\,\\:\\)\\(]`, "img")
+      const variableUseRegex = CobolRegexUtils.createRegexForVariableUsage(variable.getName());
       const endMethodRegex = new RegExp(`(\\s+end\\s+method\\.)`, "img")
       const endMethodLine = endMethodRegex.exec(shortText)
       if (!endMethodLine) {

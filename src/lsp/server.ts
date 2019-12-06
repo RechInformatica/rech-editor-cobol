@@ -26,6 +26,8 @@ import {
   ErrorCodes,
   ColorPresentationParams,
   ColorPresentation,
+  ReferenceParams,
+  RequestHandler
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
@@ -46,6 +48,7 @@ import { BufferSplitter } from "../commons/BufferSplitter";
 import { CobolDiagnosticParser } from "../cobol/diagnostic/cobolDiagnosticParser";
 import { ClassCompletion } from "./completion/ClassCompletion";
 import { MethodCompletion } from "./completion/method/MethodCompletion";
+import { CobolReferencesFinder } from "./references/CobolReferencesFinder";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -70,6 +73,7 @@ connection.onInitialize(async (params: InitializeParams) => {
     capabilities: {
       textDocumentSync: documents.syncKind,
       definitionProvider: true,
+      referencesProvider: true,
       documentHighlightProvider: true,
       // Tell the client that the server supports code completion
       completionProvider: {
@@ -95,7 +99,7 @@ ExpandedSourceManager.setStatusBarFromSourceExpander((file?: string) => {
 connection.onRequest("custom/findDeclarationPosition", (word: string, referenceLine: number, referenceColumn: number, fullDocument: string, uri: string) => {
   return new Promise((resolve, reject) => {
     Log.get().info("Found declaration position request for " + word + " starting");
-    callCobolFinder(word, referenceLine, referenceColumn, fullDocument, uri).then((position) => {
+    callCobolDeclarationFinder(word, referenceLine, referenceColumn, fullDocument, uri).then((position) => {
       Log.get().info("Found declaration position request for " + word + " in " + position.file + " request on " + uri);
       resolve(position);
     }).catch(() => {
@@ -266,7 +270,7 @@ export function getConfig<T>(section: string) {
   return new Promise<T>((resolve, reject) => {
     return connection.sendRequest<T>("custom/getConfig", section).then((config) => {
       return resolve(config);
-    }, ()=> {
+    }, () => {
       reject();
     });
   })
@@ -376,7 +380,7 @@ let snippetsRepositories: string[] | undefined;
 function getSnippetsRepositories(): Promise<string[]> {
   return new Promise((resolve, reject) => {
     if (snippetsRepositories) {
-      resolve (snippetsRepositories)
+      resolve(snippetsRepositories)
     } else {
       getConfig<string[]>("snippetsRepositories").then((repositories) => {
         snippetsRepositories = repositories;
@@ -436,14 +440,14 @@ connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) =
       const formatter = new CobolFormatter(line, column, fullDocument!);
       switch (true) {
         case hasTypedEnter(params.ch):
-           Log.get().info(`Formatting with enter. File: ${params.textDocument.uri}`);
-           return reolve(formatter.formatWhenEnterIsPressed());
+          Log.get().info(`Formatting with enter. File: ${params.textDocument.uri}`);
+          return reolve(formatter.formatWhenEnterIsPressed());
         case params.ch.toUpperCase() == "E":
-           Log.get().info(`Formatting with \"E\". File: ${params.textDocument.uri}`);
-           return reolve(formatter.formatWhenEIsPressed());
+          Log.get().info(`Formatting with \"E\". File: ${params.textDocument.uri}`);
+          return reolve(formatter.formatWhenEIsPressed());
         case params.ch.toUpperCase() == "N":
-           Log.get().info(`Formatting with \"N\". File: ${params.textDocument.uri}`);
-           return reolve(formatter.formatWhenNIsPressed());
+          Log.get().info(`Formatting with \"N\". File: ${params.textDocument.uri}`);
+          return reolve(formatter.formatWhenNIsPressed());
         default:
           Log.get().error(`Error formatting file: ${params.textDocument.uri}`);
           return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error formatting"))
@@ -486,10 +490,40 @@ connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location 
         resolve(undefined);
       });
     } else {
-      Log.get().error("Error to get the fullDocument");
+      Log.get().error("Error to get the fullDocument within onDefinition");
       reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration"));
     }
   })
+});
+
+connection.onReferences((params: ReferenceParams): Thenable<Location[] | ResponseError<undefined>> => {
+  return new Promise((resolve, reject) => {
+    const fullDocument = documents.get(params.textDocument.uri);
+    if (fullDocument) {
+      const text = fullDocument.getText();
+      const word = getLineText(text, params.position.line, params.position.character);
+      callCobolReferencesFinder(word, text).then((positions: RechPosition[]) => {
+        let locations: Location[] = [];
+        positions.forEach((currentPosition) => {
+          // If the delcaration was found on an external file
+          if (currentPosition.file) {
+            // Retrieves the location on the external file
+            locations.push(createLocation(currentPosition.file, currentPosition));
+          } else {
+            // Retrieves the location on the current file
+            locations.push(createLocation(params.textDocument.uri, currentPosition));
+          }
+        })
+        resolve(locations);
+      })
+        .catch(() => {
+          reject();
+        });
+    } else {
+      Log.get().error("Error to get the fullDocument within onReferences");
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references"));
+    }
+  });
 });
 
 // Make the text document manager listen on the connection
@@ -533,7 +567,7 @@ export function createPromiseForWordDeclaration(documentFullText: string, refere
   // Creates an external promise so the reject function can be called when no definition
   // is found for the specified word
   return new Promise<Location>((resolve, reject) => {
-    callCobolFinder(word, referenceLine, referenceColumn, documentFullText, uri).then((position) => {
+    callCobolDeclarationFinder(word, referenceLine, referenceColumn, documentFullText, uri).then((position) => {
       // If the delcaration was found on an external file
       if (position.file) {
         // Retrieves the location on the external file
@@ -556,7 +590,7 @@ export function createPromiseForWordDeclaration(documentFullText: string, refere
  * @param documentFullText
  * @param uri
  */
-export function callCobolFinder(word: string, referenceLine: number, referenceColumn: number, documentFullText: string, uri: string): Promise<RechPosition> {
+export function callCobolDeclarationFinder(word: string, referenceLine: number, referenceColumn: number, documentFullText: string, uri: string): Promise<RechPosition> {
   return new Promise((resolve, reject) => {
     new CobolDeclarationFinder(documentFullText)
       .findDeclaration(word, uri, referenceLine, referenceColumn)
@@ -566,6 +600,25 @@ export function callCobolFinder(word: string, referenceLine: number, referenceCo
         reject();
       })
   })
+}
+
+/**
+ * Call the cobol word references finder
+ *
+ * @param word
+ * @param documentFullText
+ * @param uri
+ */
+export function callCobolReferencesFinder(word: string, documentFullText: string): Promise<RechPosition[]> {
+  return new Promise((resolve, reject) => {
+    new CobolReferencesFinder(documentFullText)
+      .findReferences(word)
+      .then((positions: RechPosition[]) => {
+        return resolve(positions);
+      }).catch(() => {
+        reject();
+      })
+  });
 }
 
 /**
