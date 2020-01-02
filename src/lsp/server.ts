@@ -27,7 +27,10 @@ import {
   ColorPresentationParams,
   ColorPresentation,
   ReferenceParams,
-  RequestHandler
+  RequestHandler,
+  WorkspaceEdit,
+  RenameParams,
+  TextEdit
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
@@ -80,6 +83,7 @@ connection.onInitialize(async (params: InitializeParams) => {
         resolveProvider: true
       },
       foldingRangeProvider: true,
+      renameProvider: true,
       documentOnTypeFormattingProvider: {
         firstTriggerCharacter: "\n",
         moreTriggerCharacter: ["N", 'n', 'E', 'e'],
@@ -525,6 +529,37 @@ connection.onReferences((params: ReferenceParams): Thenable<Location[] | Respons
     }
   });
 });
+
+connection.onRenameRequest((params: RenameParams): Thenable<WorkspaceEdit | ResponseError<undefined>> => {
+  return new Promise((resolve, reject) => {
+    const fullDocument = documents.get(params.textDocument.uri);
+    if (fullDocument) {
+      const text = fullDocument.getText();
+      const word = getLineText(text, params.position.line, params.position.character);
+      callCobolReferencesFinder(word, text).then((positions: RechPosition[]) => {
+        const textEdits: TextEdit[] = [];
+        positions.forEach((currentPosition) => {
+          textEdits.push({
+            newText: params.newName,
+            range: Range.create(
+              Position.create(currentPosition.line, currentPosition.column),
+              Position.create(currentPosition.line, currentPosition.column + word.length)
+            )
+          });
+        })
+        resolve({ changes: { [params.textDocument.uri]: textEdits } });
+      })
+        .catch(() => {
+          reject();
+        });
+    } else {
+      Log.get().error("Error to get the fullDocument within onRenameRequest");
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename"));
+    }
+  });
+
+});
+
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
