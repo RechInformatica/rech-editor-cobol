@@ -6,6 +6,7 @@ import { ExpandedSourceManager } from "../../../cobol/ExpandedSourceManager";
 import { VariableInsertTextBuilder } from "./VariableInsertTextBuilder";
 import { VariableNameInsertTextBuilder } from "./VariableNameInsertTextBuilder";
 import { BufferSplitter } from "../../../commons/BufferSplitter";
+import { CompletionUtils } from "../../commons/CompletionUtils";
 
 /**
  * Class to generate LSP Completion Items for Cobol variables
@@ -26,6 +27,10 @@ export class VariableCompletion implements CompletionInterface {
     private uri: string | undefined
     /** Current lines in the source */
     private currentLines: string[] | undefined;
+    /** Current line number */
+    private lineNumber: number = 0;
+    /** Column where user started typing variable name. This column tells VSCode where replacement should start within the current line */
+    private rangeColumn: number = 0;
     /** Source of completions */
     private sourceOfCompletions: Thenable<string> | undefined;
 
@@ -38,6 +43,8 @@ export class VariableCompletion implements CompletionInterface {
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve, reject) => {
             this.currentLines = lines;
+            this.lineNumber = line;
+            this.rangeColumn = CompletionUtils.findWordStartWithinLine(column, lines[line]) - 1;
             const items: CompletionItem[] = [];
             this.loadCache().catch(() => {
                 reject();
@@ -46,12 +53,12 @@ export class VariableCompletion implements CompletionInterface {
             const cache = VariableCompletion.cache.get(uri);
             if (cache) {
                 for (const value of cache.values()){
-                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, value.kind === CompletionItemKind.EnumMember, lines[line], column);
+                    value.textEdit!.newText = this.insertTextBuilder.buildInsertText(value.label, value.kind === CompletionItemKind.EnumMember, lines[line], column);
                     items.push(value);
                 }
             } else {
                 for (const value of this.generateItemsFromCurrentBuffer(this.currentLines, false).values()) {
-                    value.insertText = this.insertTextBuilder.buildInsertText(value.label, value.kind === CompletionItemKind.EnumMember, lines[line], column);
+                    value.textEdit!.newText = this.insertTextBuilder.buildInsertText(value.label, value.kind === CompletionItemKind.EnumMember, lines[line], column);
                     items.push(value);
                 }
             }
@@ -147,7 +154,7 @@ export class VariableCompletion implements CompletionInterface {
                 itemsMap.set(variable.getName(), variableItem);
             }
         });
-        // Merge the cache with the local paragraphs
+        // Merge the cache with the local variables
         if (useCache) {
             this.generateItemsFromCurrentBuffer(<string[]>this.currentLines, false).forEach((value, key) => {
                 if (!itemsMap.has(key)){
@@ -203,8 +210,16 @@ export class VariableCompletion implements CompletionInterface {
         if (!comments) {
             comments = [""];
         }
+        const variableName = variable.getName();
         return {
-            label: variable.getName(),
+            label: variableName,
+            textEdit: {
+                newText: variableName,
+                range: {
+                    start: {line: this.lineNumber, character: this.rangeColumn},
+                    end: {line: this.lineNumber, character: this.rangeColumn}
+                }
+            },
             detail: comments.join(" | "),
             documentation: {
                 kind: MarkupKind.Markdown,
@@ -240,7 +255,6 @@ export class VariableCompletion implements CompletionInterface {
      */
     private buildVariableAsMarkdown(variable: CobolVariable): string {
         let info = "";
-        // info = info.concat("*Level*: `" + `0${variable.getLevel()}`.slice(-2) + "`\n\n");
         if (variable.getPicture() !== "") {
             info = info.concat("*Picture*: `" + variable.getPicture() + "`\n\n");
         }

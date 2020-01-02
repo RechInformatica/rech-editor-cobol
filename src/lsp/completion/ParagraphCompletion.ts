@@ -5,6 +5,7 @@ import { CompletionInterface } from "./CompletionInterface";
 import { Scan } from "../../commons/Scan";
 import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
 import { BufferSplitter } from "../../commons/BufferSplitter";
+import { CompletionUtils } from "../commons/CompletionUtils";
 
 /**
  * Class to generate LSP Completion Items for Cobol paragraphs declarations
@@ -25,6 +26,10 @@ export class ParagraphCompletion implements CompletionInterface {
     private uri: string;
     /** Current lines in the source */
     private currentLines: string[] | undefined;
+    /** Current line number */
+    private lineNumber: number = 0;
+    /** Column where user started typing paragraph name. This column tells VSCode where replacement should start within the current line */
+    private rangeColumn: number = 0;
     /** Source of completions */
     private sourceOfCompletions: Thenable<string>;
 
@@ -36,15 +41,17 @@ export class ParagraphCompletion implements CompletionInterface {
         this.sourceOfCompletions = sourceOfCompletions;
     }
 
-    public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve, reject) => {
             this.currentLines = lines;
+            this.lineNumber = line;
+            this.rangeColumn = CompletionUtils.findWordStartWithinLine(column, lines[line]) - 1;
             this.loadCache().catch(() => {
                 reject();
             });
             const items: CompletionItem[] = [];
             if (ParagraphCompletion.cache && ParagraphCompletion.cacheSourceFileName == this.cacheFileName) {
-                for (const value of ParagraphCompletion.cache.values()){
+                for (const value of ParagraphCompletion.cache.values()) {
                     items.push(value);
                 }
             } else {
@@ -103,7 +110,7 @@ export class ParagraphCompletion implements CompletionInterface {
         // Merge the cache with the local paragraphs
         if (useCache) {
             this.generateParagraphCompletion(<string[]>this.currentLines, false).forEach((value, key) => {
-                if (!items.has(key)){
+                if (!items.has(key)) {
                     items.set(key, value);
                 }
             })
@@ -121,6 +128,13 @@ export class ParagraphCompletion implements CompletionInterface {
         const cobolDoc = this.cobolDocParser.parseCobolDoc(docArray);
         return {
             label: paragraph,
+            textEdit: {
+                newText: paragraph,
+                range: {
+                    start: {line: this.lineNumber, character: this.rangeColumn},
+                    end: {line: this.lineNumber, character: this.rangeColumn}
+                }
+            },
             detail: cobolDoc.comment.join(" "),
             documentation: {
                 kind: MarkupKind.Markdown,
