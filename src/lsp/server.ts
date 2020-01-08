@@ -562,11 +562,16 @@ connection.onCodeAction((params: CodeActionParams): Thenable<CodeAction[] | Resp
       const column = params.range.start.character;
       const uri = params.textDocument.uri;
       const text = fullDocument.getText();
-      const actions = new CobolActionFactory(line, column, BufferSplitter.split(text), uri).generateActions(diagnostics);
-      resolve(actions);
+      new CobolActionFactory(line, column, BufferSplitter.split(text), uri)
+      .generateActions(diagnostics)
+      .then((actions) => {
+        resolve(actions);
+      }).catch(() => {
+        reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction inside CobolActionFactory"));
+      });
     } else {
       Log.get().error("Error to get the fullDocument within onCodeAction");
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction"));
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction because some information is undefined"));
     }
   });
 });

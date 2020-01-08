@@ -2,7 +2,6 @@
     "defaultSeverity": "error",
     "plugins": [],
     "jsRules": {},
-    //"extends": "tslint:recommended",
     "rules": {
         "no-floating-promises": {
             "severity": "error",

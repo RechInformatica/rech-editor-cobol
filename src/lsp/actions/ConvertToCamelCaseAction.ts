@@ -23,7 +23,7 @@ export class CamelCaseAction implements ActionInterface {
                         edit: { changes: { [documentUri]: textEdits } }
                     }]
                 );
-            })
+            }).catch();
         });
     }
 

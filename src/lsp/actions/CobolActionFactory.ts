@@ -44,9 +44,9 @@ export class CobolActionFactory {
         result.forEach((currentAction) => {
           actions = actions.concat(currentAction);
         });
-        return resolve(actions);
+        resolve(actions);
       }).catch(() => {
-        return reject();
+        reject();
       });
     });
   }
