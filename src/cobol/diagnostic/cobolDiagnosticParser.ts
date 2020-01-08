@@ -173,8 +173,10 @@ export class CobolDiagnosticParser {
   private createDiagnostic(fileName: string, severity: DiagnosticSeverity, range: TextRange, message: string, source: string): Diagnostic {
     const diagnosticRange = this.diagnosticPosition(fileName, source, range)
     const fullFileName = this.fullFileName(new Path(fileName).fullPathWin(), source);
+    const diagnosticId = this.extractDiagnosticIdentifier(message);
     const diagnostic: Diagnostic = {
       severity: severity,
+      code: diagnosticId,
       range: {
         start: {
           line: diagnosticRange.start.line,
@@ -249,6 +251,19 @@ export class CobolDiagnosticParser {
         character: 120
       }
     };
+  }
+
+  /**
+   * Extracts and returns the diagnostic unique identifier from it's message
+   *
+   * @param message diagnostic message
+   */
+  private extractDiagnosticIdentifier(message: string): string | undefined {
+    const diagnosticId = /\[(W...)].*/.exec(message);
+    if (diagnosticId && diagnosticId.length > 1) {
+      return diagnosticId[1];
+    }
+    return undefined;
   }
 
   /**

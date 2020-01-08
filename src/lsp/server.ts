@@ -24,12 +24,11 @@ import {
   TextDocumentChangeEvent,
   FoldingRangeRequest,
   ErrorCodes,
-  ColorPresentationParams,
-  ColorPresentation,
   ReferenceParams,
-  RequestHandler,
   WorkspaceEdit,
   RenameParams,
+  CodeActionParams,
+  CodeAction,
   TextEdit
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
@@ -52,6 +51,8 @@ import { CobolDiagnosticParser } from "../cobol/diagnostic/cobolDiagnosticParser
 import { ClassCompletion } from "./completion/ClassCompletion";
 import { MethodCompletion } from "./completion/method/MethodCompletion";
 import { CobolReferencesFinder } from "./references/CobolReferencesFinder";
+import { CobolActionFactory } from "./actions/CobolActionFactory";
+import { RenamingUtils } from "./commons/RenamingUtils";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -82,6 +83,7 @@ connection.onInitialize(async (params: InitializeParams) => {
       completionProvider: {
         resolveProvider: true
       },
+      codeActionProvider: true,
       foldingRangeProvider: true,
       renameProvider: true,
       documentOnTypeFormattingProvider: {
@@ -537,16 +539,7 @@ connection.onRenameRequest((params: RenameParams): Thenable<WorkspaceEdit | Resp
       const text = fullDocument.getText();
       const word = getLineText(text, params.position.line, params.position.character);
       callCobolReferencesFinder(word, text).then((positions: RechPosition[]) => {
-        const textEdits: TextEdit[] = [];
-        positions.forEach((currentPosition) => {
-          textEdits.push({
-            newText: params.newName,
-            range: Range.create(
-              Position.create(currentPosition.line, currentPosition.column),
-              Position.create(currentPosition.line, currentPosition.column + word.length)
-            )
-          });
-        })
+        const textEdits = RenamingUtils.createEditsFromPositions(positions, word, params.newName);
         resolve({ changes: { [params.textDocument.uri]: textEdits } });
       })
         .catch(() => {
@@ -558,6 +551,24 @@ connection.onRenameRequest((params: RenameParams): Thenable<WorkspaceEdit | Resp
     }
   });
 
+});
+
+connection.onCodeAction((params: CodeActionParams): Thenable<CodeAction[] | ResponseError<undefined>> => {
+  return new Promise((resolve, reject) => {
+    const fullDocument = documents.get(params.textDocument.uri);
+    const diagnostics = params.context.diagnostics;
+    if (fullDocument && diagnostics) {
+      const line = params.range.start.line;
+      const column = params.range.start.character;
+      const uri = params.textDocument.uri;
+      const text = fullDocument.getText();
+      const actions = new CobolActionFactory(line, column, BufferSplitter.split(text), uri).generateActions(diagnostics);
+      resolve(actions);
+    } else {
+      Log.get().error("Error to get the fullDocument within onCodeAction");
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction"));
+    }
+  });
 });
 
 
