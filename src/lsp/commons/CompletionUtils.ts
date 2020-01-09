@@ -68,11 +68,11 @@ export class CompletionUtils {
    * @param lastWordReplacement word to replace the last word currently found in currentText
    */
   public static replaceLastWord(currentText: string, lastWordReplacement: string): string {
-      if (currentText.length == 0) {
-          return lastWordReplacement;
-      }
-      let withoutLastWord = currentText.substring(0, currentText.lastIndexOf(" ") + 1);
-      return withoutLastWord + lastWordReplacement;
+    if (currentText.length == 0) {
+      return lastWordReplacement;
+    }
+    let withoutLastWord = currentText.substring(0, currentText.lastIndexOf(" ") + 1);
+    return withoutLastWord + lastWordReplacement;
   }
 
   /**
@@ -115,15 +115,15 @@ export class CompletionUtils {
    */
   public static findWordStartWithinLine(currentCursorColumn: number, currentLineText: string): number {
     let initialWordColumn = currentCursorColumn;
-    while(true) {
-        if (initialWordColumn == 0) {
-          break;
-        }
-        let lastChar = currentLineText.charAt(initialWordColumn - 1);
-        if (lastChar === " ") {
-            break;
-        }
-        initialWordColumn--;
+    while (true) {
+      if (initialWordColumn == 0) {
+        break;
+      }
+      let lastChar = currentLineText.charAt(initialWordColumn - 1);
+      if (lastChar === " ") {
+        break;
+      }
+      initialWordColumn--;
     }
     initialWordColumn++;
     return initialWordColumn;
@@ -137,15 +137,15 @@ export class CompletionUtils {
    */
   private static findWordEndWithinLine(currentCursorColumn: number, currentLineText: string): number {
     let finalWordColumn = currentCursorColumn;
-    while(true) {
-        if (finalWordColumn >= currentLineText.length) {
-          break;
-        }
-        let lastChar = currentLineText.charAt(finalWordColumn + 1);
-        if (lastChar === " ") {
-          break;
-        }
-        finalWordColumn++;
+    while (true) {
+      if (finalWordColumn >= currentLineText.length) {
+        break;
+      }
+      let lastChar = currentLineText.charAt(finalWordColumn + 1);
+      if (lastChar === " ") {
+        break;
+      }
+      finalWordColumn++;
     }
     finalWordColumn++;
     return finalWordColumn;
@@ -222,6 +222,39 @@ export class CompletionUtils {
    */
   public static isOperator(word: string) {
     return /^(and|or|=|>|<|=>|<=)\r?\n?$/.test(word);
+  }
+
+  /**
+   * Applies the specified regex on the first lines of the buffer limited by 'limit' parameter
+   *
+   * @param regex regular expression to be applied on each line
+   * @param limit lines limit
+   * @param lines buffer lines
+   */
+  public static applyRegexFromBeginning(regex: RegExp, limit: number, lines: string[]): boolean {
+    for (let i = 0; i < limit; i++) {
+      const currentLineText = lines[i];
+      if (regex.exec(currentLineText)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  /**
+   * Applies the specified regex on the last lines of the buffer limited by 'limit' parameter
+   *
+   * @param regex regular expression to be applied on each line
+   * @param limit lines limit
+   * @param lines buffer lines
+   */
+  public static applyRegexFromEnd(regex: RegExp, limit: number, lines: string[]): boolean {
+    for (let i = lines.length - 1; i > limit; i--) {
+      const currentLineText = lines[i];
+      if (regex.exec(currentLineText)) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

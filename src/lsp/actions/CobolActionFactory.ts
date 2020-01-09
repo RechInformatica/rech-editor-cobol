@@ -9,6 +9,7 @@ import { RemoveStaticClauseAction } from "./RemoveStaticClauseAction";
 import { InsertStaticClauseAction } from "./InsertStaticClauseAction";
 import { ReplaceCommaByDotAction } from "./ReplaceCommaWithDotAction";
 import { RemoveRemainingClauseAction } from "./RemoveRemainingClauseAction";
+import { InsertSubprogramDeclarationAction } from "./subprogram/InsertSubprogramDeclarationAction";
 
 /**
  * Factory to generate Cobol Code Actions
@@ -75,6 +76,10 @@ export class CobolActionFactory {
     const implementations: ActionInterface[] = [];
     diagnostics.forEach((currentDiagnostic) => {
       switch (currentDiagnostic.code) {
+        case "W024": {
+          implementations.push(new InsertSubprogramDeclarationAction());
+          break;
+        }
         case "W028": {
           implementations.push(new RemoveVariableAction());
           break;
