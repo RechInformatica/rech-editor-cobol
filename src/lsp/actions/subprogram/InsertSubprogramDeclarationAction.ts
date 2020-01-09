@@ -265,7 +265,7 @@ export class InsertSubprogramDeclarationAction implements ActionInterface {
      */
     private findParagraphPerform(name: string, lines: string[]): number {
         let declarationLine: number = 0;
-        const regExText = "\\s+perform\\s+\\w*" + name + ".";
+        const regExText = "\\s+perform\\s+\\w\\w\\w\\w\\w\\w" + name + "\\.";
         const declaratioRegEx = new RegExp(regExText);
         const maxBottomSearch = this.getBottomSearchIterations(lines);
         for (let i = lines.length - 1; i > maxBottomSearch; i--) {
