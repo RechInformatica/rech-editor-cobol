@@ -4,7 +4,7 @@ import { CompletionUtils } from "../../commons/CompletionUtils";
 import { SubprogramUtils } from "./SubprogramUtils";
 
 /** Max number of lines to be considered on the top or the bottom of buffer lines */
-const MAX_SEARCH_LINES = 500;
+const MAX_SEARCH_LINES = 2000;
 /** RegEx to detect copy declaration */
 const GENERAL_COPY_REGEX = /\s+copy\s+........\.cpy\./;
 
@@ -209,7 +209,7 @@ export class InsertSubprogramDeclarationAction implements ActionInterface {
      */
     private createCloseProgramsTextEdit(subprogramName: string, lines: string[]): TextEdit | undefined {
         const command = SubprogramUtils.generateParagraphPerform(subprogramName + "-cancel");
-        let declarationLine = this.findParagraphPerform("-cancel", lines);
+        let declarationLine = this.findParagraphPerform("\\w\\w\\w\\w\\w\\w-cancel", lines);
         if (declarationLine == 0) {
             declarationLine = this.findParagraphDeclaration("fecha-programas", lines);
         }
@@ -223,7 +223,7 @@ export class InsertSubprogramDeclarationAction implements ActionInterface {
      */
     private createCancelTextEdit(subprogramName: string, lines: string[]): TextEdit | undefined {
         const command = SubprogramUtils.generateParagraphPerform(subprogramName + "-fecarq");
-        let declarationLine = this.findParagraphPerform("-fecarq", lines);
+        let declarationLine = this.findParagraphPerform("\\w\\w\\w\\w\\w\\w-fecarq", lines);
         if (declarationLine == 0) {
             declarationLine = this.findParagraphPerform("arq-close-all", lines);
         }
@@ -260,12 +260,12 @@ export class InsertSubprogramDeclarationAction implements ActionInterface {
      * Returns the line where the specified paragraph is performed.
      * This method starts searching from the end of the file.
      *
-     * @param name paragraph name
+     * @param name paragraph regex name
      * @param lines buffer lines
      */
     private findParagraphPerform(name: string, lines: string[]): number {
         let declarationLine: number = 0;
-        const regExText = "\\s+perform\\s+\\w\\w\\w\\w\\w\\w" + name + "\\.";
+        const regExText = "\\s+perform\\s+" + name + "\\.";
         const declaratioRegEx = new RegExp(regExText);
         const maxBottomSearch = this.getBottomSearchIterations(lines);
         for (let i = lines.length - 1; i > maxBottomSearch; i--) {
