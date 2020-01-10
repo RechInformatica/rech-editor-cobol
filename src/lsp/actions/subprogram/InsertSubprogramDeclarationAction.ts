@@ -5,6 +5,8 @@ import { SubprogramUtils } from "./SubprogramUtils";
 
 /** Max number of lines to be considered on the top or the bottom of buffer lines */
 const MAX_SEARCH_LINES = 2000;
+/** Copybooks to be ignored */
+const IGNORABLE_COPYBOOKS = /\s+copy\s+(oofimcla|oofimmet)\.cpy\./;
 /** RegEx to detect copy declaration */
 const GENERAL_COPY_REGEX = /\s+copy\s+........\.cpy\./;
 
@@ -141,12 +143,10 @@ export class InsertSubprogramDeclarationAction implements ActionInterface {
             if (section) {
                 break;
             }
-            let result: RegExpExecArray | null = null;
-            result = GENERAL_COPY_REGEX.exec(currentLineText);
-            if (result) {
+            if (this.isGeneralCopyDeclaration(currentLineText)) {
                 lastGeneralCopyLine = i;
             }
-            result = /\s+copy\s+\w\w\w\w\w\wwf.cpy\./.exec(currentLineText);
+            const result = /\s+copy\s+\w\w\w\w\w\wwf.cpy\./.exec(currentLineText);
             if (result) {
                 lastParametersCopyLine = i;
             }
@@ -180,17 +180,15 @@ export class InsertSubprogramDeclarationAction implements ActionInterface {
         const maxBottomSearch = this.getBottomSearchIterations(lines);
         for (let i = lines.length - 1; i > maxBottomSearch; i--) {
             const currentLineText = lines[i];
-            let result: RegExpExecArray | null = null;
             if (CompletionUtils.isTheParagraphDeclaration(currentLineText)) {
                 break;
             }
             if (lastGeneralCopyLine == 0) {
-                result = GENERAL_COPY_REGEX.exec(currentLineText);
-                if (result) {
+                if (this.isGeneralCopyDeclaration(currentLineText)) {
                     lastGeneralCopyLine = i;
                 }
             }
-            result = /\s+copy\s+\w\w\w\w\w\wpf.cpy\./.exec(currentLineText);
+            const result = /\s+copy\s+\w\w\w\w\w\wpf.cpy\./.exec(currentLineText);
             if (result) {
                 lastProcedureCopyLine = i;
                 break;
@@ -278,6 +276,22 @@ export class InsertSubprogramDeclarationAction implements ActionInterface {
         }
         return declarationLine;
     }
+
+    /**
+     * Returns true if the current line text represents a general copy declaration (which is not on wf/pf format)
+     *
+     * @param currentLineText current line text
+     */
+    private isGeneralCopyDeclaration(currentLineText: string): boolean {
+        const generalCopy = GENERAL_COPY_REGEX.exec(currentLineText);
+        if (generalCopy) {
+            const ignorableCopy = IGNORABLE_COPYBOOKS.exec(currentLineText);
+            if (!ignorableCopy) {
+                return true;
+            }
+        }
+        return false;
+}
 
     /**
      * Creates a TextEdit on the specified line with the specified text
