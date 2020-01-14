@@ -253,7 +253,7 @@ describe('Cobol variable completion', () => {
         expect(expectedItems.length).to.equal(items.length);
         for (let i = 0; i < items.length; i++) {
             expect(expectedItems[i].label).to.equal(items[i].label);
-            expect(expectedItems[i].insertText).to.equal(items[i].insertText);
+            expect(expectedItems[i].insertText).to.equal(items[i].textEdit!.newText);
             expect(expectedItems[i].detail).to.equal(items[i].detail);
         };
     });
