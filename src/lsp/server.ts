@@ -522,7 +522,7 @@ connection.onReferences((params: ReferenceParams): Thenable<Location[] | Respons
         resolve(locations);
       })
         .catch(() => {
-          reject();
+          resolve(undefined);
         });
     } else {
       Log.get().error("Error to get the fullDocument within onReferences");
@@ -542,7 +542,7 @@ connection.onRenameRequest((params: RenameParams): Thenable<WorkspaceEdit | Resp
         resolve({ changes: { [params.textDocument.uri]: textEdits } });
       })
         .catch(() => {
-          reject();
+          resolve(undefined);
         });
     } else {
       Log.get().error("Error to get the fullDocument within onRenameRequest");

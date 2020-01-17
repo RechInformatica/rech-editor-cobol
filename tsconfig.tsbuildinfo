@@ -109,19 +109,19 @@
         "version": "448535dbe313237a36ec340e78c561dbfb7de4c113604468c723f2279b5b141b",
         "signature": "ea7607ea3c7340e8df638c5fbec7a9989a324d537dd444221c656f5c1150ee02"
       },
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts": {
+      "./node_modules/rech-ts-commons/out/buffer/scan.d.ts": {
         "version": "336e497d88e524ae743f826624be113b7677c9e5645d6042d013b45b99e3e039",
         "signature": "336e497d88e524ae743f826624be113b7677c9e5645d6042d013b45b99e3e039"
       },
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts": {
+      "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts": {
         "version": "b414c81ca1fb524ab4efc39f1abe7e7a4854816b2dedf41ffe359fa14d3af939",
         "signature": "b414c81ca1fb524ab4efc39f1abe7e7a4854816b2dedf41ffe359fa14d3af939"
       },
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts": {
+      "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts": {
         "version": "1da66e343b494bafb9941a1b0afc3ac8a4b25e74ee8860721e4377055bc625d6",
         "signature": "1da66e343b494bafb9941a1b0afc3ac8a4b25e74ee8860721e4377055bc625d6"
       },
-      "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts": {
+      "./node_modules/rech-ts-commons/out/index.d.ts": {
         "version": "49412fe73f342b26e33bcd3509e2cb12a3cd226c51a876458bfa96f69e8a5abb",
         "signature": "49412fe73f342b26e33bcd3509e2cb12a3cd226c51a876458bfa96f69e8a5abb"
       },
@@ -806,7 +806,7 @@
         "signature": "e19c6f98c8dd71621eabc57e837e84c071375d22bcb0f9415fdeb67bb0ef7bf9"
       },
       "./src/lsp/server.ts": {
-        "version": "71e83e08c875077f023183adb2e326796863d943e6105a487de83d97201eb964",
+        "version": "48abf3831ea04b7daa411a37d1548debc13cafe0863d8ad3dfd504765319964d",
         "signature": "3be5437b9cacfc737fcfb47cf9514096f347e280a19d84a1145742eaf23603de"
       },
       "./node_modules/vscode/lib/testrunner.d.ts": {
@@ -1025,22 +1025,22 @@
         "./node_modules/iconv-lite/lib/index.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts": [
+      "./node_modules/rech-ts-commons/out/buffer/scan.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts": [
+      "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts": [
+      "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts": [
-        "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts",
+      "./node_modules/rech-ts-commons/out/index.d.ts": [
+        "./node_modules/rech-ts-commons/out/buffer/scan.d.ts",
+        "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts",
+        "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -1048,7 +1048,7 @@
         "./src/commons/file.ts",
         "./src/commons/executor.ts",
         "./node_modules/iconv-lite/lib/index.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -1433,7 +1433,7 @@
         "./node_modules/vscode/vscode.d.ts",
         "./src/lsp/completion/cobolvariable.ts",
         "./src/commons/variableutils.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/helpers/configuration.ts",
         "./node_modules/@types/q/index.d.ts",
         "./src/cobol/cobolregexutils.ts",
@@ -1480,7 +1480,7 @@
         "./src/cobol/rechdoc/coboldocparser.ts",
         "./src/commons/path.ts",
         "./src/commons/file.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -1525,13 +1525,13 @@
         "./src/cobol/cobolcopy.ts",
         "./src/cobol/elementsdisplayer/copy/copydisplayer.ts",
         "./node_modules/vscode/vscode.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/cobol/elementsdisplayer/class/classdisplayer.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./src/commons/cobolwordfinder.ts": [
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -1558,7 +1558,7 @@
       "./src/lsp/declaration/coboldeclarationfinder.ts": [
         "./src/commons/path.ts",
         "./src/commons/file.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/cobol/parsercobol.ts",
         "./src/commons/rechposition.ts",
         "./src/cobol/expandedsourcemanager.ts",
@@ -1664,7 +1664,7 @@
         "./src/cobol/diagnostic/textposition.ts",
         "./src/commons/file.ts",
         "./src/commons/path.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/q/index.d.ts",
         "./src/lsp/commons/completionutils.ts",
         "./node_modules/@types/node/base.d.ts",
@@ -1769,7 +1769,7 @@
         "./src/lsp/commons/completionutils.ts",
         "./src/lsp/formatter/performvaryingformatter.ts",
         "./src/lsp/formatter/commentaryformatter.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -1922,7 +1922,7 @@
       "./src/lsp/completion/variable/variablecompletion.ts": [
         "./node_modules/vscode-languageserver/lib/main.d.ts",
         "./src/lsp/completion/completioninterface.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/lsp/completion/cobolvariable.ts",
         "./src/cobol/expandedsourcemanager.ts",
         "./src/lsp/completion/variable/variableinserttextbuilder.ts",
@@ -1947,7 +1947,7 @@
         "./src/lsp/commons/completionutils.ts",
         "./src/commons/rechposition.ts",
         "./src/commons/file.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -1999,7 +1999,7 @@
         "./src/commons/file.ts",
         "./src/cobol/parsercobol.ts",
         "./src/commons/path.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/lsp/completion/cobolmethod.ts",
         "./node_modules/@types/q/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
@@ -2056,7 +2056,7 @@
         "./src/cobol/rechdoc/coboldocparser.ts",
         "./node_modules/vscode-languageserver/lib/main.d.ts",
         "./src/lsp/completion/completioninterface.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/cobol/expandedsourcemanager.ts",
         "./src/lsp/commons/completionutils.ts",
         "./node_modules/@types/node/base.d.ts",
@@ -2070,21 +2070,21 @@
       "./src/lsp/highlight/defaulthighlight.ts": [
         "./src/lsp/highlight/highlightinterface.ts",
         "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./src/lsp/highlight/ifhighlight.ts": [
         "./src/lsp/highlight/highlightinterface.ts",
         "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./src/lsp/highlight/evaluatehighlight.ts": [
         "./src/lsp/highlight/highlightinterface.ts",
         "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -2092,14 +2092,14 @@
         "./src/lsp/highlight/highlightinterface.ts",
         "./node_modules/vscode-languageserver/lib/main.d.ts",
         "./src/lsp/highlight/defaulthighlight.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./src/lsp/highlight/tryhighlight.ts": [
         "./src/lsp/highlight/highlightinterface.ts",
         "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -2209,13 +2209,13 @@
         "./src/lsp/completion/completioninterface.ts",
         "./src/cobol/parsercobol.ts",
         "./src/cobol/rechdoc/coboldocparser.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/lsp/completion/cobolvariable.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./src/lsp/references/cobolreferencesfinder.ts": [
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/commons/rechposition.ts",
         "./src/cobol/cobolregexutils.ts",
         "./node_modules/@types/node/base.d.ts",
@@ -2337,7 +2337,7 @@
         "./src/lsp/completion/variable/variablecompletion.ts",
         "./src/lsp/completion/variable/variablecompletionfactory.ts",
         "./src/commons/log.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/cobol/diagnostic/coboldiagnosticparser.ts",
         "./src/lsp/completion/classcompletion.ts",
         "./src/lsp/completion/method/methodcompletion.ts",
@@ -2382,7 +2382,7 @@
         "./node_modules/@types/chai/index.d.ts",
         "./node_modules/@types/mocha/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/commons/file.ts",
         "./src/commons/path.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
@@ -2408,7 +2408,7 @@
         "./src/lsp/completion/cobolvariable.ts",
         "./src/commons/file.ts",
         "./src/commons/path.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./src/test/lsp/completion/tocompletion.test.ts": [
@@ -2445,7 +2445,7 @@
         "./src/lsp/completion/variable/variablecompletion.ts",
         "./node_modules/vscode/vscode.d.ts",
         "./src/lsp/completion/variable/variableinserttextbuilder.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -2575,22 +2575,22 @@
       "./src/commons/executor.ts": [
         "./src/commons/process.ts"
       ],
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts": [
+      "./node_modules/rech-ts-commons/out/buffer/scan.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts": [
+      "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts": [
+      "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts": [
-        "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts",
-        "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts",
+      "./node_modules/rech-ts-commons/out/index.d.ts": [
+        "./node_modules/rech-ts-commons/out/buffer/scan.d.ts",
+        "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts",
+        "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -3355,10 +3355,10 @@
       "./src/commons/process.ts",
       "./node_modules/iconv-lite/lib/index.d.ts",
       "./src/commons/executor.ts",
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts",
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts",
-      "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts",
-      "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+      "./node_modules/rech-ts-commons/out/buffer/scan.d.ts",
+      "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts",
+      "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts",
+      "./node_modules/rech-ts-commons/out/index.d.ts",
       "./src/indent/indent.ts",
       "./src/commons/genericexecutor.ts",
       "./src/editor/positionfinder.ts",
@@ -3552,5 +3552,5 @@
       "./src/lsp/server.ts"
     ]
   },
-  "version": "3.7.4"
+  "version": "3.7.5"
 }
