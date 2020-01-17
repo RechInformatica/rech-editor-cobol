@@ -2,7 +2,7 @@ import { ParserCobol } from "./parsercobol";
 import { CobolDocParser } from "./rechdoc/CobolDocParser";
 import { Path } from "../commons/path";
 import { File } from "../commons/file";
-import { BufferSplitter } from "../commons/BufferSplitter";
+import { BufferSplitter } from "rech-ts-commons";
 
 /**
  * Class representing a Cobol copy

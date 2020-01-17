@@ -1,4 +1,4 @@
-import { Scan } from '../../commons/Scan';
+import { Scan } from "rech-ts-commons";
 import { RechPosition } from '../../commons/rechposition'
 import { CobolRegexUtils } from '../../cobol/CobolRegexUtils';
 

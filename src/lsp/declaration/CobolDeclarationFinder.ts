@@ -1,6 +1,6 @@
 import { Path } from '../../commons/path';
 import { File } from '../../commons/file';
-import { Scan } from '../../commons/Scan';
+import { Scan } from "rech-ts-commons";
 import { ParserCobol } from '../../cobol/parsercobol'
 import { RechPosition } from '../../commons/rechposition'
 import { ExpandedSourceManager } from '../../cobol/ExpandedSourceManager';

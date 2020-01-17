@@ -1,0 +1,3556 @@
+{
+  "program": {
+    "fileInfos": {
+      "./node_modules/typescript/lib/lib.es5.d.ts": {
+        "version": "fc43680ad3a1a4ec8c7b8d908af1ec9ddff87845346de5f02c735c9171fa98ea",
+        "signature": "fc43680ad3a1a4ec8c7b8d908af1ec9ddff87845346de5f02c735c9171fa98ea"
+      },
+      "./node_modules/typescript/lib/lib.es2015.d.ts": {
+        "version": "7994d44005046d1413ea31d046577cdda33b8b2470f30281fd9c8b3c99fe2d96",
+        "signature": "7994d44005046d1413ea31d046577cdda33b8b2470f30281fd9c8b3c99fe2d96"
+      },
+      "./node_modules/typescript/lib/lib.es2016.d.ts": {
+        "version": "5f217838d25704474d9ef93774f04164889169ca31475fe423a9de6758f058d1",
+        "signature": "5f217838d25704474d9ef93774f04164889169ca31475fe423a9de6758f058d1"
+      },
+      "./node_modules/typescript/lib/lib.es2017.d.ts": {
+        "version": "459097c7bdd88fc5731367e56591e4f465f2c9de81a35427a7bd473165c34743",
+        "signature": "459097c7bdd88fc5731367e56591e4f465f2c9de81a35427a7bd473165c34743"
+      },
+      "./node_modules/typescript/lib/lib.es2015.core.d.ts": {
+        "version": "734ddc145e147fbcd55f07d034f50ccff1086f5a880107665ec326fb368876f6",
+        "signature": "734ddc145e147fbcd55f07d034f50ccff1086f5a880107665ec326fb368876f6"
+      },
+      "./node_modules/typescript/lib/lib.es2015.collection.d.ts": {
+        "version": "4a0862a21f4700de873db3b916f70e41570e2f558da77d2087c9490f5a0615d8",
+        "signature": "4a0862a21f4700de873db3b916f70e41570e2f558da77d2087c9490f5a0615d8"
+      },
+      "./node_modules/typescript/lib/lib.es2015.generator.d.ts": {
+        "version": "765e0e9c9d74cf4d031ca8b0bdb269a853e7d81eda6354c8510218d03db12122",
+        "signature": "765e0e9c9d74cf4d031ca8b0bdb269a853e7d81eda6354c8510218d03db12122"
+      },
+      "./node_modules/typescript/lib/lib.es2015.iterable.d.ts": {
+        "version": "285958e7699f1babd76d595830207f18d719662a0c30fac7baca7df7162a9210",
+        "signature": "285958e7699f1babd76d595830207f18d719662a0c30fac7baca7df7162a9210"
+      },
+      "./node_modules/typescript/lib/lib.es2015.promise.d.ts": {
+        "version": "d4deaafbb18680e3143e8b471acd650ed6f72a408a33137f0a0dd104fbe7f8ca",
+        "signature": "d4deaafbb18680e3143e8b471acd650ed6f72a408a33137f0a0dd104fbe7f8ca"
+      },
+      "./node_modules/typescript/lib/lib.es2015.proxy.d.ts": {
+        "version": "5e72f949a89717db444e3bd9433468890068bb21a5638d8ab15a1359e05e54fe",
+        "signature": "5e72f949a89717db444e3bd9433468890068bb21a5638d8ab15a1359e05e54fe"
+      },
+      "./node_modules/typescript/lib/lib.es2015.reflect.d.ts": {
+        "version": "f5b242136ae9bfb1cc99a5971cccc44e99947ae6b5ef6fd8aa54b5ade553b976",
+        "signature": "f5b242136ae9bfb1cc99a5971cccc44e99947ae6b5ef6fd8aa54b5ade553b976"
+      },
+      "./node_modules/typescript/lib/lib.es2015.symbol.d.ts": {
+        "version": "9ae2860252d6b5f16e2026d8a2c2069db7b2a3295e98b6031d01337b96437230",
+        "signature": "9ae2860252d6b5f16e2026d8a2c2069db7b2a3295e98b6031d01337b96437230"
+      },
+      "./node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": {
+        "version": "3e0a459888f32b42138d5a39f706ff2d55d500ab1031e0988b5568b0f67c2303",
+        "signature": "3e0a459888f32b42138d5a39f706ff2d55d500ab1031e0988b5568b0f67c2303"
+      },
+      "./node_modules/typescript/lib/lib.es2016.array.include.d.ts": {
+        "version": "3f96f1e570aedbd97bf818c246727151e873125d0512e4ae904330286c721bc0",
+        "signature": "3f96f1e570aedbd97bf818c246727151e873125d0512e4ae904330286c721bc0"
+      },
+      "./node_modules/typescript/lib/lib.es2017.object.d.ts": {
+        "version": "c2d60b2e558d44384e4704b00e6b3d154334721a911f094d3133c35f0917b408",
+        "signature": "c2d60b2e558d44384e4704b00e6b3d154334721a911f094d3133c35f0917b408"
+      },
+      "./node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts": {
+        "version": "b8667586a618c5cf64523d4e500ae39e781428abfb28f3de441fc66b56144b6f",
+        "signature": "b8667586a618c5cf64523d4e500ae39e781428abfb28f3de441fc66b56144b6f"
+      },
+      "./node_modules/typescript/lib/lib.es2017.string.d.ts": {
+        "version": "21df2e0059f14dcb4c3a0e125859f6b6ff01332ee24b0065a741d121250bc71c",
+        "signature": "21df2e0059f14dcb4c3a0e125859f6b6ff01332ee24b0065a741d121250bc71c"
+      },
+      "./node_modules/typescript/lib/lib.es2017.intl.d.ts": {
+        "version": "c1759cb171c7619af0d2234f2f8fb2a871ee88e956e2ed91bb61778e41f272c6",
+        "signature": "c1759cb171c7619af0d2234f2f8fb2a871ee88e956e2ed91bb61778e41f272c6"
+      },
+      "./node_modules/typescript/lib/lib.es2017.typedarrays.d.ts": {
+        "version": "28569d59e07d4378cb3d54979c4c60f9f06305c9bb6999ffe6cab758957adc46",
+        "signature": "28569d59e07d4378cb3d54979c4c60f9f06305c9bb6999ffe6cab758957adc46"
+      },
+      "./node_modules/vscode/vscode.d.ts": {
+        "version": "cd3d92cbbfd4295eeb9eea106ed367288bd23b772057335c9117cfa51ca24fd7",
+        "signature": "cd3d92cbbfd4295eeb9eea106ed367288bd23b772057335c9117cfa51ca24fd7"
+      },
+      "./src/commons/path.ts": {
+        "version": "83467708323f176e8ccc10841f1090ed6128a701ca627cd32ee34e96df1dda8e",
+        "signature": "f038514143026b340e1e8e2ad2c51f2a5930fc2c0019b9e829c282780c8c6876"
+      },
+      "./src/commons/rechposition.ts": {
+        "version": "ba063bcda366b9ff6aa016f06624b672aa6d7d5f8b3d105420f9a011fec56d89",
+        "signature": "b0f0a2301a88b4797d1d0ac5cd806aa9e86564ad30ccff9b59fa238c8135e190"
+      },
+      "./node_modules/@types/q/index.d.ts": {
+        "version": "57427a9a368f8f0ee4ce03c36a762e19166756b95ab688948b29be553b24a78a",
+        "signature": "57427a9a368f8f0ee4ce03c36a762e19166756b95ab688948b29be553b24a78a"
+      },
+      "./src/commons/file.ts": {
+        "version": "0f6b92bbaa3c0d9a8be281705e2cd8296d2ca30ff58ded8b1b8a2c327a0658a5",
+        "signature": "a9af802676ef2a64a7eb984de821496d814fd6ee91580e26db49afc7a4098481"
+      },
+      "./src/commons/process.ts": {
+        "version": "f56a8b4deeeeb0a6ab758d325f8d46e65ae81389c1e9a3c00fcdb31b4b912fbb",
+        "signature": "450553c61b4ffb3b96489850041ff61cde78ba85ac38f87f197c6bd4688e1ee4"
+      },
+      "./node_modules/iconv-lite/lib/index.d.ts": {
+        "version": "73aaee6a7a9cf41fb2c67158f4bc218f9da27545ea55648b2c10ca2a9600ae15",
+        "signature": "73aaee6a7a9cf41fb2c67158f4bc218f9da27545ea55648b2c10ca2a9600ae15"
+      },
+      "./src/commons/executor.ts": {
+        "version": "448535dbe313237a36ec340e78c561dbfb7de4c113604468c723f2279b5b141b",
+        "signature": "ea7607ea3c7340e8df638c5fbec7a9989a324d537dd444221c656f5c1150ee02"
+      },
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts": {
+        "version": "336e497d88e524ae743f826624be113b7677c9e5645d6042d013b45b99e3e039",
+        "signature": "336e497d88e524ae743f826624be113b7677c9e5645d6042d013b45b99e3e039"
+      },
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts": {
+        "version": "b414c81ca1fb524ab4efc39f1abe7e7a4854816b2dedf41ffe359fa14d3af939",
+        "signature": "b414c81ca1fb524ab4efc39f1abe7e7a4854816b2dedf41ffe359fa14d3af939"
+      },
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts": {
+        "version": "1da66e343b494bafb9941a1b0afc3ac8a4b25e74ee8860721e4377055bc625d6",
+        "signature": "1da66e343b494bafb9941a1b0afc3ac8a4b25e74ee8860721e4377055bc625d6"
+      },
+      "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts": {
+        "version": "49412fe73f342b26e33bcd3509e2cb12a3cd226c51a876458bfa96f69e8a5abb",
+        "signature": "49412fe73f342b26e33bcd3509e2cb12a3cd226c51a876458bfa96f69e8a5abb"
+      },
+      "./src/indent/indent.ts": {
+        "version": "29b943355e6bbf85575061b32b801863ce6835f6e559aa35b6769acaa639216d",
+        "signature": "b1adc8ca1d0deea879ce6ebcb50e48277273bf6f1bb312eae70a5ef3fe6570b4"
+      },
+      "./src/commons/genericexecutor.ts": {
+        "version": "8275158631a8cc0044dd277a60422ae7b3982c794d8fb11653a7997325680ad9",
+        "signature": "5daaa7c548bf3726d90676eb499dc2c3cc0be3155248a7f06638a6beb86045ca"
+      },
+      "./src/editor/positionfinder.ts": {
+        "version": "9790e92ca161c840d8a8da51e9d1396f75a0e5c70c516f89944eefb5b78a02f7",
+        "signature": "50ff68ca5ef6200c58735dd2a61c9bb99554970dc86643423fa5d35218eac388"
+      },
+      "./src/editor/editor.ts": {
+        "version": "39f3b82c5d75f9e5b93127053e24d86c25c761ae4dd10b2ea3434783ac8dfbf7",
+        "signature": "207d2c9775a8279159f39ccc6781ea86fa3c2f99758220405f371a963ba59109"
+      },
+      "./src/cobol/diagnostic/coboldiagnosticfilter.ts": {
+        "version": "09903843f3db1bf60096784cc614d1a45cfd26b3f080bce5bf8d703d6bcec1ae",
+        "signature": "541e948843509ebf5a78df43eb8c5c610f72d6e3a7bb59fca12f3a12f8a0daff"
+      },
+      "./src/helpers/configuration.ts": {
+        "version": "e8c2e69491b88b331b95ccd741724987dc835236ee03d12dbcb007717569969b",
+        "signature": "843238e81e70229c7077f9da55bceea2562a524e3ba962042a56081dac23d2fd"
+      },
+      "./src/dependencieinjection.ts": {
+        "version": "57e8996260bd159378da8f3a2381226019379abbc82f835b910bde2caea73d94",
+        "signature": "7559da046460a013cd31172443ecda90798f74ec80a2a94af1258238d4fb1f1a"
+      },
+      "./src/cobol/colunas.ts": {
+        "version": "48d42a307fcd7ce098c6d24565365fb92354d9753e6e52c089ed54f45c4d4999",
+        "signature": "cee6478d43531631c3c4fbba39d63666ba903bc752f2a8eec248a6f4fde53293"
+      },
+      "./src/cobol/gerador-cobol.ts": {
+        "version": "89e57bdab1cc055c57a67ce5907ec8bda9738100390caa5f2a3180a32da12dc8",
+        "signature": "4e8327e2e8e4af9431e659ad8aa25b63e9094c632ee87e75ae6172ecaeaebd8e"
+      },
+      "./src/cobol/tabstopper.ts": {
+        "version": "63632823beb3ad829b6114cb2b71bdcbf4696f499872f694c758565f69fdfec0",
+        "signature": "69faa7874c0b1fff928d2bfb3ba90a92063cb3ead9de2d5b63e67a57a550ce9b"
+      },
+      "./node_modules/@types/node/inspector.d.ts": {
+        "version": "7e49dbf1543b3ee54853ade4c5e9fa460b6a4eca967efe6bf943e0c505d087ed",
+        "signature": "7e49dbf1543b3ee54853ade4c5e9fa460b6a4eca967efe6bf943e0c505d087ed"
+      },
+      "./node_modules/@types/node/base.d.ts": {
+        "version": "9eb6ed7f67245f815a70e718cb2396070890ce589978cb5ae9738fa2287a9c72",
+        "signature": "9eb6ed7f67245f815a70e718cb2396070890ce589978cb5ae9738fa2287a9c72"
+      },
+      "./node_modules/@types/node/ts3.2/index.d.ts": {
+        "version": "1de0ff6200b92798a5aef43f57029c79dbf69932037dee1c007fdd2c562db258",
+        "signature": "1de0ff6200b92798a5aef43f57029c79dbf69932037dee1c007fdd2c562db258"
+      },
+      "./node_modules/vscode-jsonrpc/typings/thenable.d.ts": {
+        "version": "bfc76a4e61cdb6910c65287d4ca958d4a2e95b2e39aa3f0189a581eda3d30871",
+        "signature": "bfc76a4e61cdb6910c65287d4ca958d4a2e95b2e39aa3f0189a581eda3d30871"
+      },
+      "./node_modules/vscode-jsonrpc/lib/messages.d.ts": {
+        "version": "9293f008f38c7f3ec39fa711897be893d9f924d567cdcc93998ec05a943ce375",
+        "signature": "9293f008f38c7f3ec39fa711897be893d9f924d567cdcc93998ec05a943ce375"
+      },
+      "./node_modules/vscode-jsonrpc/lib/events.d.ts": {
+        "version": "17a93dce7e8e50ba578eceb61df5606fbcf9526c3036f0e52d83cee2061ca6b6",
+        "signature": "17a93dce7e8e50ba578eceb61df5606fbcf9526c3036f0e52d83cee2061ca6b6"
+      },
+      "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts": {
+        "version": "bc45c7a4ab89c24c4b7b54e054bbe42ee8f1258727a7963d0fab6c676cc057a0",
+        "signature": "bc45c7a4ab89c24c4b7b54e054bbe42ee8f1258727a7963d0fab6c676cc057a0"
+      },
+      "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts": {
+        "version": "2dc9b80a4881326f493561337e4fb08c76cc819be69f3ead9f7659579f5e607b",
+        "signature": "2dc9b80a4881326f493561337e4fb08c76cc819be69f3ead9f7659579f5e607b"
+      },
+      "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts": {
+        "version": "9d5a5b4c565b1af387e912ba6cd2d5a6eb063ba40e422e80da538b205404bc70",
+        "signature": "9d5a5b4c565b1af387e912ba6cd2d5a6eb063ba40e422e80da538b205404bc70"
+      },
+      "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts": {
+        "version": "51715257cd9f653982cb9bc28f9756b857333abcbdaced5481cf501236ec033a",
+        "signature": "51715257cd9f653982cb9bc28f9756b857333abcbdaced5481cf501236ec033a"
+      },
+      "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts": {
+        "version": "be22ee20c2230fa19af4680094d4b83c1e4d6e63a03166cd1284111b289b608b",
+        "signature": "be22ee20c2230fa19af4680094d4b83c1e4d6e63a03166cd1284111b289b608b"
+      },
+      "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts": {
+        "version": "f31eda5cecdade1062c17073ac9165f171b1b05f296a955c212fc3fc2c4b963b",
+        "signature": "f31eda5cecdade1062c17073ac9165f171b1b05f296a955c212fc3fc2c4b963b"
+      },
+      "./node_modules/vscode-jsonrpc/lib/main.d.ts": {
+        "version": "5791da541ff19825947ec53107c44c1ce424a56ad8b79685f7c4aeaa3fa01337",
+        "signature": "5791da541ff19825947ec53107c44c1ce424a56ad8b79685f7c4aeaa3fa01337"
+      },
+      "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts": {
+        "version": "6463c33c819d309d862de22cd0ca766ed1f09e1ccec9c67c89c7853eb1feca54",
+        "signature": "6463c33c819d309d862de22cd0ca766ed1f09e1ccec9c67c89c7853eb1feca54"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts": {
+        "version": "17cf71fd1f7af8d34f3657c3d024e143f90bc27a731a306b1f0429aed6483ced",
+        "signature": "17cf71fd1f7af8d34f3657c3d024e143f90bc27a731a306b1f0429aed6483ced"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts": {
+        "version": "464ccb4cfdb63d696e2b442af6b5464fa1d4ab3d8cfe35149a1b1aecf5c0f6b9",
+        "signature": "464ccb4cfdb63d696e2b442af6b5464fa1d4ab3d8cfe35149a1b1aecf5c0f6b9"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts": {
+        "version": "d1241891dfab79bb25b5f913c4181b62d95337c7f533d760a59a24961ab73e59",
+        "signature": "d1241891dfab79bb25b5f913c4181b62d95337c7f533d760a59a24961ab73e59"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts": {
+        "version": "d9a71be99584b1dbcee4c93755a755585d0b0df7ad33b83ae3ef9904ed25f55d",
+        "signature": "d9a71be99584b1dbcee4c93755a755585d0b0df7ad33b83ae3ef9904ed25f55d"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts": {
+        "version": "98051f94d17f88d241dcf521a5068a5b6cd9b0e8b7d32770f6337d5d820978f1",
+        "signature": "98051f94d17f88d241dcf521a5068a5b6cd9b0e8b7d32770f6337d5d820978f1"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts": {
+        "version": "4bce3c3e133b73443269d6467d346a956b3b9ebaf3aa047af36d9b9c1331da98",
+        "signature": "4bce3c3e133b73443269d6467d346a956b3b9ebaf3aa047af36d9b9c1331da98"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts": {
+        "version": "f3056995635885f59c09468a50b798557079f8e0f246c40b100c7fba17e0195b",
+        "signature": "f3056995635885f59c09468a50b798557079f8e0f246c40b100c7fba17e0195b"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts": {
+        "version": "0b463e35e75b5089962c2442c484fb7947b8b56faceb6a331c744dd409320719",
+        "signature": "0b463e35e75b5089962c2442c484fb7947b8b56faceb6a331c744dd409320719"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts": {
+        "version": "33f449b99614a238bdada26166ba73cf4df88b6a0194717eb2dd73ff63bcf9a6",
+        "signature": "33f449b99614a238bdada26166ba73cf4df88b6a0194717eb2dd73ff63bcf9a6"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts": {
+        "version": "2ed62ca6307d3a70b58cb645419c1453306961eb689875a813c55a8e5effbc78",
+        "signature": "2ed62ca6307d3a70b58cb645419c1453306961eb689875a813c55a8e5effbc78"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts": {
+        "version": "3ea03dbd156afeea284e3ed2084e4803bb4647fd86940da2b54cef4d44f01baa",
+        "signature": "3ea03dbd156afeea284e3ed2084e4803bb4647fd86940da2b54cef4d44f01baa"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/main.d.ts": {
+        "version": "c35f014effa759935c4c6fdcb39e08aa21c8bb20e9a11dcc5c9f0344c3de7f57",
+        "signature": "c35f014effa759935c4c6fdcb39e08aa21c8bb20e9a11dcc5c9f0344c3de7f57"
+      },
+      "./node_modules/vscode-languageclient/lib/colorprovider.d.ts": {
+        "version": "240f82b98aa9037ca2eeab5241f964ad20542c85779c853319785177b7e83276",
+        "signature": "240f82b98aa9037ca2eeab5241f964ad20542c85779c853319785177b7e83276"
+      },
+      "./node_modules/vscode-languageclient/lib/implementation.d.ts": {
+        "version": "57275f1f03897ab3801604a0b2379e1403738a7fe90610610ea2533d2a489703",
+        "signature": "57275f1f03897ab3801604a0b2379e1403738a7fe90610610ea2533d2a489703"
+      },
+      "./node_modules/vscode-languageclient/lib/typedefinition.d.ts": {
+        "version": "fb3c75f9db5f3962eb338ff7c7b6cd3cfcc986e42fd72bcebcb6228a6f262722",
+        "signature": "fb3c75f9db5f3962eb338ff7c7b6cd3cfcc986e42fd72bcebcb6228a6f262722"
+      },
+      "./node_modules/vscode-languageclient/lib/configuration.d.ts": {
+        "version": "95cb22cf2cfad93b49f87653e4001201715fb9e63e0013ad3963e0e8185e1b22",
+        "signature": "95cb22cf2cfad93b49f87653e4001201715fb9e63e0013ad3963e0e8185e1b22"
+      },
+      "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts": {
+        "version": "cde98f86a11df161981d5ac5ec53177e41d0904e76f3ae818473e6443e95991f",
+        "signature": "cde98f86a11df161981d5ac5ec53177e41d0904e76f3ae818473e6443e95991f"
+      },
+      "./node_modules/vscode-languageclient/lib/foldingrange.d.ts": {
+        "version": "436e1bc0f2a6bb749d1dd73ea801b63b6e490c14c77852483d912e7aa5a42931",
+        "signature": "436e1bc0f2a6bb749d1dd73ea801b63b6e490c14c77852483d912e7aa5a42931"
+      },
+      "./node_modules/vscode-languageclient/lib/codeconverter.d.ts": {
+        "version": "444f30f3b0c15705dc79bed582c8649060c62e652432e5bea5453d64f6cdb220",
+        "signature": "444f30f3b0c15705dc79bed582c8649060c62e652432e5bea5453d64f6cdb220"
+      },
+      "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts": {
+        "version": "1784829ab5d1c118636e477e216e1f7eb3ac53707e333c74fc30f9078d77faa3",
+        "signature": "1784829ab5d1c118636e477e216e1f7eb3ac53707e333c74fc30f9078d77faa3"
+      },
+      "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts": {
+        "version": "2d52c689418851cb97d0fef50d45ab8497223fab524ffdb91d5235b2ca3bae9d",
+        "signature": "2d52c689418851cb97d0fef50d45ab8497223fab524ffdb91d5235b2ca3bae9d"
+      },
+      "./node_modules/vscode-languageclient/lib/client.d.ts": {
+        "version": "8a309152f45ce67b31160a533df6dc35bd4d154eddec4c17e0115389d0c040cf",
+        "signature": "8a309152f45ce67b31160a533df6dc35bd4d154eddec4c17e0115389d0c040cf"
+      },
+      "./node_modules/vscode-languageclient/lib/main.d.ts": {
+        "version": "141edea12fd407315f22b0fb7be47a5dc5dd7c367ad929dec97077cf1cd6993a",
+        "signature": "141edea12fd407315f22b0fb7be47a5dc5dd7c367ad929dec97077cf1cd6993a"
+      },
+      "./src/commons/log.ts": {
+        "version": "6f8f44fc923d6abb43d834fdb57dbb108b9ef28db76953cffeb95cf1c1f132fa",
+        "signature": "230675055569b074550dbbaf7fe0825a4c9d73d2e0d1e85eba85708d2c7d052b"
+      },
+      "./src/editor/sourceexpander.ts": {
+        "version": "bcd22d0e48f2abeb0a051b09f0bdfc54e74971dfcab87c7e1d006e65c25e1551",
+        "signature": "1075ff7b4745737fd1fea19c3e0df5d9b1b5bdfa0168c7fdfdeee4b9575670fe"
+      },
+      "./src/lsp/commons/sourceofcompletions.ts": {
+        "version": "4980704e437e1d640f2bfb0b28b313d0361162925cc4b7156aa2a3d63e20a21d",
+        "signature": "a33a64acc1cfa47117e0b75604c7840486bf7137caac6fdde9fd5b8ff136d320"
+      },
+      "./src/lsp/fold/foldstatusbar.ts": {
+        "version": "96bacb6daf4189c4de49d5b139f96a5337dcc58398d63653d6614514f9dbd47b",
+        "signature": "abe8f09ba31db5869dc2840820fad4a1fa6d5d2c3dd96bbae88ccc8f251db3c2"
+      },
+      "./src/cobol/expandedsourcestatusbar.ts": {
+        "version": "089ff828e388476239e8f35cde08d78d27cc0d586db5377be3c40088da48d0b2",
+        "signature": "5892bc40bd44dbdc0b985cbbf60486d5e295d85a319c96ee197e999a1032b6ef"
+      },
+      "./src/lsp/client.ts": {
+        "version": "2d26704d238df8651c3cd031780d4c618e0de70be53a71898dfd7dee4dfa88b8",
+        "signature": "39bbe0a411e73028644fa4522a52534a2ca495082b1fef2f7ae59d78f4ddd202"
+      },
+      "./src/cobol/rechdoc/elementdocumentationextractor.ts": {
+        "version": "081b8d49114d886d1f0fdeb39bd6f78dd730eddf5a39eb824720f9134add01ba",
+        "signature": "09d0f3a3b66e816d5770154c94b287d42443895d3d96a5ed717e50ebdd3ebe02"
+      },
+      "./src/commons/variableutils.ts": {
+        "version": "cd860445e2116a4a621a6759522edfd52d24e9e2d4c7edb27033ff23d659384b",
+        "signature": "189cb88cf8434cc98aa575a3157839405cdacfe92fadfe93e1d36ba5b06691cb"
+      },
+      "./src/cobol/rechdoc/docelement.ts": {
+        "version": "b1f57650425f6989ac2b7df3fdac7cb782d930ccf9deca4508cb2739b1a80371",
+        "signature": "106d331b20b6908719164cd9d64e72ed53cbd6821e5702d0ba3f045eac658c70"
+      },
+      "./src/cobol/rechdoc/coboldoc.ts": {
+        "version": "800581373a4fa6e535f50efc85ecf307ee43611581c00428fd4361dd3cfbd31f",
+        "signature": "38c95980af1426cd78882f93ded7b2c114d7ba2d641853515ae25207abbda8c1"
+      },
+      "./src/cobol/rechdoc/coboldocparser.ts": {
+        "version": "a233b7ccc7285a876ff13bc5a85975f43fa5f49ae406fdd93752fd9f9e847822",
+        "signature": "84d0c5523614b51f6b361eafb7afe316e0a5c65ab3b42a0742e03a48cc6bb269"
+      },
+      "./src/lsp/completion/cobolvariable.ts": {
+        "version": "82eb32919f43b7ed701b3a440d25ba183c878310bc267e2e8e243867bd9d1700",
+        "signature": "64092b03f32c1cd0411a3d5762a5be5afa13c6e9f5f3cc5c60408bb5db73ec10"
+      },
+      "./src/cobol/cobolregexutils.ts": {
+        "version": "31152c2eb6b50b1ecede619a1ae30db11d8a94e36f445969f837bf49f80d876b",
+        "signature": "0ba50dd626ca82028f010eb98a1bcd70f27a12ba0fac60a0391fb8ede2e8e116"
+      },
+      "./src/decoration/parser.ts": {
+        "version": "ac570385e8c5f5a30f9e1895730cfb55a7dbc1d8f3488ccca25d2b80571a166e",
+        "signature": "cc3681139ba4290615f58b04716677d6400b61662a261b10473c785410dd40c0"
+      },
+      "./src/decoration/customdecorator.ts": {
+        "version": "d53fed4e5ed5b0d625bc9e71e745920b7b3db2f927be769de49889e854165d70",
+        "signature": "01b2b05810f2aa83deb26f7b6b36b787decb6def687891e02fb501d6cbf8c10b"
+      },
+      "./src/cobol/parsercobol.ts": {
+        "version": "197863939a2f0ab84451dd89b36b310a2ae036c5d391c3fd8c29da585d22e482",
+        "signature": "3b2248b69b43e41b6f81ec9ec107cdc262ec8e31ebecc411e4127dc049e4d2e3"
+      },
+      "./src/cobol/elementsdisplayer/elementinterface.ts": {
+        "version": "3caa1a7fa88db73513ae40f36cf6c52d58d7d1dc5273d006a84e072367ef325a",
+        "signature": "e82aa6c2d57a68c3e0e2bdfd28e904eea0a7317599d6133773b14869be334414"
+      },
+      "./src/cobol/elementsdisplayer/elementsdisplayer.ts": {
+        "version": "9a535d21853aec16ba3599b439ca8a68139cb5445972144eaabab0d95ec77cd1",
+        "signature": "57c6680bf6dae8cb35e6ab869584869b1678bfc17a5015dcc33dd244944701b0"
+      },
+      "./src/cobol/elementsdisplayer/variable/variableelement.ts": {
+        "version": "7cc7f5444676c37fa71f9984ecdfc4ccb20f9ccfaf50494e0d1249df6194fbc4",
+        "signature": "c75d99c002746626c1fa262fc3767a3d86384707e8cd398cfaafa61ad45a67ba"
+      },
+      "./src/cobol/elementsdisplayer/variable/variabledisplayer.ts": {
+        "version": "88923eed7dda67d9e86af30cb52094cd4e81ef68bc815d211b15f300520f3b7b",
+        "signature": "e548f29f2a3f2c1ddfa9abd00b5f30b42ea1f11d58c8452e6c7e21df0c6fe349"
+      },
+      "./src/cobol/cobolcopy.ts": {
+        "version": "a6b1b4bf7c04a875ea4a6f44bbdd6f571a1dfe6ef46c6e547fa06bbfea6b2092",
+        "signature": "5dcec13ac6ee911186f7d6e7b02a58c52ed824e79a3f5f091947344ce6933653"
+      },
+      "./src/cobol/elementsdisplayer/copy/copyelement.ts": {
+        "version": "d1965b8f992b471dba372a98b19bc88f811b80f1d5dae79710b55591afbb3122",
+        "signature": "6f987e7909ef1e80aed3d47ccc8f0700f2c00fed08253a10056af9ea12bd8f75"
+      },
+      "./src/cobol/elementsdisplayer/copy/copydisplayer.ts": {
+        "version": "79b64a1cb980a32b10592d49d183fa65798c44f5c78f231c64ba7be3c3f255bd",
+        "signature": "63a04f8b016272c294570a4ad1a522f4efe65901dc89d62e11fe97ee195cf67c"
+      },
+      "./src/cobol/elementsdisplayer/class/classelement.ts": {
+        "version": "f044b62e75eb1f76e421557401783bc6c7167b10a7e6d8b2ace55a7f79e3600d",
+        "signature": "5546a023f47779065bd180faf8edd9715c196516f9ffd6d031a89039c6b9512d"
+      },
+      "./src/cobol/elementsdisplayer/class/classdisplayer.ts": {
+        "version": "a4945fb60f58b2a1f81c4a4d047552801aa6959d4e680fa97cb5915e3e37bf6d",
+        "signature": "7545fecac873a54ca41667591bb89a60a4b43069b503d25b2087257f5d96e81d"
+      },
+      "./src/cobol/elementsdisplayer/elementsdisplayerfactory.ts": {
+        "version": "878afd007882951962e311cb7d616063210bd35d75e2f6dece37eb9d44452f8a",
+        "signature": "67e8f296f13fcb1514adf22710a231317613b11428ee704e5008317958201a1b"
+      },
+      "./src/commons/cobolwordfinder.ts": {
+        "version": "778d52015639e42a3783caaf257280c68e894cfd8c210ac8363ab5bd244ca3fa",
+        "signature": "062d068a3bfb16cb16c7f7f6c468149655db5a051a310d8925b5f4d7af60e4ec"
+      },
+      "./src/cobol/expandedsourcemanager.ts": {
+        "version": "690925e0383d623b5a214926d0342ebae5fc92dac4c4ee96df20e52b1510549c",
+        "signature": "7d0c81d9000c387f8be538c56eb6d0b16c2f7b7d021565222a10ff7576b0fb3b"
+      },
+      "./src/lsp/completion/cobolmethod.ts": {
+        "version": "2cc4b1657ddc0a00e2dafe451997daea101ef70fb939266a5f04b596773ea8f9",
+        "signature": "0a1922d1bb646ade795d240149e8fad0fea15fcf06502c7d50cc5f4a1b846d61"
+      },
+      "./src/lsp/declaration/coboldeclarationfinder.ts": {
+        "version": "dc507712e3024c06719fead2886f97a59d63f50bc55e09637d9ea98f10040c0d",
+        "signature": "a2fcb8d771559666487eb4e26cf91f71c32593f2fc112302f3ae023f40f8be10"
+      },
+      "./src/extension.ts": {
+        "version": "318ca49cb6cbc25934fcdd742912e43a3ad538b075db3f6fbc5406b4a3b3e1c1",
+        "signature": "6382014926a7c506aa58bf974f686f96d2eee2b4761fe198bcedfb1a051eed63"
+      },
+      "./src/cobol/posicionamento.ts": {
+        "version": "cc4cc7daf09d0715f8371871cf24bc5be893c651d0a1f96fee865658b101d62f",
+        "signature": "e64328fab0e98cdb7fb487983235f9fba3426fadbd60a88b028867e9752a26e3"
+      },
+      "./src/cobol/diagnostic/coboldiagnosticpreprocmanager.ts": {
+        "version": "ff288cb913c6bcffcb59defd92efc93d131a9dceb5d4da23e83da36709d88625",
+        "signature": "820851b7500efefc120a3c01f9cc3f8626fa2a83e4c94f971e511b6ce0de652e"
+      },
+      "./node_modules/vscode-languageserver/lib/thenable.d.ts": {
+        "version": "a38136f8e185eb84f4e9501de6a3ab517c968d1014fc15f4bec86d39735fe424",
+        "signature": "a38136f8e185eb84f4e9501de6a3ab517c968d1014fc15f4bec86d39735fe424"
+      },
+      "./node_modules/vscode-languageserver/lib/configuration.d.ts": {
+        "version": "075c6658a78933bcae973484f4230c9fd69d7ad0b929ddc708e7a21e88a3642f",
+        "signature": "075c6658a78933bcae973484f4230c9fd69d7ad0b929ddc708e7a21e88a3642f"
+      },
+      "./node_modules/vscode-languageserver/lib/workspacefolders.d.ts": {
+        "version": "2efb518381cbb405a6f0aa87df30587baa5f9d9b667fb841707018c07737ddd7",
+        "signature": "2efb518381cbb405a6f0aa87df30587baa5f9d9b667fb841707018c07737ddd7"
+      },
+      "./node_modules/vscode-languageserver/lib/files.d.ts": {
+        "version": "c1c9e5d8a83a9a772cca7d5c8ff95313e682ffecf00a9ca74d55db6cc710e377",
+        "signature": "c1c9e5d8a83a9a772cca7d5c8ff95313e682ffecf00a9ca74d55db6cc710e377"
+      },
+      "./node_modules/vscode-languageserver/lib/main.d.ts": {
+        "version": "7263d67486fedca3956d7b63c132e5ce9adb326532f44720114c560f622eb21b",
+        "signature": "7263d67486fedca3956d7b63c132e5ce9adb326532f44720114c560f622eb21b"
+      },
+      "./src/cobol/diagnostic/coboldiagnostic.ts": {
+        "version": "fe0fad820a02c1f7308e241360ffbd70f464748fa413b88049de529bcd956686",
+        "signature": "9038c343e4349a34f55e9aee6749ec48ff193833ba091c9e18f552bf58b5cfa1"
+      },
+      "./src/cobol/diagnostic/textposition.ts": {
+        "version": "fb9a9b6645cc5131917a58a6de34e71824cbfb7a0759a4390f43c2a08c33d398",
+        "signature": "08de74bdef65e32039474b586d1b02f0e0def0118ea4361c9905477d117e3d30"
+      },
+      "./src/cobol/diagnostic/textrange.ts": {
+        "version": "3a7034170dedd650aed21ab4b85191f1b133c400fad31e89aaa6a0dcb2692218",
+        "signature": "18f1566c6221995a540abac5e074ea806f4e96c182b2b3be83d4f1155588a1c2"
+      },
+      "./src/lsp/commons/completionutils.ts": {
+        "version": "0b76ee52779aeea3409770065dccb33a15ca2defca4e786c881f11422328d135",
+        "signature": "836d7afbebada369ec654e92658ea6186b4ebf508285fe41aaa4140cc5bb3cda"
+      },
+      "./src/cobol/diagnostic/coboldiagnosticparser.ts": {
+        "version": "ae41d1c2b00b3fdf62ea321877e46d57bb3a086f5b8d1c72dcc5a6bc5af6c1b1",
+        "signature": "963f633490951d67e627598c865d7cf23021f32590bc7a6d013005b298e2e008"
+      },
+      "./src/cobol/diagnostic/diagnostician.ts": {
+        "version": "815942b19127be55b7c3d35607c729aecdc330fe9ecba4051b69424b0ae04dd0",
+        "signature": "795f206b8f545b81baa991127680cbbe70c629fb99b054e04d55ac8fbf23a8e7"
+      },
+      "./src/lsp/formatter/formatterinterface.ts": {
+        "version": "92a692edb290c956eb5a057096b6e53e8957136fa6e17ff17d899ad1027a27a2",
+        "signature": "0ff58f4f60e1af7322898991354895f1b34afd52639a8d84f5e5dacf1779a3f6"
+      },
+      "./src/lsp/formatter/formatterutils.ts": {
+        "version": "8e18747f776294786b40c48c670f4da4b5fe53acbad9c69ab7be366e32112188",
+        "signature": "194d2ce49f5ef662b686184896ba883ae591071c50df1fb5d849db21b71ae8f8"
+      },
+      "./src/lsp/formatter/ifformatter.ts": {
+        "version": "9ec65da0f0ab7cb505b6689c7c5d9e27478f75a85ffb048a7b941e0d507044bb",
+        "signature": "13a1d341102e7844c7f4626c084a01588b3aa707275175c987bc8b6d553d23e9"
+      },
+      "./src/lsp/formatter/commandseparatorformatter.ts": {
+        "version": "c0a59be95a3fd54f5c21da47f57d8b7746833e1d6e70e656c6d1b53f3772e1ae",
+        "signature": "d1e41c380a78df5473a2cdd974c9d4ef373c1c28ac40f7de1e4776d0a61b5a45"
+      },
+      "./src/lsp/formatter/whenformatter.ts": {
+        "version": "56fad2741ecf45ed67939237747bde0f5389b337155cb15d2e885f4127dca857",
+        "signature": "95ae8c10ac702d64666f9a8f118ccac3638b1b4ba260f962232a7452a63dc3f0"
+      },
+      "./src/lsp/formatter/evaluateformatter.ts": {
+        "version": "d85f61426218258137aeb1f423e58d6a683ffa3d9fcdd4842e56582d5a79f5f0",
+        "signature": "e37cdb941ca6a47175151ed56247e689ae75a738fcbae4364e4f395082309e9b"
+      },
+      "./src/lsp/formatter/performuntilexitformatter.ts": {
+        "version": "b21a43765fbb6fd5ab33100ed37cf31204bcd01309ccdc633e38b557a74ed978",
+        "signature": "f826da4685b98921a54542023259cd317bb8abd207fa79a43f756be4236aebf3"
+      },
+      "./src/lsp/formatter/elseformatter.ts": {
+        "version": "495b29c28060212e4fc04c6f578e0069d6649ec87131526f66d5a729c20b4d79",
+        "signature": "ac9ca33739371cd002fcd4d0f44e5c28f5a5fd69bd95ecb53f13132cda75260d"
+      },
+      "./src/lsp/formatter/performvaryingformatter.ts": {
+        "version": "cf3a2c23e77a9701d04f75cfa0e7a70bf4e39daaaa56cc3700f84d93f797af90",
+        "signature": "1d1e1a3000a88003b8d096159bfd0adcbedbe0d78a0162002dd58d629024bcc9"
+      },
+      "./src/lsp/formatter/commentaryformatter.ts": {
+        "version": "d05a48c852b4167f87436007c526a1d7fbd2ef8cec3050d139a1af3da4be05f7",
+        "signature": "8bc91fd1f2a9b3e4028d5e93aaf9c3c99f5ff6b9ea75078f330bc6a30a85d166"
+      },
+      "./src/lsp/formatter/cobolformatter.ts": {
+        "version": "33e54c83d3e6db8d8f479e8e07c8c6b28d1085072825f600571f9dea852bcbb0",
+        "signature": "0788cab6f21858f98e9cd1739bcc9326d33fbcf8b3bccfd918c0a437fa9e0746"
+      },
+      "./src/lsp/completion/completioninterface.ts": {
+        "version": "8cea8d9752caf28dc63325d6e143087eb62bd38fa6b2d5e0d973054900b14a1b",
+        "signature": "c35d4dfe7f671d1879e84a037d09dd3239b5aeaf0c043ca65c18bd75241a7cb0"
+      },
+      "./src/lsp/completion/performcompletion.ts": {
+        "version": "8765a41ed9c45b9d4350f7b0b31282c2be60f9fe55961a9c47062ed464160100",
+        "signature": "0b8d7b26ba3edc414ebadb0faab91887814143a9d7dc80c332c35968644fa2c9"
+      },
+      "./src/lsp/completion/movecompletion.ts": {
+        "version": "72d91deffabc08a5b14f92365ad49130f16b86e901cd6bfe1ac2e10e915d492c",
+        "signature": "a6eb1eac05d78caf13dbdf74816cff5ee6f863b5a13b59b13d99fcd5784b45a1"
+      },
+      "./src/lsp/completion/tocompletion.ts": {
+        "version": "b98049fbdb566e259df55923e597f840b1321864fef8f9d28686e12ef8a3cf53",
+        "signature": "a6608a6da4246dc97967ffc00e3fa29b9ec27ab52eae81028fc2f79dd37612bb"
+      },
+      "./src/lsp/completion/evaluatecompletion.ts": {
+        "version": "71f79f0c5fd9430d5849a17f180e5a75687e1bb3982bb98ee9e9771a8ed47de9",
+        "signature": "20c41f39cf333c8a223a3cb5a07095234fa9c19ae5f69e0aa8dec4693d58ddf3"
+      },
+      "./src/lsp/completion/performuntilexitcompletion.ts": {
+        "version": "67e75c5b10f2a7e0182316812cd6b3fb53cc376ed43a81161df4af12205121d0",
+        "signature": "dc7b04881d5e5f77b355b7c657d0a962486fc2ad4a7f9d90971efb863b80494b"
+      },
+      "./src/lsp/completion/setcompletion.ts": {
+        "version": "ab8c8fb2343948eb252e27f18599fcc33e3875b99659697fb39d1f6a2c9baa75",
+        "signature": "faa6c9b342ebb921944aeecbc184a4ad09beea7073e65b4d6fd51ae6ab499d3a"
+      },
+      "./src/lsp/completion/performvaryingcompletion.ts": {
+        "version": "00e1a03d22ec4f04a040c74e51326138f685a45d1ca650e046fe20e0ae498f16",
+        "signature": "cc729be8ef3f56446973bda3ba7828f9193e20d7281d75bba7985b33d41bec0e"
+      },
+      "./src/lsp/completion/addcompletion.ts": {
+        "version": "2b39646dd0c3cd80d8af5789ef3f96cda40ab1223bee68dadaaec56cd4688843",
+        "signature": "c8b58b7470ffbff073d2fa1a8f6e7c4c0bd76abf76b4129f72e7e0fd3fa4ac3b"
+      },
+      "./src/lsp/completion/subtractcompletion.ts": {
+        "version": "ac183cad2f16b742da78a69dfca09aec71c8240970cd98dd3346dc8906da1040",
+        "signature": "56a6a7318b14bcec385081859d543080a70f6cc2a7b1c274b38fd7130dfdb93e"
+      },
+      "./src/lsp/completion/fromcompletion.ts": {
+        "version": "35a5d4e2f15eeecf733ceb0c27714b582ec2752371a3d01019387c8851d877e1",
+        "signature": "8292ca08f04056637b0e35154c2d0e657486a21844c5389054e539cc9e6dc3bd"
+      },
+      "./src/lsp/completion/exitparagraphcompletion.ts": {
+        "version": "f72e304fb84ddd35fcd7438572cf63ab21ebcd1efb3a7eb4af09eceacced5d15",
+        "signature": "ac9d432888a45219e4bf2d7981f756940259e44f4348e52877c30f5111cf2036"
+      },
+      "./src/lsp/completion/exitperformcompletion.ts": {
+        "version": "1d76cb8e6ecabbd0ab2246e64135814adf840d92ae768a0448d357cb9dea649c",
+        "signature": "4bc6f9a3c7412ff9ab81f9cfccbdddfe90d4cbe6e5795e109b3925c4bd2ab53b"
+      },
+      "./src/lsp/completion/exitcyclecompletion.ts": {
+        "version": "41fc3ae8bd9c638f9f6bcdb247866b4acedabf4a2dc21a1d381c9c17529a2692",
+        "signature": "f04d941c6bebfd8be7cfeb52fdee1a3ec62b81663bced86f065b684d8c8f6dd4"
+      },
+      "./src/lsp/completion/flagcompletion.ts": {
+        "version": "f2b59356f4a52d96bc4efb28594d14eaf30857ad5dca9cad4065d962fdb8a6bf",
+        "signature": "5cc15248aef17b9b60a600fc456701b98f2e48d8b02616a2c4a1c79444c2f5ea"
+      },
+      "./src/lsp/completion/totruecompletion.ts": {
+        "version": "a2a624c4fadaacccb8bc4492d490f3a4fea2a3b314da6a4b995ead3eb0f093a9",
+        "signature": "28eb4b38a146b45311d6802cad238c45feb2852ed840bd8d9ef28f39110459a6"
+      },
+      "./src/lsp/completion/picturecompletion.ts": {
+        "version": "2e2963ed75bec408e9ae01dc96f23af1c2f85e9c552006da363eab5a25ba93e4",
+        "signature": "85c434d78c1739a5f8e8390a838243c834df76ba3bc7d1cbdf6299942d5b3366"
+      },
+      "./src/lsp/completion/valuecompletion.ts": {
+        "version": "7d17e30b152697a544b79c8e274db3ede147511b022ec83674426e4191e5a543",
+        "signature": "377cc306291f971558764ea2fa061cf39858e5b6ecc2df88d92fefe2418c2f81"
+      },
+      "./src/lsp/completion/elsecompletion.ts": {
+        "version": "f747a2633138386e536153cb951c8f7d3dfe6f8e677b773b25b407f2f4ff2c6e",
+        "signature": "dd779e2bfdfbfac9e300ae75770f3374eb26fb583842bd5d2709027608659af0"
+      },
+      "./src/lsp/completion/variable/variableinserttextbuilder.ts": {
+        "version": "5162129fd45a1b83e506f76b4b63c7ac15881cb4c95463d2ecc65f70313bd0a4",
+        "signature": "a22d1390ae16a3a71c0df826f59f13524058d9f27636eea634d3ed72938e1ad8"
+      },
+      "./src/lsp/completion/variable/variablenameinserttextbuilder.ts": {
+        "version": "80fdcead794efca939789ebbef443198ce2ad654a40585ff94b06a3c98447aec",
+        "signature": "c9cc57147ec3bc0be34228cada9e105e06f2dfe078faa8da89800e2ad09923cc"
+      },
+      "./src/lsp/completion/variable/variablecompletion.ts": {
+        "version": "4efa3545e5ff80ef1ece90027826ad78e7a53b4a186c702d1286ad28dd1a195b",
+        "signature": "a3ef81c8ba8535bcb77a8f8e807c4f66bb969de1a2a2bb8a34031d1d9bedd9ee"
+      },
+      "./src/lsp/completion/emptycompletion.ts": {
+        "version": "d5afee0019005ae4d50d0420fccc460829bbc726571fa9e6d9332ab874d2f621",
+        "signature": "7b21ebca771e9e9dd166efc42cb3acaed3369141070ee88890611d62465820bb"
+      },
+      "./src/lsp/completion/whencompletion.ts": {
+        "version": "712a34c0dce07535faccf2a02fcc7ea433a77ee119559a6522af3fb25091d4af",
+        "signature": "38f136fda90bb48dfdfad2b9f4e5a5372364d03973f6f0f03c070c5b9cba4d12"
+      },
+      "./src/lsp/completion/endcompletion.ts": {
+        "version": "828da12c02bdfab856e75d2044753dee8c0c051e95e0e8f19457f994c53d05d6",
+        "signature": "3508cbbfeaaab1caaf7f24cacc8395b69f1bbc5aa2b05676cbd1809332862a2c"
+      },
+      "./src/lsp/completion/variable/variablecompletionfactory.ts": {
+        "version": "9d4b54d630a9af3aacf62d19c0af37d2005f72f83b189b786b0c4792a16389fb",
+        "signature": "92d1e1d37e2cb27097dc7865c1c521bc1b753f7e4de42d46f09dae9dcb2370dd"
+      },
+      "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts": {
+        "version": "880ec90bef60772822379228c6ded81f7ca6ae4d47643248466269f6976c3262",
+        "signature": "f33a1653b88fa7d96b73d2f18a28703833c43e6d1bb46f1954155871565ad0cf"
+      },
+      "./src/lsp/completion/variable/commadotinserttextbuilder.ts": {
+        "version": "8ae570401430211fd5dc781deec375c5a8c832deba8c59f14fae244cc704aa9e",
+        "signature": "f661880e4e3986903bd053f08f4a09b918c8e0fcb930fbdebbcf2a7b56a27795"
+      },
+      "./src/lsp/completion/variable/totrueinserttextbuilder.ts": {
+        "version": "2deb4f65bd1546fddb7d0b7733bd66e13393241fa70236bb5f34990ae2280b24",
+        "signature": "7a7b04f744d0d8e746f6ca6b2efdb64de062114f034f77a72b77708159b0f8f4"
+      },
+      "./src/lsp/completion/parser/assignercommandparser.ts": {
+        "version": "a73847122fd4217252e9545c4a84134c29b71fc55db84f637eae3d842454d28e",
+        "signature": "93f2631344952d97a4ecc46052cc3c44e5c27e1a49ac642685ee1db33e31dc1b"
+      },
+      "./src/lsp/completion/method/methodcompletion.ts": {
+        "version": "086312af65080c70f8507abf15579b176ae9acd41e37f4220c379fbb4d51d24d",
+        "signature": "7f8a219d9e56ca22914cb5fed12726c9db8353f251622d3526e01edcb1525957"
+      },
+      "./src/lsp/completion/cobolcompletionitemfactory.ts": {
+        "version": "94b0a677549fdd5bb0d5d4d872d97bd7dca0dd013b49e3c37079c334ea76e337",
+        "signature": "15f65a2243968fb0f1ce653e31edb9a6474d761cd08bec2410c401deb394e229"
+      },
+      "./src/lsp/completion/dynamicjsoncompletion.ts": {
+        "version": "080d5a65b3b5835101898559688521f76b3b8d96f7a8d2f328cca3d51a658657",
+        "signature": "53557b7964fb9d527ca7bd803e02640ecfa5770447246c15f7ddea382cb48130"
+      },
+      "./src/lsp/completion/paragraphcompletion.ts": {
+        "version": "23490c4f1b47f81b3ae575f4f9d05315a8ead8304ee562bcfb9436eead5d973c",
+        "signature": "3e786d42f8d498e4841c11897d0162a7d83f55f650ed3430a00798d2c99c351c"
+      },
+      "./src/lsp/highlight/highlightinterface.ts": {
+        "version": "2ef48377ed3292f103c132b524a4a1e0318143570238425642db51bea65a7aa7",
+        "signature": "420a68010ec6e8f7dbd7f8f2c123bf08e520d215d4302149017dbf3192765271"
+      },
+      "./src/lsp/highlight/defaulthighlight.ts": {
+        "version": "7aa8128af5e9ebf9171eefe793f77ed03460b0e6ab6fc69768365bf5ebe9ec2a",
+        "signature": "9818f464a1bf05e174491d32a9b5c8f2d84a72393b9091e8ecaa6649ed61eaaf"
+      },
+      "./src/lsp/highlight/ifhighlight.ts": {
+        "version": "d21658cce5a791b2f239168bb94a6d5948f7b8f50b05484ec7c6feb7d4366646",
+        "signature": "50c5973a6dc0b4b1d602db45faab0e7b70f908b15634eb0798879a8f873300c7"
+      },
+      "./src/lsp/highlight/evaluatehighlight.ts": {
+        "version": "53ba1f1b1e111723230d101d08123d95523bb6e9f0bc7658ef9139bbd6f6bbfd",
+        "signature": "8af675c9d74542c03b2f7e8939139f5ec9b0c630b1fde5290934a93aa0e60510"
+      },
+      "./src/lsp/highlight/performhighlight.ts": {
+        "version": "72bfde6f36e393a81dcf9a7b3f4e24f4d2a6099d4b38ec743f0a6a5b4bf59f27",
+        "signature": "21671ec2862f3b86e5fae43a0776790235c32bbbfd77c4a1fec1c1fa72bb79fa"
+      },
+      "./src/lsp/highlight/tryhighlight.ts": {
+        "version": "6b5f05b8160ddf38c0d6b961b914646febb12191d6186abf6fa9ff7ec248c45e",
+        "signature": "2a6bce1ecdcd31a3ba5e15ae6c5d64f99283fbca680d83c27291b792224966eb"
+      },
+      "./src/lsp/highlight/constanttesthighlight.ts": {
+        "version": "241c3e032c94cc765b4fad337ec8e915be1bf310f13f67cc103129a476fcd08e",
+        "signature": "b43a6f7763cb04be5b1ee60aa671ddd1dd01eb4ad633b2ded4539699b60a6f88"
+      },
+      "./src/lsp/highlight/highlightfactory.ts": {
+        "version": "50b00bbd3a78b4e81be6fcb3be1c4e8806a232ab81a02e69837e892c576af5bf",
+        "signature": "320c9ee0d032b4a27e4afdfd01dd9b85b32a48bc34b2703b605672644a2023e6"
+      },
+      "./src/lsp/fold/cobolfoldinterface.ts": {
+        "version": "d2b8440978c3940806371f22f0764adcbfceb55e59ae5f9a0686fccb6ebfce7b",
+        "signature": "6b0c32d04aae15a3e4f313e2b3288213201f2719b053a0d33122e58722c2b4db"
+      },
+      "./src/lsp/fold/copyfolding.ts": {
+        "version": "2b8b64e88d2dbc5bb71aa0521452de0d85b02ee2bf999d83de8a035240065b47",
+        "signature": "e0571a6616540eee51625af173ba4eed1033bd38eeb5296974a1418a7e7df64f"
+      },
+      "./src/lsp/fold/variablefolding.ts": {
+        "version": "0df0a26b87ae17d6d9c85c1245284ea0093699cf7b60fc12dd7aad6c3f206d9a",
+        "signature": "383dc143bd2907b12083a985df87ef52077dfa336f0a38c272acf22ac9848da4"
+      },
+      "./src/lsp/fold/iffolding.ts": {
+        "version": "6134313f91e1ab6ebd5fa9a2c4e8cad010824471ba1d75ede23b5efa3570e63d",
+        "signature": "dd2368f53fa55d8c55ac83748aeeac5dc0586d31803ad22e38e269e40c427832"
+      },
+      "./src/lsp/fold/elsefolding.ts": {
+        "version": "288f56db61914a259d5a0c9bd254368ec31045b9fa801d811e433c09084c1160",
+        "signature": "6a478899b8fe90cc85bdd53e27bcbf9da848d2744de5dfb4aac03277f554dc45"
+      },
+      "./src/lsp/fold/evaluatefolding.ts": {
+        "version": "0a47e658e1a6092c7d5dcc45f712271f024189cd6008ace1a751e625f878f5ff",
+        "signature": "0fe5f4eac593d522aa6cf8103e6eeac0db1993716e8cd5046c4246f40edee6f6"
+      },
+      "./src/lsp/fold/whenfolding.ts": {
+        "version": "ccf54473d058db9bf5329e04640c495dbedcf751f326299d6fbea0e5df7a5a6f",
+        "signature": "5c5f01f207b5eae2a77eb1ff051b433065e5be31038afae79d8779fb6e7f4f44"
+      },
+      "./src/lsp/fold/paragraphfolding.ts": {
+        "version": "92cb30f2e105d8926375111513d03d62c45d5699463208d1053dbc4f456d81fc",
+        "signature": "d476e2544d36bac69ffbdb7c9ec8cd8207325508a44252ba33898c24d51b697c"
+      },
+      "./src/lsp/fold/performuntilfolding.ts": {
+        "version": "9404e6a4f225929d71a8a7f280e0cccce558914c24b79766b0d4623e5a81062b",
+        "signature": "b322f14383a497991ca7c92b12e84909bdd20b2a5ca1ed05a7fb795252cd73bf"
+      },
+      "./src/lsp/fold/performwithtest.ts": {
+        "version": "bc8d055df2d16058bad2a0380d9b4487a6c648fbfc00a3a85232faefd64949a7",
+        "signature": "fa963e2d6a4aabd0b0e8d10fd079ec3dc18e7a985de28a383a8ff2d0b9b345b3"
+      },
+      "./src/lsp/fold/cobolfoldfactory.ts": {
+        "version": "660dbc224cf3e84567826353a56ee8eccfa7bf070835973d5c8b29e1810be818",
+        "signature": "1a60b37c05c550db9e0880638ee5f8bc6e766b9081717fc0741bdeceaf930949"
+      },
+      "./src/lsp/completion/classcompletion.ts": {
+        "version": "25ac06acb59bed64f39b5fd4801e9b5b3d78b3e13625e19b776a7e483d876175",
+        "signature": "2876722f97e6ac30b28e0a45f38815a2bb05916d9baeeb902176525c6fb74850"
+      },
+      "./src/lsp/references/cobolreferencesfinder.ts": {
+        "version": "f293572eec2810fce216cf28e4a3106ea6683028ef02d293d78639ac8e7cd32f",
+        "signature": "3becb40d689f721a9ed094874dd69e54ad610a7d854cef81a5bd684bbdd5f94c"
+      },
+      "./src/lsp/actions/actioninterface.ts": {
+        "version": "be54074247591f2d0538a1d6c740c978bfa1d14b1463d2f195eb6de20085f9f3",
+        "signature": "4a584b13e9d5c1f8fec4bc0d67ed4634ce1c14f8acf16fd3ac591457e60c8397"
+      },
+      "./src/lsp/actions/removeparenthesesaction.ts": {
+        "version": "2b53e2551bb45d3c9205fd06c3e599c32872c4f65ccd1ab140769cbcf51cb079",
+        "signature": "8d9b129ab702b258c91ed43e7bdbda68edfdef6e86874a84a7dfdfee9c6fd383"
+      },
+      "./src/lsp/commons/renamingutils.ts": {
+        "version": "1d827049f996caf574326ad8d9a88d016097aefebfb45433a5a37f841596986c",
+        "signature": "3c2bbc56687fa14f1f0f9184d778cd1482fb4ef5edcac152ae7d802baf7782d7"
+      },
+      "./src/lsp/actions/converttocamelcaseaction.ts": {
+        "version": "d73be29979bce0ecb64eb22804a835ed56d71d1761c617141e7b1134209bfb83",
+        "signature": "257f0ca859b93d5914df5ef09a998d602af981f6d1cc5af086e43e3d7383e8f6"
+      },
+      "./src/lsp/actions/removevariableaction.ts": {
+        "version": "0522ee11bfb6f45ccd2d136f7427e20627d6098d12644d7ca9775d46889dc46f",
+        "signature": "a9187e103126fd4ae50d159d4f3b266bb8ee2f49181795107d6b84195c255be9"
+      },
+      "./src/lsp/actions/replacezeroswithspacesaction.ts": {
+        "version": "4912e99ea5a83455d8d4f7e1564af96f8898e7b129069846967d82f6623ac4a6",
+        "signature": "9664e22210e90ddec7de200d0782286e7d369bae8759975e778a7c60c794632d"
+      },
+      "./src/lsp/actions/removestaticclauseaction.ts": {
+        "version": "96976e8839c75f22670f229f8312b4859c0731dd88b02c60e4813cc765b894ed",
+        "signature": "8871134b2a7be41a51ef04b34b346c1ea0edbc80e92db8aee70962636a1c51f3"
+      },
+      "./src/lsp/actions/insertstaticclauseaction.ts": {
+        "version": "54323660224b43049a2dc7c8e39aaa63fe30da2235a62551e6d7a884c37dfba2",
+        "signature": "3300038a8e06f7e78c0e2e38bbd0156bcdc32857cbb57eac270505c59cf8f285"
+      },
+      "./src/lsp/actions/replacecommawithdotaction.ts": {
+        "version": "603134a7e98e7c99fcba3e2acbfc80f188f02d60c35befd1bea91f41656ea6df",
+        "signature": "054992176b26d3cacf35201e0c43ea58f2c63767b68c56b3fe291873a580a72d"
+      },
+      "./src/lsp/actions/removeremainingclauseaction.ts": {
+        "version": "2129244f17c03685fb4ea43ab2f4c970f187cda7482f88513ba61f328df2ce46",
+        "signature": "b9f3cc479d2614a7ae1133b3a2b4894e2198635989f77ea9eb844b4405befff3"
+      },
+      "./src/lsp/actions/subprogram/subprogramutils.ts": {
+        "version": "cc8c07eccb0159dabfeb308d5d714fdf6a71851a841f247d66d1c686d7a01cfc",
+        "signature": "9e7a45b08d052c7222bd73472112ff02fc603427d01be160ba65d82236349705"
+      },
+      "./src/lsp/actions/subprogram/insertsubprogramdeclarationaction.ts": {
+        "version": "cf4bcc85fe4f3a71360c7db53e7e1fdf458d23d8f953f16fb82bce86b3ffea7d",
+        "signature": "8a992e8051be5cd0539721475b338b77033212067263fa6454ea2109e485936f"
+      },
+      "./src/lsp/actions/cobolactionfactory.ts": {
+        "version": "c23ee68632b51bcfb026e8026893105f42aabeef03f19b0b863a83932c35c5b4",
+        "signature": "e19c6f98c8dd71621eabc57e837e84c071375d22bcb0f9415fdeb67bb0ef7bf9"
+      },
+      "./src/lsp/server.ts": {
+        "version": "71e83e08c875077f023183adb2e326796863d943e6105a487de83d97201eb964",
+        "signature": "3be5437b9cacfc737fcfb47cf9514096f347e280a19d84a1145742eaf23603de"
+      },
+      "./node_modules/vscode/lib/testrunner.d.ts": {
+        "version": "b175aa767126db4a758084c184a567da0f1b1dabd34625ca52fa44d8b534faf1",
+        "signature": "b175aa767126db4a758084c184a567da0f1b1dabd34625ca52fa44d8b534faf1"
+      },
+      "./src/test/index.ts": {
+        "version": "d87392ad395533e389b908bf704fbf03b75ead4ca9970e043354959497607aeb",
+        "signature": "f761c91419d0a89422a0004ef1a92929dd4d2d5e5c16758654d8b0467d1998c6"
+      },
+      "./node_modules/@types/chai/index.d.ts": {
+        "version": "28b110e792d2faf80d7dc52ad8d6905d007eda9077d0508dd3d44ecb9a66538b",
+        "signature": "28b110e792d2faf80d7dc52ad8d6905d007eda9077d0508dd3d44ecb9a66538b"
+      },
+      "./node_modules/@types/mocha/index.d.ts": {
+        "version": "d93bdd7313bdc64d926cd1429bdb9a979037240e89995fddbc6817075bbfe502",
+        "signature": "d93bdd7313bdc64d926cd1429bdb9a979037240e89995fddbc6817075bbfe502"
+      },
+      "./src/test/commons/cobolwordfinder.test.ts": {
+        "version": "dc2b21887b2fb5642aac8777e6a7d19e69467585acaa14e8ba58f5ecfa07b238",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/commons/file.test.ts": {
+        "version": "c07f4fac2f029cbe5d5067dc1960a5c5ba0e31a50fb2b9238570a25d914dc51e",
+        "signature": "e0c0d55d0b3a14a888989df248d2817b1c684e70531ad07a26677c993463818a"
+      },
+      "./src/test/commons/scan.test.ts": {
+        "version": "1d5aba363e5c956808a84ae6950cc3b259406b885572dbba48df162d6f8b7a33",
+        "signature": "e0c0d55d0b3a14a888989df248d2817b1c684e70531ad07a26677c993463818a"
+      },
+      "./src/test/lsp/commons/completionutils.test.ts": {
+        "version": "cc18c4485c51e706af367ee56eadfc13bdcd38ef059e9611e591fe6ff613d16c",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/completion/cobolcompletionitemfactory.test.ts": {
+        "version": "4e05de99316a1aa33710f0d110fc0f9cc09b50ca9b653ba42dc8ca37ef84092d",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/completion/cobolvariable.test.ts": {
+        "version": "f9b2d66ce65bfb812904e9a479542fcce35a9d5888b8048f4d08a348344c0899",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/completion/tocompletion.test.ts": {
+        "version": "8ffea37a0b079a9f50cc194b74ac7a6d516f38e4a5a39eac681cd59884dd463f",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/completion/variable/commadotinserttextbuilder.test.ts": {
+        "version": "558e65c328609bf6f4b8f4895a1c1ae263057917ebf95abe2524832ae9492c7f",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/completion/variable/commandseparatorinserttextbuilder.test.ts": {
+        "version": "7bf41bfa6c89948a22c21290b73e907a56bf2155133afa4e62afbac9d18dc0b4",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/completion/variable/totrueinserttextbuilder.test.ts": {
+        "version": "68c9c73fca4fa1455acdd4b9c807a6721a33c8f6097ed416b4558e759094cf02",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/completion/variable/variablecompletion.test.ts": {
+        "version": "63d00afb81c92b6b06bcbab5dfb663e6364d7a4e025a120ed515ce07441c0ece",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/completion/variable/variablenameinserttextbuilder.test.ts": {
+        "version": "f32b5e0d1d1fc62d398764465aa8fd12b2071150408b36bfe9da72f9be49d93a",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/formatter/elseformatter.test.ts": {
+        "version": "dbbbd507cc4641afe5ac9bee4ea065851836b6a1a7647884c6c7628acf6187c9",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/formatter/performvaryingformatter.test.ts": {
+        "version": "8b9348ace25d2524127e216e5fbf9dc86329bd835a12a2152f8d6c6b1d0f0365",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./src/test/lsp/highlight/ifhighlight.test.ts": {
+        "version": "c762bfcb25a3749ed45d548ea603d012fa86543f4f7de1c48d77a0e122d90195",
+        "signature": "4b924be1e6ffd2703f6a7f1eb17dc9a8ecf61e89d27fe54b40f196337f0a0acd"
+      },
+      "./node_modules/@types/iconv-lite/index.d.ts": {
+        "version": "2b67afd7fc720b7ee35d65d35d4e559bf9836ee8cf15c0da996c5cce01bb14e2",
+        "signature": "2b67afd7fc720b7ee35d65d35d4e559bf9836ee8cf15c0da996c5cce01bb14e2"
+      }
+    },
+    "options": {
+      "target": 2,
+      "module": 1,
+      "lib": [
+        "lib.es2015.d.ts"
+      ],
+      "declaration": true,
+      "sourceMap": true,
+      "outDir": "./out",
+      "rootDir": "./src",
+      "composite": true,
+      "strict": true,
+      "noImplicitAny": true,
+      "noUnusedParameters": true,
+      "noImplicitReturns": false,
+      "noFallthroughCasesInSwitch": true,
+      "moduleResolution": 2,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "project": "./",
+      "configFilePath": "./tsconfig.json"
+    },
+    "referencedMap": {
+      "./node_modules/typescript/lib/lib.es5.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2016.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.core.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.collection.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.generator.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.iterable.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.promise.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.proxy.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.reflect.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.symbol.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2016.array.include.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.object.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.string.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.intl.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.typedarrays.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode/vscode.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/path.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/rechposition.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/q/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/file.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/q/index.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/process.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/iconv-lite/lib/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/executor.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./src/commons/process.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/iconv-lite/lib/index.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts": [
+        "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/indent/indent.ts": [
+        "./src/commons/file.ts",
+        "./src/commons/executor.ts",
+        "./node_modules/iconv-lite/lib/index.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/genericexecutor.ts": [
+        "./src/commons/path.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/editor/positionfinder.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/commons/rechposition.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/editor/editor.ts": [
+        "./src/commons/path.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/commons/rechposition.ts",
+        "./src/indent/indent.ts",
+        "./src/commons/genericexecutor.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./src/editor/positionfinder.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/diagnostic/coboldiagnosticfilter.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/helpers/configuration.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/dependencieinjection.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/editor/editor.ts",
+        "./src/commons/genericexecutor.ts",
+        "./src/cobol/diagnostic/coboldiagnosticfilter.ts",
+        "./src/helpers/configuration.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/colunas.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/gerador-cobol.ts": [
+        "./src/editor/editor.ts",
+        "./src/commons/rechposition.ts",
+        "./src/cobol/colunas.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/tabstopper.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/helpers/configuration.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/node/inspector.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/node/base.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/inspector.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/node/ts3.2/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/typings/thenable.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/messages.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/events.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/main.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts",
+        "./node_modules/vscode-jsonrpc/typings/thenable.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/main.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/colorprovider.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/implementation.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/typedefinition.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/configuration.d.ts": [
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/foldingrange.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/codeconverter.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/client.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/colorprovider.d.ts",
+        "./node_modules/vscode-languageclient/lib/implementation.d.ts",
+        "./node_modules/vscode-languageclient/lib/typedefinition.d.ts",
+        "./node_modules/vscode-languageclient/lib/configuration.d.ts",
+        "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts",
+        "./node_modules/vscode-languageclient/lib/foldingrange.d.ts",
+        "./node_modules/vscode-languageclient/lib/codeconverter.d.ts",
+        "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/main.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/log.ts": [
+        "./src/commons/file.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/editor/sourceexpander.ts": [
+        "./src/editor/editor.ts",
+        "./src/commons/log.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/commons/sourceofcompletions.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/foldstatusbar.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/expandedsourcestatusbar.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/client.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageclient/lib/main.d.ts",
+        "./src/editor/editor.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./src/helpers/configuration.ts",
+        "./src/cobol/diagnostic/coboldiagnosticfilter.ts",
+        "./src/editor/sourceexpander.ts",
+        "./src/lsp/commons/sourceofcompletions.ts",
+        "./src/commons/rechposition.ts",
+        "./src/commons/log.ts",
+        "./src/lsp/fold/foldstatusbar.ts",
+        "./src/cobol/expandedsourcestatusbar.ts",
+        "./src/dependencieinjection.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/rechdoc/elementdocumentationextractor.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/variableutils.ts": [
+        "./src/cobol/rechdoc/elementdocumentationextractor.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/rechdoc/docelement.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/rechdoc/coboldoc.ts": [
+        "./src/cobol/rechdoc/docelement.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/rechdoc/coboldocparser.ts": [
+        "./src/cobol/rechdoc/coboldoc.ts",
+        "./src/cobol/rechdoc/docelement.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/cobolvariable.ts": [
+        "./src/commons/rechposition.ts",
+        "./src/commons/variableutils.ts",
+        "./src/cobol/rechdoc/coboldocparser.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/cobolregexutils.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/decoration/parser.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/commons/variableutils.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/helpers/configuration.ts",
+        "./node_modules/@types/q/index.d.ts",
+        "./src/cobol/cobolregexutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/decoration/customdecorator.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/decoration/parser.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/parsercobol.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/elementinterface.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/elementsdisplayer.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/variable/variableelement.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/variable/variabledisplayer.ts": [
+        "./src/cobol/elementsdisplayer/elementsdisplayer.ts",
+        "./src/cobol/elementsdisplayer/variable/variableelement.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/editor/editor.ts",
+        "./src/cobol/gerador-cobol.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/cobolcopy.ts": [
+        "./src/cobol/parsercobol.ts",
+        "./src/cobol/rechdoc/coboldocparser.ts",
+        "./src/commons/path.ts",
+        "./src/commons/file.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/copy/copyelement.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/copy/copydisplayer.ts": [
+        "./src/cobol/elementsdisplayer/elementsdisplayer.ts",
+        "./src/cobol/cobolcopy.ts",
+        "./src/cobol/elementsdisplayer/copy/copyelement.ts",
+        "./src/editor/editor.ts",
+        "./src/cobol/gerador-cobol.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/editor/positionfinder.ts",
+        "./src/commons/rechposition.ts",
+        "./src/commons/path.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/class/classelement.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/class/classdisplayer.ts": [
+        "./src/cobol/elementsdisplayer/elementsdisplayer.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/editor/editor.ts",
+        "./src/cobol/elementsdisplayer/class/classelement.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/elementsdisplayerfactory.ts": [
+        "./src/lsp/client.ts",
+        "./src/commons/rechposition.ts",
+        "./src/commons/file.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/cobol/elementsdisplayer/variable/variabledisplayer.ts",
+        "./src/cobol/cobolcopy.ts",
+        "./src/cobol/elementsdisplayer/copy/copydisplayer.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/cobol/elementsdisplayer/class/classdisplayer.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/cobolwordfinder.ts": [
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/expandedsourcemanager.ts": [
+        "./src/commons/path.ts",
+        "./src/commons/file.ts",
+        "./src/commons/log.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/cobolmethod.ts": [
+        "./src/commons/rechposition.ts",
+        "./src/commons/variableutils.ts",
+        "./src/cobol/rechdoc/coboldocparser.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/cobol/rechdoc/coboldoc.ts",
+        "./src/lsp/declaration/coboldeclarationfinder.ts",
+        "./src/commons/file.ts",
+        "./node_modules/@types/q/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/declaration/coboldeclarationfinder.ts": [
+        "./src/commons/path.ts",
+        "./src/commons/file.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/commons/rechposition.ts",
+        "./src/cobol/expandedsourcemanager.ts",
+        "./src/lsp/completion/cobolmethod.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/extension.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/cobol/gerador-cobol.ts",
+        "./src/editor/editor.ts",
+        "./src/cobol/colunas.ts",
+        "./src/cobol/tabstopper.ts",
+        "./src/lsp/client.ts",
+        "./src/decoration/customdecorator.ts",
+        "./src/lsp/commons/sourceofcompletions.ts",
+        "./src/cobol/elementsdisplayer/elementsdisplayerfactory.ts",
+        "./src/commons/log.ts",
+        "./src/helpers/configuration.ts",
+        "./src/lsp/fold/foldstatusbar.ts",
+        "./src/cobol/expandedsourcestatusbar.ts",
+        "./src/commons/executor.ts",
+        "./src/commons/cobolwordfinder.ts",
+        "./src/commons/variableutils.ts",
+        "./src/commons/file.ts",
+        "./src/commons/path.ts",
+        "./src/commons/process.ts",
+        "./src/editor/sourceexpander.ts",
+        "./src/commons/rechposition.ts",
+        "./src/commons/genericexecutor.ts",
+        "./src/indent/indent.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/cobol/rechdoc/elementdocumentationextractor.ts",
+        "./src/cobol/rechdoc/coboldocparser.ts",
+        "./src/lsp/declaration/coboldeclarationfinder.ts",
+        "./src/cobol/diagnostic/coboldiagnosticfilter.ts",
+        "./src/cobol/expandedsourcemanager.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/posicionamento.ts": [
+        "./src/editor/editor.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/diagnostic/coboldiagnosticpreprocmanager.ts": [
+        "./src/commons/file.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/thenable.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/configuration.d.ts": [
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/workspacefolders.d.ts": [
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/files.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/main.d.ts": [
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageserver/lib/configuration.d.ts",
+        "./node_modules/vscode-languageserver/lib/workspacefolders.d.ts",
+        "./node_modules/vscode-languageserver/lib/files.d.ts",
+        "./node_modules/vscode-languageserver/lib/thenable.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./src/cobol/diagnostic/coboldiagnostic.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/diagnostic/textposition.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/diagnostic/textrange.ts": [
+        "./src/cobol/diagnostic/textposition.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/commons/completionutils.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/diagnostic/coboldiagnosticparser.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/cobol/diagnostic/coboldiagnostic.ts",
+        "./src/cobol/diagnostic/textrange.ts",
+        "./src/cobol/diagnostic/textposition.ts",
+        "./src/commons/file.ts",
+        "./src/commons/path.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/q/index.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/diagnostic/diagnostician.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/cobol/diagnostic/coboldiagnostic.ts",
+        "./src/commons/path.ts",
+        "./src/commons/file.ts",
+        "./src/cobol/diagnostic/coboldiagnosticparser.ts",
+        "./src/cobol/diagnostic/coboldiagnosticpreprocmanager.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/formatterinterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/formatterutils.ts": [
+        "./src/lsp/commons/completionutils.ts",
+        "./src/cobol/parsercobol.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/ifformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/formatter/formatterutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/commandseparatorformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/whenformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/formatter/evaluateformatter.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/evaluateformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/formatter/formatterutils.ts",
+        "./src/lsp/formatter/whenformatter.ts",
+        "./src/lsp/formatter/commandseparatorformatter.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/performuntilexitformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/formatter/formatterutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/elseformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/formatter/ifformatter.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/performvaryingformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/commentaryformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts",
+        "./src/lsp/formatter/formatterutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/formatter/cobolformatter.ts": [
+        "./src/cobol/parsercobol.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts",
+        "./src/lsp/formatter/ifformatter.ts",
+        "./src/lsp/formatter/commandseparatorformatter.ts",
+        "./src/lsp/formatter/evaluateformatter.ts",
+        "./src/lsp/formatter/formatterutils.ts",
+        "./src/lsp/formatter/whenformatter.ts",
+        "./src/lsp/formatter/performuntilexitformatter.ts",
+        "./src/lsp/formatter/elseformatter.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/formatter/performvaryingformatter.ts",
+        "./src/lsp/formatter/commentaryformatter.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/completioninterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/performcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/movecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/tocompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/evaluatecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/performuntilexitcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/setcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/performvaryingcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/addcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/subtractcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/fromcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/exitparagraphcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/exitperformcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/exitcyclecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/flagcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/totruecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/completion/tocompletion.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/picturecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/valuecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/elsecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/formatter/elseformatter.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/variable/variableinserttextbuilder.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/variable/variablenameinserttextbuilder.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/variable/variablecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/cobol/expandedsourcemanager.ts",
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts",
+        "./src/lsp/completion/variable/variablenameinserttextbuilder.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/emptycompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/whencompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/declaration/coboldeclarationfinder.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/commons/rechposition.ts",
+        "./src/commons/file.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/endcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/formatter/formatterutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/variable/variablecompletionfactory.ts": [
+        "./src/lsp/completion/variable/variablecompletion.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/variable/commadotinserttextbuilder.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/variable/totrueinserttextbuilder.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts",
+        "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/parser/assignercommandparser.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/method/methodcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/declaration/coboldeclarationfinder.ts",
+        "./src/commons/rechposition.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/commons/file.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/commons/path.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/lsp/completion/cobolmethod.ts",
+        "./node_modules/@types/q/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/cobolcompletionitemfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/lsp/completion/performcompletion.ts",
+        "./src/lsp/completion/movecompletion.ts",
+        "./src/lsp/completion/tocompletion.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/completion/evaluatecompletion.ts",
+        "./src/lsp/completion/performuntilexitcompletion.ts",
+        "./src/lsp/completion/setcompletion.ts",
+        "./src/lsp/completion/performvaryingcompletion.ts",
+        "./src/lsp/completion/addcompletion.ts",
+        "./src/lsp/completion/subtractcompletion.ts",
+        "./src/lsp/completion/fromcompletion.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/completion/exitparagraphcompletion.ts",
+        "./src/lsp/completion/exitperformcompletion.ts",
+        "./src/lsp/completion/exitcyclecompletion.ts",
+        "./src/lsp/completion/flagcompletion.ts",
+        "./src/lsp/completion/totruecompletion.ts",
+        "./src/lsp/completion/picturecompletion.ts",
+        "./src/lsp/completion/valuecompletion.ts",
+        "./src/lsp/completion/elsecompletion.ts",
+        "./node_modules/@types/q/index.d.ts",
+        "./src/lsp/completion/variable/variablecompletion.ts",
+        "./src/lsp/completion/emptycompletion.ts",
+        "./src/lsp/completion/whencompletion.ts",
+        "./src/lsp/completion/endcompletion.ts",
+        "./src/lsp/completion/variable/variablecompletionfactory.ts",
+        "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts",
+        "./src/lsp/completion/variable/commadotinserttextbuilder.ts",
+        "./src/lsp/completion/variable/totrueinserttextbuilder.ts",
+        "./src/commons/cobolwordfinder.ts",
+        "./src/lsp/completion/parser/assignercommandparser.ts",
+        "./src/lsp/completion/method/methodcompletion.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/dynamicjsoncompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/commons/file.ts",
+        "./src/helpers/configuration.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/paragraphcompletion.ts": [
+        "./src/cobol/parsercobol.ts",
+        "./src/cobol/rechdoc/coboldocparser.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/cobol/expandedsourcemanager.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/highlight/highlightinterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/highlight/defaulthighlight.ts": [
+        "./src/lsp/highlight/highlightinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/highlight/ifhighlight.ts": [
+        "./src/lsp/highlight/highlightinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/highlight/evaluatehighlight.ts": [
+        "./src/lsp/highlight/highlightinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/highlight/performhighlight.ts": [
+        "./src/lsp/highlight/highlightinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/defaulthighlight.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/highlight/tryhighlight.ts": [
+        "./src/lsp/highlight/highlightinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/highlight/constanttesthighlight.ts": [
+        "./src/lsp/highlight/highlightinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/highlight/highlightfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/defaulthighlight.ts",
+        "./src/lsp/highlight/ifhighlight.ts",
+        "./src/lsp/highlight/evaluatehighlight.ts",
+        "./src/lsp/highlight/performhighlight.ts",
+        "./src/lsp/highlight/tryhighlight.ts",
+        "./src/lsp/highlight/constanttesthighlight.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/cobolfoldinterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/copyfolding.ts": [
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/variablefolding.ts": [
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/iffolding.ts": [
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/elsefolding.ts": [
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/evaluatefolding.ts": [
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/whenfolding.ts": [
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/paragraphfolding.ts": [
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/cobol/parsercobol.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/performuntilfolding.ts": [
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/performwithtest.ts": [
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/fold/cobolfoldfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/copyfolding.ts",
+        "./node_modules/@types/q/index.d.ts",
+        "./src/lsp/fold/variablefolding.ts",
+        "./src/lsp/fold/iffolding.ts",
+        "./src/lsp/fold/elsefolding.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts",
+        "./src/lsp/fold/evaluatefolding.ts",
+        "./src/lsp/fold/whenfolding.ts",
+        "./src/lsp/fold/paragraphfolding.ts",
+        "./src/lsp/fold/performuntilfolding.ts",
+        "./src/lsp/fold/performwithtest.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/completion/classcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/cobol/rechdoc/coboldocparser.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/references/cobolreferencesfinder.ts": [
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/commons/rechposition.ts",
+        "./src/cobol/cobolregexutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/actioninterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/removeparenthesesaction.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/commons/renamingutils.ts": [
+        "./src/commons/rechposition.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/converttocamelcaseaction.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/commons/rechposition.ts",
+        "./src/lsp/references/cobolreferencesfinder.ts",
+        "./src/lsp/commons/renamingutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/removevariableaction.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/cobol/rechdoc/elementdocumentationextractor.ts",
+        "./src/cobol/rechdoc/coboldocparser.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/replacezeroswithspacesaction.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/removestaticclauseaction.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/insertstaticclauseaction.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/replacecommawithdotaction.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/removeremainingclauseaction.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/subprogram/subprogramutils.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/subprogram/insertsubprogramdeclarationaction.ts": [
+        "./src/lsp/actions/actioninterface.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./src/lsp/actions/subprogram/subprogramutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/cobolactionfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/q/index.d.ts",
+        "./src/lsp/actions/removeparenthesesaction.ts",
+        "./src/lsp/actions/converttocamelcaseaction.ts",
+        "./src/lsp/actions/removevariableaction.ts",
+        "./src/lsp/actions/actioninterface.ts",
+        "./src/lsp/actions/replacezeroswithspacesaction.ts",
+        "./src/lsp/actions/removestaticclauseaction.ts",
+        "./src/lsp/actions/insertstaticclauseaction.ts",
+        "./src/lsp/actions/replacecommawithdotaction.ts",
+        "./src/lsp/actions/removeremainingclauseaction.ts",
+        "./src/lsp/actions/subprogram/insertsubprogramdeclarationaction.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/server.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/declaration/coboldeclarationfinder.ts",
+        "./src/commons/path.ts",
+        "./src/commons/rechposition.ts",
+        "./src/commons/cobolwordfinder.ts",
+        "./src/cobol/diagnostic/diagnostician.ts",
+        "./src/lsp/formatter/cobolformatter.ts",
+        "./src/lsp/completion/cobolcompletionitemfactory.ts",
+        "./src/lsp/completion/dynamicjsoncompletion.ts",
+        "./src/lsp/completion/paragraphcompletion.ts",
+        "./src/lsp/highlight/highlightfactory.ts",
+        "./src/lsp/fold/cobolfoldfactory.ts",
+        "./src/cobol/expandedsourcemanager.ts",
+        "./src/lsp/completion/variable/variablecompletion.ts",
+        "./src/lsp/completion/variable/variablecompletionfactory.ts",
+        "./src/commons/log.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/cobol/diagnostic/coboldiagnosticparser.ts",
+        "./src/lsp/completion/classcompletion.ts",
+        "./src/lsp/completion/method/methodcompletion.ts",
+        "./src/lsp/references/cobolreferencesfinder.ts",
+        "./src/lsp/actions/cobolactionfactory.ts",
+        "./src/lsp/commons/renamingutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode/lib/testrunner.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/index.ts": [
+        "./node_modules/vscode/lib/testrunner.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/chai/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/mocha/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/commons/cobolwordfinder.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/commons/cobolwordfinder.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/commons/file.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/commons/file.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/commons/scan.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./src/commons/file.ts",
+        "./src/commons/path.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/commons/completionutils.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/commons/completionutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/completion/cobolcompletionitemfactory.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/completion/cobolcompletionitemfactory.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/completion/cobolvariable.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/commons/file.ts",
+        "./src/commons/path.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/completion/tocompletion.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/completion/tocompletion.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/commadotinserttextbuilder.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/completion/variable/commadotinserttextbuilder.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/commandseparatorinserttextbuilder.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/totrueinserttextbuilder.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/completion/variable/totrueinserttextbuilder.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/variablecompletion.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/completion/variable/variablecompletion.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/variablenameinserttextbuilder.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts",
+        "./src/lsp/completion/variable/variablenameinserttextbuilder.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/formatter/elseformatter.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/formatter/elseformatter.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/formatter/performvaryingformatter.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/formatter/performvaryingformatter.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/highlight/ifhighlight.test.ts": [
+        "./node_modules/@types/chai/index.d.ts",
+        "./node_modules/@types/mocha/index.d.ts",
+        "./src/lsp/highlight/ifhighlight.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/iconv-lite/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "./node_modules/typescript/lib/lib.es5.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2016.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.core.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.collection.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.generator.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.iterable.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.promise.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.proxy.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.reflect.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.symbol.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2016.array.include.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.object.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.string.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.intl.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/typescript/lib/lib.es2017.typedarrays.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode/vscode.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/q/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/iconv-lite/lib/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/executor.ts": [
+        "./src/commons/process.ts"
+      ],
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts": [
+        "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts",
+        "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/commons/genericexecutor.ts": [
+        "./src/commons/path.ts"
+      ],
+      "./src/editor/positionfinder.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/editor/editor.ts": [
+        "./src/commons/path.ts",
+        "./src/commons/rechposition.ts",
+        "./src/commons/genericexecutor.ts"
+      ],
+      "./src/cobol/gerador-cobol.ts": [
+        "./src/editor/editor.ts"
+      ],
+      "./node_modules/@types/node/inspector.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/node/base.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/inspector.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/node/ts3.2/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/typings/thenable.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/messages.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/events.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/main.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts",
+        "./node_modules/vscode-jsonrpc/typings/thenable.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/main.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/colorprovider.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/implementation.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/typedefinition.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/configuration.d.ts": [
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/foldingrange.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/codeconverter.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/client.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/colorprovider.d.ts",
+        "./node_modules/vscode-languageclient/lib/implementation.d.ts",
+        "./node_modules/vscode-languageclient/lib/typedefinition.d.ts",
+        "./node_modules/vscode-languageclient/lib/configuration.d.ts",
+        "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts",
+        "./node_modules/vscode-languageclient/lib/foldingrange.d.ts",
+        "./node_modules/vscode-languageclient/lib/codeconverter.d.ts",
+        "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/main.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/client.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/commons/variableutils.ts": [
+        "./src/lsp/completion/cobolvariable.ts"
+      ],
+      "./src/cobol/rechdoc/coboldoc.ts": [
+        "./src/cobol/rechdoc/docelement.ts"
+      ],
+      "./src/cobol/rechdoc/coboldocparser.ts": [
+        "./src/cobol/rechdoc/coboldoc.ts",
+        "./src/lsp/completion/cobolvariable.ts"
+      ],
+      "./src/lsp/completion/cobolvariable.ts": [
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/decoration/parser.ts": [
+        "./node_modules/vscode/vscode.d.ts"
+      ],
+      "./src/decoration/customdecorator.ts": [
+        "./node_modules/vscode/vscode.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/elementinterface.ts": [
+        "./node_modules/vscode/vscode.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/elementsdisplayer.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts"
+      ],
+      "./src/cobol/elementsdisplayer/variable/variableelement.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts"
+      ],
+      "./src/cobol/elementsdisplayer/variable/variabledisplayer.ts": [
+        "./src/lsp/completion/cobolvariable.ts"
+      ],
+      "./src/cobol/elementsdisplayer/copy/copyelement.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts"
+      ],
+      "./src/cobol/elementsdisplayer/copy/copydisplayer.ts": [
+        "./src/cobol/cobolcopy.ts"
+      ],
+      "./src/cobol/elementsdisplayer/class/classelement.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts"
+      ],
+      "./src/cobol/elementsdisplayer/class/classdisplayer.ts": [
+        "./src/lsp/completion/cobolvariable.ts"
+      ],
+      "./src/lsp/completion/cobolmethod.ts": [
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/cobol/rechdoc/coboldoc.ts"
+      ],
+      "./src/lsp/declaration/coboldeclarationfinder.ts": [
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/extension.ts": [
+        "./src/commons/executor.ts",
+        "./src/commons/cobolwordfinder.ts",
+        "./src/commons/variableutils.ts",
+        "./src/commons/file.ts",
+        "./src/commons/path.ts",
+        "./src/commons/process.ts",
+        "./src/editor/editor.ts",
+        "./src/editor/sourceexpander.ts",
+        "./src/commons/rechposition.ts",
+        "./src/commons/genericexecutor.ts",
+        "./src/indent/indent.ts",
+        "./src/cobol/parsercobol.ts",
+        "./src/cobol/gerador-cobol.ts",
+        "./src/cobol/rechdoc/elementdocumentationextractor.ts",
+        "./src/cobol/rechdoc/coboldocparser.ts",
+        "./src/lsp/declaration/coboldeclarationfinder.ts",
+        "./src/cobol/diagnostic/coboldiagnosticfilter.ts",
+        "./src/cobol/expandedsourcemanager.ts",
+        "./src/cobol/tabstopper.ts",
+        "./src/commons/log.ts"
+      ],
+      "./src/cobol/diagnostic/coboldiagnosticpreprocmanager.ts": [
+        "./src/commons/file.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/thenable.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/configuration.d.ts": [
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/workspacefolders.d.ts": [
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/files.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver/lib/main.d.ts": [
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageserver/lib/configuration.d.ts",
+        "./node_modules/vscode-languageserver/lib/workspacefolders.d.ts",
+        "./node_modules/vscode-languageserver/lib/files.d.ts",
+        "./node_modules/vscode-languageserver/lib/thenable.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./src/cobol/diagnostic/coboldiagnostic.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/cobol/diagnostic/textrange.ts": [
+        "./src/cobol/diagnostic/textposition.ts"
+      ],
+      "./src/cobol/diagnostic/coboldiagnosticparser.ts": [
+        "./src/cobol/diagnostic/coboldiagnostic.ts"
+      ],
+      "./src/cobol/diagnostic/diagnostician.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/formatter/formatterinterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/formatter/formatterutils.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/formatter/ifformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/commandseparatorformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/whenformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/evaluateformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/performuntilexitformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/elseformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/performvaryingformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/commentaryformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/cobolformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/completion/completioninterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/completion/performcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/movecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/tocompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/evaluatecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/performuntilexitcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/setcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/performvaryingcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/addcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/subtractcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/fromcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/exitparagraphcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/exitperformcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/exitcyclecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/flagcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/totruecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/picturecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/valuecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/elsecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/variable/variablenameinserttextbuilder.ts": [
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
+      ],
+      "./src/lsp/completion/variable/variablecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/emptycompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/whencompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/endcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/variable/variablecompletionfactory.ts": [
+        "./src/lsp/completion/variable/variablecompletion.ts"
+      ],
+      "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts": [
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
+      ],
+      "./src/lsp/completion/variable/commadotinserttextbuilder.ts": [
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
+      ],
+      "./src/lsp/completion/variable/totrueinserttextbuilder.ts": [
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
+      ],
+      "./src/lsp/completion/method/methodcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/cobolcompletionitemfactory.ts": [
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/completion/variable/variablecompletionfactory.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/completion/dynamicjsoncompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/paragraphcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/highlight/highlightinterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/highlight/defaulthighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/highlight/ifhighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/highlight/evaluatehighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/highlight/performhighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/highlight/tryhighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/highlight/constanttesthighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/highlight/highlightfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/fold/cobolfoldinterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/fold/copyfolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/variablefolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/iffolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/elsefolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/evaluatefolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/whenfolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/paragraphfolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/performuntilfolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/performwithtest.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/cobolfoldfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/completion/classcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/references/cobolreferencesfinder.ts": [
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/lsp/actions/actioninterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/actions/removeparenthesesaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/commons/renamingutils.ts": [
+        "./src/commons/rechposition.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/actions/converttocamelcaseaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/removevariableaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/replacezeroswithspacesaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/removestaticclauseaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/insertstaticclauseaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/replacecommawithdotaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/removeremainingclauseaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/subprogram/insertsubprogramdeclarationaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/cobolactionfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/server.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/commons/rechposition.ts"
+      ],
+      "./node_modules/vscode/lib/testrunner.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/chai/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/mocha/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/commons/cobolwordfinder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/commons/file.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/commons/scan.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/commons/completionutils.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/cobolcompletionitemfactory.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/cobolvariable.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/tocompletion.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/commadotinserttextbuilder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/commandseparatorinserttextbuilder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/totrueinserttextbuilder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/variablecompletion.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/variablenameinserttextbuilder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/formatter/elseformatter.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/formatter/performvaryingformatter.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/highlight/ifhighlight.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./node_modules/@types/iconv-lite/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "./node_modules/typescript/lib/lib.es5.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.d.ts",
+      "./node_modules/typescript/lib/lib.es2016.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.core.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.collection.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.generator.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.promise.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.proxy.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.reflect.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.symbol.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts",
+      "./node_modules/typescript/lib/lib.es2016.array.include.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.object.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.string.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.intl.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.typedarrays.d.ts",
+      "./node_modules/vscode/vscode.d.ts",
+      "./src/commons/path.ts",
+      "./src/commons/rechposition.ts",
+      "./node_modules/@types/q/index.d.ts",
+      "./src/commons/file.ts",
+      "./src/commons/process.ts",
+      "./node_modules/iconv-lite/lib/index.d.ts",
+      "./src/commons/executor.ts",
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/scan.d.ts",
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/buffersplitter.d.ts",
+      "../../../../../fontes/ts/rech-ts-commons/out/buffer/wordfinder.d.ts",
+      "../../../../../fontes/ts/rech-ts-commons/out/index.d.ts",
+      "./src/indent/indent.ts",
+      "./src/commons/genericexecutor.ts",
+      "./src/editor/positionfinder.ts",
+      "./src/editor/editor.ts",
+      "./src/cobol/diagnostic/coboldiagnosticfilter.ts",
+      "./src/helpers/configuration.ts",
+      "./src/dependencieinjection.ts",
+      "./src/cobol/colunas.ts",
+      "./src/cobol/gerador-cobol.ts",
+      "./src/cobol/tabstopper.ts",
+      "./node_modules/@types/node/inspector.d.ts",
+      "./node_modules/@types/node/base.d.ts",
+      "./node_modules/@types/node/ts3.2/index.d.ts",
+      "./node_modules/vscode-jsonrpc/typings/thenable.d.ts",
+      "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+      "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+      "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+      "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+      "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts",
+      "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts",
+      "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts",
+      "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts",
+      "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+      "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+      "./node_modules/vscode-languageclient/lib/colorprovider.d.ts",
+      "./node_modules/vscode-languageclient/lib/implementation.d.ts",
+      "./node_modules/vscode-languageclient/lib/typedefinition.d.ts",
+      "./node_modules/vscode-languageclient/lib/configuration.d.ts",
+      "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts",
+      "./node_modules/vscode-languageclient/lib/foldingrange.d.ts",
+      "./node_modules/vscode-languageclient/lib/codeconverter.d.ts",
+      "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts",
+      "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts",
+      "./node_modules/vscode-languageclient/lib/client.d.ts",
+      "./node_modules/vscode-languageclient/lib/main.d.ts",
+      "./src/commons/log.ts",
+      "./src/editor/sourceexpander.ts",
+      "./src/lsp/commons/sourceofcompletions.ts",
+      "./src/lsp/fold/foldstatusbar.ts",
+      "./src/cobol/expandedsourcestatusbar.ts",
+      "./src/lsp/client.ts",
+      "./src/cobol/rechdoc/elementdocumentationextractor.ts",
+      "./src/commons/variableutils.ts",
+      "./src/cobol/rechdoc/docelement.ts",
+      "./src/cobol/rechdoc/coboldoc.ts",
+      "./src/cobol/rechdoc/coboldocparser.ts",
+      "./src/lsp/completion/cobolvariable.ts",
+      "./src/cobol/cobolregexutils.ts",
+      "./src/decoration/parser.ts",
+      "./src/decoration/customdecorator.ts",
+      "./src/cobol/parsercobol.ts",
+      "./src/cobol/elementsdisplayer/elementinterface.ts",
+      "./src/cobol/elementsdisplayer/elementsdisplayer.ts",
+      "./src/cobol/elementsdisplayer/variable/variableelement.ts",
+      "./src/cobol/elementsdisplayer/variable/variabledisplayer.ts",
+      "./src/cobol/cobolcopy.ts",
+      "./src/cobol/elementsdisplayer/copy/copyelement.ts",
+      "./src/cobol/elementsdisplayer/copy/copydisplayer.ts",
+      "./src/cobol/elementsdisplayer/class/classelement.ts",
+      "./src/cobol/elementsdisplayer/class/classdisplayer.ts",
+      "./src/cobol/elementsdisplayer/elementsdisplayerfactory.ts",
+      "./src/commons/cobolwordfinder.ts",
+      "./src/cobol/expandedsourcemanager.ts",
+      "./src/lsp/completion/cobolmethod.ts",
+      "./src/lsp/declaration/coboldeclarationfinder.ts",
+      "./src/extension.ts",
+      "./src/cobol/posicionamento.ts",
+      "./src/cobol/diagnostic/coboldiagnosticpreprocmanager.ts",
+      "./node_modules/vscode-languageserver/lib/thenable.d.ts",
+      "./node_modules/vscode-languageserver/lib/configuration.d.ts",
+      "./node_modules/vscode-languageserver/lib/workspacefolders.d.ts",
+      "./node_modules/vscode-languageserver/lib/files.d.ts",
+      "./node_modules/vscode-languageserver/lib/main.d.ts",
+      "./src/cobol/diagnostic/coboldiagnostic.ts",
+      "./src/cobol/diagnostic/textposition.ts",
+      "./src/cobol/diagnostic/textrange.ts",
+      "./src/lsp/commons/completionutils.ts",
+      "./src/cobol/diagnostic/coboldiagnosticparser.ts",
+      "./src/cobol/diagnostic/diagnostician.ts",
+      "./src/lsp/formatter/formatterinterface.ts",
+      "./src/lsp/formatter/formatterutils.ts",
+      "./src/lsp/formatter/ifformatter.ts",
+      "./src/lsp/formatter/commandseparatorformatter.ts",
+      "./src/lsp/formatter/whenformatter.ts",
+      "./src/lsp/formatter/evaluateformatter.ts",
+      "./src/lsp/formatter/performuntilexitformatter.ts",
+      "./src/lsp/formatter/elseformatter.ts",
+      "./src/lsp/formatter/performvaryingformatter.ts",
+      "./src/lsp/formatter/commentaryformatter.ts",
+      "./src/lsp/formatter/cobolformatter.ts",
+      "./src/lsp/completion/completioninterface.ts",
+      "./src/lsp/completion/performcompletion.ts",
+      "./src/lsp/completion/movecompletion.ts",
+      "./src/lsp/completion/tocompletion.ts",
+      "./src/lsp/completion/evaluatecompletion.ts",
+      "./src/lsp/completion/performuntilexitcompletion.ts",
+      "./src/lsp/completion/setcompletion.ts",
+      "./src/lsp/completion/performvaryingcompletion.ts",
+      "./src/lsp/completion/addcompletion.ts",
+      "./src/lsp/completion/subtractcompletion.ts",
+      "./src/lsp/completion/fromcompletion.ts",
+      "./src/lsp/completion/exitparagraphcompletion.ts",
+      "./src/lsp/completion/exitperformcompletion.ts",
+      "./src/lsp/completion/exitcyclecompletion.ts",
+      "./src/lsp/completion/flagcompletion.ts",
+      "./src/lsp/completion/totruecompletion.ts",
+      "./src/lsp/completion/picturecompletion.ts",
+      "./src/lsp/completion/valuecompletion.ts",
+      "./src/lsp/completion/elsecompletion.ts",
+      "./src/lsp/completion/variable/variableinserttextbuilder.ts",
+      "./src/lsp/completion/variable/variablenameinserttextbuilder.ts",
+      "./src/lsp/completion/variable/variablecompletion.ts",
+      "./src/lsp/completion/emptycompletion.ts",
+      "./src/lsp/completion/whencompletion.ts",
+      "./src/lsp/completion/endcompletion.ts",
+      "./src/lsp/completion/variable/variablecompletionfactory.ts",
+      "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts",
+      "./src/lsp/completion/variable/commadotinserttextbuilder.ts",
+      "./src/lsp/completion/variable/totrueinserttextbuilder.ts",
+      "./src/lsp/completion/parser/assignercommandparser.ts",
+      "./src/lsp/completion/method/methodcompletion.ts",
+      "./src/lsp/completion/cobolcompletionitemfactory.ts",
+      "./src/lsp/completion/dynamicjsoncompletion.ts",
+      "./src/lsp/completion/paragraphcompletion.ts",
+      "./src/lsp/highlight/highlightinterface.ts",
+      "./src/lsp/highlight/defaulthighlight.ts",
+      "./src/lsp/highlight/ifhighlight.ts",
+      "./src/lsp/highlight/evaluatehighlight.ts",
+      "./src/lsp/highlight/performhighlight.ts",
+      "./src/lsp/highlight/tryhighlight.ts",
+      "./src/lsp/highlight/constanttesthighlight.ts",
+      "./src/lsp/highlight/highlightfactory.ts",
+      "./src/lsp/fold/cobolfoldinterface.ts",
+      "./src/lsp/fold/copyfolding.ts",
+      "./src/lsp/fold/variablefolding.ts",
+      "./src/lsp/fold/iffolding.ts",
+      "./src/lsp/fold/elsefolding.ts",
+      "./src/lsp/fold/evaluatefolding.ts",
+      "./src/lsp/fold/whenfolding.ts",
+      "./src/lsp/fold/paragraphfolding.ts",
+      "./src/lsp/fold/performuntilfolding.ts",
+      "./src/lsp/fold/performwithtest.ts",
+      "./src/lsp/fold/cobolfoldfactory.ts",
+      "./src/lsp/completion/classcompletion.ts",
+      "./src/lsp/references/cobolreferencesfinder.ts",
+      "./src/lsp/actions/actioninterface.ts",
+      "./src/lsp/actions/removeparenthesesaction.ts",
+      "./src/lsp/commons/renamingutils.ts",
+      "./src/lsp/actions/converttocamelcaseaction.ts",
+      "./src/lsp/actions/removevariableaction.ts",
+      "./src/lsp/actions/replacezeroswithspacesaction.ts",
+      "./src/lsp/actions/removestaticclauseaction.ts",
+      "./src/lsp/actions/insertstaticclauseaction.ts",
+      "./src/lsp/actions/replacecommawithdotaction.ts",
+      "./src/lsp/actions/removeremainingclauseaction.ts",
+      "./src/lsp/actions/subprogram/subprogramutils.ts",
+      "./src/lsp/actions/subprogram/insertsubprogramdeclarationaction.ts",
+      "./src/lsp/actions/cobolactionfactory.ts",
+      "./node_modules/vscode/lib/testrunner.d.ts",
+      "./src/test/index.ts",
+      "./node_modules/@types/chai/index.d.ts",
+      "./node_modules/@types/mocha/index.d.ts",
+      "./src/test/commons/cobolwordfinder.test.ts",
+      "./src/test/commons/file.test.ts",
+      "./src/test/commons/scan.test.ts",
+      "./src/test/lsp/commons/completionutils.test.ts",
+      "./src/test/lsp/completion/cobolcompletionitemfactory.test.ts",
+      "./src/test/lsp/completion/cobolvariable.test.ts",
+      "./src/test/lsp/completion/tocompletion.test.ts",
+      "./src/test/lsp/completion/variable/commadotinserttextbuilder.test.ts",
+      "./src/test/lsp/completion/variable/commandseparatorinserttextbuilder.test.ts",
+      "./src/test/lsp/completion/variable/totrueinserttextbuilder.test.ts",
+      "./src/test/lsp/completion/variable/variablecompletion.test.ts",
+      "./src/test/lsp/completion/variable/variablenameinserttextbuilder.test.ts",
+      "./src/test/lsp/formatter/elseformatter.test.ts",
+      "./src/test/lsp/formatter/performvaryingformatter.test.ts",
+      "./src/test/lsp/highlight/ifhighlight.test.ts",
+      "./node_modules/@types/iconv-lite/index.d.ts",
+      "./src/lsp/server.ts"
+    ]
+  },
+  "version": "3.7.4"
+}

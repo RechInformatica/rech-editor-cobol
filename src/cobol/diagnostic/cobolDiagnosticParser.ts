@@ -5,9 +5,8 @@ import { TextRange } from "./textRange";
 import { TextPosition } from "./textPosition";
 import { File } from "../../commons/file";
 import { Path } from "../../commons/path";
-import { Scan } from "../../commons/Scan";
+import { Scan, BufferSplitter } from "rech-ts-commons";
 import Q from "q";
-import { BufferSplitter } from "../../commons/BufferSplitter";
 import { CompletionUtils } from "../../lsp/commons/CompletionUtils";
 
 /**

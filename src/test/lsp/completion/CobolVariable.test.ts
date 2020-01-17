@@ -4,7 +4,7 @@ import * as path from "path";
 import { CobolVariable, Type } from '../../../lsp/completion/CobolVariable';
 import { File } from '../../../commons/file';
 import { Path } from '../../../commons/path';
-import { BufferSplitter } from '../../../commons/BufferSplitter';
+import { BufferSplitter } from 'rech-ts-commons';
 
 describe('Cobol variable declaration parser test', () => {
 

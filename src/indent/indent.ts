@@ -3,7 +3,7 @@
 import { File } from '../commons/file';
 import { Executor } from '../commons/executor';
 import * as iconv from 'iconv-lite';
-import { BufferSplitter } from '../commons/BufferSplitter';
+import { BufferSplitter } from 'rech-ts-commons';
 
 /** Time in millis representing an old indent file */
 const INDENT_OLD_FILE_IN_MILLIS: number = 3000;

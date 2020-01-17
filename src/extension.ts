@@ -133,8 +133,6 @@ export * from "./commons/VariableUtils";
 export * from "./commons/file";
 export * from "./commons/path";
 export * from "./commons/Process";
-export * from "./commons/Scan";
-export * from "./commons/BufferSplitter";
 export * from "./editor/editor";
 export * from "./editor/SourceExpander";
 export * from "./commons/rechposition";

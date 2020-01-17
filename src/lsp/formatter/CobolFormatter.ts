@@ -11,7 +11,7 @@ import { ElseFormatter } from "./ElseFormatter";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { PerformVaryingFormatter } from "./PerformVaryingFormatter";
 import { CommentaryFormatter } from "./CommentaryFormatter";
-import { BufferSplitter } from "../../commons/BufferSplitter";
+import { BufferSplitter } from "rech-ts-commons";
 
 /**
  * Class to format Cobol source code

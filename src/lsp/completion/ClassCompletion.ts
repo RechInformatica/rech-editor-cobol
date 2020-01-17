@@ -2,10 +2,8 @@ import { CompletionItemKind, CompletionItem, MarkupKind } from "vscode-languages
 import { CompletionInterface } from "./CompletionInterface";
 import { ParserCobol } from "../../cobol/parsercobol";
 import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
-import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
-import { Scan } from "../../commons/Scan";
+import { Scan } from "rech-ts-commons";
 import { CobolVariable } from "./CobolVariable";
-import { BufferSplitter } from "../../commons/BufferSplitter";
 
 /**
  * Class to generate LSP Completion Items for Cobol 'add' clause

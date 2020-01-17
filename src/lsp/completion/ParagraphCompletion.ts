@@ -2,9 +2,8 @@ import { ParserCobol } from "../../cobol/parsercobol";
 import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
 import { MarkupKind, CompletionItemKind, CompletionItem } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
-import { Scan } from "../../commons/Scan";
+import { Scan, BufferSplitter } from "rech-ts-commons";
 import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
-import { BufferSplitter } from "../../commons/BufferSplitter";
 import { CompletionUtils } from "../commons/CompletionUtils";
 
 /**
