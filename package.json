@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit Cobol files with Visual Studio Code",
-	"version": "1.0.65",
+	"version": "1.0.64",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.35.0"
@@ -150,7 +150,65 @@
 				"path": "./snippets/cobol.json"
 			}
 		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "cobolflow",
+					"title": "Cobol Flow",
+					"icon": "images/flow.svg"
+				}
+			]
+		},
+		"views": {
+			"cobolflow": [
+				{
+					"id": "cobolflowview",
+					"name": "Cobol Flow View"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "rech.editor.cobol.flowparser",
+					"when": "view == cobolflowview",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "rech.editor.cobol.gotoFlowLine",
+					"when": "view == cobolflowview",
+					"group": "inline"
+				}
+			],
+			"editor/context": [
+				{
+					"command": "rech.editor.cobol.flowparser",
+					"when": "editorTextFocus",
+					"group": "navigation"
+
+				}
+			]
+		},
 		"commands": [
+			{
+				"command": "rech.editor.cobol.gotoFlowLine",
+				"title": "Rech COBOL: Go to selected line in flow view",
+				"enablement": "view == cobolflowview",
+				"icon": {
+					"dark": "images/goto-icon-dark.svg",
+					"light": "images/goto-icon-light.svg"
+				}
+			},
+			{
+				"command": "rech.editor.cobol.flowparser",
+				"title": "Rech COBOL: Analyze source code flow",
+				"icon": {
+					"dark": "images/flow-parser-dark.svg",
+					"light": "images/flow-parser-light.svg"
+				}
+			},
 			{
 				"command": "rech.editor.cobol.cobolInsertStartComment",
 				"title": "Rech COBOL: Inserts a '*>->' comment at the begginig of the current line"

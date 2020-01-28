@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { commands } from 'vscode';
+import { commands, window } from 'vscode';
 import { GeradorCobol } from './cobol/gerador-cobol';
 import { Editor } from './editor/editor';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
@@ -13,6 +13,7 @@ import { Log } from './commons/Log';
 import { configuration } from './helpers/configuration';
 import { FoldStatusBar } from './lsp/fold/FoldStatusBar';
 import { ExpandedSourceStatusBar } from './cobol/ExpandedSourceStatusBar';
+import FlowProvider from './sourceflow/treeView/providers/FlowProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -40,6 +41,11 @@ async function _activate(context: any) {
     CustomDecorator.activate(context);
     //
     SourceOfCompletions.show();
+
+    // This register the provider from the Flow list view
+    const flowProvider = new FlowProvider(context);
+    window.registerTreeDataProvider("cobolflowview", flowProvider);
+
     //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
