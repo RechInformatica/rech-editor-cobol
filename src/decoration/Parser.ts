@@ -1,7 +1,7 @@
 import { Range, TextEditor, DecorationRenderOptions, window, TextEditorDecorationType, Position } from "vscode";
 import { CobolVariable } from "../lsp/completion/CobolVariable";
 import { VariableUtils } from "../commons/VariableUtils";
-import { Scan } from "../commons/Scan";
+import { Scan } from "rech-ts-commons";
 import { Configuration } from "../helpers/configuration";
 import Q from "q";
 import { CobolRegexUtils } from "../cobol/CobolRegexUtils";

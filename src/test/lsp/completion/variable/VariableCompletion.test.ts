@@ -1,10 +1,9 @@
-import { CompletionItemKind } from "vscode-languageserver";
 import { expect } from 'chai';
 import 'mocha';
 import { VariableCompletion } from '../../../../lsp/completion/variable/VariableCompletion';
 import { CompletionItem } from 'vscode';
 import { VariableInsertTextBuilder } from '../../../../lsp/completion/variable/VariableInsertTextBuilder';
-import { BufferSplitter } from '../../../../commons/BufferSplitter';
+import { BufferSplitter } from 'rech-ts-commons';
 
 //
 let buffer = "      *>--------------------------------------------------------------------------------------------------------------<*\r\n" +

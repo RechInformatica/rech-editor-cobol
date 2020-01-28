@@ -6,7 +6,7 @@ import { CobolVariable } from "../CobolVariable";
 import { File } from "../../../commons/file";
 import { ParserCobol } from "../../../cobol/parsercobol";
 import { Path } from "../../../commons/path";
-import { Scan } from "../../../commons/Scan";
+import { Scan } from "rech-ts-commons";
 import { CobolMethod } from "../CobolMethod";
 import Q from "q";
 

@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import "mocha";
 import * as path from "path";
-import { Scan } from "../../commons/Scan";
+import { Scan } from "rech-ts-commons";
 import { File } from "../../commons/file";
 import { Path } from "../../commons/path";
 

@@ -7,7 +7,7 @@ import { VariableDisplayer } from "./variable/VariableDisplayer";
 import { CobolCopy } from "../CobolCopy";
 import { copyDisplayer } from "./copy/CopyDisplayer";
 import { window } from "vscode";
-import { BufferSplitter } from "../../commons/BufferSplitter";
+import { BufferSplitter } from "rech-ts-commons";
 import { ClassDisplayer } from "./class/ClassDisplayer";
 
 /**

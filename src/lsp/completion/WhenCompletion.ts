@@ -5,7 +5,7 @@ import { ParserCobol } from "../../cobol/parsercobol";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { RechPosition } from "../../commons/rechposition";
 import { File } from "../../commons/file";
-import { BufferSplitter } from "../../commons/BufferSplitter";
+import { BufferSplitter } from "rech-ts-commons";
 
 /**
  * Class to generate LSP Completion Items for 'when' clause

@@ -1,11 +1,10 @@
 import { CompletionItemKind, CompletionItem, MarkupKind } from "vscode-languageserver";
 import { CompletionInterface } from "../CompletionInterface";
-import { Scan } from "../../../commons/Scan";
+import { Scan, BufferSplitter } from "rech-ts-commons";
 import { CobolVariable } from "../CobolVariable";
 import { ExpandedSourceManager } from "../../../cobol/ExpandedSourceManager";
 import { VariableInsertTextBuilder } from "./VariableInsertTextBuilder";
 import { VariableNameInsertTextBuilder } from "./VariableNameInsertTextBuilder";
-import { BufferSplitter } from "../../../commons/BufferSplitter";
 import { CompletionUtils } from "../../commons/CompletionUtils";
 
 /**

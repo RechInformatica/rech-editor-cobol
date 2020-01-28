@@ -22,14 +22,13 @@ import {
   FoldingRange,
   ResponseError,
   TextDocumentChangeEvent,
-  FoldingRangeRequest,
   ErrorCodes,
   ReferenceParams,
   WorkspaceEdit,
   RenameParams,
   CodeActionParams,
   CodeAction,
-  TextEdit
+  FoldingRangeRequest,
 } from "vscode-languageserver";
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
@@ -46,7 +45,7 @@ import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
 import { VariableCompletion } from "./completion/variable/VariableCompletion";
 import { VariableCompletionFactory } from "./completion/variable/VariableCompletionFactory";
 import { Log } from "../commons/Log";
-import { BufferSplitter } from "../commons/BufferSplitter";
+import { BufferSplitter } from "rech-ts-commons";
 import { CobolDiagnosticParser } from "../cobol/diagnostic/cobolDiagnosticParser";
 import { ClassCompletion } from "./completion/ClassCompletion";
 import { MethodCompletion } from "./completion/method/MethodCompletion";
@@ -133,7 +132,7 @@ documents.onDidSave(document => {
   validateTextDocument(document.document, "onSave").then().catch();
   // Update the folding
   loadFolding(document);
-  connection.client.register(FoldingRangeRequest.type, document);
+  connection.client.register(FoldingRangeRequest.type, undefined);
   // Update the expanded source
   new ExpandedSourceManager(uri).expandSource().then().catch()
   // Clear the variableCompletion cache
@@ -523,7 +522,7 @@ connection.onReferences((params: ReferenceParams): Thenable<Location[] | Respons
         resolve(locations);
       })
         .catch(() => {
-          reject();
+          resolve(undefined);
         });
     } else {
       Log.get().error("Error to get the fullDocument within onReferences");
@@ -543,7 +542,7 @@ connection.onRenameRequest((params: RenameParams): Thenable<WorkspaceEdit | Resp
         resolve({ changes: { [params.textDocument.uri]: textEdits } });
       })
         .catch(() => {
-          reject();
+          resolve(undefined);
         });
     } else {
       Log.get().error("Error to get the fullDocument within onRenameRequest");

@@ -1,7 +1,7 @@
 
 import { HighlightInterface } from "./HighlightInterface";
 import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
-import { BufferSplitter } from "../../commons/BufferSplitter";
+import { BufferSplitter } from "rech-ts-commons";
 
 /** Terms of block */
 const BEGINBLOCKTERM = "if"
