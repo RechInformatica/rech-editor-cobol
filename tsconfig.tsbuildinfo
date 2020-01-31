@@ -417,6 +417,54 @@
         "version": "878afd007882951962e311cb7d616063210bd35d75e2f6dece37eb9d44452f8a",
         "signature": "67e8f296f13fcb1514adf22710a231317613b11428ee704e5008317958201a1b"
       },
+      "./src/sourceflow/treeview/nodes/nodeinterface.ts": {
+        "version": "37b5f142656ea411889231099c0385beb5164da3040fbfbaf8f5e632942c184d",
+        "signature": "75a711b22ac476027d81c885a924d11daa2a0fa091591cd0e88787f89f89a125"
+      },
+      "./src/sourceflow/parser/flowline.ts": {
+        "version": "cb52153cb4e5a346a7ac75b8551aa7982e4ebd8792371c119cb92befb0568a13",
+        "signature": "2417a1d6a532083ebf1a2fd27618d97d21d88389bed6b00893b92658be9d88e9"
+      },
+      "./src/sourceflow/parser/contextoriginfinderinterface.ts": {
+        "version": "da72444ea7b83ee3dbec8eda541b3e0ea9188fbc666dba7aab82fbc017ed478a",
+        "signature": "9eb70760650c04fec48adebac8719cbc5d017aabf7433796c5f38d8cea3ec2fb"
+      },
+      "./src/sourceflow/parser/defaultcontextoriginfinder.ts": {
+        "version": "337daf83a8c4b4da23b9d7f78a3005ae2ed3b15b3b18a930e679cb99a386b7eb",
+        "signature": "5171f6f5d5e513471503f4e884c641f68a805a2966367e7f89c406dfbcb3609e"
+      },
+      "./src/lsp/references/cobolreferencesfinder.ts": {
+        "version": "f293572eec2810fce216cf28e4a3106ea6683028ef02d293d78639ac8e7cd32f",
+        "signature": "3becb40d689f721a9ed094874dd69e54ad610a7d854cef81a5bd684bbdd5f94c"
+      },
+      "./src/sourceflow/parser/paragraphcontextoriginfinder.ts": {
+        "version": "6ebf167a03facbef30dcd8c11bff41b49ed788ab3a7d6008715aeef07eee440c",
+        "signature": "722c2a493e8797de083fd184aa9374d1fe68f8eaa5a056d1f78d442de0eff01a"
+      },
+      "./src/sourceflow/parser/gotocontextoriginfinder.ts": {
+        "version": "301aee4da12c4d3b70d2d42b0bd3ead4e0480e851be93290601bcbf903f2b2af",
+        "signature": "b18f28c8e70f8b9b3cf62ce9a7e46556544049e1a7b5e7e1f756a33ba7026596"
+      },
+      "./src/sourceflow/parser/contextfactory.ts": {
+        "version": "aced873c22e69115f3ba8bac7d4d9c656786aa94732976915f7fb7ff059d7724",
+        "signature": "db33bd0b383011890cb925744e7b5b4cb694eacf214fd387f5d87299c6aa938b"
+      },
+      "./src/sourceflow/parser/flowparser.ts": {
+        "version": "527d3b84d29f33ddc0de2711085bf51397a821b2387c58d3da524b406eea883f",
+        "signature": "471cdf1374e5745997a33d959fb73259c0855f45cf6af7b28fad4be0f5de7f31"
+      },
+      "./src/sourceflow/flow.ts": {
+        "version": "1a785c9f3a4af3d5b9e4e002922722cb546a1aab59d46112810e309c0926bcba",
+        "signature": "85644e2426266389c93e8f68c6535fa52103a14fe847d3a682ae51d1b436f89a"
+      },
+      "./src/sourceflow/treeview/nodes/flownode.ts": {
+        "version": "ded826992bcc2baaf361ce04ccee96c121334d2177f220f902536f5eda83301a",
+        "signature": "3e70209acd2130fbfff4f77ce6ba5b78633c1906a1921da1e04bd4604b88a2e3"
+      },
+      "./src/sourceflow/treeview/providers/flowprovider.ts": {
+        "version": "e6934b33c970f0366c2aca3d3f0217110ef1b70d3c295828e9ee7acc4b639955",
+        "signature": "2bcebbc27f5c63bab8716b4e82d3ef84bd83e4bcfed9a808fff296839f85974f"
+      },
       "./src/commons/cobolwordfinder.ts": {
         "version": "778d52015639e42a3783caaf257280c68e894cfd8c210ac8363ab5bd244ca3fa",
         "signature": "062d068a3bfb16cb16c7f7f6c468149655db5a051a310d8925b5f4d7af60e4ec"
@@ -434,7 +482,7 @@
         "signature": "a2fcb8d771559666487eb4e26cf91f71c32593f2fc112302f3ae023f40f8be10"
       },
       "./src/extension.ts": {
-        "version": "318ca49cb6cbc25934fcdd742912e43a3ad538b075db3f6fbc5406b4a3b3e1c1",
+        "version": "e247cbe746d9bf839ed7350afe603f25403195982e4751513a55882a9c92fc78",
         "signature": "6382014926a7c506aa58bf974f686f96d2eee2b4761fe198bcedfb1a051eed63"
       },
       "./src/cobol/posicionamento.ts": {
@@ -469,6 +517,18 @@
         "version": "fe0fad820a02c1f7308e241360ffbd70f464748fa413b88049de529bcd956686",
         "signature": "9038c343e4349a34f55e9aee6749ec48ff193833ba091c9e18f552bf58b5cfa1"
       },
+      "./src/lsp/commons/completionutils.ts": {
+        "version": "0b76ee52779aeea3409770065dccb33a15ca2defca4e786c881f11422328d135",
+        "signature": "836d7afbebada369ec654e92658ea6186b4ebf508285fe41aaa4140cc5bb3cda"
+      },
+      "./src/cobol/diagnostic/coboldiagnosticparser.ts": {
+        "version": "96e9e8c42775689200e05c0f1fff09d9d3f722aeec98dccafa53265d069a612a",
+        "signature": "0a192df662ac16000e39eec3b06666f102edf1eaa3fec9e6d4cf10acddfe6546"
+      },
+      "./src/cobol/diagnostic/diagnostician.ts": {
+        "version": "815942b19127be55b7c3d35607c729aecdc330fe9ecba4051b69424b0ae04dd0",
+        "signature": "795f206b8f545b81baa991127680cbbe70c629fb99b054e04d55ac8fbf23a8e7"
+      },
       "./src/cobol/diagnostic/textposition.ts": {
         "version": "fb9a9b6645cc5131917a58a6de34e71824cbfb7a0759a4390f43c2a08c33d398",
         "signature": "08de74bdef65e32039474b586d1b02f0e0def0118ea4361c9905477d117e3d30"
@@ -476,18 +536,6 @@
       "./src/cobol/diagnostic/textrange.ts": {
         "version": "3a7034170dedd650aed21ab4b85191f1b133c400fad31e89aaa6a0dcb2692218",
         "signature": "18f1566c6221995a540abac5e074ea806f4e96c182b2b3be83d4f1155588a1c2"
-      },
-      "./src/lsp/commons/completionutils.ts": {
-        "version": "0b76ee52779aeea3409770065dccb33a15ca2defca4e786c881f11422328d135",
-        "signature": "836d7afbebada369ec654e92658ea6186b4ebf508285fe41aaa4140cc5bb3cda"
-      },
-      "./src/cobol/diagnostic/coboldiagnosticparser.ts": {
-        "version": "ae41d1c2b00b3fdf62ea321877e46d57bb3a086f5b8d1c72dcc5a6bc5af6c1b1",
-        "signature": "963f633490951d67e627598c865d7cf23021f32590bc7a6d013005b298e2e008"
-      },
-      "./src/cobol/diagnostic/diagnostician.ts": {
-        "version": "815942b19127be55b7c3d35607c729aecdc330fe9ecba4051b69424b0ae04dd0",
-        "signature": "795f206b8f545b81baa991127680cbbe70c629fb99b054e04d55ac8fbf23a8e7"
       },
       "./src/lsp/formatter/formatterinterface.ts": {
         "version": "92a692edb290c956eb5a057096b6e53e8957136fa6e17ff17d899ad1027a27a2",
@@ -748,10 +796,6 @@
       "./src/lsp/completion/classcompletion.ts": {
         "version": "25ac06acb59bed64f39b5fd4801e9b5b3d78b3e13625e19b776a7e483d876175",
         "signature": "2876722f97e6ac30b28e0a45f38815a2bb05916d9baeeb902176525c6fb74850"
-      },
-      "./src/lsp/references/cobolreferencesfinder.ts": {
-        "version": "f293572eec2810fce216cf28e4a3106ea6683028ef02d293d78639ac8e7cd32f",
-        "signature": "3becb40d689f721a9ed094874dd69e54ad610a7d854cef81a5bd684bbdd5f94c"
       },
       "./src/lsp/actions/actioninterface.ts": {
         "version": "be54074247591f2d0538a1d6c740c978bfa1d14b1463d2f195eb6de20085f9f3",
@@ -1530,6 +1574,81 @@
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
+      "./src/sourceflow/treeview/nodes/nodeinterface.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/parser/flowline.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/parser/contextoriginfinderinterface.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/parser/defaultcontextoriginfinder.ts": [
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/references/cobolreferencesfinder.ts": [
+        "./node_modules/rech-ts-commons/out/index.d.ts",
+        "./src/commons/rechposition.ts",
+        "./src/cobol/cobolregexutils.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/parser/paragraphcontextoriginfinder.ts": [
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts",
+        "./src/lsp/references/cobolreferencesfinder.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/parser/gotocontextoriginfinder.ts": [
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/parser/contextfactory.ts": [
+        "./src/sourceflow/parser/flowline.ts",
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts",
+        "./src/sourceflow/parser/defaultcontextoriginfinder.ts",
+        "./src/sourceflow/parser/paragraphcontextoriginfinder.ts",
+        "./src/sourceflow/parser/gotocontextoriginfinder.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/parser/flowparser.ts": [
+        "./src/sourceflow/parser/contextfactory.ts",
+        "./src/sourceflow/parser/flowline.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/flow.ts": [
+        "./src/editor/editor.ts",
+        "./src/sourceflow/parser/flowparser.ts",
+        "./src/sourceflow/parser/flowline.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/treeview/nodes/flownode.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./src/sourceflow/treeview/nodes/nodeinterface.ts",
+        "./src/sourceflow/flow.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/treeview/providers/flowprovider.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/sourceflow/treeview/nodes/nodeinterface.ts",
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./src/sourceflow/flow.ts",
+        "./src/sourceflow/treeview/nodes/flownode.ts",
+        "./src/editor/editor.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
       "./src/commons/cobolwordfinder.ts": [
         "./node_modules/rech-ts-commons/out/index.d.ts",
         "./node_modules/@types/node/base.d.ts",
@@ -1581,6 +1700,7 @@
         "./src/helpers/configuration.ts",
         "./src/lsp/fold/foldstatusbar.ts",
         "./src/cobol/expandedsourcestatusbar.ts",
+        "./src/sourceflow/treeview/providers/flowprovider.ts",
         "./src/commons/executor.ts",
         "./src/commons/cobolwordfinder.ts",
         "./src/commons/variableutils.ts",
@@ -1644,15 +1764,6 @@
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "./src/cobol/diagnostic/textposition.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./src/cobol/diagnostic/textrange.ts": [
-        "./src/cobol/diagnostic/textposition.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
       "./src/lsp/commons/completionutils.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
@@ -1660,8 +1771,6 @@
       "./src/cobol/diagnostic/coboldiagnosticparser.ts": [
         "./node_modules/vscode-languageserver/lib/main.d.ts",
         "./src/cobol/diagnostic/coboldiagnostic.ts",
-        "./src/cobol/diagnostic/textrange.ts",
-        "./src/cobol/diagnostic/textposition.ts",
         "./src/commons/file.ts",
         "./src/commons/path.ts",
         "./node_modules/rech-ts-commons/out/index.d.ts",
@@ -1677,6 +1786,15 @@
         "./src/commons/file.ts",
         "./src/cobol/diagnostic/coboldiagnosticparser.ts",
         "./src/cobol/diagnostic/coboldiagnosticpreprocmanager.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/diagnostic/textposition.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/cobol/diagnostic/textrange.ts": [
+        "./src/cobol/diagnostic/textposition.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -2211,13 +2329,6 @@
         "./src/cobol/rechdoc/coboldocparser.ts",
         "./node_modules/rech-ts-commons/out/index.d.ts",
         "./src/lsp/completion/cobolvariable.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./src/lsp/references/cobolreferencesfinder.ts": [
-        "./node_modules/rech-ts-commons/out/index.d.ts",
-        "./src/commons/rechposition.ts",
-        "./src/cobol/cobolregexutils.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -2898,6 +3009,40 @@
       "./src/cobol/elementsdisplayer/class/classdisplayer.ts": [
         "./src/lsp/completion/cobolvariable.ts"
       ],
+      "./src/sourceflow/treeview/nodes/nodeinterface.ts": [
+        "./node_modules/vscode/vscode.d.ts"
+      ],
+      "./src/sourceflow/parser/defaultcontextoriginfinder.ts": [
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts"
+      ],
+      "./src/lsp/references/cobolreferencesfinder.ts": [
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/sourceflow/parser/paragraphcontextoriginfinder.ts": [
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts"
+      ],
+      "./src/sourceflow/parser/gotocontextoriginfinder.ts": [
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts"
+      ],
+      "./src/sourceflow/parser/contextfactory.ts": [
+        "./src/sourceflow/parser/flowline.ts"
+      ],
+      "./src/sourceflow/parser/flowparser.ts": [
+        "./src/sourceflow/parser/flowline.ts"
+      ],
+      "./src/sourceflow/flow.ts": [
+        "./src/sourceflow/parser/flowline.ts"
+      ],
+      "./src/sourceflow/treeview/nodes/flownode.ts": [
+        "./src/sourceflow/flow.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/sourceflow/treeview/nodes/nodeinterface.ts"
+      ],
+      "./src/sourceflow/treeview/providers/flowprovider.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./src/sourceflow/treeview/nodes/nodeinterface.ts",
+        "./node_modules/vscode/vscode.d.ts"
+      ],
       "./src/lsp/completion/cobolmethod.ts": [
         "./src/lsp/completion/cobolvariable.ts",
         "./src/cobol/rechdoc/coboldoc.ts"
@@ -2962,14 +3107,14 @@
       "./src/cobol/diagnostic/coboldiagnostic.ts": [
         "./node_modules/vscode-languageserver/lib/main.d.ts"
       ],
-      "./src/cobol/diagnostic/textrange.ts": [
-        "./src/cobol/diagnostic/textposition.ts"
-      ],
       "./src/cobol/diagnostic/coboldiagnosticparser.ts": [
         "./src/cobol/diagnostic/coboldiagnostic.ts"
       ],
       "./src/cobol/diagnostic/diagnostician.ts": [
         "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/cobol/diagnostic/textrange.ts": [
+        "./src/cobol/diagnostic/textposition.ts"
       ],
       "./src/lsp/formatter/formatterinterface.ts": [
         "./node_modules/vscode-languageserver/lib/main.d.ts"
@@ -3212,9 +3357,6 @@
         "./node_modules/vscode-languageserver/lib/main.d.ts",
         "./src/lsp/completion/completioninterface.ts"
       ],
-      "./src/lsp/references/cobolreferencesfinder.ts": [
-        "./src/commons/rechposition.ts"
-      ],
       "./src/lsp/actions/actioninterface.ts": [
         "./node_modules/vscode-languageserver/lib/main.d.ts"
       ],
@@ -3432,6 +3574,18 @@
       "./src/cobol/elementsdisplayer/class/classelement.ts",
       "./src/cobol/elementsdisplayer/class/classdisplayer.ts",
       "./src/cobol/elementsdisplayer/elementsdisplayerfactory.ts",
+      "./src/sourceflow/treeview/nodes/nodeinterface.ts",
+      "./src/sourceflow/parser/flowline.ts",
+      "./src/sourceflow/parser/contextoriginfinderinterface.ts",
+      "./src/sourceflow/parser/defaultcontextoriginfinder.ts",
+      "./src/lsp/references/cobolreferencesfinder.ts",
+      "./src/sourceflow/parser/paragraphcontextoriginfinder.ts",
+      "./src/sourceflow/parser/gotocontextoriginfinder.ts",
+      "./src/sourceflow/parser/contextfactory.ts",
+      "./src/sourceflow/parser/flowparser.ts",
+      "./src/sourceflow/flow.ts",
+      "./src/sourceflow/treeview/nodes/flownode.ts",
+      "./src/sourceflow/treeview/providers/flowprovider.ts",
       "./src/commons/cobolwordfinder.ts",
       "./src/cobol/expandedsourcemanager.ts",
       "./src/lsp/completion/cobolmethod.ts",
@@ -3445,11 +3599,9 @@
       "./node_modules/vscode-languageserver/lib/files.d.ts",
       "./node_modules/vscode-languageserver/lib/main.d.ts",
       "./src/cobol/diagnostic/coboldiagnostic.ts",
+      "./src/lsp/commons/completionutils.ts",
       "./src/cobol/diagnostic/textposition.ts",
       "./src/cobol/diagnostic/textrange.ts",
-      "./src/lsp/commons/completionutils.ts",
-      "./src/cobol/diagnostic/coboldiagnosticparser.ts",
-      "./src/cobol/diagnostic/diagnostician.ts",
       "./src/lsp/formatter/formatterinterface.ts",
       "./src/lsp/formatter/formatterutils.ts",
       "./src/lsp/formatter/ifformatter.ts",
@@ -3515,7 +3667,6 @@
       "./src/lsp/fold/performwithtest.ts",
       "./src/lsp/fold/cobolfoldfactory.ts",
       "./src/lsp/completion/classcompletion.ts",
-      "./src/lsp/references/cobolreferencesfinder.ts",
       "./src/lsp/actions/actioninterface.ts",
       "./src/lsp/actions/removeparenthesesaction.ts",
       "./src/lsp/commons/renamingutils.ts",
@@ -3549,7 +3700,9 @@
       "./src/test/lsp/formatter/performvaryingformatter.test.ts",
       "./src/test/lsp/highlight/ifhighlight.test.ts",
       "./node_modules/@types/iconv-lite/index.d.ts",
-      "./src/lsp/server.ts"
+      "./src/cobol/diagnostic/coboldiagnosticparser.ts",
+      "./src/lsp/server.ts",
+      "./src/cobol/diagnostic/diagnostician.ts"
     ]
   },
   "version": "3.7.5"
