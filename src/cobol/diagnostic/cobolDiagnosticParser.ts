@@ -266,15 +266,15 @@ export class CobolDiagnosticParser {
    */
   private createRangeOfCopyDeclaration(fileName: string, source: string): Range | undefined {
     let result: Range | undefined = undefined;
-    const regexp = new RegExp(".*" + this.copyDeclaredInSource(fileName, source).replace(".", "\\.") + ".*", "gmi");
+    const regexp = new RegExp("\\s+copy\\s+" + this.copyDeclaredInSource(fileName, source).replace(".", "\\.") + ".*", "gi");
     new Scan(this.sourceLines).scan(regexp, (iterator: any) => {
       result = {
         start: {
-          line: iterator.row,
+          line: iterator.row + 1,
           character: 0
         },
         end: {
-          line: iterator.row,
+          line: iterator.row + 1,
           character: 120
         }
       }

@@ -522,7 +522,7 @@
         "signature": "836d7afbebada369ec654e92658ea6186b4ebf508285fe41aaa4140cc5bb3cda"
       },
       "./src/cobol/diagnostic/coboldiagnosticparser.ts": {
-        "version": "96e9e8c42775689200e05c0f1fff09d9d3f722aeec98dccafa53265d069a612a",
+        "version": "77cd365eafba27d26621fb3c0b032ba1008447ad481f745de73cf21782d2d36d",
         "signature": "0a192df662ac16000e39eec3b06666f102edf1eaa3fec9e6d4cf10acddfe6546"
       },
       "./src/cobol/diagnostic/diagnostician.ts": {
@@ -3600,6 +3600,7 @@
       "./node_modules/vscode-languageserver/lib/main.d.ts",
       "./src/cobol/diagnostic/coboldiagnostic.ts",
       "./src/lsp/commons/completionutils.ts",
+      "./src/cobol/diagnostic/diagnostician.ts",
       "./src/cobol/diagnostic/textposition.ts",
       "./src/cobol/diagnostic/textrange.ts",
       "./src/lsp/formatter/formatterinterface.ts",
@@ -3680,6 +3681,7 @@
       "./src/lsp/actions/subprogram/subprogramutils.ts",
       "./src/lsp/actions/subprogram/insertsubprogramdeclarationaction.ts",
       "./src/lsp/actions/cobolactionfactory.ts",
+      "./src/lsp/server.ts",
       "./node_modules/vscode/lib/testrunner.d.ts",
       "./src/test/index.ts",
       "./node_modules/@types/chai/index.d.ts",
@@ -3700,9 +3702,7 @@
       "./src/test/lsp/formatter/performvaryingformatter.test.ts",
       "./src/test/lsp/highlight/ifhighlight.test.ts",
       "./node_modules/@types/iconv-lite/index.d.ts",
-      "./src/cobol/diagnostic/coboldiagnosticparser.ts",
-      "./src/lsp/server.ts",
-      "./src/cobol/diagnostic/diagnostician.ts"
+      "./src/cobol/diagnostic/coboldiagnosticparser.ts"
     ]
   },
   "version": "3.7.5"
