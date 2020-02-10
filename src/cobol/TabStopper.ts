@@ -5,17 +5,17 @@ import { configuration } from '../helpers/configuration'
 
 /**
  * Class used to modify the Tab Stop tipically used with Cobol files.
- * 
+ *
  * Originally extracted from https://github.com/spgennard/vscode_cobol/blob/ae519156bf569742b4cd0e81e5ed252369c89ecd/src/tabstopper.ts
  */
 export class TabStopper {
 
     /* Default tabstops when no configuration is specified */
-    private static readonly DEFAULT_RULER: number[] = [0, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 75, 79];
+    private static DEFAULT_RULER: number[] = [0, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 75, 79];
 
     /**
      * Processes the Tab or Reverse-tab with the specified stops
-     * 
+     *
      * @param inserting true if needs to insert tab
      */
     public processTabKey(inserting: boolean) {
@@ -30,13 +30,13 @@ export class TabStopper {
     /**
      * Returns the configured tabstops or default values if no tabstop is configured
      */
-    private getTabs(): number[] {
-        return configuration.get<number[]>('tabstops', [0, 7, 11, 15, 19, 23, 27, 31, 35, 39, 43, 47, 51, 55, 59, 63, 67, 71, 75, 79]);
+    public getTabs(): number[] {
+        return configuration.get<number[]>('tabstops', TabStopper.DEFAULT_RULER);
     }
 
     /**
      * Executes the tab insertion or removal
-     * 
+     *
      * @param editor text editor
      * @param doc current document
      * @param sel selection
@@ -65,7 +65,7 @@ export class TabStopper {
 
     /**
      * Inserts a single selection tab
-     * 
+     *
      * @param edit text editor
      * @param pos position to insert the tab
      */
@@ -91,7 +91,7 @@ export class TabStopper {
 
     /**
      * Performs multiple tab selecton
-     * 
+     *
      * @param edit editor
      * @param sel selection
      */
@@ -104,10 +104,10 @@ export class TabStopper {
 
     /**
      * Performs ubtab with multiple selecions
-     * 
+     *
      * @param edit current text editor
      * @param doc text document
-     * @param selection selection 
+     * @param selection selection
      */
     private multipleSelectionUnTab(edit: TextEditorEdit, doc: TextDocument, selection: Selection) {
         for (let line = selection.start.line; line <= selection.end.line; line++) {
@@ -129,7 +129,7 @@ export class TabStopper {
 
     /**
      * Returns the tab size
-     * 
+     *
      * @param pos current position
      */
     private tabSize(pos: number) {
@@ -149,7 +149,7 @@ export class TabStopper {
 
     /**
      * Returns the untab size
-     * 
+     *
      * @param pos current position
      */
     private unTabSize(pos: number) {

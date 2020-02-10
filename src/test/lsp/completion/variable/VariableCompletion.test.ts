@@ -3,7 +3,7 @@ import 'mocha';
 import { VariableCompletion } from '../../../../lsp/completion/variable/VariableCompletion';
 import { CompletionItem } from 'vscode';
 import { VariableInsertTextBuilder } from '../../../../lsp/completion/variable/VariableInsertTextBuilder';
-import { BufferSplitter } from '../../../../commons/BufferSplitter';
+import { BufferSplitter } from 'rech-ts-commons';
 
 //
 let buffer = "      *>--------------------------------------------------------------------------------------------------------------<*\r\n" +
@@ -252,7 +252,7 @@ describe('Cobol variable completion', () => {
         expect(expectedItems.length).to.equal(items.length);
         for (let i = 0; i < items.length; i++) {
             expect(expectedItems[i].label).to.equal(items[i].label);
-            expect(expectedItems[i].insertText).to.equal(items[i].insertText);
+            expect(expectedItems[i].insertText).to.equal(items[i].textEdit!.newText);
             expect(expectedItems[i].detail).to.equal(items[i].detail);
         };
     });
@@ -264,7 +264,7 @@ describe('Cobol variable completion', () => {
  */
 class DummyInsertTextBuilder implements VariableInsertTextBuilder {
 
-    buildInsertText(variableName: string, _currentCommand: string): string {
+    buildInsertText(variableName: string, _isEnum: boolean, _currentCommand: string): string {
         return "antes " + variableName + " dummy";
     }
 

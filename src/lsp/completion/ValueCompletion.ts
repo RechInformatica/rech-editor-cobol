@@ -13,9 +13,9 @@ export class ValueCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let currentLineText = lines[line];
-            let variable = CobolVariable.parseLine(currentLineText);
-            let text = this.generateTextFromVariable(variable, column, currentLineText);
+            const currentLineText = lines[line];
+            const variable = CobolVariable.parseLines(line, lines);
+            const text = this.generateTextFromVariable(variable, column, currentLineText);
             resolve(
                 [{
                     label: 'Complete VALUE declaration',

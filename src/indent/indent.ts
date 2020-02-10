@@ -3,7 +3,7 @@
 import { File } from '../commons/file';
 import { Executor } from '../commons/executor';
 import * as iconv from 'iconv-lite';
-import { BufferSplitter } from '../commons/BufferSplitter';
+import { BufferSplitter } from 'rech-ts-commons';
 
 /** Time in millis representing an old indent file */
 const INDENT_OLD_FILE_IN_MILLIS: number = 3000;
@@ -25,7 +25,7 @@ export class Indenta {
    * @param targetSourceCode target source code to be indented
    */
   public indentCommentary(targetSourceCode: string[], callback: (buffer: string[]) => any,) {
-    let buffer = this.buildBufferOfCommentary(targetSourceCode);
+    const buffer = this.buildBufferOfCommentary(targetSourceCode);
     callback([this.buildCommentaryLines(buffer)]);
   }
 
@@ -35,7 +35,7 @@ export class Indenta {
    * @param targetSourceCode
    */
   private buildBufferOfCommentary(targetSourceCode: string[]) {
-    let buffer: string[] = [];
+    const buffer: string[] = [];
     targetSourceCode.forEach((occurs) => {
       BufferSplitter.split(occurs).forEach((line) => {
         line = line.replace(/\*>->/g, "").replace(/\n/g, " ").trim();
@@ -63,7 +63,7 @@ export class Indenta {
   private buildCommentaryLines(buffer: string[]) {
     let result = "";
     buffer.forEach((commentary) => {
-      let words = commentary.trim().split(" ");
+      const words = commentary.trim().split(" ");
       result += this.buildCommentBlock(words)
     })
     return result;
@@ -80,7 +80,7 @@ export class Indenta {
       if (result.length == 0) {
         result = this.startCommentary(result, false);
       }
-      let word = words[i];
+      const word = words[i];
       if (result[result.length - 1].length + word.length > INDENT_LIMIT_COLUMN) {
         result[result.length - 1] = result[result.length - 1].trimRight() + "\n"
         result = this.startCommentary(result, true);
@@ -137,31 +137,31 @@ export class Indenta {
    * @param callback callback executed when no indenting errors are found
    * @param err callback executed when indenting errors are found
    */
-  public async indenta(alignment: string, targetSourceCode: string[], sourceFileName: string, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
-    let inputFile = this.createInputFileInstance();
+  public async indenta(alignment: string, targetSourceCode: string[], sourceFileName: string, referenceLine: number, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
+    const inputFile = this.createInputFileInstance();
     if (inputFile.exists()) {
       return;
     }
     // Saves the target source code in the input file
-    let buffer = iconv.encode(targetSourceCode.join(), "win1252");
+    const buffer = iconv.encode(targetSourceCode.join(), "win1252");
     inputFile.saveBufferSync([buffer.toString("binary")], INDENT_FILE_CHARSET);
     //
-    let indentFile = this.createIndentedFileInstance();
-    let errorFile = this.createErrorFileIntance();
+    const indentFile = this.createIndentedFileInstance();
+    const errorFile = this.createErrorFileIntance();
     if (indentFile.exists() || errorFile.exists()) {
       return;
     }
     // Runs the Cobol indenter
-    new Executor().runSync(this.buildCommandLine(alignment, sourceFileName));
+    new Executor().runSync(this.buildCommandLine(alignment, sourceFileName, referenceLine));
     // If any error was found
     if (errorFile.exists()) {
-      let buffer = iconv.encode(errorFile.loadBufferSync(INDENT_FILE_CHARSET).trim(), "binary");
+      const buffer = iconv.encode(errorFile.loadBufferSync(INDENT_FILE_CHARSET).trim(), "binary");
       err(iconv.decode(buffer, "win1252"));
       errorFile.delete();
       inputFile.delete();
     } else {
       await indentFile.loadBuffer(INDENT_FILE_CHARSET).then((buffer) => {
-        let identBuffer = iconv.encode(buffer, "binary");
+        const identBuffer = iconv.encode(buffer, "binary");
         callback([iconv.decode(identBuffer, "win1252")]);
         indentFile.delete();
         inputFile.delete();
@@ -196,7 +196,7 @@ export class Indenta {
    * @param suffix filename suffix
    */
   private createFileWithSuffix(suffix: string): File {
-    let file = new File(this.buildTmpFileName() + suffix);
+    const file = new File(this.buildTmpFileName() + suffix);
     this.deleteOldFileIfExist(file);
     return file;
   }
@@ -208,9 +208,9 @@ export class Indenta {
    */
   private deleteOldFileIfExist(file: File) {
     if (file.exists()) {
-      let fileLastModified = file.lastModified().getTime();
-      let currentTime = new Date().getTime()
-      let resultTime = currentTime - fileLastModified;
+      const fileLastModified = file.lastModified().getTime();
+      const currentTime = new Date().getTime()
+      const resultTime = currentTime - fileLastModified;
       if (resultTime > INDENT_OLD_FILE_IN_MILLIS) {
         file.delete();
       }
@@ -220,10 +220,10 @@ export class Indenta {
   /**
    * Build a command line to run the indenter
    */
-  private buildCommandLine(alignment: string, fonte: string): string {
+  private buildCommandLine(alignment: string, fonte: string, referenceLine: number): string {
     let cmd = "Identa.bat ";
     cmd += this.buildTmpFileName();
-    cmd += ";" + fonte + ";1;" + alignment + ";F;S -lines:3";
+    cmd += ";" + fonte + ";" + (referenceLine + 1) + ";" + alignment + ";F;S -lines:3";
     return cmd;
   }
 

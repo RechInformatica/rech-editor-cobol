@@ -4,12 +4,13 @@ import * as path from "path";
 import { CobolVariable, Type } from '../../../lsp/completion/CobolVariable';
 import { File } from '../../../commons/file';
 import { Path } from '../../../commons/path';
-import { BufferSplitter } from '../../../commons/BufferSplitter';
+import { BufferSplitter } from 'rech-ts-commons';
 
 describe('Cobol variable declaration parser test', () => {
 
     it('Check Cobol variable parsing level 05', () => {
-        let variable = CobolVariable.parseLine("           05 w-var               pic is 9(100) ");
+        const line = "           05 w-var               pic is 9(100) ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(5).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Integer).to.equal(variable.getType());
@@ -19,7 +20,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("9(100)").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing level 10', () => {
-        let variable = CobolVariable.parseLine("           10 w-var               pic is 9(100) ");
+        const line = "           10 w-var               pic is 9(100) ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(10).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Integer).to.equal(variable.getType());
@@ -29,7 +31,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("9(100)").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic 9(100)v99', () => {
-        let variable = CobolVariable.parseLine("           10 w-var               pic is 9(100)v9 ");
+        const line = "           10 w-var               pic is 9(100)v9 ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(10).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Decimal).to.equal(variable.getType());
@@ -39,7 +42,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("9(100)v9").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic 99v99', () => {
-        let variable = CobolVariable.parseLine("           10 w-var               pic is 99v99 ");
+        const line = "           10 w-var               pic is 99v99 ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(10).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Decimal).to.equal(variable.getType());
@@ -49,7 +53,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("99v99").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic s99v99', () => {
-        let variable = CobolVariable.parseLine("           10 w-var               pic is s99v99 ");
+        const line = "           10 w-var               pic is s99v99 ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(10).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Decimal).to.equal(variable.getType());
@@ -59,7 +64,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("s99v99").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic -99', () => {
-        let variable = CobolVariable.parseLine("        05 w-var                  pic is -99 ");
+        const line = "        05 w-var                  pic is -99 ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(5).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Integer).to.equal(variable.getType());
@@ -69,7 +75,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("-99").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing level 10 pic is -99', () => {
-        let variable = CobolVariable.parseLine("           10 w-var               pic is -99 ");
+        const line = "           10 w-var               pic is -99 ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(10).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Integer).to.equal(variable.getType());
@@ -79,7 +86,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("-99").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic is zz9', () => {
-        let variable = CobolVariable.parseLine("           10 w-var               pic is zz9 ");
+        const line = "           10 w-var               pic is zz9 ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(10).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Integer).to.equal(variable.getType());
@@ -89,7 +97,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("zz9").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic zz9', () => {
-        let variable = CobolVariable.parseLine("           10 w-var               pic zz9 ");
+        const line = "           10 w-var               pic zz9 ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(10).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Integer).to.equal(variable.getType());
@@ -99,7 +108,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("zz9").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic -bbbbb', () => {
-        let variable = CobolVariable.parseLine("25 MINHA-VARIAVEL               pic -bbbbb ");
+        const line = "25 MINHA-VARIAVEL               pic -bbbbb ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(25).to.equal(variable.getLevel());
         expect("MINHA-VARIAVEL").to.equal(variable.getName());
         expect(Type.Integer).to.equal(variable.getType());
@@ -109,7 +119,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("-bbbbb").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic 9(100)v9', () => {
-        let variable = CobolVariable.parseLine("           10 w-var               PIC 9(100)v9");
+        const line = "           10 w-var               PIC 9(100)v9";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(10).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Decimal).to.equal(variable.getType());
@@ -119,7 +130,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("9(100)v9").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic xxx value spaces', () => {
-        let variable = CobolVariable.parseLine("05 w-varr3             pic xxx         value is spaces.");
+        const line = "05 w-varr3             pic xxx         value is spaces.";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(5).to.equal(variable.getLevel());
         expect("w-varr3").to.equal(variable.getName());
         expect(Type.Alphanumeric).to.equal(variable.getType());
@@ -129,7 +141,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("xxx").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic xxx', () => {
-        let variable = CobolVariable.parseLine("05 w-varr3             pic xxx");
+        const line = "05 w-varr3             pic xxx";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(5).to.equal(variable.getLevel());
         expect("w-varr3").to.equal(variable.getName());
         expect(Type.Alphanumeric).to.equal(variable.getType());
@@ -139,7 +152,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("xxx").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic 999,99', () => {
-        let variable = CobolVariable.parseLine("05 w-var               pic is 999,99 ");
+        const line = "05 w-var               pic is 999,99 ";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(5).to.equal(variable.getLevel());
         expect("w-var").to.equal(variable.getName());
         expect(Type.Decimal).to.equal(variable.getType());
@@ -149,7 +163,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("999,99").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic is 99/99/9999 values is zeros', () => {
-        let variable = CobolVariable.parseLine("05 w-data              pic is 99/99/9999 value is zeros.");
+        const line = "05 w-data              pic is 99/99/9999 value is zeros.";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(5).to.equal(variable.getLevel());
         expect("w-data").to.equal(variable.getName());
         expect(Type.Alphanumeric).to.equal(variable.getType());
@@ -159,7 +174,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("99/99/9999").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing pic is 9(02).', () => {
-        let variable = CobolVariable.parseLine("10 w-dia            pic is 9(02).");
+        const line = "10 w-dia            pic is 9(02).";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(10).to.equal(variable.getLevel());
         expect("w-dia").to.equal(variable.getName());
         expect(Type.Integer).to.equal(variable.getType());
@@ -169,7 +185,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("9(02)").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing goup item', () => {
-        let variable = CobolVariable.parseLine("01  wrk-campos.");
+        const line = "01  wrk-campos.";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(1).to.equal(variable.getLevel());
         expect("wrk-campos").to.equal(variable.getName());
         expect(Type.Alphanumeric).to.equal(variable.getType());
@@ -179,7 +196,8 @@ describe('Cobol variable declaration parser test', () => {
         expect("").to.equal(variable.getPicture());
     });
     it('Check Cobol variable parsing redefines', () => {
-        let variable = CobolVariable.parseLine("05 filler    redefines w-data.");
+        const line = "05 filler    redefines w-data.";
+        const variable = CobolVariable.parseLines(0, [line]);
         expect(5).to.equal(variable.getLevel());
         expect("filler").to.equal(variable.getName());
         expect(Type.Alphanumeric).to.equal(variable.getType());
@@ -193,27 +211,24 @@ describe('Cobol variable declaration parser test', () => {
 
 describe('Cobol variable children parser test', () => {
 
-    let lines = BufferSplitter.split(new File(new Path(path.resolve(__dirname) + "/../../TestFiles/WORKING.CBL").fullPath()).loadBufferSync("latin1"))
+    const lines = BufferSplitter.split(new File(new Path(path.resolve(__dirname) + "/../../TestFiles/WORKING.CBL").fullPath()).loadBufferSync("latin1"))
     //
     it('Check Cobol variable children parsing level 78', () => {
-        let line = 15
-        let variable = CobolVariable.parseLine(lines[line]);
-        variable = CobolVariable.parseAndSetChildren(variable, line, lines);
+        const line = 15
+        const variable = CobolVariable.parseLines(line, lines);
         expect(0).to.equal(variable.getChildren()!.length);
     });
     it('Check Cobol variable children parsing only child', () => {
-        let line = 17
-        let variable = CobolVariable.parseLine(lines[line]);
-        variable = CobolVariable.parseAndSetChildren(variable, line, lines);
+        const line = 17
+        const variable = CobolVariable.parseLines(line, lines);
         expect(1).to.equal(variable.getChildren()!.length);
         expect("w-filho-unico").to.equal(variable.getChildren()![0].getName());
         expect("9(06)V99comp-x").to.equal(variable.getChildren()![0].getPicture());
         expect("           05 w-filho-unico       pic is 9(06)V99 value is zeros comp-x.").to.equal(variable.getChildren()![0].getRaw());
     });
     it('Check Cobol variable children parsing dad', () => {
-        let line = 21
-        let variable = CobolVariable.parseLine(lines[line]);
-        variable = CobolVariable.parseAndSetChildren(variable, line, lines);
+        const line = 21
+        const variable = CobolVariable.parseLines(line, lines);
         expect(4).to.equal(variable.getChildren()!.length);
         //
         let children = variable.getChildren()![0];
@@ -255,195 +270,164 @@ describe('Cobol variable children parser test', () => {
         expect("              10 w-neto           pic is xxx      value is space.").to.equal(grandson.getRaw());
     });
     it('Check Cobol variable children parsing no child', () => {
-        let line = 44
-        let variable = CobolVariable.parseLine(lines[line]);
-        variable = CobolVariable.parseAndSetChildren(variable, line, lines);
+        const line = 44
+        const variable = CobolVariable.parseLines(line, lines);
         expect(0).to.equal(variable.getChildren()!.length);
     });
     it('Check Cobol variable children parsing level 77', () => {
-        let line = 46
-        let variable = CobolVariable.parseLine(lines[line]);
-        variable = CobolVariable.parseAndSetChildren(variable, line, lines);
+        const line = 46
+        const variable = CobolVariable.parseLines(line, lines);
         expect(0).to.equal(variable.getChildren()!.length);
     });
 });
 
 describe('Cobol variable get length test', () => {
 
-    let lines = new File(new Path(path.resolve(__dirname) + "/../../TestFiles/WORKING.CBL").fullPath()).loadBufferSync("latin1").split("\r\n")
+    const lines = new File(new Path(path.resolve(__dirname) + "/../../TestFiles/WORKING.CBL").fullPath()).loadBufferSync("latin1").split("\r\n")
     it('Check Cobol group item variable byte size test', () => {
-        let line = 49
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 49
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(40).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable dad of pic 9', () => {
-        let line = 53
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 53
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(64).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic 9V9', () => {
-        let line = 74
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 74
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(1).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic 9(1)V9', () => {
-        let line = 75
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 75
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(1).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic 9V9(1)', () => {
-        let line = 76
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 76
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(1).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic 9(2)V99', () => {
-        let line = 77
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 77
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(2).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic 9(7)V9(03)', () => {
-        let line = 78
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 78
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(5).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic 999V9(03)', () => {
-        let line = 79
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 79
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(3).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic 9(5)V999', () => {
-        let line = 80
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 80
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(4).to.equal(valiable.getByteSize());
     });
 
     it('Check Cobol variable pic s9(2)V99', () => {
-        let line = 81
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 81
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(2).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic s999V9(03)', () => {
-        let line = 82
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 82
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(3).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic s9(5)V999', () => {
-        let line = 83
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 83
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(4).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic s9(7)V9(03)', () => {
-        let line = 84
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 84
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(5).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic Ocurs', () => {
-        let line = 85
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 85
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(36).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable dad of display', () => {
-        let line = 88
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 88
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(31).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic zzz999', () => {
-        let line = 89
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 89
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(6).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic zzz.999', () => {
-        let line = 90
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 90
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(7).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic zzz,999', () => {
-        let line = 91
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 91
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(7).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic -99,99', () => {
-        let line = 92
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 92
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(6).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic -9999', () => {
-        let line = 93
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 93
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(5).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic x(10) no value', () => {
-        let line = 94
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 94
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(10).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic x(01) no value', () => {
-        let line = 95
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 95
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(1).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic x no value', () => {
-        let line = 96
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 96
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(1).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic 9 no value', () => {
-        let line = 97
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 97
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(1).to.equal(valiable.getByteSize());
     });
     it('Check Cobol variable pic 9(10) no value', () => {
-        let line = 98
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 98
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(10).to.equal(valiable.getByteSize());
     });
     it('Check size of variable without redefines clause', () => {
-        let line = 100
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 100
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(20).to.equal(valiable.getByteSize());
     });
     it('Check size of variable with redefines clause', () => {
-        let line = 101
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 101
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(20).to.equal(valiable.getByteSize());
     });
     it('Check size of variable with redefines clause but ignoring redefined value', () => {
-        let line = 101
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 101
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(0).to.equal(valiable.getByteSizeIgnoringRedefines());
     });
     it('Check size of parent variable with redefines of children elements', () => {
-        let line = 102
-        let valiable = CobolVariable.parseLine(lines[line]);
-        valiable = CobolVariable.parseAndSetChildren(valiable, line, lines);
+        const line = 102
+        const valiable = CobolVariable.parseLines(line, lines);
         expect(30).to.equal(valiable.getByteSize());
     });
 });

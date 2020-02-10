@@ -1,10 +1,8 @@
-import { RechPosition } from "../commons/rechposition";
 import { ParserCobol } from "./parsercobol";
-import { puts } from "util";
 import { CobolDocParser } from "./rechdoc/CobolDocParser";
 import { Path } from "../commons/path";
 import { File } from "../commons/file";
-import { BufferSplitter } from "../commons/BufferSplitter";
+import { BufferSplitter } from "rech-ts-commons";
 
 /**
  * Class representing a Cobol copy

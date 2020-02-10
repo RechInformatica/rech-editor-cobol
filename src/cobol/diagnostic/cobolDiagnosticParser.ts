@@ -1,13 +1,11 @@
 "use babel";
-import { Diagnostic, DiagnosticSeverity, Range } from "vscode-languageserver";
+import { Diagnostic, DiagnosticSeverity, Range, Position } from "vscode-languageserver";
 import { CobolDiagnostic } from "./cobolDiagnostic";
-import { TextRange } from "./textRange";
-import { TextPosition } from "./textPosition";
 import { File } from "../../commons/file";
 import { Path } from "../../commons/path";
-import { Scan } from "../../commons/Scan";
+import { Scan, BufferSplitter } from "rech-ts-commons";
 import Q from "q";
-import { BufferSplitter } from "../../commons/BufferSplitter";
+import { CompletionUtils } from "../../lsp/commons/CompletionUtils";
 
 /**
  * Class conteiner of diagnostcs of cobol language
@@ -16,6 +14,8 @@ export class CobolDiagnosticParser {
 
   /** Lines of the source */
   private sourceLines: string;
+  /** Splitted lines of source code */
+  private splittedSource: string[] | undefined;
   /** Lines of the source */
   private static copyHierarchy: Map<string, string> = new Map();
 
@@ -33,17 +33,17 @@ export class CobolDiagnosticParser {
     return new Promise((resolve, reject) => {
       if (CobolDiagnosticParser.copyHierarchy.get(fileName)) {
         this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter).then((result) => {
-          resolve(result);
+          return resolve(result);
         }).catch(() => {
-          reject();
+          return reject();
         })
       } else {
         externalGetCopyHierarchy(fileName).then((resultCopyHierarchy) => {
           CobolDiagnosticParser.copyHierarchy.set(fileName, resultCopyHierarchy);
           this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter).then((result) => {
-            resolve(result);
+            return resolve(result);
           }).catch(() => {
-            reject();
+            return reject();
           })
         });
       }
@@ -56,7 +56,7 @@ export class CobolDiagnosticParser {
    * @param preprocResult
    * @param fileName
    */
-  private extractDiagnostic(preprocResult: string, fileName: string, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean> ): Promise<CobolDiagnostic> {
+  private extractDiagnostic(preprocResult: string, fileName: string, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<CobolDiagnostic> {
     return new Promise((resolve, reject) => {
       const interpreters: Array<Promise<Diagnostic>> = [];
       const lines = BufferSplitter.split(preprocResult);
@@ -71,9 +71,9 @@ export class CobolDiagnosticParser {
             diagnostics.push(result.value!);
           }
         });
-        resolve(this.buildCobolDiagnostic(diagnostics));
+        return resolve(this.buildCobolDiagnostic(diagnostics));
       }).catch(() => {
-        reject();
+        return reject();
       })
     });
   }
@@ -110,21 +110,20 @@ export class CobolDiagnosticParser {
     return new Promise((resolve, reject) => {
       const match = pattern.exec(currentLine);
       if (!match) {
-        reject();
-        return;
+        return reject();
       }
       let fullError, message: any, file: any, line: any, error: any;
       [fullError, message, file, line, error] = match;
       if (externalDiagnosticFilter) {
         externalDiagnosticFilter(message).then((result) => {
           if (result) {
-            resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
+            return resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
           } else {
-            resolve();
+            return resolve();
           }
         });
       } else {
-        resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
+        return resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
       }
     });
   }
@@ -139,23 +138,30 @@ export class CobolDiagnosticParser {
    * @param error
    */
   private buildDiagnosticOfError(fileName: string, message: string, file: string, line: string, error: boolean): Diagnostic {
-    const nLine = Number.parseInt(line) - 1
-    let diagnosticSeverity: DiagnosticSeverity;
-    if (error) {
-      diagnosticSeverity = DiagnosticSeverity.Error;
-    } else {
-      diagnosticSeverity = DiagnosticSeverity.Warning;
-    }
+    const nLine = Number.parseInt(line) - 1;
+    const diagnosticSeverity = this.getAppropriateSeverity(error);
     return this.createDiagnostic(
       fileName,
       diagnosticSeverity,
-      new TextRange(
-        new TextPosition(nLine, 1),
-        new TextPosition(nLine, 120)
+      Range.create(
+        Position.create(nLine, 0),
+        Position.create(nLine, 120),
       ),
       message,
       file
     )
+  }
+
+  /**
+   * Returns the appropriate Diagnostic Severity according do diagnostic classification (if it's an error or not)
+   *
+   * @param error indicates wheter the diagnostic represents an error
+   */
+  private getAppropriateSeverity(error: boolean): DiagnosticSeverity {
+    if (error) {
+      return DiagnosticSeverity.Error;
+    }
+    return DiagnosticSeverity.Warning;
   }
 
   /**
@@ -167,11 +173,13 @@ export class CobolDiagnosticParser {
    * @param message
    * @param source
    */
-  private createDiagnostic(fileName: string, severity: DiagnosticSeverity, range: TextRange, message: string, source: string): Diagnostic {
-    const diagnosticRange = this.diagnosticPosition(fileName, source, range)
+  private createDiagnostic(fileName: string, severity: DiagnosticSeverity, range: Range, message: string, source: string): Diagnostic {
+    const diagnosticRange = this.createAppropriateDiagnosticRange(fileName, source, range);
     const fullFileName = this.fullFileName(new Path(fileName).fullPathWin(), source);
+    const diagnosticId = this.extractDiagnosticIdentifier(message);
     const diagnostic: Diagnostic = {
       severity: severity,
+      code: diagnosticId,
       range: {
         start: {
           line: diagnosticRange.start.line,
@@ -183,59 +191,106 @@ export class CobolDiagnosticParser {
         }
       },
       message: message,
-      source: fullFileName
-    };
-    diagnostic.relatedInformation = [
-      {
-        location: {
-          uri: new Path(fullFileName).fullPathVscode(),
-          range: Object.assign({}, {
-            start: {
-              line: range.start.line,
-              character: range.start.character
-            },
-            end: {
-              line: range.end.line,
-              character: range.end.character
-            }
-          })
+      source: fullFileName,
+      relatedInformation: [
+        {
+          location: {
+            uri: new Path(fullFileName).fullPathVscode(),
+            range: Object.assign({}, {
+              start: {
+                line: range.start.line,
+                character: range.start.character
+              },
+              end: {
+                line: range.end.line,
+                character: range.end.character
+              }
+            })
+          },
+          message: message
         },
-        message: message
-      },
-    ];
+      ]
+    };
     return diagnostic;
   }
 
   /**
-   * Find the diagnostic position
+   * Creates a range on the best line according to diagnostic source code.
    *
-   * @param fileName
-   * @param source
-   * @param range
+   * If the diagnostic points to a copybook file, then the best line is the copybook
+   * declaration within the current source code.
+   *
+   * The start position is the first character on the line which is different of 'space' to
+   * make a better rendering.
+   *
+   * @param fileName file which diagnostic points to
+   * @param source current source code name
+   * @param range current range
    */
-  private diagnosticPosition(fileName: string, source: string, range: TextRange): Range | TextRange {
+  private createAppropriateDiagnosticRange(fileName: string, source: string, range: Range): Range {
+    const rangeOnBestLine = this.createRangeOnBestLine(fileName, source, range);
+    const beginningOfLine = CompletionUtils.countSpacesAtBeginning(this.getSplittedSource()[rangeOnBestLine.start.line]);
+    return Range.create(
+      Position.create(rangeOnBestLine.start.line, beginningOfLine),
+      Position.create(rangeOnBestLine.end.line, rangeOnBestLine.end.character),
+    );
+  }
+
+  /**
+   * Creates a range on the best line according to diagnostic source code.
+   *
+   * If the diagnostic points to a copybook file, then the best line is the copybook
+   * declaration within the current source code.
+   *
+   * @param fileName file which diagnostic points to
+   * @param source current source code name
+   * @param range current range
+   */
+  private createRangeOnBestLine(fileName: string, source: string, range: Range): Range {
     if (new Path(fileName).fileName() == source) {
-        return range;
+      return range;
     }
-    let result: any = undefined;
-    const regexp = new RegExp(".*" + this.copyDeclaredInSource(fileName, source).replace(".", "\\.") + ".*", "gmi");
+    const rangeOfCopyDeclaration = this.createRangeOfCopyDeclaration(fileName, source);
+    if (rangeOfCopyDeclaration) {
+      return rangeOfCopyDeclaration;
+    }
+    const lastLineRange = this.createDummyRangeOnLastLine();
+    return lastLineRange;
+  }
+
+  /**
+   * Creates a diagnostic on copy declaration position
+   *
+   * @param fileName file name
+   * @param source source name
+   */
+  private createRangeOfCopyDeclaration(fileName: string, source: string): Range | undefined {
+    let result: Range | undefined = undefined;
+    const regexp = new RegExp("\\s+copy\\s+" + this.copyDeclaredInSource(fileName, source).replace(".", "\\.") + ".*", "gi");
     new Scan(this.sourceLines).scan(regexp, (iterator: any) => {
-      result =  {
+      result = {
         start: {
-          line: iterator.row,
+          line: iterator.row + 1,
           character: 0
         },
         end: {
-          line: iterator.row,
+          line: iterator.row + 1,
           character: 120
         }
       }
       iterator.stop();
     });
-    if (result) {
-      return result;
-    }
-    const length = BufferSplitter.split(this.sourceLines).length
+    return result;
+  }
+
+  /**
+   * Creates a dummy range on the last line of the source code.
+   * It is used when, somehow, the diagnostic returned an invalid line which does not exist on current source code.
+   *
+   * Then, to prevent erros, the diagnostic range is set to the last line of current source code.'
+   */
+  private createDummyRangeOnLastLine(): Range {
+    const length = this.getSplittedSource().length;
     return {
       start: {
         line: length,
@@ -246,6 +301,19 @@ export class CobolDiagnosticParser {
         character: 120
       }
     };
+  }
+
+  /**
+   * Extracts and returns the diagnostic unique identifier from it's message
+   *
+   * @param message diagnostic message
+   */
+  private extractDiagnosticIdentifier(message: string): string | undefined {
+    const diagnosticId = /\[(W...)].*/.exec(message);
+    if (diagnosticId && diagnosticId.length > 1) {
+      return diagnosticId[1];
+    }
+    return undefined;
   }
 
   /**
@@ -262,7 +330,7 @@ export class CobolDiagnosticParser {
       return "Copy not found";
     }
     let copyFounded = false;
-    for (let i = copyArray.length; i > 0 ; i--) {
+    for (let i = copyArray.length; i > 0; i--) {
       const copy = copyArray[i];
       if (!copyFounded && copy && copy.includes(source)) {
         copyFounded = true;
@@ -300,6 +368,16 @@ export class CobolDiagnosticParser {
    */
   public static removeSourceFromCopyCache(source: string) {
     CobolDiagnosticParser.copyHierarchy.delete(source);
+  }
+
+  /**
+   * Returns the source code splitted into an array
+   */
+  private getSplittedSource(): string[] {
+    if (!this.splittedSource) {
+      this.splittedSource = BufferSplitter.split(this.sourceLines);
+    }
+    return this.splittedSource;
   }
 
 }

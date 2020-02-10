@@ -35,7 +35,7 @@ export class PositionFinder {
     if (startLineToFind) {
       startLine = startLineToFind.lineNumber;
     }
-    let document = this.editor.document;
+    const document = this.editor.document;
     // If direction next
     if (direction == PositionFinder.FindNext) {
       return this.findNextPositions(regex, startLine, document, returnFrst);

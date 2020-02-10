@@ -8,6 +8,8 @@ import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
 export class CobolVariable {
     /* Level representing a constant */
     public static CONSTANT_LEVEL: number = 78;
+    /* Level representing a variable without children */
+    public static CONSTANT_WITHOUT_CHILDREN: number = 77;
     /* Level representing a 'enum' */
     public static ENUM_LEVEL: number = 88;
     /* Variable level */
@@ -27,15 +29,37 @@ export class CobolVariable {
     /** Variable is redefines */
     private redefines: boolean;
     /** Children of variable */
-    private children: CobolVariable[] | undefined;
+    private children: CobolVariable[];
     /** Parent variable */
     private parent: CobolVariable | undefined;
+    /** Variable scope */
+    private scope: string | undefined;
+    /** Variable section */
+    private section: "working-storage" | "linkage" | "file" | undefined;
     /** Declaration position */
-    private declarationPosition: RechPosition | undefined;
+    private declarationPosition: RechPosition;
     /** Comment of variable */
-    private comment: string[] | undefined
+    private comment: string[]
+    /** Method return */
+    private methodReturn: boolean | undefined;
+    /** Represents a dummy variable */
+    private dummy: boolean | undefined;
 
-    private constructor(level: number, name: string, picture: string, type: Type, display: boolean, allowNegative: boolean, raw: string, redefines: boolean) {
+    private constructor(level: number,
+                        name: string,
+                        picture: string,
+                        type: Type,
+                        display: boolean,
+                        allowNegative: boolean,
+                        raw: string,
+                        redefines: boolean,
+                        comment: string[],
+                        children: CobolVariable[],
+                        declarationPosition: RechPosition,
+                        dummy: boolean,
+                        scope?: string,
+                        section?: "working-storage" | "linkage" | "file" | undefined,
+                        methodReturn?: boolean) {
         this.level = level;
         this.name = name;
         this.picture = picture;
@@ -44,52 +68,89 @@ export class CobolVariable {
         this.allowNegative = allowNegative;
         this.raw = raw;
         this.redefines = redefines;
+        this.comment = comment;
+        this.children = children;
+        this.declarationPosition = declarationPosition;
+        this.dummy = dummy;
+        this.scope = scope;
+        this.section = section;
+        this.methodReturn = methodReturn;
     }
 
     /**
-     * Creates a CobolVariable instance parsing the specified line
+     * Return a dummy Cobol Variable
+     *
+     * @param name
      */
-    public static parseLine(line: string): CobolVariable {
-        let splitted = CobolVariable.splitVariableInfo(line);
-        let level = Number.parseInt(splitted[0]);
-        let name = splitted[1].replace(".", "");
-        let redefines = line.toLowerCase().includes(" redefines ");
-        let picture = CobolVariable.extractPicture(splitted);
+    public static dummyCobolVariable(name: string) {
+        return new CobolVariable(0, name, "", Type.Alphanumeric, false, false, "", false, [""], [], new RechPosition(1, 1), true);
+    }
+
+    /**
+     * Creates a CobolVariable instance parsing the lines
+     *
+     * @param lineNumber
+     * @param buffer
+     * @param special
+     */
+    public static parseLines(lineNumber: number, buffer: string[], special?:{noChildren?: boolean, noScope?: boolean, noSection?: boolean, ignoreMethodReturn?: boolean, noComment?: boolean}): CobolVariable {
+        const line = buffer[lineNumber];
+        const splitted = CobolVariable.splitVariableInfo(line);
+        const level = Number.parseInt(splitted[0]);
+        const name = splitted[1].replace(".", "");
+        const redefines = line.toLowerCase().includes(" redefines ");
+        const picture = CobolVariable.extractPicture(splitted);
+        let children = new Array();
+        if (!special || !special.noChildren) {
+            children = CobolVariable.parseAndGetChildren(level, lineNumber, buffer);
+        }
+        let comment = [""]
+        if (!special || !special.noComment) {
+           comment = CobolVariable.parserAndGetComment(lineNumber, buffer);
+        }
+        const startDeclarationColumn = line.length - line.trimLeft().length
+        const declarationPosition = new RechPosition(lineNumber, startDeclarationColumn);
+        let section: "working-storage" | "linkage" | "file" | undefined;
+        if (!special || !special.noSection) {
+            section = VariableUtils.findVariableSection(buffer, lineNumber);
+        }
+        let scope;
+        if (!special || !special.noScope) {
+            scope = VariableUtils.findVariableScope(buffer, lineNumber);
+        }
+        let methodReturn = false;
+        if (!special || !special.ignoreMethodReturn) {
+            methodReturn = VariableUtils.isMethodReturn(name, buffer, lineNumber);
+        }
         if (picture === "") {
-            return new CobolVariable(level, name, "", Type.Alphanumeric, true, false, line, redefines);
+            return new CobolVariable(level, name, "", Type.Alphanumeric, true, false, line, redefines, comment, children, declarationPosition, false, scope, section, methodReturn);
         } else {
-            let type = CobolVariable.detectType(picture.toUpperCase());
-            let display = CobolVariable.isDisplay(picture.toUpperCase());
-            let allowNegative = CobolVariable.allowNegative(picture.toUpperCase());
-            return new CobolVariable(level, name, picture, type, display, allowNegative, line, redefines);
+            const type = CobolVariable.detectType(picture.toUpperCase());
+            const display = CobolVariable.isDisplay(picture.toUpperCase());
+            const allowNegative = CobolVariable.allowNegative(picture.toUpperCase());
+            return new CobolVariable(level, name, picture, type, display, allowNegative, line, redefines, comment, children, declarationPosition, false, scope, section, methodReturn);
         }
     }
 
     /**
-     * Parse the source and defines the children of the specidied variable
+     * Parse the source and returns the children of the specidied variable
      *
-     * @param variable
+     * @param level
      * @param line
      * @param lines
-     * @param level
      */
-    public static parseAndSetChildren(variable: CobolVariable, line: number, lines: string[]) {
-        let level = variable.getLevel();
-        let result: CobolVariable[] = [];
+    private static parseAndGetChildren(level: Number, line: number, lines: string[]) {
+        const allChildren: CobolVariable[] = [];
         let firstChildrenLevel = 0;
         for (let index = line + 1; index < lines.length; index++) {
-            let currentLine = lines[index];
-            let match = /^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/g.exec(currentLine);
+            const currentLine = lines[index];
+            const match = /^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/g.exec(currentLine);
             if (match) {
-                let splitted = CobolVariable.splitVariableInfo(currentLine);
-                let currentLevel = Number.parseInt(splitted[0]);
+                const splitted = CobolVariable.splitVariableInfo(currentLine);
+                const currentLevel = Number.parseInt(splitted[0]);
                 if (currentLevel > level &&
                     !CobolVariable.isEspecialVariableType(splitted[0])) {
-                    let children = CobolVariable.parseLine(currentLine);
-                    children = CobolVariable.parseAndSetChildren(children, index, lines);
-                    children = CobolVariable.parserAndSetComment(children, index, lines);
-                    let startDeclarationColumn = currentLine.length - currentLine.trimLeft().length
-                    children.setDeclarationPosition(new RechPosition(index, startDeclarationColumn))
+                    const children = CobolVariable.parseLines(index, lines);
                     if (firstChildrenLevel == 0) {
                         firstChildrenLevel = children.getLevel();
                     } else {
@@ -97,31 +158,29 @@ export class CobolVariable {
                             continue
                         }
                     }
-                    result.push(children);
+                    allChildren.push(children);
                 } else {
                     break;
                 }
-            }
-            if (/^.*(section|division)[\.\,]?\s*$/i.test(currentLine)) {
-                break;
+                if (/^.*(section|division)[\.\,]?\s*$/i.test(currentLine)) {
+                    break;
+                }
             }
         }
-        variable.setChildren(result);
-        return variable;
+        return allChildren;
     }
 
     /**
-     * Parser the lines and set the variable comments
+     * Parser the lines and returns the variable comments
      *
      * @param variable
      * @param line
      * @param lines
      */
-    public static parserAndSetComment(variable: CobolVariable, line: number, lines: string[]) {
-        let docArray = VariableUtils.findVariableDocArray(lines, line);
-        let doc = new CobolDocParser().parseCobolDoc(docArray);
-        variable.setComment(doc.comment);
-        return variable;
+    private static parserAndGetComment(line: number, lines: string[]) {
+        const docArray = VariableUtils.findVariableDocArray(lines, line);
+        const doc = new CobolDocParser().parseCobolDoc(docArray);
+        return doc.comment;
     }
 
     /**
@@ -140,15 +199,6 @@ export class CobolVariable {
      */
     public static isEnumVariableType(level: string) {
         return /88/.test(level)
-    }
-
-    /**
-     * Returns true if the variable represents a group item (it's name that ends with dot)
-     *
-     * @param name variable name
-     */
-    private static isGroupItem(name: string) {
-        return name.endsWith(".");
     }
 
     /**
@@ -298,7 +348,7 @@ export class CobolVariable {
         if (picture === "") {
             return 0;
         }
-        let expandedPicture = this.expandPricture(picture);
+        const expandedPicture = this.expandPricture(picture);
         let absolutePicture = expandedPicture.toLowerCase().replace(/comp.*/, "")
         if (!CobolVariable.hasComp(picture)) {
             absolutePicture = absolutePicture.replace("v", "");
@@ -367,9 +417,9 @@ export class CobolVariable {
             if (i < picture.length - 1) {
                 // If the next char is a "("
                 if (picture.charAt(i + 1) == "(") {
-                    let fim = picture.indexOf(")", i + 1)
-                    let firstChar = picture.charAt(i);
-                    let sSize = picture.substr(i + 2, fim - i - 2);
+                    const fim = picture.indexOf(")", i + 1)
+                    const firstChar = picture.charAt(i);
+                    const sSize = picture.substr(i + 2, fim - i - 2);
                     let size = 0;
                     if (!Number.isNaN(Number(sSize))) {
                         size = Number.parseInt(sSize);
@@ -388,7 +438,7 @@ export class CobolVariable {
      * Returns the occurs of variable
      */
     private getOccurs(): number {
-        let occurs = /.*occurs\s+(\d+)\s+times.*/i.exec(this.raw);
+        const occurs = /.*occurs\s+(\d+)\s+times.*/i.exec(this.raw);
         if (!occurs) {
             return 1;
         } else {
@@ -503,6 +553,73 @@ export class CobolVariable {
      */
     public setComment(comment: string[]) {
         this.comment = comment;
+    }
+
+    /**
+     * Returns the scope of variable
+     */
+    public getScope(): string | undefined {
+        return this.scope;
+    }
+
+    /**
+     * Defines the scope of variable
+     *
+     * @param scope
+     */
+    public setScope(scope: string | undefined) {
+        this.scope = scope;
+    }
+
+    /**
+     * Returns the section of variable
+     */
+    public getSection(): "working-storage" | "linkage" | "file" | undefined {
+        return this.section;
+    }
+
+    /**
+     * Defines the section of variable
+     *
+     * @param section
+     */
+    public setSection(section: "working-storage" | "linkage" | "file" | undefined) {
+        this.section = section;
+    }
+
+    /**
+     * Returns true if the the variable is a method return
+     */
+    public isMethodReturn(): boolean {
+        if (this.methodReturn) {
+            return this.methodReturn;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns true if the variable is a object reference
+     */
+    public getObjectReferenceOf(): string | undefined {
+        const match = this.raw.match(/.*\sobject\sreference\s+(.*)\./);
+        return match ? match[1] : undefined;
+    }
+
+    /**
+     * Defines the variable as method return
+     *
+     * @param methodReturn
+     */
+    public setMethodReturn(methodReturn: boolean) {
+        this.methodReturn = methodReturn;
+    }
+
+    /**
+     * Returns true if this is a dummy variable
+     */
+    public isDummy(): boolean {
+        return this.dummy ? true : false;
     }
 
 }

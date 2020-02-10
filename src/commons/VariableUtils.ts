@@ -68,4 +68,81 @@ export class VariableUtils {
         return false;
     }
 
+    /**
+     * Parse the lines and find the section from specific line
+     *
+     * @param lines
+     * @param line
+     */
+    public static findVariableSection(lines: string[], line: number): "working-storage" | "linkage" | "file" | undefined {
+        let section: "working-storage" | "linkage" | "file"| undefined;
+        for (let i = line; i >= 0; i--) {
+            const currentLine = lines[i];
+            let match;
+            match = /^(.*)section[\.\,]?\s*$/i.exec(currentLine)
+            if (!section && match) {
+                section = <"working-storage" | "linkage" | "file"> match[1];
+                break;
+            }
+        }
+        return section;
+    }
+
+    /**
+     * Parse the lines and find the scope from specific line
+     *
+     * @param lines
+     * @param line
+     */
+    public static findVariableScope(lines: string[], line: number): string {
+        let section: string | undefined;
+        for (let i = line; i >= 0; i--) {
+            const currentLine = lines[i];
+            let match;
+            match = /^\s*(repository|factory|object)[\.\,]?\s*$/i.exec(currentLine)
+            if (match) {
+                section = match[1].toLowerCase();
+                break;
+            }
+            match = /^\s*method-id[\.]?\s(.+)[\.]?\s*$/i.exec(currentLine)
+            if (match) {
+                section = match[1].split(" ")[0];
+                break;
+            }
+            if (/^.*data\s+division[\.\,]?\s*$/i.test(currentLine)) {
+                break;
+            }
+        }
+        return section ? section : "object";
+    }
+
+    /**
+     * Returns true if the variable scope is local
+     *
+     * @param varible
+     */
+    public static isLocalScope(varibleScope: CobolVariable | string) {
+        let scope;
+        if (varibleScope instanceof CobolVariable) {
+            scope = varibleScope.getScope();
+        } else {
+            scope = varibleScope
+        }
+        return scope != "object" && scope != "factory" && scope != "repository"
+    }
+
+    /**
+     * Returns true if the variable is a return variable from his method
+     *
+     * @param varible
+     */
+    public static isMethodReturn(varible: string, lines: string[], line: number): boolean {
+        for (let i = line; i < lines.length; i++) {
+            if (lines[i].trim().startsWith("procedure")) {
+                return new RegExp(`returning\\s+${varible}`, "gi").test(lines[i]);
+            }
+        }
+        return false;
+    }
+
 }

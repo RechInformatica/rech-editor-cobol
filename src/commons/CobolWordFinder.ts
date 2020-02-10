@@ -1,3 +1,4 @@
+import { WordFinder } from "rech-ts-commons";
 
 /**
  * Class used to find Cobol words
@@ -11,7 +12,7 @@ export class CobolWordFinder {
      * @param column column where part the word is located
      */
     public findWordWithIndexAt(lineText: string, column: number): string {
-        return this.findWordWithRegex(lineText, column, this.getCobolWordWithIndexRegex());
+        return WordFinder.findWordWithRegex(lineText, column, this.getCobolWordWithIndexRegex());
     }
 
     /**
@@ -21,26 +22,7 @@ export class CobolWordFinder {
      * @param column column where part the word is located
      */
     public findWordAt(lineText: string, column: number): string {
-        return this.findWordWithRegex(lineText, column, this.getCobolWordRegex());
-    }
-
-    /**
-     * Finds the Cobol word using the specified regular expression
-     *
-     * @param lineText current line text
-     * @param column column where part the word is located
-     * @param regex regular expression to find the cobol Word
-     */
-    private findWordWithRegex(lineText: string, column: number, cobolWordRegex: RegExp) {
-        var result: any;
-        while ((result = cobolWordRegex.exec(lineText)) !== null) {
-            const start = result.index;
-            const end = start + result[0].length;
-            if (start <= column && column <= end) {
-                return result[0];
-            }
-        }
-        return "";
+        return WordFinder.findWordWithRegex(lineText, column, this.getCobolWordRegex());
     }
 
     /**
@@ -50,15 +32,7 @@ export class CobolWordFinder {
      * @param column initial column
      */
     public getNextWordColumn(lineText: string, column: number): number {
-        const cobolWordRegex = this.getCobolWordRegex();
-        let result: any;
-        while ((result = cobolWordRegex.exec(lineText)) !== null) {
-            const start = result.index;
-            if (start > column) {
-                return start;
-            }
-        }
-        return column;
+        return WordFinder.getNextWordColumn(lineText, column, this.getCobolWordRegex());
     }
 
     /**

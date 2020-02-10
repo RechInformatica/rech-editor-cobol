@@ -19,6 +19,8 @@ export class Editor {
   private static copyHierarchy: GenericExecutor;
   /** Source preprocessor function */
   private static preprocessor: GenericExecutor;
+  /** Special class puller */
+  private static specialClassPuller: GenericExecutor;
 
   constructor() {
     this.editor = <TextEditor>this.getActiveEditor();
@@ -128,7 +130,7 @@ export class Editor {
    * Returns the current word
    */
   getCurrentWord() {
-    const range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÞÂÀãÃÊËÈÞÞÞÌÓÔÒõÕÚÛÙüÉì_\-])+/g);
+    const range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-9ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÞÂÀãÃÊËÈÞÞÞÌÓÔÒõÕÚÛÙüÉì_\-])+/g);
     if (range === undefined) {
       return '';
     }
@@ -158,6 +160,13 @@ export class Editor {
    */
   getCurrentRow() {
     return this.editor.selection.start.line;
+  }
+
+  /**
+   * Return current line
+   */
+  getCurrentColumn() {
+    return this.editor.selection.start.character;
   }
 
   /**
@@ -378,6 +387,21 @@ export class Editor {
   }
 
   /**
+   * Opens the specificied file and set the cursor position
+   *
+   * @param position
+   */
+  public openFileAndSetPosition(position: RechPosition) {
+    if (position.file) {
+      this.openFile(position.file, () => {
+        new Editor().setCursor(position.line, position.column);
+      });
+    } else {
+      this.setCursor(position.line, position.column);
+    }
+  }
+
+  /**
    * Opens the specified file
    *
    * @param file file to be opened
@@ -569,7 +593,7 @@ export class Editor {
       return;
     }
     //Indent the selection range
-    await indenter.indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), (buffer) => {
+    await indenter.indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), this.editor.selection.start.line, (buffer) => {
       this.replaceBuffer(buffer, restoreCursor);
     }, (bufferErr) => { this.showWarningMessage(bufferErr); });
   }
@@ -699,6 +723,22 @@ export class Editor {
    */
   public static getCopyHierarchy() {
     return Editor.copyHierarchy
+  }
+
+  /**
+   * Define the function to return the available classes
+   *
+   * @param specialClassPuller
+   */
+  public static setSpecialClassPuller(specialClassPuller: GenericExecutor) {
+    Editor.specialClassPuller = specialClassPuller
+  }
+
+  /**
+   * Define the function to return the available classes
+   */
+  public static getSpecialClassPuller() {
+    return Editor.specialClassPuller;
   }
 
   /**

@@ -62,8 +62,9 @@ export class CobolDoc {
      */
     public asMarkdown(): string {
         let markdown = "";
-        markdown = markdown.concat(this._comment.join(" ")).concat("\n\n\n");
-        markdown = this.elementsAsMarkdown();
+        const joined = this._comment.join("\n");
+        markdown = markdown.concat(joined).concat("\n\n\n");
+        markdown += this.elementsAsMarkdown();
         return markdown;
     }
 
@@ -87,7 +88,14 @@ export class CobolDoc {
     private elementArrayAsMarkdown(elements: DocElement[], metaName: string): string {
         let markdown = "";
         elements.forEach(currentParam => {
-            markdown = markdown.concat("*" + metaName + "* `" + currentParam.name + "` - " + currentParam.description + "\n\n");
+            markdown = markdown.concat("*" + metaName + "* `" + currentParam.name + "`");
+            if (currentParam.type) {
+                markdown = markdown.concat(" : `" + currentParam.type + "`");
+            }
+            if (currentParam.description) {
+                markdown = markdown.concat(" - " + currentParam.description);
+            }
+            markdown = markdown.concat("\n\n");
         });
         return markdown;
     }

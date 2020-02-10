@@ -1,7 +1,7 @@
 
 import { HighlightInterface } from "./HighlightInterface";
 import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
-import { Scan } from "../../commons/Scan";
+import { Scan } from "rech-ts-commons";
 
 /**
  * Class to return the default behavior of highlight

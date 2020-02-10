@@ -12,8 +12,8 @@ export class ToCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let currentText = lines[line];
-            let text = this.buildToTextWithTabStop(currentText, column);
+            const currentText = lines[line];
+            const text = this.buildToTextWithTabStop(currentText, column);
             resolve(
                 [{
                     label: 'TO command',
@@ -48,9 +48,9 @@ export class ToCompletion implements CompletionInterface {
      * @param column current cursor column
      */
     public buildToTextWithIndent(currentText: string, column: number): string {
-        let wordReplacement =  CompletionUtils.fillSpacesFromWordStart(TO_COLUMN_DECLARATION, column, currentText) + "to";
-        let futureLine = CompletionUtils.replaceLastWord(currentText, wordReplacement);
-        let finalText = wordReplacement + CompletionUtils.fillSpacesFromWordEnd(35, futureLine.length, futureLine);
+        const wordReplacement =  CompletionUtils.fillSpacesFromWordStart(TO_COLUMN_DECLARATION, column, currentText) + "to";
+        const futureLine = CompletionUtils.replaceLastWord(currentText, wordReplacement);
+        const finalText = wordReplacement + CompletionUtils.fillSpacesFromWordEnd(35, futureLine.length, futureLine);
         return finalText;
     }
 

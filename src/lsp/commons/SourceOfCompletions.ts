@@ -4,6 +4,8 @@ import { StatusBarItem, window, StatusBarAlignment } from "vscode";
 const PARAGRAPHSTATUSBARPRIORITY = 200;
 /** Variable status bar priority */
 const VARIABLESTATUSBARPRIORITY = 199;
+/** Variable status bar priority */
+const CLASSSTATUSBARPRIORITY = 198;
 
 export class SourceOfCompletions {
 

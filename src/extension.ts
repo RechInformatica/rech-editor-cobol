@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, commands, StatusBarItem, window, StatusBarAlignment } from 'vscode';
+import { commands, window } from 'vscode';
 import { GeradorCobol } from './cobol/gerador-cobol';
 import { Editor } from './editor/editor';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
@@ -10,20 +10,23 @@ import { CustomDecorator } from './decoration/CustomDecorator';
 import { SourceOfCompletions } from './lsp/commons/SourceOfCompletions';
 import { ElementsDisplayerFactory } from './cobol/elementsdisplayer/ElementsDisplayerFactory';
 import { Log } from './commons/Log';
-import { configuration, Configuration } from './helpers/configuration';
-import { GenericExecutor } from './commons/genericexecutor';
-import { cobolDiagnosticFilter, CobolDiagnosticFilter } from './cobol/diagnostic/cobolDiagnosticFilter';
+import { configuration } from './helpers/configuration';
 import { FoldStatusBar } from './lsp/fold/FoldStatusBar';
 import { ExpandedSourceStatusBar } from './cobol/ExpandedSourceStatusBar';
+import FlowProvider from './sourceflow/treeView/providers/FlowProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(_context: any) {
-    const context = <ExtensionContext>_context;
-    // Starts the LSP Client
-    Client.startServerAndEstablishCommunication(_context);
-    // Custom decorators beyond language syntax highlight
-    CustomDecorator.activate(_context);
+export async function activate(context: any) {
+    await _activate(context).catch(err => console.error(err));
+}
+
+/**
+ * Function to activate the extension
+ *
+ * @param context
+ */
+async function _activate(context: any) {
     // Build the statusBar to control the source of completions suggested in the server side
     SourceOfCompletions.buildStatusBar();
     // Build the statusBar from folding
@@ -32,6 +35,17 @@ export function activate(_context: any) {
     ExpandedSourceStatusBar.buildStatusBar();
     // Configures the Logging instance on client side
     Log.get().setActive(configuration.get<boolean>("log"));
+    // Starts the LSP Client
+    Client.startServerAndEstablishCommunication(context);
+    // Custom decorators beyond language syntax highlight
+    CustomDecorator.activate(context);
+    //
+    SourceOfCompletions.show();
+
+    // This register the provider from the Flow list view
+    const flowProvider = new FlowProvider(context);
+    window.registerTreeDataProvider("cobolflowview", flowProvider);
+
     //
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
@@ -85,7 +99,8 @@ export function activate(_context: any) {
         const buffer = editor.getEditorBuffer();
         const uri = editor.getPath().fullPathVscode();
         const line = editor.getCurrentRow();
-        new ElementsDisplayerFactory().show(word, buffer, uri, line);
+        const column = editor.getCurrentColumn();
+        new ElementsDisplayerFactory().show(word, buffer, uri, line, column);
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos12', () => {
         new Editor().setColumn(AREA_B - 1).then().catch();
@@ -111,59 +126,6 @@ export function activate(_context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.definesSourceExpander', () => {
         SourceOfCompletions.toggleTheVariableSource();
     }));
-    defineSourceExpander()
-    definePreprocessor()
-    defineDianosticConfigs()
-    defineCopyHierarchyFunction()
-}
-
-/**
- * Sets the global source expander which is responsible for executing Cobol Preprocessor
- */
-function defineSourceExpander() {
-    const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("sourceExpanderFunction");
-    commands.executeCommand(commandToConfigSourceExpander).then((sourceExpander) => {
-        if (sourceExpander) {
-            Editor.setSourceExpander(<GenericExecutor>sourceExpander)
-        }
-    });
-}
-
-/**
- * Sets the global source compile which is responsible for executing Cobol Compile
- */
-function definePreprocessor() {
-    const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("preprocessorFunction");
-    commands.executeCommand(commandToConfigSourceExpander).then((preproc) => {
-        if (preproc) {
-            Editor.setPreprocessor(<GenericExecutor>preproc);
-        }
-    });
-}
-
-/**
- * Sets configurations for Cobol source diagnostic
- */
-function defineDianosticConfigs() {
-    const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("dianosticProperties");
-    commands.executeCommand(commandToConfigSourceExpander).then((cobolDiagnosticFilterProperties) => {
-        if (cobolDiagnosticFilterProperties) {
-            cobolDiagnosticFilter.setAutoDiagnostic((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).autoDiagnostic);
-            cobolDiagnosticFilter.setNoShowWarnings((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).noShowWarnings);
-        }
-    });
-}
-
-/**
- * Sets configurations for Cobol source diagnostic
- */
-function defineCopyHierarchyFunction() {
-    const commandToConfigSourceExpander = new Configuration("rech.editor.cobol.callback").get<string>("copyHierarchy");
-    commands.executeCommand(commandToConfigSourceExpander).then((copyHierarchy) => {
-        if (copyHierarchy) {
-            Editor.setCopyHierarchy(<GenericExecutor>copyHierarchy);
-        }
-    });
 }
 
 // this method is called when your extension is deactivated
@@ -177,8 +139,6 @@ export * from "./commons/VariableUtils";
 export * from "./commons/file";
 export * from "./commons/path";
 export * from "./commons/Process";
-export * from "./commons/Scan";
-export * from "./commons/BufferSplitter";
 export * from "./editor/editor";
 export * from "./editor/SourceExpander";
 export * from "./commons/rechposition";
@@ -186,10 +146,10 @@ export * from "./commons/genericexecutor";
 export * from "./indent/indent";
 export * from "./cobol/parsercobol";
 export * from "./cobol/gerador-cobol";
-export * from "./cobol/compiler";
 export * from "./cobol/rechdoc/ElementDocumentationExtractor"
 export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./lsp/declaration/CobolDeclarationFinder";
 export * from "./cobol/diagnostic/cobolDiagnosticFilter";
 export * from "./cobol/ExpandedSourceManager";
+export * from "./cobol/TabStopper";
 export * from "./commons/Log";

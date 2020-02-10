@@ -18,12 +18,17 @@ export class FoldStatusBar {
     /**
      * Show the statusBar from folding
      */
-    public static show() {
+    public static show(file?: string) {
         if (FoldStatusBar.isVisible) {
             return;
         }
         FoldStatusBar.isVisible = true;
         if (FoldStatusBar.foldStatusBar) {
+            if (file) {
+                FoldStatusBar.foldStatusBar.tooltip = file;
+            } else {
+                FoldStatusBar.foldStatusBar.tooltip = undefined;
+            }
             FoldStatusBar.foldStatusBar.show();
         }
     }

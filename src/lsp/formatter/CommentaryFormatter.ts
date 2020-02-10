@@ -16,9 +16,27 @@ export class CommentaryFormatter implements FormatterInterface {
      * @param column column number where cursor is positioned
      * @param lines document lines
      */
-    public generate(line: number, _column: number, lines: string[]): TextEdit[] {
-        let previousCommandStartColumn = this.getPreviousCommand(line, lines);
-        return [FormatterUtils.createIndentTextEdit(line, 0, previousCommandStartColumn - COMMENTARYCOLUMN + 1)];
+    public generate(line: number, column: number, lines: string[]): TextEdit[] {
+        if (this.isRechDocLine(line, lines)) {
+            return [
+                {
+                    range: {
+                        start: {
+                            line: line,
+                            character: column
+                        },
+                        end: {
+                            line: line,
+                            character: column
+                        }
+                    },
+                    newText: "*> "
+                }
+            ];
+        } else {
+            const previousCommandStartColumn = this.getPreviousCommand(line, lines);
+            return [FormatterUtils.createIndentTextEdit(line, 0, previousCommandStartColumn - COMMENTARYCOLUMN + 1)];
+        }
     }
 
     /**
@@ -40,5 +58,60 @@ export class CommentaryFormatter implements FormatterInterface {
         }
         return COMMENTARYCOLUMN;
     }
+
+
+    /**
+     * Returns true if is a rechDoc comment line
+     */
+    private isRechDocLine(line: number, lines: string[]): boolean {
+        return this.isAfterTheStartOfRechDoc(line, lines) && this.isBeforeTheEndOfRechDoc(line, lines);
+    }
+
+    /**
+     * Return true if the line after the rechDoc start line
+     *
+     * @param line
+     * @param lines
+     */
+    private isAfterTheStartOfRechDoc(line: number, lines: string[]): boolean {
+        for (let i = line - 1; i > 0; i--) {
+            const currentLine = lines[i];
+            if (currentLine.trim().startsWith("*>/**")) {
+                return true;
+            }
+            if (currentLine.trim().startsWith("*>")) {
+                continue;
+            }
+            if (currentLine.trim() == "") {
+                continue;
+            }
+            break;
+        }
+        return false;
+    }
+
+    /**
+     * Return true if the line after the rechDoc start line
+     *
+     * @param line
+     * @param lines
+     */
+    private isBeforeTheEndOfRechDoc(line: number, lines: string[]): boolean {
+        for (let i = line; i < lines.length; i++) {
+            const currentLine = lines[i];
+            if (currentLine.trim().startsWith("*>*/")) {
+                return true;
+            }
+            if (currentLine.trim().startsWith("*>")) {
+                continue;
+            }
+            if (currentLine.trim() == "") {
+                continue;
+            }
+            break;
+        }
+        return false;
+    }
+
 
 }
