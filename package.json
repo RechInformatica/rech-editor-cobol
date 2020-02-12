@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit Cobol files with Visual Studio Code",
-	"version": "1.0.70",
+	"version": "1.0.71",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.35.0"
@@ -66,6 +66,10 @@
 						50
 					],
 					"description": "COBOL tabstops"
+				},
+				"rech.editor.cobol.formatter.location": {
+					"type": "string",
+					"description": "COBOL external formatter location."
 				},
 				"rech.editor.cobol.snippetsRepositories": {
 					"type": "array",
@@ -241,6 +245,18 @@
 				"title": "Rech COBOL: Sets cursor on the next paragraph declaration"
 			},
 			{
+				"command": "rech.editor.cobol.indent",
+				"title": "Rech COBOL: Indents selected range or indents current line when no range is selected"
+			},
+			{
+				"command": "rech.editor.cobol.indentLeft",
+				"title": "Rech COBOL: Indents source to left"
+			},
+			{
+				"command": "rech.editor.cobol.indentRight",
+				"title": "Rech COBOL: Indents source to right"
+			},
+			{
 				"command": "rech.editor.cobol.cursorPos51",
 				"title": "Rech COBOL: Sets cursor at position 51"
 			},
@@ -328,6 +344,21 @@
 			{
 				"command": "rech.editor.cobol.findPreviousParagraph",
 				"key": "alt+shift+k",
+				"when": "editorLangId == COBOL"
+			},
+			{
+				"command": "rech.editor.cobol.indent",
+				"key": "alt+shift+f",
+				"when": "editorLangId == COBOL"
+			},
+			{
+				"command": "rech.editor.cobol.indentLeft",
+				"key": "alt+shift+left",
+				"when": "editorLangId == COBOL"
+			},
+			{
+				"command": "rech.editor.cobol.indentRight",
+				"key": "alt+shift+right",
 				"when": "editorLangId == COBOL"
 			},
 			{

@@ -125,9 +125,13 @@
         "version": "49412fe73f342b26e33bcd3509e2cb12a3cd226c51a876458bfa96f69e8a5abb",
         "signature": "49412fe73f342b26e33bcd3509e2cb12a3cd226c51a876458bfa96f69e8a5abb"
       },
+      "./src/helpers/configuration.ts": {
+        "version": "e8c2e69491b88b331b95ccd741724987dc835236ee03d12dbcb007717569969b",
+        "signature": "843238e81e70229c7077f9da55bceea2562a524e3ba962042a56081dac23d2fd"
+      },
       "./src/indent/indent.ts": {
-        "version": "29b943355e6bbf85575061b32b801863ce6835f6e559aa35b6769acaa639216d",
-        "signature": "b1adc8ca1d0deea879ce6ebcb50e48277273bf6f1bb312eae70a5ef3fe6570b4"
+        "version": "46599e9be375a550ea9f7c42d1b705cb898a2f9c9710bcff64252fc8e08c1222",
+        "signature": "60acd49c4fdf5b2257eaacaaf7227deb461205620c7a7a4352e1d87d4762b27d"
       },
       "./src/commons/genericexecutor.ts": {
         "version": "8275158631a8cc0044dd277a60422ae7b3982c794d8fb11653a7997325680ad9",
@@ -138,16 +142,12 @@
         "signature": "50ff68ca5ef6200c58735dd2a61c9bb99554970dc86643423fa5d35218eac388"
       },
       "./src/editor/editor.ts": {
-        "version": "39f3b82c5d75f9e5b93127053e24d86c25c761ae4dd10b2ea3434783ac8dfbf7",
+        "version": "80af246287fbf9f7cbf0000c3735f97762ab3f4d6bd5433b47da6437cff39656",
         "signature": "207d2c9775a8279159f39ccc6781ea86fa3c2f99758220405f371a963ba59109"
       },
       "./src/cobol/diagnostic/coboldiagnosticfilter.ts": {
         "version": "09903843f3db1bf60096784cc614d1a45cfd26b3f080bce5bf8d703d6bcec1ae",
         "signature": "541e948843509ebf5a78df43eb8c5c610f72d6e3a7bb59fca12f3a12f8a0daff"
-      },
-      "./src/helpers/configuration.ts": {
-        "version": "e8c2e69491b88b331b95ccd741724987dc835236ee03d12dbcb007717569969b",
-        "signature": "843238e81e70229c7077f9da55bceea2562a524e3ba962042a56081dac23d2fd"
       },
       "./src/dependencieinjection.ts": {
         "version": "57e8996260bd159378da8f3a2381226019379abbc82f835b910bde2caea73d94",
@@ -482,7 +482,7 @@
         "signature": "a2fcb8d771559666487eb4e26cf91f71c32593f2fc112302f3ae023f40f8be10"
       },
       "./src/extension.ts": {
-        "version": "e247cbe746d9bf839ed7350afe603f25403195982e4751513a55882a9c92fc78",
+        "version": "6be848477f5d0dcad8fcdb7c4b127f9c34f4da59bd909a699077784d50fc7a1b",
         "signature": "6382014926a7c506aa58bf974f686f96d2eee2b4761fe198bcedfb1a051eed63"
       },
       "./src/cobol/posicionamento.ts": {
@@ -1088,11 +1088,17 @@
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
+      "./src/helpers/configuration.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
       "./src/indent/indent.ts": [
         "./src/commons/file.ts",
         "./src/commons/executor.ts",
         "./node_modules/iconv-lite/lib/index.d.ts",
         "./node_modules/rech-ts-commons/out/index.d.ts",
+        "./src/helpers/configuration.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -1118,11 +1124,6 @@
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./src/cobol/diagnostic/coboldiagnosticfilter.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./src/helpers/configuration.ts": [
-        "./node_modules/vscode/vscode.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -3501,12 +3502,11 @@
       "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts",
       "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts",
       "./node_modules/rech-ts-commons/out/index.d.ts",
-      "./src/indent/indent.ts",
+      "./src/helpers/configuration.ts",
       "./src/commons/genericexecutor.ts",
       "./src/editor/positionfinder.ts",
       "./src/editor/editor.ts",
       "./src/cobol/diagnostic/coboldiagnosticfilter.ts",
-      "./src/helpers/configuration.ts",
       "./src/dependencieinjection.ts",
       "./src/cobol/colunas.ts",
       "./src/cobol/gerador-cobol.ts",
@@ -3600,6 +3600,7 @@
       "./node_modules/vscode-languageserver/lib/main.d.ts",
       "./src/cobol/diagnostic/coboldiagnostic.ts",
       "./src/lsp/commons/completionutils.ts",
+      "./src/cobol/diagnostic/coboldiagnosticparser.ts",
       "./src/cobol/diagnostic/diagnostician.ts",
       "./src/cobol/diagnostic/textposition.ts",
       "./src/cobol/diagnostic/textrange.ts",
@@ -3702,7 +3703,7 @@
       "./src/test/lsp/formatter/performvaryingformatter.test.ts",
       "./src/test/lsp/highlight/ifhighlight.test.ts",
       "./node_modules/@types/iconv-lite/index.d.ts",
-      "./src/cobol/diagnostic/coboldiagnosticparser.ts"
+      "./src/indent/indent.ts"
     ]
   },
   "version": "3.7.5"

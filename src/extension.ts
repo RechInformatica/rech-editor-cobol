@@ -126,6 +126,15 @@ async function _activate(context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.definesSourceExpander', () => {
         SourceOfCompletions.toggleTheVariableSource();
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indent', () => {
+        new Editor().indent("N").then().catch();
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indentLeft', () => {
+        new Editor().indent("E").then().catch();
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indentRight', () => {
+        new Editor().indent("D").then().catch();
+    }));
 }
 
 // this method is called when your extension is deactivated
