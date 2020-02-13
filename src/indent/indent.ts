@@ -245,8 +245,33 @@ export class Indenta {
    * Returns the configured COBOL formatter location for this extension
    */
   private getConfiguredFormatterLocation(): string {
-    const path = configuration.get("formatter.location", "");
-    return path;
+    const path = configuration.get("formatter.location", "").trim();
+    const pathWithQuotes = this.insertQuotesIfNeeded(path);
+    return pathWithQuotes;
+  }
+
+  /**
+   * Insert quotes on the specified path if needed.
+   * If the path already contains quotes or the path is empty, the path itself is returned.
+   *
+   * @param path path where quotes will be inserted
+   */
+  private insertQuotesIfNeeded(path: string): string {
+    if (path.length == 0 || this.containsQuotes(path)) {
+      return path;
+    }
+    return "\"" + path + "\"";
+  }
+
+  /**
+   * Returns true if the specified path contains quotes at the beginning or the end of the string
+   *
+   * @param path path to check if already contains quotes
+   */
+  private containsQuotes(path: string): boolean {
+    const length = path.length;
+    const containsQuotes = (path.charAt(0) == "\"" && path.charAt(length - 1) == "\"");
+    return containsQuotes;
   }
 
   /**
@@ -254,7 +279,7 @@ export class Indenta {
    */
   private buildTmpFileName(): string {
     const tempDirectory = this.getTempDirectoryWithSeparator();
-    const username =  os.userInfo().username.toLowerCase();
+    const username = os.userInfo().username.toLowerCase();
     const extension = ".cbl";
     const tempFileName = tempDirectory + username + extension;
     return tempFileName;

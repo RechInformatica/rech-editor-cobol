@@ -130,8 +130,8 @@
         "signature": "843238e81e70229c7077f9da55bceea2562a524e3ba962042a56081dac23d2fd"
       },
       "./src/indent/indent.ts": {
-        "version": "46599e9be375a550ea9f7c42d1b705cb898a2f9c9710bcff64252fc8e08c1222",
-        "signature": "60acd49c4fdf5b2257eaacaaf7227deb461205620c7a7a4352e1d87d4762b27d"
+        "version": "d61506820d334d7b98bf0646630fced9c6ec9a6c637de91654e00d3a2ace18e6",
+        "signature": "51947d97699fd5470e85a4f4fe60f87f3c95ea43905cb31bbb8d3e5a5f17bcdf"
       },
       "./src/commons/genericexecutor.ts": {
         "version": "8275158631a8cc0044dd277a60422ae7b3982c794d8fb11653a7997325680ad9",
@@ -3505,7 +3505,6 @@
       "./src/helpers/configuration.ts",
       "./src/commons/genericexecutor.ts",
       "./src/editor/positionfinder.ts",
-      "./src/editor/editor.ts",
       "./src/cobol/diagnostic/coboldiagnosticfilter.ts",
       "./src/dependencieinjection.ts",
       "./src/cobol/colunas.ts",
@@ -3590,7 +3589,6 @@
       "./src/cobol/expandedsourcemanager.ts",
       "./src/lsp/completion/cobolmethod.ts",
       "./src/lsp/declaration/coboldeclarationfinder.ts",
-      "./src/extension.ts",
       "./src/cobol/posicionamento.ts",
       "./src/cobol/diagnostic/coboldiagnosticpreprocmanager.ts",
       "./node_modules/vscode-languageserver/lib/thenable.d.ts",
@@ -3703,7 +3701,9 @@
       "./src/test/lsp/formatter/performvaryingformatter.test.ts",
       "./src/test/lsp/highlight/ifhighlight.test.ts",
       "./node_modules/@types/iconv-lite/index.d.ts",
-      "./src/indent/indent.ts"
+      "./src/indent/indent.ts",
+      "./src/extension.ts",
+      "./src/editor/editor.ts"
     ]
   },
   "version": "3.7.5"
