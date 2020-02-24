@@ -370,7 +370,7 @@
         "signature": "cc3681139ba4290615f58b04716677d6400b61662a261b10473c785410dd40c0"
       },
       "./src/decoration/customdecorator.ts": {
-        "version": "d53fed4e5ed5b0d625bc9e71e745920b7b3db2f927be769de49889e854165d70",
+        "version": "b2f55957da405e2685fa001203643fedb679a84f70fd37beea0affa2cddca830",
         "signature": "01b2b05810f2aa83deb26f7b6b36b787decb6def687891e02fb501d6cbf8c10b"
       },
       "./src/cobol/parsercobol.ts": {
@@ -3503,8 +3503,10 @@
       "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts",
       "./node_modules/rech-ts-commons/out/index.d.ts",
       "./src/helpers/configuration.ts",
+      "./src/indent/indent.ts",
       "./src/commons/genericexecutor.ts",
       "./src/editor/positionfinder.ts",
+      "./src/editor/editor.ts",
       "./src/cobol/diagnostic/coboldiagnosticfilter.ts",
       "./src/dependencieinjection.ts",
       "./src/cobol/colunas.ts",
@@ -3561,7 +3563,6 @@
       "./src/lsp/completion/cobolvariable.ts",
       "./src/cobol/cobolregexutils.ts",
       "./src/decoration/parser.ts",
-      "./src/decoration/customdecorator.ts",
       "./src/cobol/parsercobol.ts",
       "./src/cobol/elementsdisplayer/elementinterface.ts",
       "./src/cobol/elementsdisplayer/elementsdisplayer.ts",
@@ -3701,9 +3702,8 @@
       "./src/test/lsp/formatter/performvaryingformatter.test.ts",
       "./src/test/lsp/highlight/ifhighlight.test.ts",
       "./node_modules/@types/iconv-lite/index.d.ts",
-      "./src/indent/indent.ts",
-      "./src/extension.ts",
-      "./src/editor/editor.ts"
+      "./src/decoration/customdecorator.ts",
+      "./src/extension.ts"
     ]
   },
   "version": "3.7.5"

@@ -6,6 +6,26 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}"
+			],
+			"name": "Launch Extension",
+			"outFiles": [
+				"${workspaceFolder}/out/**/*.js"
+			],
+			"preLaunchTask": "npm",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"type": "pwa-extensionHost"
+		},
+	{
+		"type": "COBOL",
+		"request": "launch",
+		"name": "isCOBOL Debugger",
+		"commandLine": "${command:commandLineBuild}",
+		"stopOnEntry": true
+	},
+		{
 			"type": "extensionHost",
 			"request": "launch",
 			"name": "Launch Client",
