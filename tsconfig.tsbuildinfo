@@ -2,8 +2,8 @@
   "program": {
     "fileInfos": {
       "./node_modules/typescript/lib/lib.es5.d.ts": {
-        "version": "fc43680ad3a1a4ec8c7b8d908af1ec9ddff87845346de5f02c735c9171fa98ea",
-        "signature": "fc43680ad3a1a4ec8c7b8d908af1ec9ddff87845346de5f02c735c9171fa98ea"
+        "version": "b42eddba1a53c9d27279cfe7fc0416c10a81489826ad47e39013b9d340fc0cc7",
+        "signature": "b42eddba1a53c9d27279cfe7fc0416c10a81489826ad47e39013b9d340fc0cc7"
       },
       "./node_modules/typescript/lib/lib.es2015.d.ts": {
         "version": "7994d44005046d1413ea31d046577cdda33b8b2470f30281fd9c8b3c99fe2d96",
@@ -182,8 +182,8 @@
         "signature": "bfc76a4e61cdb6910c65287d4ca958d4a2e95b2e39aa3f0189a581eda3d30871"
       },
       "./node_modules/vscode-jsonrpc/lib/messages.d.ts": {
-        "version": "9293f008f38c7f3ec39fa711897be893d9f924d567cdcc93998ec05a943ce375",
-        "signature": "9293f008f38c7f3ec39fa711897be893d9f924d567cdcc93998ec05a943ce375"
+        "version": "d8331f3923cccbdf7f1648ccf7a6ce911f91096bbe95c6c2ea65c59a9c48edc2",
+        "signature": "d8331f3923cccbdf7f1648ccf7a6ce911f91096bbe95c6c2ea65c59a9c48edc2"
       },
       "./node_modules/vscode-jsonrpc/lib/events.d.ts": {
         "version": "17a93dce7e8e50ba578eceb61df5606fbcf9526c3036f0e52d83cee2061ca6b6",
@@ -214,60 +214,68 @@
         "signature": "f31eda5cecdade1062c17073ac9165f171b1b05f296a955c212fc3fc2c4b963b"
       },
       "./node_modules/vscode-jsonrpc/lib/main.d.ts": {
-        "version": "5791da541ff19825947ec53107c44c1ce424a56ad8b79685f7c4aeaa3fa01337",
-        "signature": "5791da541ff19825947ec53107c44c1ce424a56ad8b79685f7c4aeaa3fa01337"
+        "version": "7c9c716328561d3e2eb1b8c53ce315434d2523506d0c0befbcfc4d7d9e6effb2",
+        "signature": "7c9c716328561d3e2eb1b8c53ce315434d2523506d0c0befbcfc4d7d9e6effb2"
       },
       "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts": {
-        "version": "6463c33c819d309d862de22cd0ca766ed1f09e1ccec9c67c89c7853eb1feca54",
-        "signature": "6463c33c819d309d862de22cd0ca766ed1f09e1ccec9c67c89c7853eb1feca54"
+        "version": "124b6297f44f1bb9618f1d02a8467f5a545426a369ddca22670321caa36472e8",
+        "signature": "124b6297f44f1bb9618f1d02a8467f5a545426a369ddca22670321caa36472e8"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts": {
+        "version": "357233e71f14a1fefceb99c56590ff8840092b099bc6cfe0c4c4187897651f4f",
+        "signature": "357233e71f14a1fefceb99c56590ff8840092b099bc6cfe0c4c4187897651f4f"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts": {
-        "version": "17cf71fd1f7af8d34f3657c3d024e143f90bc27a731a306b1f0429aed6483ced",
-        "signature": "17cf71fd1f7af8d34f3657c3d024e143f90bc27a731a306b1f0429aed6483ced"
+        "version": "c6e3d3f59249a67ad8e5a229db3c686b79e23551a7a66eb66a4ab69251c019e4",
+        "signature": "c6e3d3f59249a67ad8e5a229db3c686b79e23551a7a66eb66a4ab69251c019e4"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts": {
-        "version": "464ccb4cfdb63d696e2b442af6b5464fa1d4ab3d8cfe35149a1b1aecf5c0f6b9",
-        "signature": "464ccb4cfdb63d696e2b442af6b5464fa1d4ab3d8cfe35149a1b1aecf5c0f6b9"
+        "version": "ed3141993195890162085401d3acc403dbf68f77bfc681990ad6330608993ddb",
+        "signature": "ed3141993195890162085401d3acc403dbf68f77bfc681990ad6330608993ddb"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts": {
-        "version": "d1241891dfab79bb25b5f913c4181b62d95337c7f533d760a59a24961ab73e59",
-        "signature": "d1241891dfab79bb25b5f913c4181b62d95337c7f533d760a59a24961ab73e59"
+        "version": "cc00d5395d2b62b7dce5345ad2fab5b2ede83d5d1981f72f836e070bf713f6ca",
+        "signature": "cc00d5395d2b62b7dce5345ad2fab5b2ede83d5d1981f72f836e070bf713f6ca"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts": {
-        "version": "d9a71be99584b1dbcee4c93755a755585d0b0df7ad33b83ae3ef9904ed25f55d",
-        "signature": "d9a71be99584b1dbcee4c93755a755585d0b0df7ad33b83ae3ef9904ed25f55d"
+        "version": "f24d5c76c2f2d5f5ce173be8a6e3440928db1b1582642f99ffec3c66d59cbac3",
+        "signature": "f24d5c76c2f2d5f5ce173be8a6e3440928db1b1582642f99ffec3c66d59cbac3"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts": {
-        "version": "98051f94d17f88d241dcf521a5068a5b6cd9b0e8b7d32770f6337d5d820978f1",
-        "signature": "98051f94d17f88d241dcf521a5068a5b6cd9b0e8b7d32770f6337d5d820978f1"
+        "version": "64ed0a65c618ad62afaf71f1c21c0c3306ba380647932ace38ab0d2fde14cbd0",
+        "signature": "64ed0a65c618ad62afaf71f1c21c0c3306ba380647932ace38ab0d2fde14cbd0"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts": {
-        "version": "4bce3c3e133b73443269d6467d346a956b3b9ebaf3aa047af36d9b9c1331da98",
-        "signature": "4bce3c3e133b73443269d6467d346a956b3b9ebaf3aa047af36d9b9c1331da98"
+        "version": "9c423840028ab2d53820f803248c411e971fb0791320ed8730afe95995230afd",
+        "signature": "9c423840028ab2d53820f803248c411e971fb0791320ed8730afe95995230afd"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts": {
-        "version": "f3056995635885f59c09468a50b798557079f8e0f246c40b100c7fba17e0195b",
-        "signature": "f3056995635885f59c09468a50b798557079f8e0f246c40b100c7fba17e0195b"
+        "version": "52b11894d6c59506378bb8f12dedeb3d99dbb0c75f39e798fa6364d36ae33f01",
+        "signature": "52b11894d6c59506378bb8f12dedeb3d99dbb0c75f39e798fa6364d36ae33f01"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts": {
-        "version": "0b463e35e75b5089962c2442c484fb7947b8b56faceb6a331c744dd409320719",
-        "signature": "0b463e35e75b5089962c2442c484fb7947b8b56faceb6a331c744dd409320719"
+        "version": "e0f620459edc3770b7d6dd5b698c83f28d4363e79f2a97dd3ed93e688c5ae0ff",
+        "signature": "e0f620459edc3770b7d6dd5b698c83f28d4363e79f2a97dd3ed93e688c5ae0ff"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts": {
-        "version": "33f449b99614a238bdada26166ba73cf4df88b6a0194717eb2dd73ff63bcf9a6",
-        "signature": "33f449b99614a238bdada26166ba73cf4df88b6a0194717eb2dd73ff63bcf9a6"
+        "version": "d4769d5cdefcb2e57ff3d2e341dee42e58578ed8393c72b82ff7fe992805cb7e",
+        "signature": "d4769d5cdefcb2e57ff3d2e341dee42e58578ed8393c72b82ff7fe992805cb7e"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts": {
-        "version": "2ed62ca6307d3a70b58cb645419c1453306961eb689875a813c55a8e5effbc78",
-        "signature": "2ed62ca6307d3a70b58cb645419c1453306961eb689875a813c55a8e5effbc78"
+        "version": "4f6a5d327f6726b8f0737c7be1b54278aeabc7e819b1a2f5db1e3b440361dd26",
+        "signature": "4f6a5d327f6726b8f0737c7be1b54278aeabc7e819b1a2f5db1e3b440361dd26"
       },
       "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts": {
-        "version": "3ea03dbd156afeea284e3ed2084e4803bb4647fd86940da2b54cef4d44f01baa",
-        "signature": "3ea03dbd156afeea284e3ed2084e4803bb4647fd86940da2b54cef4d44f01baa"
+        "version": "cd6d4eaf3424122c7b8139070cad80f1729f5e439640c0b36277f8980be9728d",
+        "signature": "cd6d4eaf3424122c7b8139070cad80f1729f5e439640c0b36277f8980be9728d"
+      },
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.sematictokens.proposed.d.ts": {
+        "version": "247f77c69045d24cb0077727d9bf83babeb81cbd6a549513cb8526ba2ad82942",
+        "signature": "247f77c69045d24cb0077727d9bf83babeb81cbd6a549513cb8526ba2ad82942"
       },
       "./node_modules/vscode-languageserver-protocol/lib/main.d.ts": {
-        "version": "c35f014effa759935c4c6fdcb39e08aa21c8bb20e9a11dcc5c9f0344c3de7f57",
-        "signature": "c35f014effa759935c4c6fdcb39e08aa21c8bb20e9a11dcc5c9f0344c3de7f57"
+        "version": "d4bb2cc7ae51064dcf5bf012c17f7847c8345787aa478aec997257a47a7363de",
+        "signature": "d4bb2cc7ae51064dcf5bf012c17f7847c8345787aa478aec997257a47a7363de"
       },
       "./node_modules/vscode-languageclient/lib/colorprovider.d.ts": {
         "version": "240f82b98aa9037ca2eeab5241f964ad20542c85779c853319785177b7e83276",
@@ -851,7 +859,7 @@
       },
       "./src/lsp/server.ts": {
         "version": "48abf3831ea04b7daa411a37d1548debc13cafe0863d8ad3dfd504765319964d",
-        "signature": "3be5437b9cacfc737fcfb47cf9514096f347e280a19d84a1145742eaf23603de"
+        "signature": "59fbe53bf8c04197b1ad395b133b0e6ff506a4ef8adc9120d1a4936edb94963a"
       },
       "./node_modules/vscode/lib/testrunner.d.ts": {
         "version": "b175aa767126db4a758084c184a567da0f1b1dabd34625ca52fa44d8b534faf1",
@@ -1227,9 +1235,15 @@
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
+      "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
       "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
         "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
@@ -1237,23 +1251,27 @@
       "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
         "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
         "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
         "./node_modules/@types/node/base.d.ts",
@@ -1262,6 +1280,7 @@
       "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
         "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
@@ -1269,6 +1288,7 @@
       "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
         "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
@@ -1276,17 +1296,20 @@
       "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
         "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
       "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts",
@@ -1303,7 +1326,15 @@
       "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts": [
         "./node_modules/vscode-jsonrpc/lib/main.d.ts",
         "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.sematictokens.proposed.d.ts": [
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -1312,6 +1343,8 @@
         "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
         "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.sematictokens.proposed.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
@@ -2676,380 +2709,33 @@
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "./node_modules/@types/q/index.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
+      "./src/test/lsp/completion/cobolvariable.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
       ],
-      "./node_modules/iconv-lite/lib/index.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
+      "./src/test/commons/scan.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
       ],
-      "./src/commons/executor.ts": [
-        "./src/commons/process.ts"
-      ],
-      "./node_modules/rech-ts-commons/out/buffer/scan.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/rech-ts-commons/out/index.d.ts": [
-        "./node_modules/rech-ts-commons/out/buffer/scan.d.ts",
-        "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts",
-        "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./src/commons/genericexecutor.ts": [
-        "./src/commons/path.ts"
-      ],
-      "./src/editor/positionfinder.ts": [
-        "./node_modules/vscode/vscode.d.ts",
+      "./src/lsp/server.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
         "./src/commons/rechposition.ts"
       ],
-      "./src/editor/editor.ts": [
-        "./src/commons/path.ts",
-        "./src/commons/rechposition.ts",
-        "./src/commons/genericexecutor.ts"
-      ],
-      "./src/cobol/gerador-cobol.ts": [
-        "./src/editor/editor.ts"
-      ],
-      "./node_modules/@types/node/inspector.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/@types/node/base.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/inspector.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/@types/node/ts3.2/index.d.ts": [
-        "./node_modules/@types/node/base.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/typings/thenable.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/lib/messages.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/lib/events.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts",
-        "./node_modules/@types/node/base.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts",
-        "./node_modules/@types/node/base.d.ts"
-      ],
-      "./node_modules/vscode-jsonrpc/lib/main.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts",
-        "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts",
-        "./node_modules/vscode-jsonrpc/typings/thenable.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts",
-        "./node_modules/@types/node/base.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
-        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageserver-protocol/lib/main.d.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/colorprovider.d.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/vscode-languageclient/lib/client.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/implementation.d.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/vscode-languageclient/lib/client.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/typedefinition.d.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/vscode-languageclient/lib/client.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/configuration.d.ts": [
-        "./node_modules/vscode-languageclient/lib/client.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/vscode-languageclient/lib/client.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/foldingrange.d.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/vscode-languageclient/lib/client.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/codeconverter.d.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/client.d.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
-        "./node_modules/vscode-languageclient/lib/colorprovider.d.ts",
-        "./node_modules/vscode-languageclient/lib/implementation.d.ts",
-        "./node_modules/vscode-languageclient/lib/typedefinition.d.ts",
-        "./node_modules/vscode-languageclient/lib/configuration.d.ts",
-        "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts",
-        "./node_modules/vscode-languageclient/lib/foldingrange.d.ts",
-        "./node_modules/vscode-languageclient/lib/codeconverter.d.ts",
-        "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./node_modules/vscode-languageclient/lib/main.d.ts": [
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/vscode-languageclient/lib/client.d.ts",
-        "./node_modules/vscode/vscode.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
-      ],
-      "./src/lsp/client.ts": [
-        "./node_modules/vscode/vscode.d.ts",
-        "./src/commons/rechposition.ts"
-      ],
-      "./src/commons/variableutils.ts": [
-        "./src/lsp/completion/cobolvariable.ts"
-      ],
-      "./src/cobol/rechdoc/coboldoc.ts": [
-        "./src/cobol/rechdoc/docelement.ts"
-      ],
-      "./src/cobol/rechdoc/coboldocparser.ts": [
-        "./src/cobol/rechdoc/coboldoc.ts",
-        "./src/lsp/completion/cobolvariable.ts"
-      ],
-      "./src/lsp/completion/cobolvariable.ts": [
-        "./src/commons/rechposition.ts"
-      ],
-      "./src/decoration/parser.ts": [
-        "./node_modules/vscode/vscode.d.ts"
-      ],
-      "./src/decoration/customdecorator.ts": [
-        "./node_modules/vscode/vscode.d.ts"
-      ],
-      "./src/cobol/elementsdisplayer/elementinterface.ts": [
-        "./node_modules/vscode/vscode.d.ts"
-      ],
-      "./src/cobol/elementsdisplayer/elementsdisplayer.ts": [
-        "./src/cobol/elementsdisplayer/elementinterface.ts"
-      ],
-      "./src/cobol/elementsdisplayer/variable/variableelement.ts": [
-        "./src/cobol/elementsdisplayer/elementinterface.ts"
-      ],
-      "./src/cobol/elementsdisplayer/variable/variabledisplayer.ts": [
-        "./src/lsp/completion/cobolvariable.ts"
-      ],
-      "./src/cobol/elementsdisplayer/copy/copyelement.ts": [
-        "./src/cobol/elementsdisplayer/elementinterface.ts"
-      ],
-      "./src/cobol/elementsdisplayer/copy/copydisplayer.ts": [
-        "./src/cobol/cobolcopy.ts"
-      ],
-      "./src/cobol/elementsdisplayer/class/classelement.ts": [
-        "./src/cobol/elementsdisplayer/elementinterface.ts"
-      ],
-      "./src/cobol/elementsdisplayer/class/classdisplayer.ts": [
-        "./src/lsp/completion/cobolvariable.ts"
-      ],
-      "./src/sourceflow/treeview/nodes/nodeinterface.ts": [
-        "./node_modules/vscode/vscode.d.ts"
-      ],
-      "./src/sourceflow/parser/defaultcontextoriginfinder.ts": [
-        "./src/sourceflow/parser/contextoriginfinderinterface.ts"
-      ],
-      "./src/lsp/references/cobolreferencesfinder.ts": [
-        "./src/commons/rechposition.ts"
-      ],
-      "./src/sourceflow/parser/paragraphcontextoriginfinder.ts": [
-        "./src/sourceflow/parser/contextoriginfinderinterface.ts"
-      ],
-      "./src/sourceflow/parser/gotocontextoriginfinder.ts": [
-        "./src/sourceflow/parser/contextoriginfinderinterface.ts"
-      ],
-      "./src/sourceflow/parser/contextfactory.ts": [
-        "./src/sourceflow/parser/flowline.ts"
-      ],
-      "./src/sourceflow/parser/flowparser.ts": [
-        "./src/sourceflow/parser/flowline.ts"
-      ],
-      "./src/sourceflow/flow.ts": [
-        "./src/sourceflow/parser/flowline.ts"
-      ],
-      "./src/sourceflow/treeview/nodes/flownode.ts": [
-        "./src/sourceflow/flow.ts",
-        "./node_modules/vscode/vscode.d.ts",
-        "./src/sourceflow/treeview/nodes/nodeinterface.ts"
-      ],
-      "./src/sourceflow/treeview/providers/flowprovider.ts": [
-        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
-        "./src/sourceflow/treeview/nodes/nodeinterface.ts",
-        "./node_modules/vscode/vscode.d.ts"
-      ],
-      "./src/lsp/completion/cobolmethod.ts": [
-        "./src/lsp/completion/cobolvariable.ts",
-        "./src/cobol/rechdoc/coboldoc.ts"
-      ],
-      "./src/lsp/declaration/coboldeclarationfinder.ts": [
-        "./src/commons/rechposition.ts"
+      "./src/lsp/completion/method/methodcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/cobolcompletionitemfactory.ts": [
+        "./src/lsp/completion/completioninterface.ts",
+        "./src/lsp/completion/variable/variablecompletionfactory.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/test/lsp/completion/cobolcompletionitemfactory.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/cobol/diagnostic/diagnostician.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/cobol/diagnostic/coboldiagnosticparser.ts": [
+        "./src/cobol/diagnostic/coboldiagnostic.ts"
       ],
       "./src/extension.ts": [
         "./src/commons/executor.ts",
@@ -3073,28 +2759,459 @@
         "./src/cobol/tabstopper.ts",
         "./src/commons/log.ts"
       ],
+      "./src/lsp/declaration/coboldeclarationfinder.ts": [
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/lsp/completion/whencompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/cobolmethod.ts": [
+        "./src/lsp/completion/cobolvariable.ts",
+        "./src/cobol/rechdoc/coboldoc.ts"
+      ],
+      "./src/lsp/completion/paragraphcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/variable/variablecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/test/lsp/completion/variable/variablecompletion.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/lsp/completion/variable/variablecompletionfactory.ts": [
+        "./src/lsp/completion/variable/variablecompletion.ts"
+      ],
+      "./src/cobol/elementsdisplayer/copy/copydisplayer.ts": [
+        "./src/cobol/cobolcopy.ts"
+      ],
+      "./src/editor/editor.ts": [
+        "./src/commons/path.ts",
+        "./src/commons/rechposition.ts",
+        "./src/commons/genericexecutor.ts"
+      ],
+      "./src/sourceflow/treeview/providers/flowprovider.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./src/sourceflow/treeview/nodes/nodeinterface.ts",
+        "./node_modules/vscode/vscode.d.ts"
+      ],
+      "./src/sourceflow/flow.ts": [
+        "./src/sourceflow/parser/flowline.ts"
+      ],
+      "./src/sourceflow/treeview/nodes/flownode.ts": [
+        "./src/sourceflow/flow.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/sourceflow/treeview/nodes/nodeinterface.ts"
+      ],
+      "./src/cobol/elementsdisplayer/class/classdisplayer.ts": [
+        "./src/lsp/completion/cobolvariable.ts"
+      ],
+      "./src/cobol/elementsdisplayer/variable/variabledisplayer.ts": [
+        "./src/lsp/completion/cobolvariable.ts"
+      ],
+      "./src/lsp/client.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/cobol/gerador-cobol.ts": [
+        "./src/editor/editor.ts"
+      ],
+      "./src/commons/genericexecutor.ts": [
+        "./src/commons/path.ts"
+      ],
+      "./src/lsp/actions/converttocamelcaseaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/cobolactionfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/commons/renamingutils.ts": [
+        "./src/commons/rechposition.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/references/cobolreferencesfinder.ts": [
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/sourceflow/parser/paragraphcontextoriginfinder.ts": [
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts"
+      ],
+      "./src/sourceflow/parser/contextfactory.ts": [
+        "./src/sourceflow/parser/flowline.ts"
+      ],
+      "./src/sourceflow/parser/flowparser.ts": [
+        "./src/sourceflow/parser/flowline.ts"
+      ],
+      "./src/lsp/completion/cobolvariable.ts": [
+        "./src/commons/rechposition.ts"
+      ],
+      "./src/lsp/actions/removevariableaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/completion/classcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/fold/variablefolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/cobolfoldfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/completion/emptycompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/valuecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/flagcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/decoration/parser.ts": [
+        "./node_modules/vscode/vscode.d.ts"
+      ],
+      "./src/decoration/customdecorator.ts": [
+        "./node_modules/vscode/vscode.d.ts"
+      ],
+      "./src/cobol/rechdoc/coboldocparser.ts": [
+        "./src/cobol/rechdoc/coboldoc.ts",
+        "./src/lsp/completion/cobolvariable.ts"
+      ],
+      "./src/commons/variableutils.ts": [
+        "./src/lsp/completion/cobolvariable.ts"
+      ],
+      "./src/editor/positionfinder.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./src/commons/rechposition.ts"
+      ],
+      "./node_modules/@types/q/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/commons/file.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/lsp/completion/dynamicjsoncompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
       "./src/cobol/diagnostic/coboldiagnosticpreprocmanager.ts": [
         "./src/commons/file.ts"
       ],
-      "./node_modules/vscode-languageserver/lib/thenable.d.ts": [
+      "./src/commons/executor.ts": [
+        "./src/commons/process.ts"
+      ],
+      "./node_modules/iconv-lite/lib/index.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "./node_modules/vscode-languageserver/lib/configuration.d.ts": [
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+      "./node_modules/rech-ts-commons/out/buffer/scan.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/rech-ts-commons/out/index.d.ts": [
+        "./node_modules/rech-ts-commons/out/buffer/scan.d.ts",
+        "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts",
+        "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/highlight/tryhighlight.ts": [
         "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./node_modules/@types/node/base.d.ts",
-        "./node_modules/@types/node/ts3.2/index.d.ts"
+        "./src/lsp/highlight/highlightinterface.ts"
       ],
-      "./node_modules/vscode-languageserver/lib/workspacefolders.d.ts": [
-        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+      "./src/lsp/highlight/highlightfactory.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/highlight/performhighlight.ts": [
         "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/highlight/evaluatehighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/highlight/ifhighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/test/lsp/highlight/ifhighlight.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/lsp/highlight/defaulthighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/formatter/cobolformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/test/commons/cobolwordfinder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./node_modules/rech-ts-commons/out/buffer/buffersplitter.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "./node_modules/vscode-languageserver/lib/files.d.ts": [
+      "./node_modules/rech-ts-commons/out/buffer/wordfinder.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/node/inspector.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/node/base.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/inspector.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/iconv-lite/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/test/lsp/formatter/performvaryingformatter.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/formatter/elseformatter.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/variablenameinserttextbuilder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/totrueinserttextbuilder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/commandseparatorinserttextbuilder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/variable/commadotinserttextbuilder.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/completion/tocompletion.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./src/test/lsp/commons/completionutils.test.ts": [
+        "./node_modules/@types/mocha/index.d.ts"
+      ],
+      "./node_modules/@types/mocha/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/chai/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode/lib/testrunner.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/lsp/actions/subprogram/insertsubprogramdeclarationaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/removeremainingclauseaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/replacecommawithdotaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/insertstaticclauseaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/removestaticclauseaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/replacezeroswithspacesaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/removeparenthesesaction.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/actions/actioninterface.ts"
+      ],
+      "./src/lsp/actions/actioninterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/fold/performwithtest.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/performuntilfolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/paragraphfolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/whenfolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/evaluatefolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/elsefolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/iffolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/copyfolding.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/fold/cobolfoldinterface.ts"
+      ],
+      "./src/lsp/fold/cobolfoldinterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/highlight/constanttesthighlight.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/highlight/highlightinterface.ts"
+      ],
+      "./src/lsp/highlight/highlightinterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/completion/variable/totrueinserttextbuilder.ts": [
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
+      ],
+      "./src/lsp/completion/variable/commadotinserttextbuilder.ts": [
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
+      ],
+      "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts": [
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
+      ],
+      "./src/lsp/completion/endcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/variable/variablenameinserttextbuilder.ts": [
+        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
+      ],
+      "./src/lsp/completion/elsecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/picturecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/totruecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/exitcyclecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/exitperformcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/exitparagraphcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/fromcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/subtractcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/addcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/performvaryingcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/setcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/performuntilexitcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/evaluatecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/tocompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/movecompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/performcompletion.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/completion/completioninterface.ts"
+      ],
+      "./src/lsp/completion/completioninterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/formatter/commentaryformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/performvaryingformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/elseformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/performuntilexitformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/evaluateformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/whenformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/commandseparatorformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/ifformatter.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
+        "./src/lsp/formatter/formatterinterface.ts"
+      ],
+      "./src/lsp/formatter/formatterutils.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/lsp/formatter/formatterinterface.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
+      ],
+      "./src/cobol/diagnostic/textrange.ts": [
+        "./src/cobol/diagnostic/textposition.ts"
+      ],
+      "./src/cobol/diagnostic/coboldiagnostic.ts": [
+        "./node_modules/vscode-languageserver/lib/main.d.ts"
       ],
       "./node_modules/vscode-languageserver/lib/main.d.ts": [
         "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
@@ -3105,391 +3222,313 @@
         "./node_modules/@types/node/ts3.2/index.d.ts",
         "./node_modules/@types/node/base.d.ts"
       ],
-      "./src/cobol/diagnostic/coboldiagnostic.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/cobol/diagnostic/coboldiagnosticparser.ts": [
-        "./src/cobol/diagnostic/coboldiagnostic.ts"
-      ],
-      "./src/cobol/diagnostic/diagnostician.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/cobol/diagnostic/textrange.ts": [
-        "./src/cobol/diagnostic/textposition.ts"
-      ],
-      "./src/lsp/formatter/formatterinterface.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/formatter/formatterutils.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/formatter/ifformatter.ts": [
+      "./node_modules/vscode-languageserver/lib/workspacefolders.d.ts": [
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
         "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/formatter/formatterinterface.ts"
-      ],
-      "./src/lsp/formatter/commandseparatorformatter.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/formatter/formatterinterface.ts"
-      ],
-      "./src/lsp/formatter/whenformatter.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/formatter/formatterinterface.ts"
-      ],
-      "./src/lsp/formatter/evaluateformatter.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/formatter/formatterinterface.ts"
-      ],
-      "./src/lsp/formatter/performuntilexitformatter.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/formatter/formatterinterface.ts"
-      ],
-      "./src/lsp/formatter/elseformatter.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/formatter/formatterinterface.ts"
-      ],
-      "./src/lsp/formatter/performvaryingformatter.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/formatter/formatterinterface.ts"
-      ],
-      "./src/lsp/formatter/commentaryformatter.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/formatter/formatterinterface.ts"
-      ],
-      "./src/lsp/formatter/cobolformatter.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/completion/completioninterface.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/completion/performcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/movecompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/tocompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/evaluatecompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/performuntilexitcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/setcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/performvaryingcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/addcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/subtractcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/fromcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/exitparagraphcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/exitperformcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/exitcyclecompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/flagcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/totruecompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/picturecompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/valuecompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/elsecompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/variable/variablenameinserttextbuilder.ts": [
-        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
-      ],
-      "./src/lsp/completion/variable/variablecompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/variable/variableinserttextbuilder.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/emptycompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/whencompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/endcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/variable/variablecompletionfactory.ts": [
-        "./src/lsp/completion/variable/variablecompletion.ts"
-      ],
-      "./src/lsp/completion/variable/commandseparatorinserttextbuilder.ts": [
-        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
-      ],
-      "./src/lsp/completion/variable/commadotinserttextbuilder.ts": [
-        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
-      ],
-      "./src/lsp/completion/variable/totrueinserttextbuilder.ts": [
-        "./src/lsp/completion/variable/variableinserttextbuilder.ts"
-      ],
-      "./src/lsp/completion/method/methodcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/cobolcompletionitemfactory.ts": [
-        "./src/lsp/completion/completioninterface.ts",
-        "./src/lsp/completion/variable/variablecompletionfactory.ts",
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/completion/dynamicjsoncompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/completion/paragraphcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/highlight/highlightinterface.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/highlight/defaulthighlight.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/highlight/highlightinterface.ts"
-      ],
-      "./src/lsp/highlight/ifhighlight.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/highlight/highlightinterface.ts"
-      ],
-      "./src/lsp/highlight/evaluatehighlight.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/highlight/highlightinterface.ts"
-      ],
-      "./src/lsp/highlight/performhighlight.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/highlight/highlightinterface.ts"
-      ],
-      "./src/lsp/highlight/tryhighlight.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/highlight/highlightinterface.ts"
-      ],
-      "./src/lsp/highlight/constanttesthighlight.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/highlight/highlightinterface.ts"
-      ],
-      "./src/lsp/highlight/highlightfactory.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/fold/cobolfoldinterface.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/fold/copyfolding.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/fold/cobolfoldinterface.ts"
-      ],
-      "./src/lsp/fold/variablefolding.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/fold/cobolfoldinterface.ts"
-      ],
-      "./src/lsp/fold/iffolding.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/fold/cobolfoldinterface.ts"
-      ],
-      "./src/lsp/fold/elsefolding.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/fold/cobolfoldinterface.ts"
-      ],
-      "./src/lsp/fold/evaluatefolding.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/fold/cobolfoldinterface.ts"
-      ],
-      "./src/lsp/fold/whenfolding.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/fold/cobolfoldinterface.ts"
-      ],
-      "./src/lsp/fold/paragraphfolding.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/fold/cobolfoldinterface.ts"
-      ],
-      "./src/lsp/fold/performuntilfolding.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/fold/cobolfoldinterface.ts"
-      ],
-      "./src/lsp/fold/performwithtest.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/fold/cobolfoldinterface.ts"
-      ],
-      "./src/lsp/fold/cobolfoldfactory.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/completion/classcompletion.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/completion/completioninterface.ts"
-      ],
-      "./src/lsp/actions/actioninterface.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/actions/removeparenthesesaction.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/actions/actioninterface.ts"
-      ],
-      "./src/lsp/commons/renamingutils.ts": [
-        "./src/commons/rechposition.ts",
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/actions/converttocamelcaseaction.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/actions/actioninterface.ts"
-      ],
-      "./src/lsp/actions/removevariableaction.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/actions/actioninterface.ts"
-      ],
-      "./src/lsp/actions/replacezeroswithspacesaction.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/actions/actioninterface.ts"
-      ],
-      "./src/lsp/actions/removestaticclauseaction.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/actions/actioninterface.ts"
-      ],
-      "./src/lsp/actions/insertstaticclauseaction.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/actions/actioninterface.ts"
-      ],
-      "./src/lsp/actions/replacecommawithdotaction.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/actions/actioninterface.ts"
-      ],
-      "./src/lsp/actions/removeremainingclauseaction.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/actions/actioninterface.ts"
-      ],
-      "./src/lsp/actions/subprogram/insertsubprogramdeclarationaction.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/lsp/actions/actioninterface.ts"
-      ],
-      "./src/lsp/actions/cobolactionfactory.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts"
-      ],
-      "./src/lsp/server.ts": [
-        "./node_modules/vscode-languageserver/lib/main.d.ts",
-        "./src/commons/rechposition.ts"
-      ],
-      "./node_modules/vscode/lib/testrunner.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "./node_modules/@types/chai/index.d.ts": [
+      "./node_modules/vscode-languageserver/lib/configuration.d.ts": [
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageserver/lib/main.d.ts",
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "./node_modules/@types/mocha/index.d.ts": [
+      "./node_modules/vscode-languageserver/lib/files.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
       ],
-      "./src/test/commons/cobolwordfinder.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/commons/file.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/commons/scan.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/commons/completionutils.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/completion/cobolcompletionitemfactory.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/completion/cobolvariable.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/completion/tocompletion.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/completion/variable/commadotinserttextbuilder.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/completion/variable/commandseparatorinserttextbuilder.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/completion/variable/totrueinserttextbuilder.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/completion/variable/variablecompletion.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/completion/variable/variablenameinserttextbuilder.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/formatter/elseformatter.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/formatter/performvaryingformatter.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./src/test/lsp/highlight/ifhighlight.test.ts": [
-        "./node_modules/@types/mocha/index.d.ts"
-      ],
-      "./node_modules/@types/iconv-lite/index.d.ts": [
+      "./node_modules/vscode-languageserver/lib/thenable.d.ts": [
         "./node_modules/@types/node/base.d.ts",
         "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./src/sourceflow/parser/gotocontextoriginfinder.ts": [
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts"
+      ],
+      "./src/sourceflow/parser/defaultcontextoriginfinder.ts": [
+        "./src/sourceflow/parser/contextoriginfinderinterface.ts"
+      ],
+      "./src/sourceflow/treeview/nodes/nodeinterface.ts": [
+        "./node_modules/vscode/vscode.d.ts"
+      ],
+      "./src/cobol/elementsdisplayer/class/classelement.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts"
+      ],
+      "./src/cobol/elementsdisplayer/copy/copyelement.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts"
+      ],
+      "./src/cobol/elementsdisplayer/variable/variableelement.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts"
+      ],
+      "./src/cobol/elementsdisplayer/elementsdisplayer.ts": [
+        "./src/cobol/elementsdisplayer/elementinterface.ts"
+      ],
+      "./src/cobol/elementsdisplayer/elementinterface.ts": [
+        "./node_modules/vscode/vscode.d.ts"
+      ],
+      "./src/cobol/rechdoc/coboldoc.ts": [
+        "./src/cobol/rechdoc/docelement.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/main.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/client.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/colorprovider.d.ts",
+        "./node_modules/vscode-languageclient/lib/implementation.d.ts",
+        "./node_modules/vscode-languageclient/lib/typedefinition.d.ts",
+        "./node_modules/vscode-languageclient/lib/configuration.d.ts",
+        "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts",
+        "./node_modules/vscode-languageclient/lib/foldingrange.d.ts",
+        "./node_modules/vscode-languageclient/lib/codeconverter.d.ts",
+        "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/foldingrange.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/workspacefolders.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/configuration.d.ts": [
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/typedefinition.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/implementation.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/colorprovider.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/client.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/protocolconverter.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/protocolcompletionitem.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageclient/lib/codeconverter.d.ts": [
+        "./node_modules/vscode/vscode.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/main.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.sematictokens.proposed.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.sematictokens.proposed.d.ts": [
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.selectionrange.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.declaration.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.foldingrange.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.colorprovider.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.configuration.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/main.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/main.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts",
+        "./node_modules/vscode-jsonrpc/typings/thenable.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/pipesupport.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts",
+        "./node_modules/@types/node/base.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/linkedmap.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/cancellation.d.ts": [
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/messagewriter.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/messagereader.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/messages.d.ts",
+        "./node_modules/vscode-jsonrpc/lib/events.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/events.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/lib/messages.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/vscode-jsonrpc/typings/thenable.d.ts": [
+        "./node_modules/@types/node/base.d.ts",
+        "./node_modules/@types/node/ts3.2/index.d.ts"
+      ],
+      "./node_modules/@types/node/ts3.2/index.d.ts": [
+        "./node_modules/@types/node/base.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "./node_modules/typescript/lib/lib.es5.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.d.ts",
-      "./node_modules/typescript/lib/lib.es2016.d.ts",
-      "./node_modules/typescript/lib/lib.es2017.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.core.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.collection.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.generator.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.iterable.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.promise.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.proxy.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.reflect.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.symbol.d.ts",
-      "./node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts",
-      "./node_modules/typescript/lib/lib.es2016.array.include.d.ts",
-      "./node_modules/typescript/lib/lib.es2017.object.d.ts",
-      "./node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts",
-      "./node_modules/typescript/lib/lib.es2017.string.d.ts",
-      "./node_modules/typescript/lib/lib.es2017.intl.d.ts",
-      "./node_modules/typescript/lib/lib.es2017.typedarrays.d.ts",
       "./node_modules/vscode/vscode.d.ts",
       "./src/commons/path.ts",
       "./src/commons/rechposition.ts",
@@ -3526,6 +3565,7 @@
       "./node_modules/vscode-jsonrpc/lib/socketsupport.d.ts",
       "./node_modules/vscode-jsonrpc/lib/main.d.ts",
       "./node_modules/vscode-languageserver-types/lib/umd/main.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/messages.d.ts",
       "./node_modules/vscode-languageserver-protocol/lib/protocol.implementation.d.ts",
       "./node_modules/vscode-languageserver-protocol/lib/protocol.typedefinition.d.ts",
       "./node_modules/vscode-languageserver-protocol/lib/protocol.workspacefolders.d.ts",
@@ -3537,6 +3577,7 @@
       "./node_modules/vscode-languageserver-protocol/lib/protocol.progress.d.ts",
       "./node_modules/vscode-languageserver-protocol/lib/protocol.d.ts",
       "./node_modules/vscode-languageserver-protocol/lib/protocol.callhierarchy.proposed.d.ts",
+      "./node_modules/vscode-languageserver-protocol/lib/protocol.sematictokens.proposed.d.ts",
       "./node_modules/vscode-languageserver-protocol/lib/main.d.ts",
       "./node_modules/vscode-languageclient/lib/colorprovider.d.ts",
       "./node_modules/vscode-languageclient/lib/implementation.d.ts",
@@ -3563,6 +3604,7 @@
       "./src/lsp/completion/cobolvariable.ts",
       "./src/cobol/cobolregexutils.ts",
       "./src/decoration/parser.ts",
+      "./src/decoration/customdecorator.ts",
       "./src/cobol/parsercobol.ts",
       "./src/cobol/elementsdisplayer/elementinterface.ts",
       "./src/cobol/elementsdisplayer/elementsdisplayer.ts",
@@ -3590,6 +3632,7 @@
       "./src/cobol/expandedsourcemanager.ts",
       "./src/lsp/completion/cobolmethod.ts",
       "./src/lsp/declaration/coboldeclarationfinder.ts",
+      "./src/extension.ts",
       "./src/cobol/posicionamento.ts",
       "./src/cobol/diagnostic/coboldiagnosticpreprocmanager.ts",
       "./node_modules/vscode-languageserver/lib/thenable.d.ts",
@@ -3702,9 +3745,26 @@
       "./src/test/lsp/formatter/performvaryingformatter.test.ts",
       "./src/test/lsp/highlight/ifhighlight.test.ts",
       "./node_modules/@types/iconv-lite/index.d.ts",
-      "./src/decoration/customdecorator.ts",
-      "./src/extension.ts"
+      "./node_modules/typescript/lib/lib.es2015.d.ts",
+      "./node_modules/typescript/lib/lib.es2016.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.typedarrays.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.intl.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.string.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.sharedmemory.d.ts",
+      "./node_modules/typescript/lib/lib.es2017.object.d.ts",
+      "./node_modules/typescript/lib/lib.es2016.array.include.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.symbol.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.reflect.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.proxy.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.promise.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.generator.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.collection.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.core.d.ts",
+      "./node_modules/typescript/lib/lib.es5.d.ts"
     ]
   },
-  "version": "3.7.5"
+  "version": "3.8.2"
 }
