@@ -4,27 +4,34 @@ import { File } from '../commons/file';
 import { Executor } from '../commons/executor';
 import * as iconv from 'iconv-lite';
 import { BufferSplitter } from 'rech-ts-commons';
+import { configuration } from '../helpers/configuration';
 
 /** Time in millis representing an old indent file */
 const INDENT_OLD_FILE_IN_MILLIS: number = 3000;
-/** Indent file charset */
-const INDENT_FILE_CHARSET: string = "binary";
+/** Binary encoding */
+const BINARY_ENCODING: string = "binary";
+/** Windows 1252 encoding */
+const WINDOWS_1252_ENCODING: string = "win1252";
 /** Limit column of line */
 const INDENT_LIMIT_COLUMN: number = 120;
 /** Start commentary column in the line */
 const START_COMMENTARY_COLUMN: number = 7;
+/** OS module */
+const os = require("os");
+/** Path module */
+const path = require("path");
 
 /**
  * Class to indent sources
  */
 export class Indenta {
 
-    /**
+  /**
    * Indents the specified source code if this is all commentary lines
    *
    * @param targetSourceCode target source code to be indented
    */
-  public indentCommentary(targetSourceCode: string[], callback: (buffer: string[]) => any,) {
+  public indentCommentary(targetSourceCode: string[], callback: (buffer: string[]) => any): void {
     const buffer = this.buildBufferOfCommentary(targetSourceCode);
     callback([this.buildCommentaryLines(buffer)]);
   }
@@ -34,7 +41,7 @@ export class Indenta {
    *
    * @param targetSourceCode
    */
-  private buildBufferOfCommentary(targetSourceCode: string[]) {
+  private buildBufferOfCommentary(targetSourceCode: string[]): string[] {
     const buffer: string[] = [];
     targetSourceCode.forEach((occurs) => {
       BufferSplitter.split(occurs).forEach((line) => {
@@ -60,7 +67,7 @@ export class Indenta {
    *
    * @param buffer
    */
-  private buildCommentaryLines(buffer: string[]) {
+  private buildCommentaryLines(buffer: string[]): string {
     let result = "";
     buffer.forEach((commentary) => {
       const words = commentary.trim().split(" ");
@@ -74,7 +81,7 @@ export class Indenta {
    *
    * @param words
    */
-  private buildCommentBlock(words: string[]) {
+  private buildCommentBlock(words: string[]): string {
     let result: string[] = [];
     for (let i = 0; i < words.length; i++) {
       if (result.length == 0) {
@@ -116,7 +123,7 @@ export class Indenta {
    *
    * @param buffer
    */
-  public isAllCommentaryLines(buffer: string[]) {
+  public isAllCommentaryLines(buffer: string[]): boolean {
     let result = true;
     buffer.forEach((occurs) => {
       BufferSplitter.split(occurs).forEach((line) => {
@@ -137,14 +144,14 @@ export class Indenta {
    * @param callback callback executed when no indenting errors are found
    * @param err callback executed when indenting errors are found
    */
-  public async indenta(alignment: string, targetSourceCode: string[], sourceFileName: string, referenceLine: number, callback: (buffer: string[]) => any, err: (bufferErr: string) => any) {
+  public async indenta(alignment: string, targetSourceCode: string[], sourceFileName: string, referenceLine: number, callback: (buffer: string[]) => any, err: (bufferErr: string) => any): Promise<void> {
     const inputFile = this.createInputFileInstance();
     if (inputFile.exists()) {
       return;
     }
     // Saves the target source code in the input file
-    const buffer = iconv.encode(targetSourceCode.join(), "win1252");
-    inputFile.saveBufferSync([buffer.toString("binary")], INDENT_FILE_CHARSET);
+    const buffer = iconv.encode(targetSourceCode.join(), WINDOWS_1252_ENCODING);
+    inputFile.saveBufferSync([buffer.toString(BINARY_ENCODING)], BINARY_ENCODING);
     //
     const indentFile = this.createIndentedFileInstance();
     const errorFile = this.createErrorFileIntance();
@@ -152,17 +159,21 @@ export class Indenta {
       return;
     }
     // Runs the Cobol indenter
-    new Executor().runSync(this.buildCommandLine(alignment, sourceFileName, referenceLine));
+    const commandLine = this.buildCommandLine(alignment, sourceFileName, referenceLine);
+    if (commandLine.length == 0) {
+      return err("No COBOL formatter configured! Please configure formatter location on Rech COBOL extension settings.");
+    }
+    new Executor().runSync(commandLine);
     // If any error was found
     if (errorFile.exists()) {
-      const buffer = iconv.encode(errorFile.loadBufferSync(INDENT_FILE_CHARSET).trim(), "binary");
-      err(iconv.decode(buffer, "win1252"));
+      const buffer = iconv.encode(errorFile.loadBufferSync(BINARY_ENCODING).trim(), BINARY_ENCODING);
+      err(iconv.decode(buffer, WINDOWS_1252_ENCODING));
       errorFile.delete();
       inputFile.delete();
     } else {
-      await indentFile.loadBuffer(INDENT_FILE_CHARSET).then((buffer) => {
-        const identBuffer = iconv.encode(buffer, "binary");
-        callback([iconv.decode(identBuffer, "win1252")]);
+      await indentFile.loadBuffer(BINARY_ENCODING).then((buffer) => {
+        const identBuffer = iconv.encode(buffer, BINARY_ENCODING);
+        callback([iconv.decode(identBuffer, WINDOWS_1252_ENCODING)]);
         indentFile.delete();
         inputFile.delete();
       });
@@ -206,7 +217,7 @@ export class Indenta {
    *
    * @param file old indented filename
    */
-  private deleteOldFileIfExist(file: File) {
+  private deleteOldFileIfExist(file: File): void {
     if (file.exists()) {
       const fileLastModified = file.lastModified().getTime();
       const currentTime = new Date().getTime()
@@ -221,17 +232,72 @@ export class Indenta {
    * Build a command line to run the indenter
    */
   private buildCommandLine(alignment: string, fonte: string, referenceLine: number): string {
-    let cmd = "Identa.bat ";
-    cmd += this.buildTmpFileName();
+    let cmd = this.getConfiguredFormatterLocation();
+    if (cmd.length == 0) {
+      return "";
+    }
+    cmd += " " + this.buildTmpFileName();
     cmd += ";" + fonte + ";" + (referenceLine + 1) + ";" + alignment + ";F;S -lines:3";
     return cmd;
   }
 
   /**
+   * Returns the configured COBOL formatter location for this extension
+   */
+  private getConfiguredFormatterLocation(): string {
+    const path = configuration.get("formatter.location", "").trim();
+    const pathWithQuotes = this.insertQuotesIfNeeded(path);
+    return pathWithQuotes;
+  }
+
+  /**
+   * Insert quotes on the specified path if needed.
+   * If the path already contains quotes or the path is empty, the path itself is returned.
+   *
+   * @param path path where quotes will be inserted
+   */
+  private insertQuotesIfNeeded(path: string): string {
+    if (path.length == 0 || this.containsQuotes(path)) {
+      return path;
+    }
+    return "\"" + path + "\"";
+  }
+
+  /**
+   * Returns true if the specified path contains quotes at the beginning or the end of the string
+   *
+   * @param path path to check if already contains quotes
+   */
+  private containsQuotes(path: string): boolean {
+    const length = path.length;
+    const containsQuotes = (path.charAt(0) == "\"" && path.charAt(length - 1) == "\"");
+    return containsQuotes;
+  }
+
+  /**
    * Build a temporary file name
    */
-  private buildTmpFileName() {
-    return "C:\\tmp\\" + require("os").userInfo().username.toLowerCase() + ".cbl";
+  private buildTmpFileName(): string {
+    const tempDirectory = this.getTempDirectoryWithSeparator();
+    const username = os.userInfo().username.toLowerCase();
+    const extension = ".cbl";
+    const tempFileName = tempDirectory + username + extension;
+    return tempFileName;
+  }
+
+  /**
+   * Returns the temp directory with separator
+   */
+  private getTempDirectoryWithSeparator(): string {
+    const tempDirectory = os.tmpdir();
+    const separator = path.sep;
+    if (tempDirectory) {
+      if (tempDirectory.endsWith(separator)) {
+        return tempDirectory;
+      }
+      return tempDirectory + separator;
+    }
+    return "";
   }
 
 }

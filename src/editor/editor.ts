@@ -580,20 +580,22 @@ export class Editor {
    * Indent the selection Buffer
    */
   async indent(alignment: string) {
-    // If doesn't have selection, backup actual cursor to restore it later
+    // If there is no selection saves actual cursor to restore it later
     let restoreCursor: RechPosition;
-    if (this.getSelectionRange().length == 1 && this.getSelectionRange()[0].isEmpty) {
+    const selection = this.getSelectionRange();
+    if (selection.length == 1 && selection[0].isEmpty) {
       restoreCursor = this.getCursors()[0];
     }
     // Select whole lines of the selection range
     this.selectWholeLines();
     const indenter = new Indenta();
-    if (indenter.isAllCommentaryLines(this.getSelectionBuffer())) {
-      indenter.indentCommentary(this.getSelectionBuffer(), (buffer) => this.replaceBuffer(buffer, restoreCursor));
+    const selectionBuffer = this.getSelectionBuffer();
+    if (indenter.isAllCommentaryLines(selectionBuffer)) {
+      indenter.indentCommentary(selectionBuffer, (buffer) => this.replaceBuffer(buffer, restoreCursor));
       return;
     }
     //Indent the selection range
-    await indenter.indenta(alignment, this.getSelectionBuffer(), this.getPath().toString(), this.editor.selection.start.line, (buffer) => {
+    await indenter.indenta(alignment, selectionBuffer, this.getPath().toString(), this.editor.selection.start.line, (buffer) => {
       this.replaceBuffer(buffer, restoreCursor);
     }, (bufferErr) => { this.showWarningMessage(bufferErr); });
   }

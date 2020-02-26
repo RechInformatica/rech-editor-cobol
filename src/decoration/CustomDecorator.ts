@@ -1,4 +1,4 @@
-import { ExtensionContext, TextEditor, window, workspace } from 'vscode';
+import { ExtensionContext, TextEditor, window, workspace, debug } from 'vscode';
 import { Parser } from './Parser';
 
 export class CustomDecorator {
@@ -9,6 +9,10 @@ export class CustomDecorator {
 
         // Called to handle events below
         const updateDecorations = function () {
+            // If user is debugging then disable custom decoration to prevent UI freezing
+            if (debug.activeDebugSession) {
+                return;
+            }
             // If active window is open and language is supported
             if (activeEditor && activeEditor.document.languageId == "COBOL") {
                 parser.findLocalVariables(activeEditor).then(() => {
