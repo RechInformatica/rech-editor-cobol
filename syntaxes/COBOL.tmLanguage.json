@@ -12,6 +12,34 @@
   "name": "COBOL",
   "patterns": [
     {
+      "comment": "Reserved words which are not paragraph declaration",
+      "match": "\\s+(special-names\\.|repository\\.)",
+      "name": "keyword.identifiers.cobol"
+    },
+    {
+      "comment": "Start and end of class scopes",
+      "match": "\\s+(factory\\.|object\\.|end\\s+factory|end\\s+object)",
+      "name": "keyword.identifiers.cobol"
+    },
+    {
+      "comment": "Color method name",
+      "match": "(\\s*method-id\\.\\s*)(\\w+\\.*)(.*)$",
+      "captures": {
+        "1": {
+          "name": "keyword.identifiers.cobol"
+        },
+        "2": {
+          "name": "support.function.cobol"
+        },
+        "3": {
+          "name": "keyword.identifiers.cobol"
+        },
+        "4": {
+          "name": "keyword.identifiers.cobol"
+        }
+      }
+    },
+    {
       "comment": "Color paragraph declaration",
       "match": "(^       (\\w|\\-|\\(([\\w!@#])+\\))+\\.$)",
       "name": "support.function.cobol"
