@@ -124,6 +124,10 @@ export class CobolActionFactory {
           implementations.push(new CamelCaseAction());
           break;
         }
+        case "W128": {
+          implementations.push(new RemoveVariableAction());
+          break;
+        }
       }
     });
     return implementations;
