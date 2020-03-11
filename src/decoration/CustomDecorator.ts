@@ -1,6 +1,9 @@
 import { ExtensionContext, TextEditor, window, workspace, debug } from 'vscode';
 import { Parser } from './Parser';
 
+/** Max lines to decorate source, preventing UI freezing */
+const DECORATION_MAX_LINES = 30000;
+
 export class CustomDecorator {
 
     public static activate(context: ExtensionContext) {
@@ -9,8 +12,7 @@ export class CustomDecorator {
 
         // Called to handle events below
         const updateDecorations = function () {
-            // If user is debugging then disable custom decoration to prevent UI freezing
-            if (debug.activeDebugSession) {
+            if (activeEditor && activeEditor.document.lineCount > DECORATION_MAX_LINES) {
                 return;
             }
             // If active window is open and language is supported
