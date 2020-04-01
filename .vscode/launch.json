@@ -18,13 +18,13 @@
 			"runtimeExecutable": "${execPath}",
 			"type": "pwa-extensionHost"
 		},
-	{
-		"type": "COBOL",
-		"request": "launch",
-		"name": "isCOBOL Debugger",
-		"commandLine": "${command:commandLineBuild}",
-		"stopOnEntry": true
-	},
+		{
+			"type": "COBOL",
+			"request": "launch",
+			"name": "COBOL Debugger",
+			"commandLine": "${command:commandLineBuild}",
+			"stopOnEntry": true
+		},
 		{
 			"type": "extensionHost",
 			"request": "launch",

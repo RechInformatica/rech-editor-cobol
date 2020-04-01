@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with Visual Studio Code",
-	"version": "1.0.80",
+	"version": "1.0.81",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.35.0"
@@ -189,8 +189,8 @@
 			"editor/context": [
 				{
 					"command": "rech.editor.cobol.flowparser",
-					"when": "editorTextFocus",
-					"group": "navigation"
+					"when": "editorTextFocus && editorLangId == 'COBOL'",
+					"group": "cobol"
 				}
 			]
 		},
