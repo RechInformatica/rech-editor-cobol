@@ -126,15 +126,7 @@ export class Editor {
     this.setSelectionsRange(ranges);
   }
 
-  /**
-   * Select the whole paragraph
-   */
-  selectWholeParagraph() {
-    let prevLine = this.getPreviousParagraphPosition().line;
-    let nextLine = this.getNextParagraphPosition().line;
-    let range = new Range(new Position(prevLine, 0), new Position(nextLine, 0));
-    this.setSelectionRange(range);
-  }
+
 
   /**
    * Returns the current word
@@ -243,6 +235,17 @@ export class Editor {
     });
     this.setSelectionsRange(ranges);
     this.editor.revealRange(ranges[0], 2);
+  }
+
+  /**
+   * Define a selection in a given range
+   *
+   * @param start_pos Initial position
+   * @param end_pos End position
+   */
+  setSelection(start_pos: RechPosition, end_pos: RechPosition) {
+    let range = new Range(start_pos.line, start_pos.column, end_pos.line - 1 , end_pos.column)
+    this.setSelectionRange(range);
   }
 
   /**

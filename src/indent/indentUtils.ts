@@ -6,18 +6,19 @@ import * as iconv from 'iconv-lite';
 import { BufferSplitter } from 'rech-ts-commons';
 import { configuration } from '../helpers/configuration';
 import { Editor } from '../editor/editor';
+import { Position } from 'vscode';
+import { RechPosition } from '../commons/rechposition';
 
 /**
- * Class to indent sources
+ * Static class to do specific identation
  */
 export class IndentUtils {
 
     /**
-     * identWholeParagraph
+     * Indent the whole paragraph that the cursor is
      */
-    public static identWholeParagraph() {
-        new Editor().findPreviousParagraph();
-        new Editor().findNextParagraph();
+    public static indentWholeParagraph() : Promise<void> {
+        new Editor().setSelection(new Editor().getPreviousParagraphPosition(), new Editor().getNextParagraphPosition());
+        return new Editor().indent("N");
     }
-
 }
