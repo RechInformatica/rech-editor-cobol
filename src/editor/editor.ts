@@ -240,11 +240,11 @@ export class Editor {
   /**
    * Define a selection in a given range
    *
-   * @param start_pos Initial position
-   * @param end_pos End position
+   * @param startPos Initial position
+   * @param endPos End position
    */
-  setSelection(start_pos: RechPosition, end_pos: RechPosition) {
-    let range = new Range(start_pos.line, start_pos.column, end_pos.line - 1 , end_pos.column)
+  setSelection(startPos: RechPosition, endPos: RechPosition) {
+    let range = new Range(startPos.line, startPos.column, endPos.line - 1 , endPos.column)
     this.setSelectionRange(range);
   }
 
