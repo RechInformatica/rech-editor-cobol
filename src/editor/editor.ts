@@ -127,6 +127,16 @@ export class Editor {
   }
 
   /**
+   * Select the whole paragraph
+   */
+  selectWholeParagraph() {
+    let prevLine = this.getPreviousParagraphPosition().line;
+    let nextLine = this.getNextParagraphPosition().line;
+    let range = new Range(new Position(prevLine, 0), new Position(nextLine, 0));
+    this.setSelectionRange(range);
+  }
+
+  /**
    * Returns the current word
    */
   getCurrentWord() {
@@ -514,6 +524,30 @@ export class Editor {
       this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
       this.showInformationMessage("Previous paragraph not found");
+    }
+  }
+
+  /**
+   * Get next paragraph position
+   */
+  getNextParagraphPosition() {
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    if (positionsToReturn) {
+      return new RechPosition(positionsToReturn[0].line, 7);
+    } else {
+      return new RechPosition(this.editor.document.lineCount, 0)
+    }
+  }
+
+  /**
+   * Go to the previous paragraph
+   */
+  getPreviousParagraphPosition() {
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    if (positionsToReturn) {
+      return new RechPosition(positionsToReturn[0].line, 7);
+    } else {
+    return new RechPosition(0, 0);
     }
   }
 

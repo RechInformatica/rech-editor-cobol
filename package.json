@@ -257,6 +257,10 @@
 				"title": "Rech COBOL: Indents source to right"
 			},
 			{
+				"command": "rech.editor.cobol.indentParagraph",
+				"title": "Rech COBOL: Indents whole paragraph"
+			},
+			{
 				"command": "rech.editor.cobol.cursorPos51",
 				"title": "Rech COBOL: Sets cursor at position 51"
 			},
