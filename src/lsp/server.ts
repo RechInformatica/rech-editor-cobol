@@ -707,8 +707,23 @@ export function createLocation(uri: string, position: RechPosition) {
     Position.create(position.line, position.column),
     Position.create(position.line, position.column)
   );
-  const fileUri = uri.replace(/\\\\/g, "/").replace("F:", "file:///F%3A");
+  const fileUri = normalizeUri(uri);
   return Location.create(fileUri, firstCharRange);
+}
+
+/**
+ * Normalizes the specified URI to be understood by VSCode API
+ *
+ * @param uri URI to be normalized
+ */
+export function normalizeUri(uri: string) {
+  // First, convert backslashes into slashes
+  let normalized: string = uri.replace(/\\\\/g, "/");
+  // When the URI does not start with 'file://' we need to add it
+  if (!normalized.startsWith("file://")) {
+    normalized = normalized.replace("F:", "file:///F%3A");
+  }
+  return normalized;
 }
 
 /**

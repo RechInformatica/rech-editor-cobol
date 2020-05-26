@@ -9,6 +9,8 @@ import { CobolVariable } from '../completion/CobolVariable';
 
 /** Minimum word size */
 const MIN_WORD_SIZE = 3;
+/** Name of COBOL reserved word which refers to the current instance */
+const SELF_INSTANCE_NAME = "self"
 
 /**
  * Class to find Cobol declarations
@@ -37,11 +39,6 @@ export class CobolDeclarationFinder {
    */
   public findDeclaration(term: string, uri: string, referenceLine: number, referenceColumn: number): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
-      // If the word is too small
-      if (term.length < MIN_WORD_SIZE) {
-        reject();
-        return;
-      }
       // Busca declaração no próprio documento
       this.findDeclarationInBuffer(term, this.text, referenceLine, referenceColumn, uri).then((result) => {
         if (result) {
@@ -102,9 +99,14 @@ export class CobolDeclarationFinder {
   private findDeclarationInBuffer(term: string, buffer: string, referenceLine: number, referenceColumn: number, uri: string): Promise<RechPosition | undefined> {
     return new Promise((resolve, reject) => {
       const parser = new ParserCobol();
+      const splittedBuffer = buffer.split("\n");
+      const currentLine = splittedBuffer[referenceLine];
+      if (term === "" || (term.length < MIN_WORD_SIZE && parser.isCommentOrEmptyLine(currentLine))) {
+        return reject();
+      }
       let result = undefined;
-      if (this.isAMethodCall(term, referenceLine, referenceColumn, buffer.split("\n"))) {
-        this.findDeclarationFromMethod(term, buffer, referenceLine, referenceColumn, uri).then((result) => {
+      if (this.isAMethodCall(term, referenceLine, referenceColumn, splittedBuffer)) {
+        this.findDeclarationFromMethod(term, splittedBuffer, referenceLine, referenceColumn, uri).then((result) => {
           return resolve(result);
         }).catch(() => {
           return reject();
@@ -149,29 +151,36 @@ export class CobolDeclarationFinder {
    * Find the method declaration
    *
    * @param term
-   * @param buffer
+   * @param lines
    * @param referenceLine
    * @param referenceColumn
    * @param uri
    */
-  private findDeclarationFromMethod(term: string, buffer: string, referenceLine: number, referenceColumn: number, uri: string): Promise<RechPosition | undefined> {
+  private findDeclarationFromMethod(term: string, lines: string[], referenceLine: number, referenceColumn: number, uri: string): Promise<RechPosition | undefined> {
     return new Promise((resolve, reject) => {
-      const lines = buffer.split("\n");
       const originalChain = this.getTheFullChain(referenceLine, referenceColumn, lines).slice(1).reverse();
-      this.resolveChainTypes(originalChain, referenceLine, referenceColumn, lines, uri).then((chain) => {
-        const file = new Path(chain[chain.length - 1]);
-        new File(file.fullPath()).loadBuffer().then((buffer) => {
-          this.findMethodDeclaration(term, buffer).then((method) => {
-            return resolve(new RechPosition(method.getLineFromDeclaration(), method.getColumnFromDeclaration(), file.fullPathVscode()));
-          }).catch(() => {
-            return reject()
-          })
-        }).catch( () => {
-          return reject()
+      if (originalChain[0] === SELF_INSTANCE_NAME) {
+        this.findMethodDeclaration(term, lines.join("\n")).then((method) => {
+          return resolve(new RechPosition(method.getLineFromDeclaration(), method.getColumnFromDeclaration(), undefined));
+        }).catch(() => {
+          return reject();
         });
-      }).catch(() => {
-        reject();
-      })
+      } else {
+        this.resolveChainTypes(originalChain, referenceLine, referenceColumn, lines, uri).then((chain) => {
+          const file = new Path(chain[chain.length - 1]);
+          new File(file.fullPath()).loadBuffer().then((buffer) => {
+            this.findMethodDeclaration(term, buffer).then((method) => {
+              return resolve(new RechPosition(method.getLineFromDeclaration(), method.getColumnFromDeclaration(), file.fullPathVscode()));
+            }).catch(() => {
+              return reject();
+            });
+          }).catch( () => {
+            return reject()
+          });
+        }).catch(() => {
+          reject();
+        });
+      }
     });
   }
 
@@ -357,21 +366,35 @@ export class CobolDeclarationFinder {
   /**
    * Returns a fullPath from class file
    *
-   * @param classs
+   * @param clazz
    * @param uri
    */
-  private getFullPathFromClassSource(classs: string, uri: string) {
-    let path = new Path(new Path(uri).fullPathWin()).directory() + classs + ".cbl";
+  private getFullPathFromClassSource(clazz: string, uri: string) {
+    const path = this.getFullPathFromClassWithExtension(clazz, uri, ".cbl");
+    if (path !== "") {
+      return path;
+    }
+    return this.getFullPathFromClassWithExtension(clazz, uri, ".cob");
+  }
+
+  /**
+   * Returns the full path of the specified file, considering the specified extension.
+   *
+   * @param clazz class to have the full path returned
+   * @param uri URI of current file
+   * @param extension extension used to build the full path string
+   */
+  private getFullPathFromClassWithExtension(clazz: string, uri: string, extension: string) {
+    let path = new Path(new Path(uri).fullPathWin()).directory() + clazz + extension;
     if (new File(path).exists()) {
       return path;
     }
-    path = "F:\\Fontes\\" + classs + ".cbl";
+    path = "F:\\Fontes\\" + clazz + extension;
     if (new File(path).exists()) {
       return path;
     }
     return "";
   }
-
 
   /**
    * Returns the full chain from method call
