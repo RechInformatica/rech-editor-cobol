@@ -6,6 +6,9 @@ import { Scan, BufferSplitter } from "rech-ts-commons";
 import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
 import { CompletionUtils } from "../commons/CompletionUtils";
 
+/** Reserved COBOL words which aren't paragraphs although are declared on the same way as a paragraph */
+const COBOL_PARAGRAPHS_BLACKLIST = ['class-id', 'factory', 'method-id', 'object', 'repository', 'special-names'];
+
 /**
  * Class to generate LSP Completion Items for Cobol paragraphs declarations
  */
@@ -19,25 +22,16 @@ export class ParagraphCompletion implements CompletionInterface {
     private parserCobol: ParserCobol;
     /** Cobol documentation parser */
     private cobolDocParser: CobolDocParser;
-    /** Cache file name */
-    private cacheFileName: string;
-    /** uri of file */
-    private uri: string;
     /** Current lines in the source */
     private currentLines: string[] | undefined;
     /** Current line number */
     private lineNumber: number = 0;
     /** Column where user started typing paragraph name. This column tells VSCode where replacement should start within the current line */
     private rangeColumn: number = 0;
-    /** Source of completions */
-    private sourceOfCompletions: Thenable<string>;
 
-    constructor(cacheFileName: string, uri: string, sourceOfCompletions: Thenable<string>) {
+    constructor(private cacheFileName: string, private uri: string, private sourceOfCompletions: Thenable<string>) {
         this.parserCobol = new ParserCobol();
         this.cobolDocParser = new CobolDocParser();
-        this.cacheFileName = cacheFileName;
-        this.uri = uri;
-        this.sourceOfCompletions = sourceOfCompletions;
     }
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
@@ -100,8 +94,8 @@ export class ParagraphCompletion implements CompletionInterface {
         const buffer = lines.join("\n");
         new Scan(buffer).scan(/^\s\s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm, (iterator: any) => {
             const paragraphName = this.parserCobol.getDeclaracaoParagrafo(iterator.lineContent.toString());
-            const docArray = this.getElementDocumentation(lines, iterator.row);
-            if (paragraphName) {
+            if (paragraphName && !this.isReservedWord(paragraphName)) {
+                const docArray = this.getElementDocumentation(lines, iterator.row);
                 const paragraphItem = this.createParagraphCompletion(paragraphName, docArray);
                 items.set(paragraphName, paragraphItem);
             }
@@ -115,6 +109,13 @@ export class ParagraphCompletion implements CompletionInterface {
             })
         }
         return items;
+    }
+
+    /**
+     * Returns true whether the specified paragraph name represents a reserved COBOL word
+     */
+    private isReservedWord(paragraphName: string) {
+        return COBOL_PARAGRAPHS_BLACKLIST.some((word) => word === paragraphName);
     }
 
     /**
