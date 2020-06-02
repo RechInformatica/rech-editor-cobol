@@ -20,7 +20,7 @@ export class CompletionUtils {
   }
 
   /**
-   * Fills missing spaces between the colun where the word found on
+   * Fills missing spaces between the column where the word found on
    * current cursor starts, and the target final column.
    *
    * @param targetFinalColumn final column until where spaces should be inserted

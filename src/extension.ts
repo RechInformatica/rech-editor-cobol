@@ -15,6 +15,7 @@ import { FoldStatusBar } from './lsp/fold/FoldStatusBar';
 import { ExpandedSourceStatusBar } from './cobol/ExpandedSourceStatusBar';
 import FlowProvider from './sourceflow/treeView/providers/FlowProvider';
 import { IndentUtils } from './indent/indentUtils';
+import { CobolRefactor } from './cobol/refactor/CobolRefactor';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -138,9 +139,10 @@ async function _activate(context: any) {
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indentParagraph', () => {
         let cursors = new Editor().getCursors();
-        IndentUtils.indentWholeParagraph().then(() => {
-            new Editor().setCursors(cursors);
-        }).catch();
+        IndentUtils.indentWholeParagraph().then(() => new Editor().setCursors(cursors)).catch();
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.extractParagraph', () => {
+        new CobolRefactor().extractParagraph().then().catch();
     }));
 }
 

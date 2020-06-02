@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with Visual Studio Code",
-	"version": "1.0.84",
+	"version": "1.0.85",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.35.0"
@@ -307,6 +307,10 @@
 			{
 				"command": "rech.editor.cobol.showElementProperties",
 				"title": "Rech COBOL: Shows Cobol element properties"
+			},
+			{
+				"command": "rech.editor.cobol.extractParagraph",
+				"title": "Rech COBOL: Extract selected lines to a new paragraph"
 			}
 		],
 		"keybindings": [
@@ -426,10 +430,7 @@
 		"vscode:prepublish": "npm run compile",
 		"package": "vsce package --out F:/DIV/VSCode/extension/market/rech-editor-cobol/rech-editor-cobol.vsix",
 		"compile": "npm run tslint && tsc -p ./",
-		"compile:client": "tsc -p ./",
-		"compile:server": "tsc -p ./",
-		"watch:client": "tsc -watch -p ./",
-		"watch:server": "tsc -watch -p ./",
+		"watch": "tsc -watch -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "npm run compile && mocha -r ts-node/register ./src/test/**/*.test.ts",
 		"tslint": "tslint --project tsconfig.json --config tslint.json"

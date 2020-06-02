@@ -1,4 +1,4 @@
-import { Diagnostic, CodeAction } from "vscode-languageserver";
+import { Diagnostic, CodeAction, Range } from "vscode-languageserver";
 import Q from "q";
 import { UselessParenthesesAction } from "./RemoveParenthesesAction";
 import { CamelCaseAction } from "./ConvertToCamelCaseAction";
@@ -10,26 +10,14 @@ import { InsertStaticClauseAction } from "./InsertStaticClauseAction";
 import { ReplaceCommaByDotAction } from "./ReplaceCommaWithDotAction";
 import { RemoveRemainingClauseAction } from "./RemoveRemainingClauseAction";
 import { InsertSubprogramDeclarationAction } from "./subprogram/InsertSubprogramDeclarationAction";
+import { RefactorParagraphAction } from "./RefactorParagraphAction";
 
 /**
  * Factory to generate Cobol Code Actions
  */
 export class CobolActionFactory {
 
-  /** Line where the cursor is positioned */
-  private line: number;
-  /** Column where the cursor is positioned */
-  private column: number;
-  /** Document lines */
-  private lines: string[];
-  /** uri of source file */
-  private uri: string;
-
-  constructor(line: number, column: number, lines: string[], uri: string) {
-    this.line = line;
-    this.column = column;
-    this.lines = lines;
-    this.uri = uri;
+  constructor(private range: Range, private lines: string[], private uri: string) {
   }
 
   /**
@@ -130,6 +118,9 @@ export class CobolActionFactory {
         }
       }
     });
+    if (this.range.start.line !== this.range.end.line) {
+      implementations.push(new RefactorParagraphAction());
+    }
     return implementations;
   }
 
@@ -139,7 +130,7 @@ export class CobolActionFactory {
    * @param impl implementation of ActionInterface used to generate Code Actions
    */
   private generate(impl: ActionInterface): Promise<CodeAction[]> {
-    return impl.generate(this.uri, this.line, this.column, this.lines);
+    return impl.generate(this.uri, this.range.start.line, this.range.start.character, this.lines);
   }
 
 }

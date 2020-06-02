@@ -195,7 +195,7 @@ export class Editor {
   }
 
   /**
-   * Returns the text of current line
+   * Returns the text of specified line
    */
   getLine(lineIndex: number) {
     return this.editor.document.lineAt(lineIndex).text;

@@ -557,11 +557,10 @@ connection.onCodeAction((params: CodeActionParams): Thenable<CodeAction[] | Resp
     const fullDocument = documents.get(params.textDocument.uri);
     const diagnostics = params.context.diagnostics;
     if (fullDocument && diagnostics) {
-      const line = params.range.start.line;
-      const column = params.range.start.character;
+      const range = params.range;
       const uri = params.textDocument.uri;
       const text = fullDocument.getText();
-      new CobolActionFactory(line, column, BufferSplitter.split(text), uri)
+      new CobolActionFactory(range, BufferSplitter.split(text), uri)
       .generateActions(diagnostics)
       .then((actions) => {
         resolve(actions);
