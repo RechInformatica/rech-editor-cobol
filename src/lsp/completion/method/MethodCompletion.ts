@@ -90,7 +90,7 @@ export class MethodCompletion implements CompletionInterface {
       if (referenceColumn == 0 || referenceLine == 0) {
         return reject();
       }
-      new CobolDeclarationFinder(lines.join("\n")).findDeclaration(target, this.uri, referenceLine + 1, referenceColumn).then((position) => {
+      new CobolDeclarationFinder(lines.join("\n")).findDeclaration(target, this.uri, referenceLine, referenceColumn).then((position) => {
         if (!position.file) {
           this.extractClass(position.line, position.column, lines, this.uri).then((classs) => {
             return resolve(classs);
