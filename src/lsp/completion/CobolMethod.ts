@@ -1,12 +1,12 @@
 import { RechPosition } from "../../commons/rechposition";
-import { VariableUtils } from "../../commons/VariableUtils";
 import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
 import { CobolVariable, Type } from "./CobolVariable";
 import { ParserCobol } from "../../cobol/parsercobol";
 import { CobolDoc } from "../../cobol/rechdoc/CobolDoc";
 import { CobolDeclarationFinder } from "../declaration/CobolDeclarationFinder";
-import { File } from "../../commons/file";
 import Q from "q";
+import { BufferSplitter } from "rech-ts-commons";
+import { FileUtils } from "../../commons/FileUtils";
 
 /**
  * Class representing a Cobol method
@@ -38,14 +38,14 @@ export class CobolMethod {
 	private visibility: "private" | "protected" | "public";
 
 	private constructor(name: string,
-		                lineFromDeclaration: number,
-		                columnFromDeclaration: number,
-						classs: string,
-						visibility: "private" | "protected" | "public",
-						params: CobolVariable[],
-						documentation: CobolDoc,
-						throws: CobolVariable[],
-						variableReturn?: CobolVariable) {
+		lineFromDeclaration: number,
+		columnFromDeclaration: number,
+		classs: string,
+		visibility: "private" | "protected" | "public",
+		params: CobolVariable[],
+		documentation: CobolDoc,
+		throws: CobolVariable[],
+		variableReturn?: CobolVariable) {
 		this.name = name;
 		this.lineFromDeclaration = lineFromDeclaration;
 		this.columnFromDeclaration = columnFromDeclaration;
@@ -85,12 +85,8 @@ export class CobolMethod {
 				CobolMethod.extractThrows(lineNumber, column, buffer).then((throws) => {
 					const documentation = CobolMethod.extractDocumentation(lineNumber, buffer, params, returns, throws);
 					return resolve(new CobolMethod(methodName, lineNumber, column, classs, visibility, params, documentation, throws, returns));
-				}).catch(() => {
-					return reject()
-				});
-			}).catch(() => {
-				return reject()
-			});
+				}).catch(() => reject());
+			}).catch(() => reject());
 		});
 	}
 
@@ -102,7 +98,7 @@ export class CobolMethod {
 	private static extractVisibility(line: string): "private" | "protected" | "public" {
 		const match = /.*(private|protected|public)\s*\./gi.exec(line);
 		if (match && match[1]) {
-			return <"private" | "protected" | "public"> match[1];
+			return <"private" | "protected" | "public">match[1];
 		}
 		return "public";
 	}
@@ -125,11 +121,9 @@ export class CobolMethod {
 					continue;
 				}
 				noMatch = false;
-				this.buildCobolVariable(match[1], lineNumber, column, buffer).then((variable) => {
-					return resolve(variable);
-				}).catch(() => {
-					return reject();
-				})
+				this.buildCobolVariable(match[1], lineNumber, column, buffer)
+					.then((variable) => resolve(variable))
+					.catch(() => reject());
 				break;
 			}
 			if (noMatch) {
@@ -170,9 +164,7 @@ export class CobolMethod {
 						}
 					});
 					resolve(throws);
-				}).catch(() => {
-					reject();
-				})
+				}).catch(() => reject());
 			}
 			if (noMatch) {
 				return resolve(throws);
@@ -187,25 +179,23 @@ export class CobolMethod {
    * @param line
    * @param lines
    */
-  private static buildCobolVariable(variable: string, line: number, column: number, lines: string[]): Promise<CobolVariable> {
-    return new Promise((resolve, reject) => {
-      new CobolDeclarationFinder(lines.join("\n"))
-        .findDeclaration(variable, "", line, column).then((position: RechPosition) => {
-          if (!position.file) {
-            return resolve(CobolVariable.parseLines(position.line, lines, {noChildren: true, noSection: true, noScope: true, ignoreMethodReturn: true}));
-          } else {
-            new File(position.file).loadBuffer().then((buffer) => {
-              const bufferArray = buffer.split("\n");
-              return resolve(CobolVariable.parseLines(position.line, bufferArray, {noChildren: true, noSection: true, noScope: true, ignoreMethodReturn: true}));
-            }).catch(() => {
-              return reject();
-            })
-          }
-        }).catch(() => {
-          return reject();
-        });
-    })
-  }
+	private static buildCobolVariable(variable: string, line: number, column: number, lines: string[]): Promise<CobolVariable> {
+		return new Promise((resolve, reject) => {
+			new CobolDeclarationFinder(lines.join("\n"))
+				.findDeclaration({ term: variable, uri: "", lineIndex: line, columnIndex: column })
+				.then((position: RechPosition) => {
+					if (!position.file) {
+						return resolve(CobolVariable.parseLines(position.line, lines, { noChildren: true, noSection: true, noScope: true, ignoreMethodReturn: true }));
+					} else {
+						FileUtils.read(position.file)
+							.then((buffer) => {
+								const bufferArray = BufferSplitter.split(buffer);
+								return resolve(CobolVariable.parseLines(position.line, bufferArray, { noChildren: true, noSection: true, noScope: true, ignoreMethodReturn: true }));
+							}).catch(() => reject());
+					}
+				}).catch(() => reject());
+		})
+	}
 
 	/**
 	 * Extract the params from method
@@ -226,11 +216,11 @@ export class CobolMethod {
 				}
 			}
 			if (isLinkage) {
-				if (buffer[i].match(/\s+[\w]+\s+section\s.*/) || buffer[i].match(/\s+[\w]+\s+division\s.*/) ) {
+				if (buffer[i].match(/\s+[\w]+\s+section\s.*/) || buffer[i].match(/\s+[\w]+\s+division\s.*/)) {
 					break;
 				}
 				if (new ParserCobol().getDeclaracaoVariavel(buffer[i])) {
-					params.push(CobolVariable.parseLines(i, buffer, {ignoreMethodReturn: true, noChildren: true, noScope: true, noSection: true}));
+					params.push(CobolVariable.parseLines(i, buffer, { ignoreMethodReturn: true, noChildren: true, noScope: true, noSection: true }));
 				}
 			}
 

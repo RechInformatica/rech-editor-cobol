@@ -6,6 +6,7 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 import { RechPosition } from "../../commons/rechposition";
 import { File } from "../../commons/file";
 import { BufferSplitter } from "rech-ts-commons";
+import { FindParameters } from "../declaration/FindInterface";
 
 /**
  * Class to generate LSP Completion Items for 'when' clause
@@ -230,8 +231,14 @@ export class WhenCompletion implements CompletionInterface {
             if (!this.uri) {
                 reject();
             }
+            const findParams: FindParameters = {
+                term: variable,
+                uri: this.uri!,
+                lineIndex: line,
+                columnIndex: column
+             };
             const finder = new CobolDeclarationFinder(lines.join("\n"));
-            finder.findDeclaration(variable, this.uri!, line, column).then((position) => {
+            finder.findDeclaration(findParams).then((position) => {
                 let parentFileLines = lines;
                 if (position.file) {
                     parentFileLines = BufferSplitter.split(new File(position.file).loadBufferSync("latin1"));

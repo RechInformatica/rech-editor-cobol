@@ -52,6 +52,7 @@ import { MethodCompletion } from "./completion/method/MethodCompletion";
 import { CobolReferencesFinder } from "./references/CobolReferencesFinder";
 import { CobolActionFactory } from "./actions/CobolActionFactory";
 import { RenamingUtils } from "./commons/RenamingUtils";
+import { FindParameters } from "./declaration/FindInterface";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -561,12 +562,12 @@ connection.onCodeAction((params: CodeActionParams): Thenable<CodeAction[] | Resp
       const uri = params.textDocument.uri;
       const text = fullDocument.getText();
       new CobolActionFactory(range, BufferSplitter.split(text), uri)
-      .generateActions(diagnostics)
-      .then((actions) => {
-        resolve(actions);
-      }).catch(() => {
-        reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction inside CobolActionFactory"));
-      });
+        .generateActions(diagnostics)
+        .then((actions) => {
+          resolve(actions);
+        }).catch(() => {
+          reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction inside CobolActionFactory"));
+        });
     } else {
       Log.get().error("Error to get the fullDocument within onCodeAction");
       reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction because some information is undefined"));
@@ -642,7 +643,12 @@ export function createPromiseForWordDeclaration(documentFullText: string, refere
 export function callCobolDeclarationFinder(word: string, referenceLine: number, referenceColumn: number, documentFullText: string, uri: string): Promise<RechPosition> {
   return new Promise((resolve, reject) => {
     new CobolDeclarationFinder(documentFullText)
-      .findDeclaration(word, uri, referenceLine, referenceColumn)
+      .findDeclaration({
+        term: word,
+        uri: uri,
+        lineIndex: referenceLine,
+        columnIndex: referenceColumn
+      })
       .then((position: RechPosition) => {
         return resolve(position);
       }).catch(() => {

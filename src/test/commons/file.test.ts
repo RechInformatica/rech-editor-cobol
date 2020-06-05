@@ -1,6 +1,7 @@
 import { assert } from "chai";
 import "mocha";
 import { File } from "../../commons/file"
+import { FileUtils } from "../../commons/FileUtils";
 
 describe("File Functions", () => {
 
@@ -23,7 +24,7 @@ describe("File Functions", () => {
     const buffer = ["Teste", "123", "àáÍíÉÓôÔãâÃ", "-_?=[]{}()/\\|.;,"]
     const result = new File(fileName).saveBuffer(buffer, "latin1");
     result.then(() => {
-      new File(fileName).loadBuffer("latin1").then((b) => {
+      FileUtils.read(fileName, "latin1").then((b) => {
         assert.equal(buffer.toString(), b);
         done();
       }).catch();
@@ -39,7 +40,7 @@ describe("File Functions", () => {
     const buffer = ["Teste", "123", "àáÍíÉÓôÔãâÃ", "-_?=[]{}()/\\|.;,"]
     const result = new File(fileName).saveBuffer(buffer, "UTF-8");
     result.then(() => {
-      new File(fileName).loadBuffer("UTF-8").then((b) => {
+      FileUtils.read(fileName, "UTF-8").then((b) => {
         assert.equal(buffer.toString(), b);
         done();
       }).catch();

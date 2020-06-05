@@ -21,27 +21,19 @@ export class CobolDeclarationFinder {
     this.splittedBuffer = BufferSplitter.split(this.text);
   }
 
-  public findDeclaration(term: string, uri: string, referenceLine: number, referenceColumn: number): Promise<RechPosition> {
+  public findDeclaration(findParams: FindParameters): Promise<RechPosition> {
     return new Promise((resolve, reject) => {
-      const findParams: FindParameters = {
-        term: term,
-        uri: uri,
-        lineIndex: referenceLine,
-        columnIndex: referenceColumn
-      };
-      this.findDeclarationInBuffer(findParams).then((result) => {
-        if (result) {
-          return resolve(result);
-        }
-        const preprocFinder = new PreprocDeclarationFinder(this.splittedBuffer);
-        preprocFinder.findDeclaration(findParams).then((result) => {
-          return resolve(result)
-        }).catch(() => {
-          return reject();
-        });
-      }).catch(() => {
-        return reject();
-      });
+      this.findDeclarationInBuffer(findParams)
+        .then((result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            new PreprocDeclarationFinder(this.splittedBuffer)
+              .findDeclaration(findParams)
+              .then((result) => resolve(result))
+              .catch(() => reject());
+          }
+        }).catch(() => reject());
     });
   }
 
@@ -53,16 +45,14 @@ export class CobolDeclarationFinder {
       }
       const methodFinder = new MethodDeclarationFinder(this.splittedBuffer);
       if (methodFinder.isMethodCall(currentLine, params.columnIndex)) {
-        methodFinder.findDeclaration(params).then((result) => {
-          return resolve(result);
-        }).catch(() => {
-          return reject();
-        });
-        return;
+        methodFinder.findDeclaration(params)
+          .then((result) => resolve(result))
+          .catch(() => reject());
+      } else {
+        const declarationPosition = this.searchDeclarationBackwards(params);
+        resolve(declarationPosition);
       }
-      const declarationPosition = this.searchDeclarationBackwards(params);
-      return resolve(declarationPosition);
-    })
+    });
   }
 
   private shouldIgnore(currentLine: string, params: FindParameters): boolean {

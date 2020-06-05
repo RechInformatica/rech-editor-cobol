@@ -1,62 +1,77 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat, MarkupKind } from "vscode-languageserver";
 import { CompletionInterface } from "../CompletionInterface";
 import { CobolDeclarationFinder } from "../../declaration/CobolDeclarationFinder";
-import { RechPosition } from "../../../commons/rechposition";
 import { CobolVariable } from "../CobolVariable";
-import { File } from "../../../commons/file";
 import { ParserCobol } from "../../../cobol/parsercobol";
 import { Path } from "../../../commons/path";
-import { Scan } from "rech-ts-commons";
+import { Scan, BufferSplitter } from "rech-ts-commons";
 import { CobolMethod } from "../CobolMethod";
 import Q from "q";
+import { FindParameters } from "../../declaration/FindInterface";
+import { PackageFinder } from "../../declaration/PackageFinder";
+import { FileUtils } from "../../../commons/FileUtils";
+import { RechPosition } from "../../../commons/rechposition";
 
 /**
  * Class to generate LSP Completion Items for Cobol 'add' clause
  */
 export class MethodCompletion implements CompletionInterface {
 
-  /** uri of file */
   private uri: string;
-  private cachFiles: Map<string, string[]>;
 
   constructor(uri: string) {
     this.uri = uri;
-    this.cachFiles = new Map();
   }
 
   public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
+
+
+
+
+
     return new Promise((resolve, reject) => {
-      this.getTargetClass(line, column, lines).then((classs) => {
-        this.getClassPackage(classs, line, column, lines, this.uri).then((classPackage: string) => {
-          this.extractMethodsCompletionFromClass(classPackage).then((methodsCompletions) => {
-            return resolve(methodsCompletions);
-          }).catch(() => {
-            return reject();
-          });
-        }).catch(() => {
-          return reject();
-        });
-      }).catch(() => {
-        return reject();
-      })
+      
+      //
+      // Reescrever a lógica para funcionar da seguinte forma:
+      // 1. Chamar CobolDeclarationFinder para o elemento
+      // 2. Se encontrar algo, perfeito, o método existe
+      //    2.1 Se o position.file estiver em branco então é no fonte corrente. Varre esse fonte buscando os métodos
+      //    2.1 Se o position.file não estiver em branco então não é o fonte corrente. Carrega o fonte e busca os métodos no buffer
+      // 3. Se não achou a declaração então o método não existe... "ops, mas pode ser que aquele método específico não exista...."
+      //
+      
+      // new CobolDeclarationFinder(lines.join("\n"))
+      //   .findDeclaration(findParams)
+      //   .then((position) => {
+      //     if (!position.file) {
+
+      //     } else {
+      //     }
+      //   }).catch(() => reject());
+
+
+
+      this.findTargetClassDeclaration(line, column, lines).then((clazz) => {
+        new PackageFinder(lines).findClassPackage(clazz, line, column, this.uri).then((classPackage: string) => {
+          this.extractMethodCompletionsFromClassUri(classPackage)
+            .then((methodsCompletions) => resolve(methodsCompletions))
+            .catch(() => reject());
+        }).catch(() => reject());
+      }).catch(() => reject());
     });
   }
 
   /**
-   * Break the chain and returns the target class
-   *
-   * @param line
-   * @param column
-   * @param lines
+   * Breaks the chain and returns the target class declaration.
    */
-  private getTargetClass(line: number, column: number, lines: string[]): Promise<CobolVariable> {
+  private findTargetClassDeclaration(line: number, column: number, lines: string[]): Promise<CobolVariable> {
     return new Promise((resolve, reject) => {
       let currentLine = "";
-      const analisedBuffer = [];
+      const analisedBuffer: string[] = [];
       let currentColumn = column;
       for (let i = line; i > 0; i--) {
         analisedBuffer.push(lines[i]);
-        currentLine = lines[i].substr(0, currentColumn).trim().replace(/\(.*?\)/g, "") + currentLine;
+        currentLine = this.normalizeLine(lines[i], currentColumn) + currentLine;
         if (currentLine != "" && currentLine != CobolMethod.TOKEN_INVOKE_METHOD) {
           break;
         }
@@ -70,59 +85,111 @@ export class MethodCompletion implements CompletionInterface {
       if (!currentCommand.includes(CobolMethod.TOKEN_INVOKE_METHOD)) {
         return reject();
       }
-      let chain = currentCommand.split(CobolMethod.TOKEN_INVOKE_METHOD);
-      // Remove the last command because this is invalid
-      chain = chain.slice(0, chain.length - 1);
-      const target = chain[chain.length - 1];
-      let referenceColumn = 0;
-      let referenceLine = 0;
-      for (let i = 0; i < analisedBuffer.length; i++) {
-        const analisedLine = analisedBuffer[i];
-        const pattert = new RegExp(`[\\s\\,\\.\\(\\)\\:\\>]${target}[\\s\\,\\.\\(\\)\\:]`);
-        const match = analisedLine.match(pattert);
-        if (!match) {
-          continue;
-        }
-        referenceColumn = match.index! + 1 + target.length;
-        referenceLine = line - i;
-        break;
-      }
-      if (referenceColumn == 0 || referenceLine == 0) {
+      const target: string = this.extractTargetFromCommand(currentCommand);
+      let referencePosition: RechPosition = this.extractTargetPositionFromBuffer(analisedBuffer, target, line);
+      if (referencePosition.column == 0 || referencePosition.line == 0) {
         return reject();
       }
-      new CobolDeclarationFinder(lines.join("\n")).findDeclaration(target, this.uri, referenceLine, referenceColumn).then((position) => {
-        if (!position.file) {
-          this.extractClass(position.line, position.column, lines, this.uri).then((classs) => {
-            return resolve(classs);
-          }).catch(() => {
-            return reject();
-          })
-        } else {
-          new File(new Path(position.file).fullPathWin()).loadBuffer().then((buffer) => {
-            this.extractClass(position.line, position.column, buffer.split("\n"), new Path(position.file!).fullPathWin()).then((classs) => {
-              return resolve(classs);
-            }).catch(() => {
-              return reject();
-            });
-          }).catch(() => {
-            return reject();
-          })
-        }
-      }).catch(() => {
-        return reject();
-      });
+      //
+      // Constructs objects to find definition
+      //
+      const findParams: FindParameters = { term: target, uri: this.uri, lineIndex: referencePosition.line, columnIndex: referencePosition.column }
+      const joinedLines = lines.join("\n");
+      //
+      // Looks for the definition itself
+      //
+      new CobolDeclarationFinder(joinedLines)
+        .findDeclaration(findParams)
+        .then((position) => {
+          if (!position.file) {
+            //
+            // The definition is on current file, so extract class/method information from current file
+            //
+            this.extractClass(position.line, position.column, lines, this.uri)
+              .then((clazz) => resolve(clazz))
+              .catch(() => reject());
+            return;
+          }
+          //
+          // The definition is on a different file, so we need to load the file content and
+          // extract class/method from the buffer read
+          //
+          FileUtils.read(new Path(position.file).fullPathWin()).then((buffer) => {
+            const splitted = BufferSplitter.split(buffer);
+            const fullPath = new Path(position.file!).fullPathWin();
+            this.extractClass(position.line, position.column, splitted, fullPath).then((clazz) => {
+              return resolve(clazz);
+            }).catch(() => reject());
+          }).catch(() => reject());
+        }).catch(() => reject());
     })
   }
 
+  private normalizeLine(line: string, currentColumn: number) {
+    let normalizedLine: string = "";
+    normalizedLine = line;
+    normalizedLine = normalizedLine.substr(0, currentColumn);
+    normalizedLine = normalizedLine.trim()
+    normalizedLine = normalizedLine.replace(/\(.*?\)/g, "");
+    return normalizedLine;
+  }
+
+  private extractTargetFromCommand(currentCommand: string): string {
+    const chain: string[] = this.extractCallChainFromCommand(currentCommand);
+    const target = chain[chain.length - 1];
+    return target;
+  }
+
+  private extractCallChainFromCommand(currentCommand: string): string[] {
+    //
+    // Splits the command by ':>' which is COBOL token
+    // for method call. 
+    //
+    let chain = currentCommand.split(CobolMethod.TOKEN_INVOKE_METHOD);
+    //
+    // Removes the last element of this array because it's is invalid.
+    // The last element of this array is always empty and needs to be removed.
+    //
+    // For example:
+    // ["<class-name>", "method-a", ""]
+    //
+    chain = chain.slice(0, chain.length - 1);
+    // Removes constructor because not all classes have explicit constructor
+    if (chain[chain.length - 1] === "new") {
+      chain = chain.slice(0, chain.length - 1);
+    }
+    return chain;
+  }
+
+  private extractTargetPositionFromBuffer(analisedBuffer: string[], target: string, line: number): RechPosition {
+    let referenceColumn = 0;
+    let referenceLine = 0;
+    for (let i = 0; i < analisedBuffer.length; i++) {
+      const analisedLine = analisedBuffer[i];
+      const pattern = new RegExp(`[\\s\\,\\.\\(\\)\\:\\>]${target}[\\s\\,\\.\\(\\)\\:]`);
+      const match = analisedLine.match(pattern);
+      if (!match) {
+        continue;
+      }
+      referenceColumn = match.index! + 1 + target.length;
+      referenceLine = line - i;
+      break;
+    }
+    return new RechPosition(referenceLine, referenceColumn);
+  }
+
   /**
-   * Extract the CobolVariable object to represnt a target class, from the buffer
-   *
-   * @param line
-   * @param column
-   * @param buffer
+   * Extracts the CobolVariable object which represents the target class, from the buffer
    */
   private extractClass(line: number, column: number, buffer: string[], uri: string): Promise<CobolVariable> {
     return new Promise((resolve, reject) => {
+      const variableParsingParams = {
+        ignoreMethodReturn: true,
+        noChildren: true,
+        noComment: true,
+        noScope: true,
+        noSection: true
+      };
       const parser = new ParserCobol();
       const currentLine = buffer[line];
       if (parser.getDeclaracaoMethod(currentLine)) {
@@ -132,31 +199,33 @@ export class MethodCompletion implements CompletionInterface {
           } else {
             return reject();
           }
-        }).catch(() => {
-          reject();
-        })
+        }).catch(() => reject());
       } else if (parser.getDeclaracaoVariavel(currentLine)) {
-        const variable = CobolVariable.parseLines(line, buffer, {ignoreMethodReturn: true, noChildren: true, noComment: true, noScope: true, noSection: true});
+        const variable = CobolVariable.parseLines(line, buffer, variableParsingParams);
         const reference = variable.getObjectReferenceOf();
         if (!reference) {
           return variable;
         } else {
-          new CobolDeclarationFinder(buffer.join("\n")).findDeclaration(reference, uri, 0, 0).then((position) => {
-            if (!position.file) {
-              return resolve(CobolVariable.parseLines(position.line, buffer, {ignoreMethodReturn: true, noChildren: true, noComment: true, noScope: true, noSection: true}));
-            } else {
-              new File(position.file).loadBuffer().then((classFileBuf) => {
-                return resolve(CobolVariable.parseLines(position.line, classFileBuf.split("\n"), {ignoreMethodReturn: true, noChildren: true, noComment: true, noScope: true, noSection: true}));
-              }).catch(() => {
-                return reject();
-              })
-            }
-          }).catch(() => {
-            reject();
-          })
+          const findParams: FindParameters = {
+            term: reference,
+            uri: uri,
+            lineIndex: 0,
+            columnIndex: 0
+          };
+          new CobolDeclarationFinder(buffer.join("\n"))
+            .findDeclaration(findParams)
+            .then((position) => {
+              if (!position.file) {
+                return resolve(CobolVariable.parseLines(position.line, buffer, variableParsingParams));
+              } else {
+                FileUtils.read(position.file)
+                  .then((classFileBuf) => resolve(CobolVariable.parseLines(position.line, BufferSplitter.split(classFileBuf), variableParsingParams)))
+                  .catch(() => reject());
+              }
+            }).catch(() => reject());
         }
       } else if (parser.getDeclaracaoClasse(currentLine)) {
-        const variable = CobolVariable.parseLines(line, buffer, {ignoreMethodReturn: true, noChildren: true, noComment: true, noScope: true, noSection: true});
+        const variable = CobolVariable.parseLines(line, buffer, variableParsingParams);
         return resolve(variable);
       } else {
         return reject();
@@ -165,147 +234,71 @@ export class MethodCompletion implements CompletionInterface {
   }
 
   /**
-   * Returns the class package
-   *
-   * @param variable
-   * @param line
-   * @param lines
+   * Extracts the methods from the class file.
+   * 
+   * Given the full file name of `classFileUri`, reads it's content and extracts every
+   * method declaration with a regular expression.
    */
-  private getClassPackage(variable: CobolVariable, line: number, column: number, lines: string[], uri: string): Promise<string> {
+  private extractMethodCompletionsFromClassUri(classFileUri: string): Promise<CompletionItem[]> {
     return new Promise((resolve, reject) => {
-      if (variable.isDummy()) {
-        return resolve(this.getFullPathFromClassSource(variable.getName()));
-      }
-      let classs = new ParserCobol().getDeclaracaoClasse(variable.getRaw());
-      let classPackage = "";
-      if (classs) {
-        const raw = variable.getRaw();
-        const pack = /(?:^\s+CLASS\s+[\w]+\s+AS\s+(.*)|^\s+[\w]+\s+IS\s+CLASS\s+(.*))/gmi.exec(raw);
-        if (!pack) {
-          return reject();
-        }
-        classPackage = pack[1] ? pack[1] : pack[2];
-        return resolve(this.getFullPathFromClassSource(classPackage.replace(/\"/g, "")));
-      } else {
-        classs = variable.getObjectReferenceOf();
-        if (!classs) {
-          return reject();
-        }
-        this.buildCobolVariable(classs, line, column, lines, uri).then((classCobolVariable) => {
-          this.getClassPackage(classCobolVariable, line, column, lines, uri).then((classPackage) => {
-            return resolve(classPackage);
-          }).catch(() => {
-            return reject();
-          })
-        }).catch(() => {
-          return reject();
+      FileUtils.read(classFileUri)
+        .then((buffer) => {
+          this.extractMethodCompletionsFromBuffer(buffer)
+            .then((results) => resolve(results))
+            .catch(() => reject());
         })
-      }
-    })
-  }
-
-  /**
-   * Returns a fullPath from class file
-   *
-   * @param classs
-   * @param uri
-   */
-  private getFullPathFromClassSource(classs: string) {
-    let path = new Path(new Path(this.uri).fullPathWin()).directory() + classs + ".cbl";
-    if (new File(path).exists()) {
-      return path;
-    }
-    path = "F:\\Fontes\\" + classs + ".cbl";
-    if (new File(path).exists()) {
-      return path;
-    }
-    return "";
-  }
-
-  /**
-   * Find the variable declaration and build a CobolVariable
-   *
-   * @param variable
-   * @param line
-   * @param lines
-   */
-  private buildCobolVariable(variable: string, _line: number, _column: number, lines: string[], uri: string): Promise<CobolVariable> {
-    return new Promise((resolve, reject) => {
-      new CobolDeclarationFinder(lines.join("\n"))
-        .findDeclaration(variable, uri, 0, 0).then((position: RechPosition) => {
-          if (!position.file) {
-            return resolve(CobolVariable.parseLines(position.line, lines, {noChildren: true, noComment: true, noSection: true, noScope: true, ignoreMethodReturn: true}));
-          } else {
-            new File(position.file).loadBuffer().then((buffer) => {
-              const bufferArray = buffer.split("\n");
-              return resolve(CobolVariable.parseLines(position.line, bufferArray, {noChildren: true, noComment: true, noSection: true, noScope: true, ignoreMethodReturn: true}));
-            }).catch(() => {
-              return reject();
-            })
-          }
-        }).catch(() => {
-          return reject();
-        });
-    })
-  }
-
-  /**
-   * Extract the methods from the class file
-   *
-   * @param classFile
-   */
-  private extractMethodsCompletionFromClass(classFile: string): Promise<CompletionItem[]>  {
-    return new Promise((resolve, reject) => {
-      const methodsPromise = new Array();
-      const methodsCompletions: CompletionItem[] = [];
-      new File(classFile).loadBuffer().then((buff) => {
-        new Scan(buff).scan(/^\s+METHOD-ID\.\s+([\w]+)[\s\,\.]+.*/gim, (iterator: any) => {
-          methodsPromise.push(CobolMethod.parseLines(iterator.row, iterator.column ,buff.split("\r\n")));
-        })
-        Q.allSettled(methodsPromise).then((results) => {
-          const methods: CobolMethod[] = [];
-          results.forEach((result) => {
-            if (result.state === "fulfilled" && result.value) {
-              const method = <CobolMethod> result.value;
-              if (!method.isPrivate()) {
-                methods.push(method);
-              }
-            }
-          });
-          methods.forEach((method) => {
-            methodsCompletions.push(this.buildMethodCompletion(method));
-          });
-          return resolve(methodsCompletions);
-        }).catch(() => {
-          reject();
-        });
-      }).catch(() => {
-        reject();
-      });
+        .catch(() => reject());
     });
   }
 
   /**
-   * Build the completionItem from method
-   *
-   * @param method
+   * Extracts the methods from the given buffer, using a regular expression.
+   * 
+   * Here is an example of COBOL method, which in this example would extract 'read' as method name.
+   * 
+   *   *>-> <COBOL documentation>
+   *    method-id. read static.
+   *    working-storage section.
+   *    77  fileReader             object reference SFileReader.
+   *    77  out-content            pic is x any length.
+   *    linkage section.
+   *    77  in-source-file-name    object reference IPicX.
+   *    procedure division using in-source-file-name returning out-content raising SFileException.
+   *        ...
+   *    end method.
+   */
+  private extractMethodCompletionsFromBuffer(buffer: string): Promise<CompletionItem[]> {
+    return new Promise((resolve, reject) => {
+      const methodsCompletions: CompletionItem[] = [];
+      const methodsPromise = new Array();
+      new Scan(buffer).scan(/^\s+METHOD-ID\.\s+([\w]+)[\s\,\.]+.*/gim, (iterator: any) => {
+        methodsPromise.push(CobolMethod.parseLines(iterator.row, iterator.column, BufferSplitter.split(buffer)));
+      })
+      Q.allSettled(methodsPromise).then((results) => {
+        const methods: CobolMethod[] = [];
+        results.forEach((result) => {
+          if (result.state === "fulfilled" && result.value) {
+            const method = <CobolMethod>result.value;
+            if (!method.isPrivate()) {
+              methods.push(method);
+            }
+          }
+        });
+        methods.forEach((method) => {
+          methodsCompletions.push(this.buildMethodCompletion(method));
+        });
+        resolve(methodsCompletions);
+      }).catch(() => reject());
+    });
+  }
+
+  /**
+   * Build the CompletionItem instance for the given method.
    */
   private buildMethodCompletion(method: CobolMethod): CompletionItem {
     const label = method.getName();
     const documentation = method.getDocumentation().asMarkdown()
-    let text = label;
-    const params = method.getParams();
-    for (let i = 0; i < params.length; i++) {
-      const param = params[i];
-      if (i > 0) {
-        text += `, \${${i+1}:${param.getName()}}`
-      } else {
-        text += `(\${${i+1}:${param.getName()}}`
-      }
-    }
-    if (params.length > 0) {
-      text += ")"
-    }
+    let text = this.buildMethodCompletionText(method);
     return {
       label: label,
       documentation: {
@@ -318,6 +311,29 @@ export class MethodCompletion implements CompletionInterface {
       preselect: true,
       kind: CompletionItemKind.Method
     };
+  }
+
+  /**
+   * Builds the method completion text.
+   * 
+   * The result is a string considering method name and possible
+   * method parameters, with repsective types.
+   */
+  private buildMethodCompletionText(method: CobolMethod): string {
+    let text = method.getName();
+    const params = method.getParams();
+    for (let i = 0; i < params.length; i++) {
+      const param = params[i];
+      if (i > 0) {
+        text += `, \${${i + 1}:${param.getName()}}`
+      } else {
+        text += `(\${${i + 1}:${param.getName()}}`
+      }
+    }
+    if (params.length > 0) {
+      text += ")"
+    }
+    return text;
   }
 
 }

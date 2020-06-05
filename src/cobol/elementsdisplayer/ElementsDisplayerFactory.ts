@@ -9,6 +9,7 @@ import { copyDisplayer } from "./copy/CopyDisplayer";
 import { window } from "vscode";
 import { BufferSplitter } from "rech-ts-commons";
 import { ClassDisplayer } from "./class/ClassDisplayer";
+import { FileUtils } from "../../commons/FileUtils";
 
 /**
  * Class to build a ElementsDisplayer
@@ -71,7 +72,7 @@ export class ElementsDisplayerFactory {
       if (!position.file || position.file == currentUri) {
         resolve(currentBuffer)
       } else {
-        new File(position.file).loadBuffer("latin1").then((buffer) => {
+        FileUtils.read(position.file, "latin1").then((buffer) => {
           resolve(buffer);
         }).catch(() => {
           reject()
