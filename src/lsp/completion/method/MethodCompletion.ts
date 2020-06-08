@@ -52,8 +52,8 @@ export class MethodCompletion implements CompletionInterface {
 
 
       this.findTargetClassDeclaration(line, column, lines).then((clazz) => {
-        new PackageFinder(lines).findClassPackage(clazz, line, column, this.uri).then((classPackage: string) => {
-          this.extractMethodCompletionsFromClassUri(classPackage)
+        new PackageFinder(lines).findClassFileUri(clazz, line, column, this.uri).then((classFileUri: string) => {
+          this.extractMethodCompletionsFromClassUri(classFileUri)
             .then((methodsCompletions) => resolve(methodsCompletions))
             .catch(() => reject());
         }).catch(() => reject());
@@ -117,9 +117,9 @@ export class MethodCompletion implements CompletionInterface {
           FileUtils.read(new Path(position.file).fullPathWin()).then((buffer) => {
             const splitted = BufferSplitter.split(buffer);
             const fullPath = new Path(position.file!).fullPathWin();
-            this.extractClass(position.line, position.column, splitted, fullPath).then((clazz) => {
-              return resolve(clazz);
-            }).catch(() => reject());
+            this.extractClass(position.line, position.column, splitted, fullPath)
+              .then((clazz) => resolve(clazz))
+              .catch(() => reject());
           }).catch(() => reject());
         }).catch(() => reject());
     })

@@ -20,7 +20,7 @@ export class PackageFinder {
     this.parser = new ParserCobol();
   }
 
-  public findClassPackage(variable: CobolVariable, line: number, column: number, uri: string): Promise<string> {
+  public findClassFileUri(variable: CobolVariable, line: number, column: number, uri: string): Promise<string> {
     return new Promise((resolve, reject) => {
       if (variable.isDummy()) {
         return resolve(MethodPathUtils.getFullPath(variable.getName(), uri));
@@ -35,7 +35,7 @@ export class PackageFinder {
         }
         classPackage = pack[1] ? pack[1] : pack[2];
         const fullPath = MethodPathUtils.getFullPath(classPackage.replace(/\"/g, ""), uri);
-        resolve(fullPath);
+        return resolve(fullPath);
       } else {
         //
         // Since the received information is not a class declaration,
@@ -69,7 +69,7 @@ export class PackageFinder {
         this.findClassDeclaration(classFindParams).then((classCobolVariable) => {
           // Since we only have just found the class declaration, we can recursively call this
           // method to extract the real package name
-          this.findClassPackage(classCobolVariable, line, column, uri)
+          this.findClassFileUri(classCobolVariable, line, column, uri)
             .then((classPackage) => resolve(classPackage))
             .catch(() => reject());
         }).catch(() => reject());

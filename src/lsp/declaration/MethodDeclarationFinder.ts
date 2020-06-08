@@ -118,24 +118,23 @@ export class MethodDeclarationFinder implements FindInterface {
         //
         // This method extracts the "real-name" from the declaration
         //
-        packageFinder.findClassPackage(classDeclaration, params.lineIndex, 0, params.uri).then((classPackage) => {
-          newChain[0] = classPackage;
-          const classFile = new File(classPackage);
+        packageFinder.findClassFileUri(classDeclaration, params.lineIndex, 0, params.uri).then((classUri) => {
+          newChain[0] = classUri;
           if (!targetMethod) {
             return resolve(newChain);
           }
-          const cachedBuffer = this.cachedSources.get(classPackage);
+          const cachedBuffer = this.cachedSources.get(classUri);
           if (cachedBuffer) {
-            this.findMethodAndReturnChain(targetMethod, newChain.concat(reversedChain.slice(newChain.length)), cachedBuffer, classPackage, targetClass)
+            this.findMethodAndReturnChain(targetMethod, newChain.concat(reversedChain.slice(newChain.length)), cachedBuffer, classUri, targetClass)
               .then((chain) => {
                 const chainTypes = [newChain[0]].concat(chain);
                 resolve(chainTypes);
               }).catch(() => reject());
             return;
           }
-          classFile.loadBuffer().then((buffer) => {
-            this.cachedSources.set(classPackage, buffer);
-            this.findMethodAndReturnChain(targetMethod, newChain.concat(reversedChain.slice(newChain.length)), buffer, classPackage, targetClass)
+          FileUtils.read(classUri).then((buffer) => {
+            this.cachedSources.set(classUri, buffer);
+            this.findMethodAndReturnChain(targetMethod, newChain.concat(reversedChain.slice(newChain.length)), buffer, classUri, targetClass)
               .then((chain) => {
                 const chainTypes = [newChain[0]].concat(chain);
                 resolve(chainTypes);
