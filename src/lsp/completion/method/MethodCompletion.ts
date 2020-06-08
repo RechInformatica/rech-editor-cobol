@@ -24,33 +24,7 @@ export class MethodCompletion implements CompletionInterface {
   }
 
   public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
-
-
-
-
-
     return new Promise((resolve, reject) => {
-      
-      //
-      // Reescrever a lógica para funcionar da seguinte forma:
-      // 1. Chamar CobolDeclarationFinder para o elemento
-      // 2. Se encontrar algo, perfeito, o método existe
-      //    2.1 Se o position.file estiver em branco então é no fonte corrente. Varre esse fonte buscando os métodos
-      //    2.1 Se o position.file não estiver em branco então não é o fonte corrente. Carrega o fonte e busca os métodos no buffer
-      // 3. Se não achou a declaração então o método não existe... "ops, mas pode ser que aquele método específico não exista...."
-      //
-      
-      // new CobolDeclarationFinder(lines.join("\n"))
-      //   .findDeclaration(findParams)
-      //   .then((position) => {
-      //     if (!position.file) {
-
-      //     } else {
-      //     }
-      //   }).catch(() => reject());
-
-
-
       this.findTargetClassDeclaration(line, column, lines).then((clazz) => {
         new PackageFinder(lines).findClassFileUri(clazz, 0, 0, this.uri).then((classFileUri: string) => {
           this.extractMethodCompletionsFromClassUri(classFileUri)
