@@ -167,6 +167,7 @@ export * from "./cobol/gerador-cobol";
 export * from "./cobol/rechdoc/ElementDocumentationExtractor"
 export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./lsp/declaration/CobolDeclarationFinder";
+export * from "./lsp/declaration/FindInterface";
 export * from "./cobol/diagnostic/cobolDiagnosticFilter";
 export * from "./cobol/ExpandedSourceManager";
 export * from "./cobol/TabStopper";
