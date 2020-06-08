@@ -52,7 +52,7 @@ export class MethodCompletion implements CompletionInterface {
 
 
       this.findTargetClassDeclaration(line, column, lines).then((clazz) => {
-        new PackageFinder(lines).findClassFileUri(clazz, line, column, this.uri).then((classFileUri: string) => {
+        new PackageFinder(lines).findClassFileUri(clazz, 0, 0, this.uri).then((classFileUri: string) => {
           this.extractMethodCompletionsFromClassUri(classFileUri)
             .then((methodsCompletions) => resolve(methodsCompletions))
             .catch(() => reject());
