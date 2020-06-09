@@ -91,7 +91,7 @@ export class EndCompletion implements CompletionInterface {
    * @param text
    */
   private performDeclaration(text: string): boolean {
-    return /\s+perform($|\s*with\stest.*|\s*until\sexit.*)/im.test(text)
+    return /\s+perform(?:$|\s*with\stest.*|\s*until\sexit.*|\s+varying\s.*)/im.test(text)
   }
 
   /**
