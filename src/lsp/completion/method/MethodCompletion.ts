@@ -180,7 +180,7 @@ export class MethodCompletion implements CompletionInterface {
     let referenceLine = 0;
     for (let i = 0; i < target.containingBuffer.length; i++) {
       const analisedLine = target.containingBuffer[i];
-      const pattern = new RegExp(`[\\s\\,\\.\\(\\)\\:\\>]${target}[\\s\\,\\.\\(\\)\\:]`);
+      const pattern = new RegExp(`[\\s\\,\\.\\(\\)\\:\\>]${target.elementName}[\\s\\,\\.\\(\\)\\:]`);
       const match = analisedLine.match(pattern);
       if (!match) {
         continue;
