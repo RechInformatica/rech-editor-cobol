@@ -10,8 +10,6 @@ import { FileUtils } from "../../commons/FileUtils";
 import { MethodChainResolver } from "./MethodChainResolver";
 import { MethodCallUtils } from "./MethodCallUtils";
 
-const SELF_INSTANCE_NAME = "self"
-
 export class MethodDeclarationFinder implements FindInterface {
 
   private cachedSources: Map<string, string>;
@@ -83,8 +81,14 @@ export class MethodDeclarationFinder implements FindInterface {
       .reverse();
   }
 
+  /**
+   * Returns true whether the current call chain starts calling a method on the
+   * current instance
+   * 
+   * @param originalChain call chain
+   */
   private isSelfInstance(originalChain: string[]): boolean {
-    return originalChain[0] === SELF_INSTANCE_NAME;
+    return originalChain[0] === CobolMethod.SELF_INSTANCE_NAME;
   }
 
   private createPositionFromMethod(method: CobolMethod, file?: string): RechPosition {

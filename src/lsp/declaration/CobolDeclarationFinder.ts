@@ -11,7 +11,7 @@ const MIN_WORD_SIZE = 3;
 /**
  * Class to find Cobol declarations
  */
-export class CobolDeclarationFinder {
+export class CobolDeclarationFinder implements FindInterface {
 
   private parser: ParserCobol;
   private splittedBuffer: string[];

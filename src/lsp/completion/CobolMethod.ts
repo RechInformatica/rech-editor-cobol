@@ -17,6 +17,8 @@ export class CobolMethod {
 	public static TOKEN_INVOKE_METHOD = ":>";
 	/** Constructor method name */
 	public static CONSTRUCTOR_METHOD_NAME = "new";
+	/** Element indicating the current instance */
+	public static SELF_INSTANCE_NAME = "self"
 
 	/* Method name */
 	private name: string;

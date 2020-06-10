@@ -1,7 +1,16 @@
 import { CobolMethod } from "../completion/CobolMethod";
 
+/**
+ * Utility class to detect COBOL method calls 
+ */
 export class MethodCallUtils {
 
+    /**
+     * Returns true whether the line text represents a method call on the specified position
+     * 
+     * @param lineText line test
+     * @param column column where cursor is positioned
+     */
     public static isMethodCall(lineText: string, column: number): boolean {
         for (let i = column - 1; i > 0; i--) {
             const character = lineText.charAt(i);

@@ -25,20 +25,39 @@ export class MethodCompletion implements CompletionInterface {
 
   public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
     return new Promise((resolve, reject) => {
-      this.findTargetClassDeclaration(line, column, lines).then((clazz) => {
-        new PackageFinder(lines).findClassFileUri(clazz, 0, 0, this.uri).then((classFileUri: string) => {
-          this.extractMethodCompletionsFromClassUri(classFileUri)
-            .then((methodsCompletions) => resolve(methodsCompletions))
-            .catch(() => reject());
-        }).catch(() => reject());
-      }).catch(() => reject());
+      this.findTargetElement(line, column, lines)
+        .then(completionTarget => {
+          // 
+          // Since we're suggesting methods of the current class we don't need to discover which class
+          // it represents. We already have the buffer of current class from the parameter of this method
+          // 
+          // So, we just extract the methods from the given buffer.
+          // 
+          if (this.isSelfInstance(completionTarget.elementName)) {
+            const joinedLines: string = lines.join('\n');
+            this.extractMethodCompletionsFromBuffer(joinedLines)
+              .then(items => resolve(items))
+              .catch(() => reject());
+          } else {
+            // 
+            // On this situation we're not suggesting methods of the current instance.
+            // 
+            // So, we need to discover the class name, load the class content and finally suggest it`s methods
+            // 
+            this.findTargetClassDeclaration(completionTarget, line, lines).then((clazz) => {
+              new PackageFinder(lines).findClassFileUri(clazz, 0, 0, this.uri).then((classFileUri: string) => {
+                this.extractMethodCompletionsFromClassUri(classFileUri)
+                  .then((methodsCompletions) => resolve(methodsCompletions))
+                  .catch(() => reject());
+              }).catch(() => reject());
+            }).catch(() => reject());
+          }
+        })
+        .catch(() => reject());
     });
   }
 
-  /**
-   * Breaks the chain and returns the target class declaration.
-   */
-  private findTargetClassDeclaration(line: number, column: number, lines: string[]): Promise<CobolVariable> {
+  private findTargetElement(line: number, column: number, lines: string[]): Promise<CompletionTarget> {
     return new Promise((resolve, reject) => {
       let currentLine = "";
       const analisedBuffer: string[] = [];
@@ -59,15 +78,36 @@ export class MethodCompletion implements CompletionInterface {
       if (!currentCommand.includes(CobolMethod.TOKEN_INVOKE_METHOD)) {
         return reject();
       }
-      const target: string = this.extractTargetFromCommand(currentCommand);
-      let referencePosition: RechPosition = this.extractTargetPositionFromBuffer(analisedBuffer, target, line);
+      const elementName: string = this.extractTargetFromCommand(currentCommand);
+      const completion: CompletionTarget = { elementName: elementName, containingBuffer: analisedBuffer };
+      resolve(completion);
+    });
+  }
+
+  /**
+   * Returns true whether the current call chain starts calling a method on the
+   * current instance
+   * 
+   * @param element element to check whether represents the current instance
+   */
+  private isSelfInstance(element: string): boolean {
+    return element === CobolMethod.SELF_INSTANCE_NAME;
+  }
+
+
+  /**
+   * Breaks the chain and returns the target class declaration.
+   */
+  private findTargetClassDeclaration(target: CompletionTarget, line: number, lines: string[]): Promise<CobolVariable> {
+    return new Promise((resolve, reject) => {
+      let referencePosition: RechPosition = this.extractTargetPositionFromBuffer(target, line);
       if (referencePosition.column == 0 || referencePosition.line == 0) {
         return reject();
       }
       //
       // Constructs objects to find definition
       //
-      const findParams: FindParameters = { term: target, uri: this.uri, lineIndex: referencePosition.line, columnIndex: referencePosition.column }
+      const findParams: FindParameters = { term: target.elementName, uri: this.uri, lineIndex: referencePosition.line, columnIndex: referencePosition.column }
       const joinedLines = lines.join("\n");
       //
       // Looks for the definition itself
@@ -90,7 +130,7 @@ export class MethodCompletion implements CompletionInterface {
           //
           FileUtils.read(new Path(position.file).fullPathWin()).then((buffer) => {
             const splitted = BufferSplitter.split(buffer);
-            const fullPath = new Path(position.file!).fullPathWin();
+            const fullPath = new Path(position.file).fullPathWin();
             this.extractClass(position.line, position.column, splitted, fullPath)
               .then((clazz) => resolve(clazz))
               .catch(() => reject());
@@ -99,7 +139,7 @@ export class MethodCompletion implements CompletionInterface {
     })
   }
 
-  private normalizeLine(line: string, currentColumn: number) {
+  private normalizeLine(line: string, currentColumn: number): string {
     let normalizedLine: string = "";
     normalizedLine = line;
     normalizedLine = normalizedLine.substr(0, currentColumn);
@@ -135,17 +175,17 @@ export class MethodCompletion implements CompletionInterface {
     return chain;
   }
 
-  private extractTargetPositionFromBuffer(analisedBuffer: string[], target: string, line: number): RechPosition {
+  private extractTargetPositionFromBuffer(target: CompletionTarget, line: number): RechPosition {
     let referenceColumn = 0;
     let referenceLine = 0;
-    for (let i = 0; i < analisedBuffer.length; i++) {
-      const analisedLine = analisedBuffer[i];
+    for (let i = 0; i < target.containingBuffer.length; i++) {
+      const analisedLine = target.containingBuffer[i];
       const pattern = new RegExp(`[\\s\\,\\.\\(\\)\\:\\>]${target}[\\s\\,\\.\\(\\)\\:]`);
       const match = analisedLine.match(pattern);
       if (!match) {
         continue;
       }
-      referenceColumn = match.index! + 1 + target.length;
+      referenceColumn = match.index! + 1 + target.elementName.length;
       referenceLine = line - i;
       break;
     }
@@ -310,4 +350,19 @@ export class MethodCompletion implements CompletionInterface {
     return text;
   }
 
+}
+
+/**
+ * Information about the completion target
+ */
+type CompletionTarget = {
+  /**
+   * Name of the element which is having completions returned
+   */
+  elementName: string,
+
+  /**
+   * Buffer which has been analised to extract the element name
+   */
+  containingBuffer: string[]
 }
