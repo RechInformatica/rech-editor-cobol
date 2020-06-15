@@ -7,7 +7,7 @@ import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
 import { CompletionUtils } from "../commons/CompletionUtils";
 
 /** Reserved COBOL words which aren't paragraphs although are declared on the same way as a paragraph */
-const COBOL_PARAGRAPHS_BLACKLIST = ['class-id', 'factory', 'method-id', 'object', 'repository', 'special-names'];
+const COBOL_PARAGRAPHS_BLACKLIST = ['class-id', 'program-id', 'factory', 'method-id', 'object', 'repository', 'special-names'];
 
 /**
  * Class to generate LSP Completion Items for Cobol paragraphs declarations
