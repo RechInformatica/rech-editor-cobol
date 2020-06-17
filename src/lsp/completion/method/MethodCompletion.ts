@@ -257,7 +257,7 @@ export class MethodCompletion implements CompletionInterface {
     return new Promise((resolve, reject) => {
       FileUtils.read(classFileUri)
         .then((buffer) => {
-          this.extractMethodCompletionsFromBuffer(buffer)
+          this.extractMethodCompletionsFromBuffer(buffer, true)
             .then((results) => resolve(results))
             .catch(() => reject());
         })
@@ -281,7 +281,7 @@ export class MethodCompletion implements CompletionInterface {
    *        ...
    *    end method.
    */
-  private extractMethodCompletionsFromBuffer(buffer: string): Promise<CompletionItem[]> {
+  private extractMethodCompletionsFromBuffer(buffer: string, filterPrivateMethods?: boolean): Promise<CompletionItem[]> {
     return new Promise((resolve, reject) => {
       const methodsCompletions: CompletionItem[] = [];
       const methodsPromise = new Array();
@@ -293,7 +293,7 @@ export class MethodCompletion implements CompletionInterface {
         results.forEach((result) => {
           if (result.state === "fulfilled" && result.value) {
             const method = <CobolMethod>result.value;
-            if (!method.isPrivate()) {
+            if (!filterPrivateMethods || (filterPrivateMethods && !method.isPrivate())) {
               methods.push(method);
             }
           }
