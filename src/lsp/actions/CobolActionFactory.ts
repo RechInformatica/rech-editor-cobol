@@ -11,6 +11,7 @@ import { ReplaceCommaByDotAction } from "./ReplaceCommaWithDotAction";
 import { RemoveRemainingClauseAction } from "./RemoveRemainingClauseAction";
 import { InsertSubprogramDeclarationAction } from "./subprogram/InsertSubprogramDeclarationAction";
 import { RefactorParagraphAction } from "./RefactorParagraphAction";
+import { FixClassCaseAction } from "./FixClassCaseAction";
 
 /**
  * Factory to generate Cobol Code Actions
@@ -110,6 +111,10 @@ export class CobolActionFactory {
         }
         case "W106": {
           implementations.push(new CamelCaseAction());
+          break;
+        }
+        case "W120": {
+          implementations.push(new FixClassCaseAction(currentDiagnostic.message));
           break;
         }
         case "W128": {
