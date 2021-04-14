@@ -1,5 +1,5 @@
 "use babel";
-import { Diagnostic, DiagnosticSeverity, Range, Position } from "vscode-languageserver";
+import { Diagnostic, DiagnosticSeverity, Range, Position, DiagnosticTag } from "vscode-languageserver";
 import { CobolDiagnostic } from "./cobolDiagnostic";
 import { File } from "../../commons/file";
 import { Path } from "../../commons/path";
@@ -28,11 +28,17 @@ export class CobolDiagnosticParser {
    *
    * @param preprocResult
    * @param fileName
+   * @param externalGetCopyHierarchy
+   * @param externalDiagnosticFilter
+   * @param isDeprecatedWarning
    */
-  parser(preprocResult: string, fileName: string, externalGetCopyHierarchy: (uri: string) => Thenable<string>, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<CobolDiagnostic> {
+  parser(preprocResult: string, fileName: string,
+         externalGetCopyHierarchy: (uri: string) => Thenable<string>,
+         externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>,
+         isDeprecatedWarning?: (diagnosticMessage: string) => Thenable<boolean>): Promise<CobolDiagnostic> {
     return new Promise((resolve, reject) => {
       if (CobolDiagnosticParser.copyHierarchy.get(fileName)) {
-        this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter).then((result) => {
+        this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter, isDeprecatedWarning).then((result) => {
           return resolve(result);
         }).catch(() => {
           return reject();
@@ -40,7 +46,7 @@ export class CobolDiagnosticParser {
       } else {
         externalGetCopyHierarchy(fileName).then((resultCopyHierarchy) => {
           CobolDiagnosticParser.copyHierarchy.set(fileName, resultCopyHierarchy);
-          this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter).then((result) => {
+          this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter, isDeprecatedWarning).then((result) => {
             return resolve(result);
           }).catch(() => {
             return reject();
@@ -55,14 +61,18 @@ export class CobolDiagnosticParser {
    *
    * @param preprocResult
    * @param fileName
+   * @param externalDiagnosticFilter
+   * @param isDeprecatedWarning
    */
-  private extractDiagnostic(preprocResult: string, fileName: string, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<CobolDiagnostic> {
+  private extractDiagnostic(preprocResult: string, fileName: string,
+                            externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>,
+                            isDeprecatedWarning?: (diagnosticMessage: string) => Thenable<boolean>): Promise<CobolDiagnostic> {
     return new Promise((resolve, reject) => {
       const interpreters: Array<Promise<Diagnostic>> = [];
       const lines = BufferSplitter.split(preprocResult);
       const pattern = /\*\*\*\sWarning:\s(.*);\sfile\s=\s([A-Za-z0-9.]+),\sline\s=\s(\d+)\s?(\(Erro\))?/;
       lines.forEach(currentLine => {
-        interpreters.push(this.interpretsTheErrorMessage(fileName, pattern, currentLine, externalDiagnosticFilter));
+        interpreters.push(this.interpretsTheErrorMessage(fileName, pattern, currentLine, externalDiagnosticFilter, isDeprecatedWarning));
       });
       Q.allSettled(interpreters).then((results) => {
         const diagnostics: Diagnostic[] = [];
@@ -105,8 +115,11 @@ export class CobolDiagnosticParser {
    * @param pattern
    * @param currentLine
    * @param externalDiagnosticFilter
+   * @param isDeprecatedWarning
    */
-  private interpretsTheErrorMessage(fileName: string, pattern: RegExp, currentLine: string, externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>): Promise<Diagnostic> {
+  private interpretsTheErrorMessage(fileName: string, pattern: RegExp, currentLine: string,
+                                    externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>,
+                                    isDeprecatedWarning?: (diagnosticMessage: string) => Thenable<boolean>): Promise<Diagnostic> {
     return new Promise((resolve, reject) => {
       const match = pattern.exec(currentLine);
       if (!match) {
@@ -117,13 +130,15 @@ export class CobolDiagnosticParser {
       if (externalDiagnosticFilter) {
         externalDiagnosticFilter(message).then((result) => {
           if (result) {
-            return resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
+            this.buildDiagnosticOfError(fileName, message, file, line, error, isDeprecatedWarning).then((diagnostic) => {
+              resolve(diagnostic);
+            });
           } else {
-            return resolve();
+            return reject();
           }
         });
       } else {
-        return resolve(this.buildDiagnosticOfError(fileName, message, file, line, error));
+        return resolve(this.buildDiagnosticOfError(fileName, message, file, line, error, isDeprecatedWarning));
       }
     });
   }
@@ -136,20 +151,41 @@ export class CobolDiagnosticParser {
    * @param file
    * @param line
    * @param error
+   * @param isDeprecatedWarning
    */
-  private buildDiagnosticOfError(fileName: string, message: string, file: string, line: string, error: boolean): Diagnostic {
-    const nLine = Number.parseInt(line) - 1;
-    const diagnosticSeverity = this.getAppropriateSeverity(error);
-    return this.createDiagnostic(
-      fileName,
-      diagnosticSeverity,
-      Range.create(
-        Position.create(nLine, 0),
-        Position.create(nLine, 120),
-      ),
-      message,
-      file
-    )
+  private buildDiagnosticOfError(fileName: string, message: string, file: string, line: string, error: boolean,
+                                 isDeprecatedWarning?: (diagnosticMessage: string) => Thenable<boolean>): Promise<Diagnostic> {
+    return new Promise((resolve, reject) => {
+      const nLine = Number.parseInt(line) - 1;
+      const diagnosticSeverity = this.getAppropriateSeverity(error);
+      if (isDeprecatedWarning) {
+        isDeprecatedWarning(message).then((deprecated) => {
+          resolve(this.createDiagnostic(
+            fileName,
+            diagnosticSeverity,
+            Range.create(
+              Position.create(nLine, 0),
+              Position.create(nLine, 120),
+            ),
+            message,
+            file,
+            deprecated
+          ));
+        }, () => reject());
+      } else {
+        resolve(this.createDiagnostic(
+          fileName,
+          diagnosticSeverity,
+          Range.create(
+            Position.create(nLine, 0),
+            Position.create(nLine, 120),
+          ),
+          message,
+          file,
+          false
+        ));
+      }
+    });
   }
 
   /**
@@ -173,10 +209,15 @@ export class CobolDiagnosticParser {
    * @param message
    * @param source
    */
-  private createDiagnostic(fileName: string, severity: DiagnosticSeverity, range: Range, message: string, source: string): Diagnostic {
+  private createDiagnostic(fileName: string, severity: DiagnosticSeverity, range: Range, message: string, source: string, deprecated: boolean): Diagnostic {
     const diagnosticRange = this.createAppropriateDiagnosticRange(fileName, source, range);
     const fullFileName = this.fullFileName(new Path(fileName).fullPathWin(), source);
     const diagnosticId = this.extractDiagnosticIdentifier(message);
+    let tag: undefined | DiagnosticTag = undefined;
+    if (deprecated) {
+      tag = DiagnosticTag.Deprecated;
+      severity = DiagnosticSeverity.Hint
+    }
     const diagnostic: Diagnostic = {
       severity: severity,
       code: diagnosticId,
@@ -209,7 +250,8 @@ export class CobolDiagnosticParser {
           },
           message: message
         },
-      ]
+      ],
+      tags: tag == undefined ? undefined : [tag]
     };
     return diagnostic;
   }
