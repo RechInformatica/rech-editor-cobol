@@ -32,10 +32,11 @@ export class Diagnostician {
   public diagnose(textDocument: TextDocument,
     PreprocessCallback: (uri: string) => Thenable<string>,
     externalGetCopyHierarchy: (uri: string) => Thenable<string>,
-    externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>
+    externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>,
+    isDeprecatedWarning?: (diagnosticMessage: string) => Thenable<boolean>
   ): Promise<Diagnostic[]> {
     return new Promise((resolve, reject) => {
-      this.findErrorsAndWarnings(textDocument, PreprocessCallback, externalGetCopyHierarchy, externalDiagnosticFilter).then(cobolDiagnostic => {
+      this.findErrorsAndWarnings(textDocument, PreprocessCallback, externalGetCopyHierarchy, externalDiagnosticFilter, isDeprecatedWarning).then(cobolDiagnostic => {
           if (!cobolDiagnostic) {
             return reject();
           }
@@ -61,7 +62,8 @@ export class Diagnostician {
     textDocument: TextDocument,
     PreprocessCallback: (uri: string) => Thenable<string>,
     externalGetCopyHierarchy: (uri: string) => Thenable<string>,
-    externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>
+    externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>,
+    isDeprecatedWarning?: (diagnosticMessage: string) => Thenable<boolean>
   ): Promise<CobolDiagnostic | undefined> {
     return new Promise<CobolDiagnostic>((resolve, reject) => {
       // If not a cobol processable source
@@ -83,7 +85,7 @@ export class Diagnostician {
         (buffer) => {
           const fileName = documentPath.fullPath();
           new CobolDiagnosticParser(this.sourceLines)
-            .parser(buffer, fileName, externalGetCopyHierarchy, externalDiagnosticFilter)
+            .parser(buffer, fileName, externalGetCopyHierarchy, externalDiagnosticFilter, isDeprecatedWarning)
             .then(cobolDiagnostic => {
               return resolve(cobolDiagnostic);
             })

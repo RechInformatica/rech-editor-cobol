@@ -2,7 +2,7 @@ import { TreeDataProvider, EventEmitter, TreeItem, ProviderResult, commands } fr
 import NodeInterface from "../nodes/NodeInterface";
 import { Event } from "vscode-jsonrpc";
 import Flow from "../../Flow";
-import FlowNode, { FlowItem } from "../nodes/FlowNode";
+import FlowNode from "../nodes/FlowNode";
 import { Editor } from "../../../editor/editor";
 
 /**
@@ -62,6 +62,6 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      * Refresh the treeView
      */
     public refresh(): void {
-        this._onDidChangeTreeData.fire();
+        this._onDidChangeTreeData.fire;
     }
 }

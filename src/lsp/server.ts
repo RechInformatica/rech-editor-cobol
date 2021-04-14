@@ -15,7 +15,6 @@ import {
   Range,
   Position,
   CompletionItem,
-  TextDocument,
   DocumentOnTypeFormattingParams,
   DocumentHighlight,
   FoldingRangeRequestParam,
@@ -29,7 +28,11 @@ import {
   CodeActionParams,
   CodeAction,
   FoldingRangeRequest,
+  TextDocumentSyncKind,
 } from "vscode-languageserver";
+import {
+	TextDocument
+} from 'vscode-languageserver-textdocument';
 import { CobolDeclarationFinder } from "./declaration/CobolDeclarationFinder";
 import { Path } from "../commons/path";
 import { RechPosition } from "../commons/rechposition";
@@ -52,7 +55,6 @@ import { MethodCompletion } from "./completion/method/MethodCompletion";
 import { CobolReferencesFinder } from "./references/CobolReferencesFinder";
 import { CobolActionFactory } from "./actions/CobolActionFactory";
 import { RenamingUtils } from "./commons/RenamingUtils";
-import { FindParameters } from "./declaration/FindInterface";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -62,7 +64,7 @@ const connection = createConnection(ProposedFeatures.all);
 let loggingConfigured: boolean;
 
 let hasDiagnosticRelatedInformationCapability: boolean | undefined = false;
-const documents: TextDocuments = new TextDocuments();
+const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
 connection.onInitialize(async (params: InitializeParams) => {
   const capabilities = params.capabilities;
@@ -75,7 +77,7 @@ connection.onInitialize(async (params: InitializeParams) => {
   });
   return {
     capabilities: {
-      textDocumentSync: documents.syncKind,
+      textDocumentSync: TextDocumentSyncKind.Full,
       definitionProvider: true,
       referencesProvider: true,
       documentHighlightProvider: true,
@@ -176,7 +178,7 @@ documents.onDidClose(textDocument => {
  *
  * @param document
  */
-export function loadFolding(document: TextDocumentChangeEvent) {
+export function loadFolding(document: TextDocumentChangeEvent<TextDocument>) {
   if (document.document.lineCount > MAX_LINE_IN_SOURCE_TO_FOLDING) {
     return;
   }
@@ -227,6 +229,9 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
           },
           (message) => {
             return externalDiagnosticFilter(message);
+          },
+          (message) => {
+            return externalDeprecatedWarning(message);
           }
         ).then(diagnostics => {
           Log.get().info("Diagnose from " + textDocument.uri + " resulted ok");
@@ -297,6 +302,18 @@ export function getAutoDiagnostic() {
 export function externalDiagnosticFilter(diagnosticMessage: string) {
   return connection.sendRequest<boolean>(
     "custom/diagnosticFilter",
+    diagnosticMessage
+  );
+}
+
+/**
+ * Sends a request to the client for get a specific setting
+ *
+ * @param section
+ */
+export function externalDeprecatedWarning(diagnosticMessage: string) {
+  return connection.sendRequest<boolean>(
+    "custom/deprecatedWarning",
     diagnosticMessage
   );
 }
@@ -493,11 +510,11 @@ connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location 
         resolve(location);
       }).catch(() => {
         Log.get().warning("Could not find declaration for " + word + ". Key pressed in " + params.textDocument.uri);
-        resolve(undefined);
+        resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration1"));
       });
     } else {
       Log.get().error("Error to get the fullDocument within onDefinition");
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration"));
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration2"));
     }
   })
 });
@@ -521,13 +538,12 @@ connection.onReferences((params: ReferenceParams): Thenable<Location[] | Respons
           }
         })
         resolve(locations);
-      })
-        .catch(() => {
-          resolve(undefined);
+      }).catch(() => {
+          resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references1"));
         });
     } else {
       Log.get().error("Error to get the fullDocument within onReferences");
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references"));
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references2"));
     }
   });
 });
@@ -543,11 +559,11 @@ connection.onRenameRequest((params: RenameParams): Thenable<WorkspaceEdit | Resp
         resolve({ changes: { [params.textDocument.uri]: textEdits } });
       })
         .catch(() => {
-          resolve(undefined);
+          resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename1"));
         });
     } else {
       Log.get().error("Error to get the fullDocument within onRenameRequest");
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename"));
+      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename2"));
     }
   });
 
@@ -737,7 +753,7 @@ export function normalizeUri(uri: string) {
 export function configureServerLog() {
   return new Promise((resolve, reject) => {
     if (loggingConfigured) {
-      return resolve();
+      return resolve(undefined);
     }
     getConfig<boolean>("log").then((loggingActive) => {
       if (loggingActive) {
@@ -747,6 +763,6 @@ export function configureServerLog() {
       return reject();
     });
     loggingConfigured = true;
-    return resolve();
+    return resolve(undefined);
   })
 }

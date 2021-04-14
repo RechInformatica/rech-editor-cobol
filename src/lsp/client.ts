@@ -130,6 +130,16 @@ export class Client {
 					}
 				})
 			});
+			Client.client.onRequest("custom/deprecatedWarning", (diagnosticMessage: string) => {
+				return new Promise<Boolean>((resolve, reject) => {
+					const result = cobolDiagnosticFilter.isDeprecatedWarning(diagnosticMessage);
+					if (result !== undefined) {
+						resolve(result);
+					} else {
+						reject(false);
+					}
+				})
+			});
 			Client.client.onRequest("custom/sourceOfParagraphCompletions", () => {
 				return new Promise<string>((resolve, reject) => {
 					const result = SourceOfCompletions.getSourceOfParagraphCompletions();

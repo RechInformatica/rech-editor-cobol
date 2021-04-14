@@ -39,6 +39,7 @@ export function defineDianosticConfigs() {
         if (cobolDiagnosticFilterProperties) {
             cobolDiagnosticFilter.setAutoDiagnostic((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).autoDiagnostic);
             cobolDiagnosticFilter.setNoShowWarnings((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).noShowWarnings);
+            cobolDiagnosticFilter.setDeprecatedWarning((<CobolDiagnosticFilter>cobolDiagnosticFilterProperties).deprecatedWarning);
         }
     });
 }
