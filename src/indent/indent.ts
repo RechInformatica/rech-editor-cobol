@@ -151,7 +151,7 @@ export class Indenta {
     }
     // Saves the target source code in the input file
     const buffer = iconv.encode(targetSourceCode.join(), WINDOWS_1252_ENCODING);
-    inputFile.saveBufferSync([buffer.toString(BINARY_ENCODING)], BINARY_ENCODING);
+    inputFile.saveBufferSync(buffer, BINARY_ENCODING);
     //
     const indentFile = this.createIndentedFileInstance();
     const errorFile = this.createErrorFileIntance();

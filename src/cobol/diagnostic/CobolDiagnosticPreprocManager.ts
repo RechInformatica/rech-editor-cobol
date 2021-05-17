@@ -10,7 +10,7 @@ export class CobolDiagnosticPreprocManager {
   /** Indicates if the preprocessor is called */
   private static PreprocessCallbackCalled: boolean = false;
   /** Last file content */
-  private static lastFileContent: string[];
+  private static lastFileContent: Buffer;
 
   /**
    * Run the preproc when possible and call all callbacks
@@ -23,7 +23,7 @@ export class CobolDiagnosticPreprocManager {
   public static runWhenPossible(
     PreprocessCallback: (uri: string) => Thenable<string>,
     file: File,
-    fileContent: string[],
+    fileContent: Buffer,
     callback: (file: string) => any,
     errorCallback: () => any
   ) {
@@ -49,7 +49,7 @@ export class CobolDiagnosticPreprocManager {
    */
   private static saveSourceAndRunPreproc(PreprocessCallback: (uri: string) => Thenable<string>,
   file: File,
-  fileContent: string[],
+  fileContent: Buffer,
   errorCallback: () => any
   ) {
     file.saveBuffer(fileContent, "latin1").then(() => {
