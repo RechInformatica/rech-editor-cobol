@@ -81,7 +81,7 @@ export class Diagnostician {
       CobolDiagnosticPreprocManager.runWhenPossible(
         PreprocessCallback,
         tmpFile,
-        [textDocument.getText()],
+        Buffer.from(textDocument.getText()),
         (buffer) => {
           const fileName = documentPath.fullPath();
           new CobolDiagnosticParser(this.sourceLines)

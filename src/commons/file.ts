@@ -38,7 +38,7 @@ export class File {
    * @param buffer
    * @param encoding
    */
-  public saveBuffer(buffer: string[], encoding?: string): Q.Promise<any> {
+  public saveBuffer(buffer: Buffer, encoding?: string): Q.Promise<any> {
     return writeFile(this.fileName, buffer, { encoding: encoding });
   }
 
@@ -48,21 +48,21 @@ export class File {
    * @param buffer
    * @param encoding
    */
-  public saveBufferSync(buffer: string[], encoding?: string): void {
+  public saveBufferSync(buffer: Buffer, encoding?: string): void {
     fs.writeFileSync(this.fileName, buffer, { encoding: encoding });
   }
 
   /**
    * Append a buffer in file
    */
-  public appendBuffer(buffer: string[], encoding?: string): Q.Promise<any> {
+  public appendBuffer(buffer: Buffer, encoding?: string): Q.Promise<any> {
     return appendFile(this.fileName, buffer, { encoding: encoding });
   }
 
   /**
    * Append a buffer in file Synchronously
    */
-  public appendBufferSync(buffer: string[], encoding?: string): void {
+  public appendBufferSync(buffer: Buffer, encoding?: string): void {
     fs.appendFileSync(this.fileName, buffer, { encoding: encoding });
   }
 
