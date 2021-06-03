@@ -433,6 +433,20 @@ export class Editor {
   }
 
   /**
+   * Opens the specified folder
+   *
+   * @param folder folder to be opened
+   * @param callback callback function executed after the folder is opened
+   */
+   public addFolderToWorkspace(folder: string) {
+    let index = 0;
+    if (workspace.workspaceFolders) {
+      index = workspace.workspaceFolders.length
+    }
+    workspace.updateWorkspaceFolders(index, 0, {uri: Uri.file(folder)});
+  }
+
+  /**
    * Shows a warning message
    */
   showWarningMessage(message: string) {
