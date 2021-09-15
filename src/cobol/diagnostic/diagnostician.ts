@@ -5,6 +5,7 @@ import { Path } from "../../commons/path";
 import { File } from "../../commons/file";
 import { CobolDiagnosticParser } from "./cobolDiagnosticParser";
 import { CobolDiagnosticPreprocManager } from "./CobolDiagnosticPreprocManager";
+import { Log } from "../../commons/Log";
 
 /** Root directory from diagnostic files */
 const DIAGNOSTIC_ROOT_DIR = "C:\\TMP\\Diagnostic\\";
@@ -68,7 +69,9 @@ export class Diagnostician {
     return new Promise<CobolDiagnostic>((resolve, reject) => {
       // If not a cobol processable source
       const documentPath = new Path(textDocument.uri);
+      Log.get().info("FindErrorsAndWarnings from " + documentPath);
       if (documentPath.extension().toUpperCase() != ".CBL" || documentPath.extension().toUpperCase() != ".COB") {
+        Log.get().info("Rejected because extension is not a .CBL or .COB");
         return reject();
       }
       const dir = new File(DIAGNOSTIC_ROOT_DIR + require("os").userInfo().username + "\\");
@@ -83,17 +86,23 @@ export class Diagnostician {
         tmpFile,
         Buffer.from(textDocument.getText()),
         (buffer) => {
+          Log.get().info("Diagnostician buffer recived for " + dir.fileName);
           const fileName = documentPath.fullPath();
           new CobolDiagnosticParser(this.sourceLines)
             .parser(buffer, fileName, externalGetCopyHierarchy, externalDiagnosticFilter, isDeprecatedWarning)
             .then(cobolDiagnostic => {
+              Log.get().info("FindErrorsAndWarnings from " + documentPath + " has correctly finished.");
               return resolve(cobolDiagnostic);
             })
-            .catch(() => {
-              return reject();
+            .catch((error) => {
+              Log.get().info("FindErrorsAndWarnings from " + documentPath + " has finished with error. Error: " + error);
+              return reject(error);
             });
         },
-        () => {return reject()}
+        () => {
+          Log.get().info("FindErrorsAndWarnings from " + documentPath + " has finished with error on runWhenPossible from PreprocManager");
+          return reject();
+        }
       );
     });
   }
