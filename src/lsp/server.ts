@@ -151,8 +151,7 @@ documents.onDidOpen(document => {
   validateTextDocument(document.document, true).then().catch();
   // Load the folding
   loadFolding(document);
-  // Load the expanded source
-  new ExpandedSourceManager(document.document.uri).expandSource().then().catch();
+  definesMaxCacheTimeFromExpandedSourceConfig();
 });
 
 // If the document closed
@@ -251,6 +250,15 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
       }
     }
   });
+}
+
+/**
+ * Sends a request to the client to get a max cache time from expanded source configuration and configures it on this aplication
+ */
+function definesMaxCacheTimeFromExpandedSourceConfig() {
+  getConfig<number>("maxCacheTimeFromExpandedSource").then((maxCacheTime) => {
+    ExpandedSourceManager.setMaxCacheTime(maxCacheTime);
+  })
 }
 
 /**

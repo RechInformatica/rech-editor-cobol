@@ -1,4 +1,5 @@
 import { File } from "../../commons/file";
+import { Log } from "../../commons/Log";
 
 /* Time in millis representing an old file */
 const OLD_FILE_IN_MILLIS: number = 1000;
@@ -30,11 +31,13 @@ export class CobolDiagnosticPreprocManager {
     if (CobolDiagnosticPreprocManager.PreprocessCallbackCalled) {
       CobolDiagnosticPreprocManager.pendingCallbacks.push(callback);
       CobolDiagnosticPreprocManager.lastFileContent = fileContent;
+      Log.get().info("CobolDiagnosticPreprocManager in waiting");
       return;
     }
     CobolDiagnosticPreprocManager.pendingCallbacks.push(callback);
     CobolDiagnosticPreprocManager.lastFileContent = fileContent;
     CobolDiagnosticPreprocManager.PreprocessCallbackCalled = true;
+    Log.get().info("CobolDiagnosticPreprocManager fired to preproc " + file);
     CobolDiagnosticPreprocManager.saveSourceAndRunPreproc(PreprocessCallback, file, CobolDiagnosticPreprocManager.lastFileContent, errorCallback);
   }
 
@@ -58,7 +61,11 @@ export class CobolDiagnosticPreprocManager {
         file,
         errorCallback
       );
-    }).catch(() => errorCallback());
+    }).catch(() => {
+      Log.get().info("CobolDiagnosticPreprocManager Error to save buffer " + file);
+      errorCallback();
+    }
+    );
   }
 
   /**
@@ -79,6 +86,7 @@ export class CobolDiagnosticPreprocManager {
     PreprocessCallback(file.fileName).then(buffer => {
       CobolDiagnosticPreprocManager.PreprocessCallbackCalled = false;
       currentPendingCallbacks.forEach(currentCallback => {
+        Log.get().info("CobolDiagnosticPreprocManager preproc was called " + file);
         currentCallback(buffer);
       });
       if (CobolDiagnosticPreprocManager.pendingCallbacks.length > 0) {
