@@ -1,9 +1,6 @@
 import { File } from "../../commons/file";
 import { Log } from "../../commons/Log";
 
-/* Time in millis representing an old file */
-const OLD_FILE_IN_MILLIS: number = 1000;
-
 export class CobolDiagnosticPreprocManager {
 
   /** Pendings Callbacks */

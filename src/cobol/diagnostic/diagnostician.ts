@@ -4,7 +4,7 @@ import { CobolDiagnostic } from "./cobolDiagnostic";
 import { Path } from "../../commons/path";
 import { File } from "../../commons/file";
 import { CobolDiagnosticParser } from "./cobolDiagnosticParser";
-import { CobolDiagnosticPreprocManager } from "./CobolDiagnosticPreprocManager";
+import { CobolDiagnosticPreprocManager } from "./cobolDiagnosticPreprocManager";
 import { Log } from "../../commons/Log";
 
 /** Root directory from diagnostic files */
