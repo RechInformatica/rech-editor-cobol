@@ -36,7 +36,7 @@
 				"--extensionDevelopmentPath=${workspaceRoot}"
 			],
 			"outFiles": [
-				"${workspaceRoot}/client/out/**/*.js"
+				"${workspaceRoot}/out/**/*.js"
 			],
 			"preLaunchTask": "npm: watch:client"
 		},
@@ -45,9 +45,10 @@
 			"request": "attach",
 			"name": "Attach to Server",
 			"port": 11000,
+			"timeout": 20000,
 			"restart": true,
 			"outFiles": [
-				"${workspaceRoot}/server/out/**/*.js"
+				"${workspaceRoot}/out/**/*.js"
 			]
 		},
 		{

@@ -4,8 +4,10 @@ import { CobolDiagnostic } from "./cobolDiagnostic";
 import { File } from "../../commons/file";
 import { Path } from "../../commons/path";
 import { Scan, BufferSplitter } from "rech-ts-commons";
-import Q from "q";
+import Q, { reject } from "q";
 import { CompletionUtils } from "../../lsp/commons/CompletionUtils";
+import { CobolDiagnosticPreprocManager } from "./cobolDiagnosticPreprocManager";
+import { CobolDiagnosticGetCopyHierarchyManager } from "./cobolDiagnosticGetCopyHierarchyManager";
 
 /**
  * Class conteiner of diagnostcs of cobol language
@@ -44,16 +46,16 @@ export class CobolDiagnosticParser {
           return reject();
         })
       } else {
-        externalGetCopyHierarchy(fileName).then((resultCopyHierarchy) => {
+        CobolDiagnosticGetCopyHierarchyManager.runWhenPossible(externalGetCopyHierarchy, fileName, (resultCopyHierarchy) => {
           CobolDiagnosticParser.copyHierarchy.set(fileName, resultCopyHierarchy);
           this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter, isDeprecatedWarning).then((result) => {
             return resolve(result);
           }).catch(() => {
             return reject();
           })
-        });
+        }, () => reject());
       }
-    })
+    });
   }
 
   /**
@@ -379,7 +381,7 @@ export class CobolDiagnosticParser {
       }
       if (copyFounded) {
         if (copy == copy.trimLeft()) {
-          const match = /(.*\.(?:cpy|cpb))/.exec(copy.trim());
+          const match = /.*\s+(.+\.(?:cpy|cpb))/.exec(copy.trim());
           const copyName = match ? match[1] : "";
           return new Path(copyName).fileName();
         }

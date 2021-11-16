@@ -4,7 +4,7 @@ import { CobolDiagnostic } from "./cobolDiagnostic";
 import { Path } from "../../commons/path";
 import { File } from "../../commons/file";
 import { CobolDiagnosticParser } from "./cobolDiagnosticParser";
-import { CobolDiagnosticPreprocManager } from "./CobolDiagnosticPreprocManager";
+import { CobolDiagnosticPreprocManager } from "./cobolDiagnosticPreprocManager";
 import { Log } from "../../commons/Log";
 
 /** Root directory from diagnostic files */
@@ -70,8 +70,8 @@ export class Diagnostician {
       // If not a cobol processable source
       const documentPath = new Path(textDocument.uri);
       Log.get().info("FindErrorsAndWarnings from " + documentPath);
-      if (documentPath.extension().toUpperCase() != ".CBL" || documentPath.extension().toUpperCase() != ".COB") {
-        Log.get().info("Rejected because extension is not a .CBL or .COB");
+      if (documentPath.extension().toUpperCase() != ".CBL" && documentPath.extension().toUpperCase() != ".COB") {
+        Log.get().info("Rejected because extension is not a .CBL or .COB. extension: " + documentPath.extension().toUpperCase());
         return reject();
       }
       const dir = new File(DIAGNOSTIC_ROOT_DIR + require("os").userInfo().username + "\\");
