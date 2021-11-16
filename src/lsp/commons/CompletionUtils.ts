@@ -11,6 +11,10 @@ export class CompletionUtils {
    * @param lineText line text
    */
   public static countSpacesAtBeginning(lineText: string) {
+    if (!lineText) {
+      console.log("Error to rcount spaces at beginning")
+      return 0;
+    }
     for (let index = 0; index < lineText.length; index++) {
       if (lineText.charAt(index) !== " ") {
         return index;

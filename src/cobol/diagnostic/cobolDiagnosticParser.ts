@@ -53,7 +53,9 @@ export class CobolDiagnosticParser {
           }).catch(() => {
             return reject();
           })
-        }, () => reject());
+        }, () => {
+          reject();
+        });
       }
     });
   }
@@ -273,7 +275,9 @@ export class CobolDiagnosticParser {
    */
   private createAppropriateDiagnosticRange(fileName: string, source: string, range: Range): Range {
     const rangeOnBestLine = this.createRangeOnBestLine(fileName, source, range);
-    const beginningOfLine = CompletionUtils.countSpacesAtBeginning(this.getSplittedSource()[rangeOnBestLine.start.line]);
+    const splittedSource = this.getSplittedSource();
+    const lineText = splittedSource[rangeOnBestLine.start.line];
+    const beginningOfLine = CompletionUtils.countSpacesAtBeginning(lineText);
     return Range.create(
       Position.create(rangeOnBestLine.start.line, beginningOfLine),
       Position.create(rangeOnBestLine.end.line, rangeOnBestLine.end.character),
@@ -381,7 +385,7 @@ export class CobolDiagnosticParser {
       }
       if (copyFounded) {
         if (copy == copy.trimLeft()) {
-          const match = /.*\s+(.+\.(?:cpy|cpb))/.exec(copy.trim());
+          const match = /(?:.*\s)?(.+\.(?:cpy|cpb))/.exec(copy.trim());
           const copyName = match ? match[1] : "";
           return new Path(copyName).fileName();
         }
