@@ -1,3 +1,4 @@
+import { kill } from "process";
 import { Log } from "../../commons/Log";
 
 export class CobolDiagnosticGetCopyHierarchyManager {
@@ -76,14 +77,17 @@ export class CobolDiagnosticGetCopyHierarchyManager {
       });
       let remaining = CobolDiagnosticGetCopyHierarchyManager.pendingCallbacks;
       if (remaining.size > 0) {
-        for (let file in remaining.keys) {
+        remaining.forEach((_callback, file) => {
           CobolDiagnosticGetCopyHierarchyManager.runGetCopyHierarchy(
             externalGetCopyHierarchy,
             file,
             errorCallback
           );
-        }
+        });
       }
+      return;
+    }, () => {
+      return errorCallback()
     });
   }
 
