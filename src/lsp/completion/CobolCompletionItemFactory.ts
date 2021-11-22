@@ -33,6 +33,7 @@ import { CobolWordFinder } from "../../commons/CobolWordFinder";
 import { AssignerCommandParser } from "./parser/AssignerCommandParser";
 import { MethodCompletion } from "./method/MethodCompletion";
 import { ObjectReferenceCompletion } from "./ObjectReferenceCompletion";
+import { AnyLengthCompletion } from "./AnyLengthCompletion";
 
 
 /**
@@ -360,7 +361,12 @@ export class CobolCompletionItemFactory {
           return resolve(this.generate(this.classCompletion));
         }
         if (!this.isValueDeclared()) {
-          return resolve(this.generate(new ValueCompletion()));
+          let items: Promise<CompletionItem[]>[] = [];
+          items = items.concat(this.generate(new ValueCompletion()));
+          if (this.isInPictureXDeclaration()) {
+            items = items.concat(this.generate(new AnyLengthCompletion()));
+          }
+          return resolve(this.createWrappingPromise(items));
         }
       }
       if (this.isFlagParent()) {
@@ -411,6 +417,15 @@ export class CobolCompletionItemFactory {
    */
   private isObjectReferenceDeclared(): boolean {
     return this.lineText.toUpperCase().includes(" OBJECT REFERENCE ");
+  }
+
+  /**
+   * Returns true if the cursor is in Picture X declaration
+   */
+  private isInPictureXDeclaration(): boolean {
+    let text = this.lineText.substr(0, this.column);
+    let match = text.match(/^.*\sPIC\sIS\sX(?:\(\w*\)?)?\s?$/gi);
+    return match != null;
   }
 
   /**

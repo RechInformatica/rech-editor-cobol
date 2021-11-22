@@ -84,7 +84,7 @@ export class ClassCompletion implements CompletionInterface {
         const className = parts[0];
         const packagex = parts[1] ? parts[1] : ""
         const documentation = "*>-> " + packagex.replace("\r", "");
-        const classItem = this.createClassCompletion(className, [documentation]);
+        const classItem = this.createClassCompletion(className, [documentation], packagex);
         items.set(className, classItem);
       }
     }
@@ -105,7 +105,7 @@ export class ClassCompletion implements CompletionInterface {
     new Scan(buffer).scan(/(?:^\s+CLASS\s+([\w]+)\s+AS.*|^\s+([\w]+)\s+IS\s+CLASS.*)/gim, (iterator: any) => {
       if (this.parserCobol.getDeclaracaoClasse(iterator.lineContent.toString())) {
         const classs = CobolVariable.parseLines(iterator.row, lines, {ignoreMethodReturn: true, noChildren: true, noScope: true, noSection: true});
-        const classItem = this.createClassCompletion(classs.getName(), classs.getComment());
+        const classItem = this.createClassCompletion(classs.getName(), classs.getComment(), undefined);
         items.set(classs.getName(), classItem);
       }
     });
@@ -117,8 +117,9 @@ export class ClassCompletion implements CompletionInterface {
    *
    * @param classs class name
    * @param documentation documentation array
+   * @param packagex package name for clas
    */
-  private createClassCompletion(classs: string, documentation: string[] | undefined): CompletionItem {
+  private createClassCompletion(classs: string, documentation: string[] | undefined, packagex: string | undefined): CompletionItem {
     const cobolDoc = this.cobolDocParser.parseCobolDoc(documentation != undefined ? documentation : []);
     return {
       label: classs,
@@ -127,6 +128,7 @@ export class ClassCompletion implements CompletionInterface {
         kind: MarkupKind.Markdown,
         value: cobolDoc.elementsAsMarkdown()
       },
+      filterText: classs + " " + packagex ? packagex : cobolDoc.elementsAsMarkdown(),
       kind: CompletionItemKind.Class
     };
   }

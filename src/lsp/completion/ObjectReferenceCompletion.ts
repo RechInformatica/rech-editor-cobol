@@ -20,7 +20,7 @@ export class ObjectReferenceCompletion implements CompletionInterface {
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "object reference",
                     preselect: true,
-                    kind: CompletionItemKind.Variable
+                    kind: CompletionItemKind.Keyword
                 }]
             );
         })
