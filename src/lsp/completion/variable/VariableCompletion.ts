@@ -121,19 +121,19 @@ export class VariableCompletion implements CompletionInterface {
                         ExpandedSourceManager.getExpandedSource(this.uri!).then((buffer) => {
                             const result = this.generateItemsFromCurrentBuffer(BufferSplitter.split(buffer.toString()), true);
                             VariableCompletion.cache.set(this.uri!, result);
-                            return resolve();
+                            return resolve([]);
                         }).catch(() => {
                             return reject();
                         })
                     } else {
                         VariableCompletion.cache.set(this.uri!, this.generateItemsFromCurrentBuffer(<string[]>this.currentLines, false));
-                        return resolve();
+                        return resolve([]);
                     }
                 })
             }
             if (!awaitsResult) {
                 VariableCompletion.cache.set(this.uri!, this.generateItemsFromCurrentBuffer(<string[]>this.currentLines, false));
-                return resolve();
+                return resolve([]);
             }
         });
     }

@@ -32,6 +32,7 @@ import { ToTrueInsertTextBuilder } from "./variable/ToTrueInsertTextBuilder";
 import { CobolWordFinder } from "../../commons/CobolWordFinder";
 import { AssignerCommandParser } from "./parser/AssignerCommandParser";
 import { MethodCompletion } from "./method/MethodCompletion";
+import { ObjectReferenceCompletion } from "./ObjectReferenceCompletion";
 
 
 /**
@@ -349,8 +350,14 @@ export class CobolCompletionItemFactory {
   private createVariableCompletions(): Promise<CompletionItem[]> {
     return new Promise((resolve) => {
       if (!this.isVariableDeclarationFinalized()) {
-        if (!this.isPictureDeclared()) {
-          return resolve(this.generate(new PictureCompletion()));
+        if (!this.isPictureOrObjectReferenceDeclared()) {
+          let items: Promise<CompletionItem[]>[] = [];
+          items = items.concat(this.generate(new PictureCompletion()));
+          items = items.concat(this.generate(new ObjectReferenceCompletion()));
+          return resolve(this.createWrappingPromise(items));
+        }
+        if (this.isObjectReferenceDeclared()) {
+          return resolve(this.generate(this.classCompletion));
         }
         if (!this.isValueDeclared()) {
           return resolve(this.generate(new ValueCompletion()));
@@ -395,8 +402,15 @@ export class CobolCompletionItemFactory {
   /**
    * Returns true if the var Picture is declared on the current line
    */
-  private isPictureDeclared(): boolean {
-    return this.lineText.toUpperCase().includes(" PIC ");
+  private isPictureOrObjectReferenceDeclared(): boolean {
+    return this.lineText.toUpperCase().includes(" PIC ") || this.isObjectReferenceDeclared();
+  }
+
+  /**
+   * Returns true if the var is declared with Object Reference
+   */
+  private isObjectReferenceDeclared(): boolean {
+    return this.lineText.toUpperCase().includes(" OBJECT REFERENCE ");
   }
 
   /**
