@@ -180,7 +180,7 @@ export class InsertSubprogramDeclarationAction implements ActionInterface {
         const maxBottomSearch = this.getBottomSearchIterations(lines);
         for (let i = lines.length - 1; i > maxBottomSearch; i--) {
             const currentLineText = lines[i];
-            if (CompletionUtils.isTheParagraphDeclaration(currentLineText)) {
+            if (CompletionUtils.isTheParagraphOrMethodDeclaration(currentLineText)) {
                 break;
             }
             if (lastGeneralCopyLine == 0) {

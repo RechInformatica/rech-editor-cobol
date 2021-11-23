@@ -29,15 +29,16 @@ export class EndCompletion implements CompletionInterface {
     let findEvaluate = false
     let findPerform = false
     let findMethod = false
+    let findTry = false
     for (let i = line; i > 0; i--) {
       const currentLine = lines[i];
-      if (CompletionUtils.isTheParagraphDeclaration(currentLine)) {
+      if (CompletionUtils.isTheParagraphOrMethodDeclaration(currentLine)) {
         break;
       }
       if (!findIf && this.ifIfDeclaration(currentLine)) {
         let endIfClause = "end-if"
         let ifStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
-        if (FormatterUtils.isClauseMissing(i + 1, ifStartColumn, lines, [endIfClause])) {
+        if (FormatterUtils.isClauseMissing(i + 1, ifStartColumn, lines, endIfClause, [endIfClause, "else"])) {
           result.push(this.buildEndCompletion(endIfClause, line, ifStartColumn))
           findIf = true
           continue;
@@ -47,7 +48,7 @@ export class EndCompletion implements CompletionInterface {
       if (!findEvaluate && this.evaluateDeclaration(currentLine)) {
         let endEvaluateClause = "end-evaluate"
         let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
-        if (FormatterUtils.isClauseMissing(i + 1, evaluateStartColumn, lines, [endEvaluateClause])) {
+        if (FormatterUtils.isClauseMissing(i + 1, evaluateStartColumn, lines, endEvaluateClause, [endEvaluateClause, "when"])) {
           result.push(this.buildEndCompletion(endEvaluateClause, line, evaluateStartColumn))
           findEvaluate = true
           continue;
@@ -57,7 +58,10 @@ export class EndCompletion implements CompletionInterface {
       if (!findMethod && this.methodDeclaration(currentLine)) {
         let endMethodClause = "end method"
         let methodStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
-        if (FormatterUtils.isClauseMissing(i + 1, methodStartColumn, lines, [endMethodClause])) {
+        let identClauses = [endMethodClause, "working-storage", "linkage", "procedure", "environment", "data", "77", "01",
+                            "configuration", "input-output", "file-control", "i-o-control", "source-computer", "object-computer",
+                            "special-names", "repository", "file", "local-storage", "report", "screen"];
+        if (FormatterUtils.isClauseMissing(i + 1, methodStartColumn, lines, endMethodClause, identClauses)) {
           result.push(this.buildEndCompletion(endMethodClause, line, methodStartColumn))
           findMethod = true
           continue;
@@ -67,9 +71,19 @@ export class EndCompletion implements CompletionInterface {
       if (!findPerform && this.performDeclaration(currentLine)) {
         let endPerformClause = "end-perform"
         let performColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
-        if (FormatterUtils.isClauseMissing(i + 1, performColumn, lines, [endPerformClause])) {
+        if (FormatterUtils.isClauseMissing(i + 1, performColumn, lines, endPerformClause, [endPerformClause])) {
           result.push(this.buildEndCompletion(endPerformClause, line, performColumn))
           findPerform = true
+          continue;
+        }
+        continue;
+      }
+      if (!findTry && this.tryDeclaration(currentLine)) {
+        let endTryClause = "end-try"
+        let tryColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+        if (FormatterUtils.isClauseMissing(i + 1, tryColumn, lines, endTryClause, [endTryClause, "catch", "finally"])) {
+          result.push(this.buildEndCompletion(endTryClause, line, tryColumn))
+          findTry = true
           continue;
         }
         continue;
@@ -115,6 +129,15 @@ export class EndCompletion implements CompletionInterface {
   }
 
   /**
+   * Returns true if the line represents a 'try'
+   *
+   * @param text
+   */
+  private tryDeclaration(text: string): boolean {
+    return /\s+try\s*/im.test(text)
+  }
+
+  /**
    * Build the completion items from endCompletion
    *
    * @param generateIf
@@ -141,7 +164,6 @@ export class EndCompletion implements CompletionInterface {
       }],
       detail: "Generates " + label.toUpperCase() + " to end the command block",
       insertTextFormat: InsertTextFormat.Snippet,
-      preselect: true,
       kind: CompletionItemKind.Keyword
     }
   }

@@ -7,12 +7,12 @@ import { IfFormatter } from "./IfFormatter";
 const END_COBOL_COLUMN = 120;
 
 /**
- * Class to format Cobol 'else'
+ * Class to format Cobol 'finally'
  */
-export class ElseFormatter implements FormatterInterface {
+export class FinallyFormatter implements FormatterInterface {
 
-  /** RegExp that identifies if it is the ELSE clause*/
-  public static ELSE_REGEXP = /\s+(ELSE|else).*/;
+  /** RegExp that identifies if it is the FINALLY clause*/
+  public static FINALLY_REGEXP = /\s+(finally|FINALLY).*/;
 
   /**
    * Generates an array of Text Edits for source code formatting
@@ -23,11 +23,11 @@ export class ElseFormatter implements FormatterInterface {
    */
   public generate(line: number, _column: number, lines: string[]): TextEdit[] {
     let startColumn = this.findStartColumn(line, lines);
-    return [this.createElseTextEdit(line, startColumn)];
+    return [this.createFinallyTextEdit(line, startColumn)];
   }
 
   /**
-   * Find the 'if' column
+   * Find the 'try' column
    *
    * @param line current line
    * @param lines document lines
@@ -35,14 +35,13 @@ export class ElseFormatter implements FormatterInterface {
   public findStartColumn(line: number, lines: string[]) {
     let depth = 0;
     for (let i = line; i > 0; i--) {
-      let trimLine = lines[i].trim();
       if (CompletionUtils.isTheParagraphOrMethodDeclaration(lines[i])) {
         break
       }
-      if (lines[i].trim().toLowerCase().startsWith("end-if")) {
+      if (lines[i].trim().toLowerCase().startsWith("end-try")) {
         depth++;
       } else {
-        if (trimLine.toLowerCase().startsWith("if ") || trimLine.toLowerCase() == "if") {
+        if (lines[i].trim().toLowerCase().startsWith("try")) {
           depth--;
         }
       }
@@ -54,13 +53,13 @@ export class ElseFormatter implements FormatterInterface {
   }
 
   /**
-     * Creates a TextEdit with the 'else' clause already formatted
+     * Creates a TextEdit with the 'catch' clause already formatted
      *
-     * @param line line where the 'else' clause will be inserted
-     * @param column column where the 'else' clause will be inserted
+     * @param line line where the 'catch' clause will be inserted
+     * @param column column where the 'catch' clause will be inserted
      */
-  public createElseTextEdit(line: number, column: number): TextEdit {
-    let text = CompletionUtils.fillSpacesBetween(0, column) + "else,";
+  public createFinallyTextEdit(line: number, column: number): TextEdit {
+    let text = CompletionUtils.fillSpacesBetween(0, column) + "finally";
     return {
       range: {
         start: {

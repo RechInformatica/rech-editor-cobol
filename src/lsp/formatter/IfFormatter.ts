@@ -22,7 +22,8 @@ export class IfFormatter implements FormatterInterface {
         let ifLineText = lines[line - 1];
         let ifStartColumn = CompletionUtils.countSpacesAtBeginning(ifLineText);
         const edits: TextEdit[] = [FormatterUtils.createIndentTextEdit(line, 0)];
-        if (FormatterUtils.isClauseMissing(line + 1, ifStartColumn, lines, ["end-if", "else"])) {
+        let enfIfClause = "end-if";
+        if (FormatterUtils.isClauseMissing(line + 1, ifStartColumn, lines, enfIfClause, [enfIfClause, "else"])) {
             edits.push(this.createEndIfTextEdit(line + 1, ifStartColumn + 1));
         }
         return edits;

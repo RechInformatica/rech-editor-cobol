@@ -90,7 +90,7 @@ connection.onInitialize(async (params: InitializeParams) => {
       renameProvider: true,
       documentOnTypeFormattingProvider: {
         firstTriggerCharacter: "\n",
-        moreTriggerCharacter: ["N", 'n', 'E', 'e'],
+        moreTriggerCharacter: ["N", 'n', 'E', 'e', 'H', 'h', 'Y', 'y'],
       }
     }
   };
@@ -479,6 +479,12 @@ connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) =
         case params.ch.toUpperCase() == "N":
           Log.get().info(`Formatting with \"N\". File: ${params.textDocument.uri}`);
           return reolve(formatter.formatWhenNIsPressed());
+        case params.ch.toUpperCase() == "H":
+          Log.get().info(`Formatting with \"H\". File: ${params.textDocument.uri}`);
+          return reolve(formatter.formatWhenHIsPressed());
+        case params.ch.toUpperCase() == "Y":
+          Log.get().info(`Formatting with \"Y\". File: ${params.textDocument.uri}`);
+          return reolve(formatter.formatWhenYIsPressed());
         default:
           Log.get().error(`Error formatting file: ${params.textDocument.uri}`);
           return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error formatting"))

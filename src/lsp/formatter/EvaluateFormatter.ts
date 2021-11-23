@@ -25,7 +25,8 @@ export class EvaluateFormatter implements FormatterInterface {
         let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(evaluateLineText);
         const edits: TextEdit[] = this.completeTextEditWithComma(line, lines);
         edits.push(this.createWhenTextEdit(line, evaluateStartColumn + 3));
-        if (FormatterUtils.isClauseMissing(line + 1, evaluateStartColumn, lines, ["end-evaluate"])) {
+        let endEvaluateClause = "end-evaluate";
+        if (FormatterUtils.isClauseMissing(line + 1, evaluateStartColumn, lines, endEvaluateClause, [endEvaluateClause, "when"])) {
             edits.push(this.createEndEvaluateTextEdit(line + 1, evaluateStartColumn + 1));
         }
         return edits;
