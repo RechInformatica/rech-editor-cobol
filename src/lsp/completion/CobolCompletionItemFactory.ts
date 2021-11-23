@@ -38,6 +38,9 @@ import { MethodModifyersCompletion } from "./MethodModifyersCompletion";
 import { WorkingStorageCompletion } from "./WorkingStorageCompletion";
 import { LinkageCompletion } from "./LinkageCompletion";
 import { ProcedureCompletion } from "./ProcedureCompletion";
+import { TryCompletion } from "./TryCompletion";
+import { FinallyCompletion } from "./FinallyCompletion";
+import { CatchCompletion } from "./CatchCompletion";
 
 
 /**
@@ -202,6 +205,7 @@ export class CobolCompletionItemFactory {
             result = result.concat(await this.generate(new MethodModifyersCompletion("public")));
             result = result.concat(await this.generate(new MethodModifyersCompletion("protected")));
             result = result.concat(await this.generate(new MethodModifyersCompletion("static")));
+            result = result.concat(await this.generate(new MethodModifyersCompletion("override")));
             return resolve(result);
           }
           case this.isInitialize(): {
@@ -636,7 +640,7 @@ export class CobolCompletionItemFactory {
     let openBlocks = 0;
     let closeBlocks = 0;
     for (let i = this.line - 1; i > 0; i--) {
-      if (CompletionUtils.isTheParagraphDeclaration(this.lines[i])) {
+      if (CompletionUtils.isTheParagraphOrMethodDeclaration(this.lines[i])) {
         break;
       }
       const currentLine = this.lines[i].toLowerCase().trim();
@@ -644,6 +648,27 @@ export class CobolCompletionItemFactory {
         openBlocks++;
       }
       if (currentLine.toUpperCase().startsWith("END-IF")) {
+        closeBlocks++;
+      }
+    }
+    return openBlocks != closeBlocks;
+  }
+
+  /**
+   * Returns true if the current line is in a if try block
+   */
+  private isInTryBlock(): boolean {
+    let openBlocks = 0;
+    let closeBlocks = 0;
+    for (let i = this.line - 1; i > 0; i--) {
+      if (CompletionUtils.isTheParagraphOrMethodDeclaration(this.lines[i])) {
+        break;
+      }
+      const currentLine = this.lines[i].toLowerCase().trim();
+      if (currentLine.toUpperCase() == "TRY") {
+        openBlocks++;
+      }
+      if (currentLine.toUpperCase().startsWith("END-TRY")) {
         closeBlocks++;
       }
     }
@@ -702,9 +727,14 @@ export class CobolCompletionItemFactory {
       if (this.isCobolClass()) {
         items = items.concat(this.generate(new MethodIdCompletion()));
       }
+      items = items.concat(this.generate(new TryCompletion()));
     }
     if (this.isInIfBlock()) {
       items = items.concat(this.generate(new ElseCompletion()));
+    }
+    if (this.isInTryBlock()) {
+      items = items.concat(this.generate(new FinallyCompletion()));
+      items = items.concat(this.generate(new CatchCompletion()));
     }
     items = items.concat(this.generate(this.createVariableSuggestionForObjectReference()));
     return this.createWrappingPromise(items);

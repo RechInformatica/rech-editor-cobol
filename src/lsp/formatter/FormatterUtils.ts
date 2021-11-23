@@ -40,12 +40,13 @@ export class FormatterUtils {
      * @param line line number
      * @param column column number
      * @param lines editor lines
-     * @param clauses clauses to be tested
+     * @param clause clause to be tested
+     * @param identClauses clauses to be ignored
      */
-    public static isClauseMissing(line: number, column: number, lines: string[], clauses: string[]): boolean {
+    public static isClauseMissing(line: number, column: number, lines: string[], clause:string, identClauses: string[]): boolean {
         let parser = new ParserCobol();
         let indentedClauses: string[] = [];
-        clauses.forEach(currentClause => {
+        identClauses.forEach(currentClause => {
             indentedClauses.push(CompletionUtils.fillSpacesBetween(0, column) + currentClause.toLowerCase());
         });
         for (let index = line; index < lines.length; index++) {
@@ -63,7 +64,13 @@ export class FormatterUtils {
                     return true;
                 }
                 if (!(lineText.charAt(column) === " ")) {
-                    return !(this.startsWithClause(lineText.toLowerCase(), indentedClauses));
+                    if ((this.startsWithClause(lineText.toLowerCase(), indentedClauses))) {
+                        if (lineText.toLowerCase().trim().startsWith(clause)) {
+                            return false;
+                        }
+                    } else {
+                        return true;
+                    }
                 }
             }
         }

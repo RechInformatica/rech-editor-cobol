@@ -22,7 +22,8 @@ export class PerformUntilExitFormatter implements FormatterInterface {
         let lineText = lines[line];
         let performUntilStartColumn = CompletionUtils.countSpacesAtBeginning(lineText);
         const edits: TextEdit[] = [FormatterUtils.createIndentTextEdit(line, 0)];
-        if (FormatterUtils.isClauseMissing(line + 1, performUntilStartColumn, lines, ["end-perform"])) {
+        let endPerformClause = "end-perform"
+        if (FormatterUtils.isClauseMissing(line + 1, performUntilStartColumn, lines, endPerformClause, [endPerformClause])) {
             edits.push(this.createEndPerformTextEdit(line + 1, performUntilStartColumn + 1));
         }
         return edits;

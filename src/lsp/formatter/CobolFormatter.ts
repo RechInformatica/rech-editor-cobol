@@ -12,6 +12,9 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 import { PerformVaryingFormatter } from "./PerformVaryingFormatter";
 import { CommentaryFormatter } from "./CommentaryFormatter";
 import { BufferSplitter } from "rech-ts-commons";
+import { TryFormatter } from "./TryFormatter";
+import { CatchFormatter } from "./CatchFormatter";
+import { FinallyFormatter } from "./FinallyFormatter";
 
 /**
  * Class to format Cobol source code
@@ -51,7 +54,16 @@ export class CobolFormatter {
     if (this.isIfCondition(currentText)) {
       return this.generate(new IfFormatter());
     }
+    if (this.isTryCondition(currentText)) {
+      return this.generate(new TryFormatter());
+    }
     if (this.isElseCondition(currentText)) {
+      return [FormatterUtils.createIndentTextEdit(this.line, 0)];
+    }
+    if (this.isCatchCondition(currentText)) {
+      return [FormatterUtils.createIndentTextEdit(this.line, 0)];
+    }
+    if (this.isFinallyCondition(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0)];
     }
     if (this.isEvaluateCondition(currentText)) {
@@ -104,6 +116,34 @@ export class CobolFormatter {
   }
 
   /**
+   * Formats the Cobol source when 'H' is pressed
+   */
+  public formatWhenHIsPressed(): TextEdit[] {
+    let currentText = this.lines[this.line];
+    if (this.isCommentary(currentText)) {
+      return [];
+    }
+    if (this.isCatchCondition(currentText)) {
+      return this.generate(new CatchFormatter());
+    }
+    return [];
+  }
+
+  /**
+   * Formats the Cobol source when 'Y' is pressed
+   */
+  public formatWhenYIsPressed(): TextEdit[] {
+    let currentText = this.lines[this.line];
+    if (this.isCommentary(currentText)) {
+      return [];
+    }
+    if (this.isFinallyCondition(currentText)) {
+      return this.generate(new FinallyFormatter());
+    }
+    return [];
+  }
+
+  /**
    *
    * @param currentText
    */
@@ -116,6 +156,36 @@ export class CobolFormatter {
    */
   private isIfCondition(currentText: string): boolean {
     if (IfFormatter.IF_REGEXP.exec(currentText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents an 'try' condition
+   */
+  private isTryCondition(currentText: string): boolean {
+    if (TryFormatter.TRY_REGEXP.exec(currentText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents an 'catch' condition
+   */
+  private isCatchCondition(currentText: string): boolean {
+    if (CatchFormatter.CATCH_REGEXP.exec(currentText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line represents an 'finally' condition
+   */
+  private isFinallyCondition(currentText: string): boolean {
+    if (FinallyFormatter.FINALLY_REGEXP.exec(currentText)) {
       return true;
     }
     return false;

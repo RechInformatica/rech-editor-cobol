@@ -19,7 +19,7 @@ export class PerformVaryingFormatter implements FormatterInterface {
     public static LineOfUntilClause(line: number, lines: string[]): number | undefined {
         for (let index = line; index > 0; index--) {
             const element = lines[index];
-            if (CompletionUtils.isTheParagraphDeclaration(element)) {
+            if (CompletionUtils.isTheParagraphOrMethodDeclaration(element)) {
                 break
             }
             if (PerformVaryingFormatter.UNTIL_REGEXP.exec(element)) {
