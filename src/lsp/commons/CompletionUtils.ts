@@ -1,5 +1,9 @@
+import { TextEdit } from "vscode-languageserver-types";
+
 /** Maximum number of interpreted lines */
 const MAX_INTERPRETED_LINES = 100;
+/** End Cobol column */
+const END_COBOL_COLUMN = 120;
 
 /**
  * Utili class for Cobol code completion and formatting
@@ -244,6 +248,7 @@ export class CompletionUtils {
     }
     return false;
   }
+
   /**
    * Applies the specified regex on the last lines of the buffer limited by 'limit' parameter
    *
@@ -259,6 +264,28 @@ export class CompletionUtils {
       }
     }
     return false;
+  }
+
+  /**
+   * Creatres a clean line text edit
+   *
+   * @param line line to clean
+   */
+  public static createCleanLineTextEdit(line: number): TextEdit {
+    let textEdit =  {
+      range: {
+        start: {
+          line: line,
+          character: 0
+        },
+        end: {
+          line: line,
+          character: END_COBOL_COLUMN
+        }
+      },
+      newText: ""
+    };
+    return textEdit;
   }
 
 }
