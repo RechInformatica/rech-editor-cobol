@@ -28,6 +28,7 @@ export class EndCompletion implements CompletionInterface {
     let findIf = false
     let findEvaluate = false
     let findPerform = false
+    let findMethod = false
     for (let i = line; i > 0; i--) {
       const currentLine = lines[i];
       if (CompletionUtils.isTheParagraphDeclaration(currentLine)) {
@@ -49,6 +50,16 @@ export class EndCompletion implements CompletionInterface {
         if (FormatterUtils.isClauseMissing(i + 1, evaluateStartColumn, lines, [endEvaluateClause])) {
           result.push(this.buildEndCompletion(endEvaluateClause, line, evaluateStartColumn))
           findEvaluate = true
+          continue;
+        }
+        continue;
+      }
+      if (!findMethod && this.methodDeclaration(currentLine)) {
+        let endMethodClause = "end method"
+        let methodStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+        if (FormatterUtils.isClauseMissing(i + 1, methodStartColumn, lines, [endMethodClause])) {
+          result.push(this.buildEndCompletion(endMethodClause, line, methodStartColumn))
+          findMethod = true
           continue;
         }
         continue;
@@ -83,6 +94,15 @@ export class EndCompletion implements CompletionInterface {
    */
   private evaluateDeclaration(text: string): boolean {
     return /\s+evaluate\s.*/i.test(text)
+  }
+
+  /**
+   * Returns true if the line represents a method declaration
+   *
+   * @param text
+   */
+  private methodDeclaration(text: string): boolean {
+    return /\s+method-id.\s.*/i.test(text)
   }
 
   /**

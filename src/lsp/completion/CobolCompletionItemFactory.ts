@@ -31,9 +31,13 @@ import { CommaDotInsertTextBuilder } from "./variable/CommaDotInsertTextBuilder"
 import { ToTrueInsertTextBuilder } from "./variable/ToTrueInsertTextBuilder";
 import { CobolWordFinder } from "../../commons/CobolWordFinder";
 import { AssignerCommandParser } from "./parser/AssignerCommandParser";
-import { MethodCompletion } from "./method/MethodCompletion";
 import { ObjectReferenceCompletion } from "./ObjectReferenceCompletion";
 import { AnyLengthCompletion } from "./AnyLengthCompletion";
+import { MethodIdCompletion } from "./MethodIdCompletion";
+import { MethodModifyersCompletion } from "./MethodModifyersCompletion";
+import { WorkingStorageCompletion } from "./WorkingStorageCompletion";
+import { LinkageCompletion } from "./LinkageCompletion";
+import { ProcedureCompletion } from "./ProcedureCompletion";
 
 
 /**
@@ -191,6 +195,13 @@ export class CobolCompletionItemFactory {
             let result = new Array();
             result = result.concat(await this.generate(this.createVariableSuggestionWithoutEnumAndDisplay()));
             result = result.concat(await this.generate(this.classCompletion))
+            return resolve(result);
+          }
+          case this.isMethodDeclaration(): {
+            let result = new Array();
+            result = result.concat(await this.generate(new MethodModifyersCompletion("public")));
+            result = result.concat(await this.generate(new MethodModifyersCompletion("protected")));
+            result = result.concat(await this.generate(new MethodModifyersCompletion("static")));
             return resolve(result);
           }
           case this.isInitialize(): {
@@ -506,6 +517,29 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if the current line is a method declaration
+   */
+  private isMethodDeclaration(): boolean {
+    return this.lineText.toUpperCase().includes(" METHOD-ID. ");
+  }
+
+  /**
+   * Returns true if the current program is a COBOL class
+   */
+  private isCobolClass(): boolean {
+    for (let index = 0; index < this.lines.length; index++) {
+      const line = this.lines[index];
+      if (line.toUpperCase().includes(" CLASS-ID. ")) {
+        return true;
+      }
+      if (line.toUpperCase().includes(" PROGRAM-ID. ")) {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Returns true if the level and the name of the Cobol variable are declared.
    *
    * This regular expression checks if the variable is ready to receive the 'PIC'
@@ -587,6 +621,15 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if current line is empty
+   *
+   * @returns
+   */
+  public isEmptyLine(): boolean {
+    return this.lineText.trim().split(" ").length < 2;
+  }
+
+  /**
    * Returns true if the current line is in a if block
    */
   private isInIfBlock(): boolean {
@@ -652,6 +695,14 @@ export class CobolCompletionItemFactory {
     items = items.concat(this.generate(new PerformVaryingCompletion()));
     items = items.concat(this.generate(new EndCompletion()));
     items = items.concat(this.generate(this.classCompletion));
+    if (this.isEmptyLine()) {
+      items = items.concat(this.generate(new WorkingStorageCompletion()));
+      items = items.concat(this.generate(new LinkageCompletion()));
+      items = items.concat(this.generate(new ProcedureCompletion()));
+      if (this.isCobolClass()) {
+        items = items.concat(this.generate(new MethodIdCompletion()));
+      }
+    }
     if (this.isInIfBlock()) {
       items = items.concat(this.generate(new ElseCompletion()));
     }

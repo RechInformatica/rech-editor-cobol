@@ -54,9 +54,9 @@ describe("File Functions", () => {
   it("Append content in a file", (done) => {
     const file = File.tmpFile();
     const buffer = [["123"], ["àáÍíÉÓôÔãâÃ"], ["-_?=[]{}()/\\|.; "]]
-    file.appendBuffer(Buffer.from(buffer[0]), "latin1").then(() => {
-      file.appendBuffer(Buffer.from(buffer[1]), "latin1").then(() => {
-        file.appendBuffer(Buffer.from(buffer[2]), "latin1").then(() => {
+    file.appendBuffer(new Buffer(buffer[0].toString(), "latin1"), "latin1").then(() => {
+      file.appendBuffer(new Buffer(buffer[1].toString(), "latin1"), "latin1").then(() => {
+        file.appendBuffer(new Buffer(buffer[2].toString(), "latin1"), "latin1").then(() => {
           file.loadBuffer("latin1").then((b) => {
             assert.equal(b, buffer.toString().replace(/,/g, ""));
             done();
@@ -76,7 +76,7 @@ describe("File Functions", () => {
       assert.fail(e);
       done();
     });
-  });
+  }).timeout(5000);
 
   // Try delete a file
   it("Delete a file", (done) => {

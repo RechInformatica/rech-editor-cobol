@@ -3,9 +3,6 @@ import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { TextEdit } from "vscode";
 
-/** End Cobol column */
-const END_COBOL_COLUMN = 120;
-
 /**
  * Class to generate LSP Completion Items for Cobol any length
  */
@@ -25,25 +22,12 @@ export class AnyLengthCompletion implements CompletionInterface {
                 text = text + "any length";
             }
             text = text + " $1"
-            let textEdit = {
-                range: {
-                  start: {
-                    line: line,
-                    character: 0
-                  },
-                  end: {
-                    line: line,
-                    character: END_COBOL_COLUMN
-                  }
-                },
-                newText: ""
-              };
             resolve(
                 [{
                     label: 'Complete PIC X ANY LENGTH declaration',
                     detail: 'PIC X ANY LENGTH clause will be inserted on the most appropriate place.',
                     insertText: text,
-                    additionalTextEdits: [textEdit],
+                    additionalTextEdits: [CompletionUtils.createCleanLineTextEdit(line)],
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "x ( ) a any" + text,
                     preselect: true,
