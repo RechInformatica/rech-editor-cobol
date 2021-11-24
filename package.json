@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with Visual Studio Code",
-	"version": "1.0.103",
+	"version": "1.0.104",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.47.0"
@@ -106,8 +106,14 @@
 					"default": {
 						"rechdocToken": "#b294bb",
 						"rechdocVariable": "#c5c8c6",
-						"localScopeVariable": "#a3e4c1"
+						"localScopeVariable": "#a3e4c1",
+						"rechAutoDocumentation": "#6a9955"
 					}
+				},
+				"rech.editor.cobol.specialAutoDocumentation": {
+					"type": "boolean",
+					"description": "Controls whether special auto documentation of some language objects is active",
+					"default": false
 				}
 			}
 		},
