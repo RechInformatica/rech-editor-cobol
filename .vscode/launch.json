@@ -36,9 +36,9 @@
 				"--extensionDevelopmentPath=${workspaceRoot}"
 			],
 			"outFiles": [
-				"${workspaceRoot}/out/**/*.js"
-			],
-			"preLaunchTask": "npm: watch:client"
+                "${workspaceRoot}/out/**/*.js"
+            ],
+			"preLaunchTask": "npm: compile"
 		},
 		{
 			"type": "node",

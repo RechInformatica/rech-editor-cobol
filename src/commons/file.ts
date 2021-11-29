@@ -76,7 +76,7 @@ export class File {
       }
       fs.readFile(this.fileName, { encoding: encoding }, (err, buffer)=> {
         if (err) {
-          reject();
+          reject(err);
         }
         resolve(buffer)
       });
@@ -109,11 +109,22 @@ export class File {
         try {
           fs.mkdirSync(directory);
         } catch (err) {
+          console.log(err);
         }
       }
     });
   }
 
+  /**
+   * Remove directory
+   */
+  public rmdir() {
+    try {
+      fs.rmdirSync(this.fileName);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   /**
    * Copy file
    */

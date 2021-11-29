@@ -371,16 +371,18 @@ export class CobolDiagnosticParser {
    */
   private copyDeclaredInSource(fileName: string, source: string): string {
     const copys = CobolDiagnosticParser.copyHierarchy.get(fileName);
+    const pattern = new RegExp("^[^*]*" + source, "gi");
     let copyArray;
     if (copys) {
       copyArray = copys.split("\n");
     } else {
       return "Copy not found";
     }
+
     let copyFounded = false;
     for (let i = copyArray.length; i > 0; i--) {
       const copy = copyArray[i];
-      if (!copyFounded && copy && copy.includes(source)) {
+      if (!copyFounded && copy && pattern.test(copy)) {
         copyFounded = true;
       }
       if (copyFounded) {
