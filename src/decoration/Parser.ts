@@ -5,6 +5,7 @@ import { Scan } from "rech-ts-commons";
 import { Configuration } from "../helpers/configuration";
 import Q from "q";
 import { CobolRegexUtils } from "../cobol/CobolRegexUtils";
+import { CobolCopy } from "../cobol/CobolCopy";
 
 export class Parser {
   private static lastLocalVariableDecorator: TextEditorDecorationType
@@ -23,10 +24,10 @@ export class Parser {
     return new Promise((resolve, reject) => {
       const text = activeEditor.document.getText();
       if (!this.needDifferentiateVariablesByScope(text)) {
-        return resolve();
+        return resolve(undefined);
       }
       Q.all(this.getAllLocalVariables(text)).then(() => {
-        return resolve();
+        return resolve(undefined);
       }).catch(() => {
         return reject();
       })
@@ -50,16 +51,16 @@ export class Parser {
           if (VariableUtils.isLocalScope(variable)) {
             this.getUsesFromVariable(text, variable).then((usesFromVariable) => {
               Q.all(usesFromVariable).then(() => {
-                return resolve();
+                return resolve(undefined);
               }).catch(() => {
                 return reject();
               })
             }).catch(() => {
               return reject();
             })
-            return resolve();
+            return resolve(undefined);
           } else {
-            return resolve();
+            return resolve(undefined);
           }
         })
       );
@@ -105,7 +106,7 @@ export class Parser {
               endPos = new Position(endPos.line + variableDeclarationPosition.line, endPos.character)
               this.localVariableRangeList.push(new Range(startPos, endPos));
             }
-            return resolve();
+            return resolve(undefined);
           })
         );
       });
@@ -121,6 +122,56 @@ export class Parser {
   private needDifferentiateVariablesByScope(text: string): boolean {
     return /^\s+method-id\./gmi.test(text);
   }
+
+
+  /**
+   * Find copys used on current file
+   *
+   * @param activeEditor
+   */
+   public findCopys(activeEditor: TextEditor): Promise<CobolCopy[]> {
+    return new Promise((resolve, reject) => {
+      const text = activeEditor.document.getText();
+      Q.allSettled(this.getAllCopys(text, activeEditor.document.fileName)).then((results) => {
+        const copys: CobolCopy[] = [];
+        results.forEach((result) => {
+          if (result.state === "fulfilled") {
+            copys.push(result.value!);
+          }
+        });
+        return resolve(copys);
+      }).catch(() => {
+        return reject();
+      })
+    });
+  }
+
+  /**
+   * Returns all copys on text buffer and return this in a promise array
+   *
+   * @param text
+   * @param fileName
+   */
+   private getAllCopys(text: string, fileName: string): Promise<CobolCopy>[] {
+    const PromiseArray:Promise<CobolCopy>[] = []
+    // Regexp to find variables declarations in source
+    const regex = /^\s+copy\s+(.+\.cp.+)[\.,]/gm
+    new Scan(text).scan(regex, (iterator: any) => {
+      PromiseArray.push(
+        new Promise((resolve, reject) => {
+          CobolCopy.parseLine(iterator.row, text.split("\n"), fileName).then((copy) => {
+            if (!copy) {
+              return reject();
+            }
+            return resolve(copy);
+          }).catch(() => reject());
+        })
+      );
+    });
+    return PromiseArray;
+  }
+
+
 
 	/**
 	 * Finds documentation comment blocks with Rech documentation starting with "*> @"
@@ -160,7 +211,7 @@ export class Parser {
           }
         }
       }
-      return resolve();
+      return resolve(undefined);
     });
   }
 
@@ -208,7 +259,7 @@ export class Parser {
    *
    * @param hex
    */
-  private invertHex(hex: string) {
+  invertHex(hex: string) {
     const invertEspecialColorsInLightTheme = new Configuration("rech.editor.cobol").get<any>("invertEspecialColorsInLightTheme");
     if (!invertEspecialColorsInLightTheme) {
       return hex;

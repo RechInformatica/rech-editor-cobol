@@ -16,6 +16,7 @@ import { ExpandedSourceStatusBar } from './cobol/ExpandedSourceStatusBar';
 import FlowProvider from './sourceflow/treeView/providers/FlowProvider';
 import { IndentUtils } from './indent/indentUtils';
 import { CobolRefactor } from './cobol/refactor/CobolRefactor';
+import { DocumentationDecorator } from './decoration/DocumentationDecorator';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -41,6 +42,8 @@ async function _activate(context: any) {
     Client.startServerAndEstablishCommunication(context);
     // Custom decorators beyond language syntax highlight
     CustomDecorator.activate(context);
+    // Decorators to show hints of elements
+    DocumentationDecorator.activate(context);
     //
     SourceOfCompletions.show();
 

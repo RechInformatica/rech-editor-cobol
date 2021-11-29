@@ -1,5 +1,5 @@
 import { Path } from '../commons/path';
-import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn, workspace } from 'vscode';
+import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn, workspace, DecorationOptions, OverviewRulerLane, ThemeColor } from 'vscode';
 import { RechPosition } from '../commons/rechposition';
 import { Indenta } from '../indent/indent';
 import { GenericExecutor } from '../commons/genericexecutor';
@@ -148,7 +148,7 @@ export class Editor {
     //
     // If cursor is exactly on word's left position (blank character at left)
     if (this.getCursors()[0].column == 0 ||
-        this.getCurrentLine().charAt(this.getCursors()[0].column - 1) == ' ') {
+      this.getCurrentLine().charAt(this.getCursors()[0].column - 1) == ' ') {
       commands.executeCommand("cursorWordRight");
       commands.executeCommand("cursorWordLeftSelect");
     } else {
@@ -244,7 +244,7 @@ export class Editor {
    * @param endPos End position
    */
   setSelection(startPos: RechPosition, endPos: RechPosition) {
-    let range = new Range(startPos.line, startPos.column, endPos.line - 1 , endPos.column)
+    let range = new Range(startPos.line, startPos.column, endPos.line - 1, endPos.column)
     this.setSelectionRange(range);
   }
 
@@ -389,13 +389,13 @@ export class Editor {
     let alreadyOpen = false;
     const names = this.getOpenDocumentsNames();
     names.forEach(currentFile => {
-        if (!alreadyOpen && currentFile.toUpperCase() === file.toUpperCase()) {
-            this.openFile(currentFile, callback);
-            alreadyOpen = true;
-        }
+      if (!alreadyOpen && currentFile.toUpperCase() === file.toUpperCase()) {
+        this.openFile(currentFile, callback);
+        alreadyOpen = true;
+      }
     });
     if (!alreadyOpen) {
-        this.openFile(file, callback);
+      this.openFile(file, callback);
     }
   }
 
@@ -425,7 +425,7 @@ export class Editor {
       viewColumn: ViewColumn.Active,
       preview: false
     }
-    commands.executeCommand('vscode.open',  Uri.file(file), options).then(() => {
+    commands.executeCommand('vscode.open', Uri.file(file), options).then(() => {
       if (callback) {
         callback()
       }
@@ -438,12 +438,12 @@ export class Editor {
    * @param folder folder to be opened
    * @param callback callback function executed after the folder is opened
    */
-   public addFolderToWorkspace(folder: string) {
+  public addFolderToWorkspace(folder: string) {
     let index = 0;
     if (workspace.workspaceFolders) {
       index = workspace.workspaceFolders.length
     }
-    workspace.updateWorkspaceFolders(index, 0, {uri: Uri.file(folder)});
+    workspace.updateWorkspaceFolders(index, 0, { uri: Uri.file(folder) });
   }
 
   /**
@@ -564,7 +564,7 @@ export class Editor {
     if (positionsToReturn) {
       return new RechPosition(positionsToReturn[0].line, 7);
     } else {
-    return new RechPosition(0, 0);
+      return new RechPosition(0, 0);
     }
   }
 
@@ -690,7 +690,7 @@ export class Editor {
   /**
    * Returns the basename of the file currently open in editor without the extension
    */
-  getCurrentFileBaseNameWithoutExtension(){
+  getCurrentFileBaseNameWithoutExtension() {
     const fileName = this.getCurrentFileBaseName();
     return fileName.substr(0, fileName.length - 4);
   }
@@ -698,7 +698,7 @@ export class Editor {
   /**
    * Returns the extension of the file currently open in editor
    */
-  getCurrentFileBaseNameExtension(){
+  getCurrentFileBaseNameExtension() {
     const fileName = this.getCurrentFileBaseName();
     return fileName.substr(fileName.length - 3, fileName.length);
   }

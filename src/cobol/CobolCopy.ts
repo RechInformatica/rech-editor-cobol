@@ -3,6 +3,9 @@ import { CobolDocParser } from "./rechdoc/CobolDocParser";
 import { Path } from "../commons/path";
 import { File } from "../commons/file";
 import { BufferSplitter } from "rech-ts-commons";
+import { Configuration } from "../helpers/configuration";
+import { commands } from "vscode";
+import { CobolVariable } from "../lsp/completion/CobolVariable";
 
 /**
  * Class representing a Cobol copy
@@ -39,36 +42,41 @@ export class CobolCopy {
     /**
      * Creates a CobolVariable instance parsing the specified line
      */
-    public static parseLine(line: number, lines: string[], uri: string): CobolCopy | undefined {
-        let name = new ParserCobol().getCopyDeclaration(lines[line]);
-        if (!name) {
-            return;
-        }
-        let commentArray: string[] = []
-        for (let i = line - 1; i > 0; i--) {
-            const docLine = lines[i];
-            if (docLine.trimLeft().startsWith("*>")) {
-                commentArray.push(docLine)
-            } else {
-                break;
+    public static parseLine(line: number, lines: string[], uri: string): Promise<CobolCopy | undefined> {
+        return new Promise((resolve, reject) => {
+            let name = new ParserCobol().getCopyDeclaration(lines[line]);
+            if (!name) {
+                return reject();
             }
-        }
-        let localDoc = new CobolDocParser().parseCobolDoc(commentArray).comment;
-        let comment;
-        if (localDoc.length > 0) {
-            comment = localDoc
-        }
-        let replacingList = this.getReplacingList(line, lines);
-        let delclarationRawMatcher = /\s+(copy\s+.+(cpy|cpb)).*/.exec(lines[line])
-        let raw = ""
-        let extension = ""
-        if (delclarationRawMatcher) {
-            raw = delclarationRawMatcher[1]
-            extension = delclarationRawMatcher[2]
-        }
-        let copyFile = this.buildUri(uri, `${name}.${extension}`);
-        let header = this.getHeaderOfCopy(copyFile)
-        return new CobolCopy(name, extension, raw, replacingList, copyFile.fileName, line, comment, header)
+            let commentArray: string[] = []
+            for (let i = line - 1; i > 0; i--) {
+                const docLine = lines[i];
+                if (docLine.trimLeft().startsWith("*>")) {
+                    commentArray.push(docLine)
+                } else {
+                    break;
+                }
+            }
+            let localDoc = new CobolDocParser().parseCobolDoc(commentArray).comment;
+            let comment: string[] = [];
+            if (localDoc.length > 0) {
+                comment = localDoc
+            }
+            let replacingList = this.getReplacingList(line, lines);
+            let delclarationRawMatcher = /\s+(copy\s+.+(cpy|cpb)).*/.exec(lines[line])
+            let raw = ""
+            let extension = ""
+            if (delclarationRawMatcher) {
+                raw = delclarationRawMatcher[1]
+                extension = delclarationRawMatcher[2]
+            }
+            let copyFile = this.buildUri(uri, `${name}.${extension}`);
+            this.getHeaderOfCopy(copyFile).then((header) => {
+                return resolve(new CobolCopy(name!, extension, raw, replacingList, copyFile.fileName, line, comment, header));
+            }).catch(() => {
+                return resolve(new CobolCopy(name!, extension, raw, replacingList, copyFile.fileName, line, comment));
+            });
+        });
     }
 
     /**
@@ -76,16 +84,44 @@ export class CobolCopy {
      *
      * @param copy
      */
-    private static getHeaderOfCopy(copy: File): string[] | undefined {
-        if (!copy.exists()) {
-            return;
-        }
-        let copyBuffer = BufferSplitter.split(copy.loadBufferSync("latin1"));
-        let comment = new CobolDocParser().parseSingleLineCobolDoc(copyBuffer[1]).comment;
-        if (!(comment.length > 0)) {
-            return;
-        }
-        return comment;
+    private static getHeaderOfCopy(copy: File): Promise<string[]> {
+        return new Promise((resolve, reject) => {
+            if (!copy.exists()) {
+                return reject();
+            }
+            const commentExractorFromCopyFilesCommand = new Configuration("rech.editor.cobol.callback").get<string>("commentExractorFromCopyFiles");
+            if (!commentExractorFromCopyFilesCommand || commentExractorFromCopyFilesCommand == "") {
+                let copyBuffer = BufferSplitter.split(copy.loadBufferSync("latin1"));
+                let comments: string[] = [];
+                for (let lineNumber = 0; lineNumber < copyBuffer.length; lineNumber++) {
+                    const line = copyBuffer[lineNumber];
+                    if (line.trimLeft().startsWith("*>")) {
+                        comments.push(line);
+                    } else {
+                        // If the last line is a variable declaration, remove the last comment line because it's not make part of copy header
+                        if (CobolVariable.parseLines(lineNumber, copyBuffer, {noChildren: true, noScope: true, noSection: true, noComment: true})) {
+                            comments.pop();
+                        }
+                        break;
+                    }
+                }
+                let comment = new CobolDocParser().parseCobolDoc(comments).comment;
+                if (!(comment.length > 0)) {
+                    return reject();
+                }
+                return resolve(comment);
+            }
+            commands.executeCommand<string[]>(commentExractorFromCopyFilesCommand, copy.fileName).then((result) => {
+                if (result) {
+                    return resolve(result);
+                } else {
+                    return reject();
+                }
+            }, () => {
+                return reject();
+            });
+
+        });
     }
 
 

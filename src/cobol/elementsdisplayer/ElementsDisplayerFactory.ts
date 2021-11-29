@@ -51,10 +51,13 @@ export class ElementsDisplayerFactory {
         new ClassDisplayer().show(classs)
         break;
       case this.isCopy(lines[currentLine]):
-        const copy = CobolCopy.parseLine(currentLine, lines, uri);
-        if (copy) {
-          new copyDisplayer().show(copy)
-        }
+        CobolCopy.parseLine(currentLine, lines, uri).then((copy) => {
+          if (copy) {
+            new copyDisplayer().show(copy)
+          }
+        }).catch(() => {
+          window.showWarningMessage(`Fail to parser copy informations! Line: ${lines[currentLine]}`);
+        });
         break;
     }
 
