@@ -46,7 +46,7 @@
     },
     {
       "comment": "Color paragraph name on PERFORM THRU",
-      "match": "(?i:perform)\\s+([\\w]+?\\-[\\w\\-]+?)\\s(?i:thru)\\s([\\w]+\\-[\\w\\-]+)",
+      "match": "(?i:perform)\\s+([\\w]+\\-?[\\w\\-]*)\\s(?i:thru)\\s([\\w]+\\-?[\\w\\-]*)",
       "captures": {
         "0": {
           "name": "keyword.verb.cobol"
@@ -61,7 +61,7 @@
     },
     {
       "comment": "Color paragraph name on GO TO or PERFORM",
-      "match": "(?i:perform|go\\s+to)\\s+([\\w]+\\-(\\w|\\-|\\(([a-z!@#])+\\))+)",
+      "match": "(?i:perform|go\\s+to)\\s+([\\w]+\\-?(\\w|\\-|\\(([a-z!@#])+\\))+)",
       "captures": {
         "0": {
           "name": "keyword.verb.cobol"
