@@ -220,8 +220,8 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
         Log.get().info("Diagnose from " + document.uri + " starting");
         new Diagnostician(text).diagnose(
           textDocument,
-          (fileName) => {
-            return sendExternalPreprocessExecution(fileName, new Path(new Path(document.uri).fullPathWin()).directory());
+          (fileName, documentPath) => {
+            return sendExternalPreprocessExecution(fileName, documentPath);
           },
           (fileName) => {
             return sendExternalGetCopyHierarchy(fileName);
@@ -231,6 +231,9 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
           },
           (message) => {
             return externalDeprecatedWarning(message);
+          },
+          (copyFile) => {
+            return sendExternalCopyUsageLocatorExecution(copyFile)
           }
         ).then(diagnostics => {
           Log.get().info("Diagnose from " + textDocument.uri + " resulted ok");
@@ -269,6 +272,15 @@ function definesMaxCacheTimeFromExpandedSourceConfig() {
 export function sendExternalPreprocessExecution(uri: string, path: string) {
   const files = [uri, path];
   return connection.sendRequest<string>("custom/runPreprocessor", [files]);
+}
+
+/**
+ * Sends a request to the client for find copy usages
+ *
+ * @param files copy file
+ */
+export function sendExternalCopyUsageLocatorExecution(files: string[]) {
+  return connection.sendRequest<string[]>("custom/copyUsageLocator", [files]);
 }
 
 /**

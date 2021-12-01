@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { commands} from 'vscode';
+import { commands } from 'vscode';
 import { Editor } from './editor/editor';
 import { GenericExecutor } from './commons/genericexecutor';
 import { cobolDiagnosticFilter, CobolDiagnosticFilter } from './cobol/diagnostic/cobolDiagnosticFilter';
@@ -66,4 +66,14 @@ export function defineSpecialClassPullerFunction() {
             Editor.setSpecialClassPuller(<GenericExecutor>specialClassPuller);
         }
     });
+}
+
+/**
+ * Sets copy usage locator
+ */
+export function defineCopyUsageLocatorFunction() {
+    const commandForCopyUsageLocator = new Configuration("rech.editor.cobol.callback").get<string>("copyUsageLocator");
+    if (commandForCopyUsageLocator) {
+        Editor.setCopyUsageLocator(commandForCopyUsageLocator);
+    }
 }

@@ -1,5 +1,5 @@
 import { Path } from '../commons/path';
-import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn, workspace, DecorationOptions, OverviewRulerLane, ThemeColor } from 'vscode';
+import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn, workspace } from 'vscode';
 import { RechPosition } from '../commons/rechposition';
 import { Indenta } from '../indent/indent';
 import { GenericExecutor } from '../commons/genericexecutor';
@@ -21,6 +21,8 @@ export class Editor {
   private static preprocessor: GenericExecutor;
   /** Special class puller */
   private static specialClassPuller: GenericExecutor;
+  /** Copy usage locator command */
+  private static copyUsageLocator: string;
 
   constructor() {
     this.editor = <TextEditor>this.getActiveEditor();
@@ -808,6 +810,22 @@ export class Editor {
    */
   public static getPreprocessor() {
     return this.preprocessor
+  }
+
+  /**
+   * Define the copy usage locator function
+   *
+   * @param copyUsageLocator
+   */
+  public static setCopyUsageLocator(copyUsageLocator: string) {
+    this.copyUsageLocator = copyUsageLocator
+  }
+
+  /**
+   * Returns the copy usage locator function
+   */
+  public static getCopyUsageLocator() {
+    return this.copyUsageLocator
   }
 
   /**

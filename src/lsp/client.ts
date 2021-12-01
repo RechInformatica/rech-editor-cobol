@@ -1,5 +1,5 @@
-import { ExtensionContext } from 'vscode';
-import { ErrorCodes, LanguageClient, LanguageClientOptions, ResponseError, ServerOptions, TransportKind } from 'vscode-languageclient';
+import { commands, ExtensionContext } from 'vscode';
+import { LanguageClient, LanguageClientOptions, ResponseError, ServerOptions, TransportKind } from 'vscode-languageclient';
 import { Editor } from '../editor/editor';
 import * as path from 'path';
 import { configuration } from '../helpers/configuration';
@@ -11,6 +11,7 @@ import { Log } from '../commons/Log';
 import { FoldStatusBar } from './fold/FoldStatusBar';
 import { ExpandedSourceStatusBar } from '../cobol/ExpandedSourceStatusBar';
 import * as dj from '../dependencieInjection';
+import { isArray } from 'util';
 
 /**
  * Language Server Provider client
@@ -63,6 +64,7 @@ export class Client {
 			dj.defineDianosticConfigs();
 			dj.defineCopyHierarchyFunction();
 			dj.defineSpecialClassPullerFunction();
+			dj.defineCopyUsageLocatorFunction();
 		}).catch();
 	}
 
@@ -159,6 +161,15 @@ export class Client {
 					});
 				})
 			});
+			Client.client.onRequest("custom/copyUsageLocator", (files: string[]) => {
+				return new Promise<string[]>((resolve, reject) => {
+					Client.createCopyUsageLocatorExecutionPromise(files).then((result) => {
+						return resolve(result);
+					}).catch((e) => {
+						return reject(e);
+					});
+				})
+			});
 			Client.client.onRequest("custom/showFoldinStatusBar", (file?: string) => {
 				FoldStatusBar.show(file);
 			});
@@ -185,6 +196,29 @@ export class Client {
 				SourceOfCompletions.show();
 			}
 		}
+	}
+
+	/**
+	 * Creates a promise for copy usage locator execution
+	 *
+	 * @param files file array with necessary files
+	 */
+	private static createCopyUsageLocatorExecutionPromise(files: string[]): Promise<string[]> {
+		return new Promise((resolve, reject) => {
+			const command = Editor.getCopyUsageLocator();
+			if (!command) {
+				return reject("CopyUsageLocator is not defined");
+			}
+			commands.executeCommand(command, files).then((result) => {
+				if (result && isArray(result)) {
+					return resolve(<string[]>result);
+				} else {
+					return reject("Unexpected result of CopyUsageLocator function");
+				}
+			}, (err) => {
+				return reject(err);
+			})
+		});
 	}
 
 	/**
