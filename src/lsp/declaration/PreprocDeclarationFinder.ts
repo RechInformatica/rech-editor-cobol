@@ -35,9 +35,9 @@ export class PreprocDeclarationFinder implements FindInterface {
           new ExpandedSourceManager(uri).expandSource().then(() => { }).catch(() => { });
           this.findDeclarationWithPreproc(term, uri, referenceLine, false)
             .then((result) => resolve(result))
-            .catch(() => reject());
-        }).catch(() => reject());
-      }).catch(() => reject());
+            .catch((e) => reject(e));
+        }).catch((e) => reject(e));
+      }).catch((e) => reject(e));
     });
   }
 

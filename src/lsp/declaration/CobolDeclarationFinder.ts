@@ -31,9 +31,9 @@ export class CobolDeclarationFinder implements FindInterface {
             new PreprocDeclarationFinder(this.splittedBuffer)
               .findDeclaration(findParams)
               .then((result) => resolve(result))
-              .catch(() => reject());
+              .catch((e) => reject(e));
           }
-        }).catch(() => reject());
+        }).catch((e) => reject(e));
     });
   }
 
@@ -47,7 +47,7 @@ export class CobolDeclarationFinder implements FindInterface {
       if (methodFinder.isMethodCall(currentLine, params.columnIndex)) {
         methodFinder.findDeclaration(params)
           .then((result) => resolve(result))
-          .catch(() => reject());
+          .catch((e) => reject(e));
       } else {
         const declarationPosition = this.searchDeclarationBackwards(params);
         resolve(declarationPosition);

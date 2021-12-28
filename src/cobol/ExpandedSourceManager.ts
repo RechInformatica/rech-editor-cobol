@@ -60,19 +60,19 @@ export class ExpandedSourceManager {
             ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
           }
           resolve(buffer)
-        }).catch(() => {
-          Log.get().error("Error to load expanded source");
+        }).catch((e) => {
+          Log.get().error("Error to load expanded source. " + e);
           if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
             ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
           }
-          reject();
+          reject(e);
         });
-      }, () => {
-        Log.get().error("callbackSourceExpander has returned a error to load expanded source");
+      }, (e) => {
+        Log.get().error("callbackSourceExpander has returned a error to load expanded source. " + e);
         if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
           ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
         }
-        reject();
+        reject(e);
       });
     });
   }
@@ -121,9 +121,9 @@ export class ExpandedSourceManager {
         new ExpandedSourceManager(source).expandSource().then((expandedSource) => {
           Log.get().info("Expanded source got from expanded file. Source: " + source);
           return resolve(expandedSource);
-        }).catch(() => {
-          Log.get().error("Error to get the expanded source. Source: " + source);
-          return reject()
+        }).catch((e) => {
+          Log.get().error("Error to get the expanded source. Source: " + source + " Error: " + e);
+          return reject(e)
         });
       }
     })
