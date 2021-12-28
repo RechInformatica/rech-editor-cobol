@@ -534,8 +534,8 @@ connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location 
       createPromiseForWordDeclaration(text, params.position.line, params.position.character, word, params.textDocument.uri).then((location) => {
         Log.get().info("Found declaration for " + word + " in " + location.uri + ". Key pressed in " + params.textDocument.uri);
         resolve(location);
-      }).catch(() => {
-        Log.get().warning("Could not find declaration for " + word + ". Key pressed in " + params.textDocument.uri);
+      }).catch((e) => {
+        Log.get().warning("Could not find declaration for " + word + ". Key pressed in " + params.textDocument.uri + " Error: " + e);
         resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration1"));
       });
     } else {
@@ -669,8 +669,8 @@ export function createPromiseForWordDeclaration(documentFullText: string, refere
         resolve(createLocation(uri, position));
       }
     })
-      .catch(() => {
-        reject();
+      .catch((e) => {
+        reject(e);
       });
   });
 }
@@ -693,8 +693,8 @@ export function callCobolDeclarationFinder(word: string, referenceLine: number, 
       })
       .then((position: RechPosition) => {
         return resolve(position);
-      }).catch(() => {
-        reject();
+      }).catch((e) => {
+        reject(e);
       })
   })
 }
