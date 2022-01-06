@@ -146,7 +146,7 @@ export class CobolCompletionItemFactory {
   public generateCompletionItems(): Promise<CompletionItem[]> {
     return new Promise((resolve, reject) => {
       this.generateConditionalCompletionItems().then((result) => {
-        if (result.length > 0) {
+        if (result.length && result.length > 0) {
           let items: Promise<CompletionItem[]>[] = [];
           this.additionalCompletions.forEach(impl => {
             items = items.concat(this.generate(impl));
@@ -160,8 +160,8 @@ export class CobolCompletionItemFactory {
         } else {
           return resolve([]);
         }
-      }).catch(() => {
-        return reject();
+      }).catch((e) => {
+        return reject(e);
       })
     });
   }
@@ -752,8 +752,8 @@ export class CobolCompletionItemFactory {
           return resolve(this.toUpperCase(result));
         }
         return resolve(result);
-      }).catch(() => {
-        return reject();
+      }).catch((e) => {
+        return reject(e);
       });
     });
   }
@@ -801,8 +801,8 @@ export class CobolCompletionItemFactory {
           completions = completions.concat(element);
         });
         return resolve(completions);
-      }).catch(() => {
-        return reject();
+      }).catch((e) => {
+        return reject(e);
       })
     });
   }

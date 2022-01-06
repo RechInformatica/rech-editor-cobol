@@ -38,7 +38,7 @@ export class MethodDeclarationFinder implements FindInterface {
           .then((method) => {
             const position = this.createPositionFromMethod(method);
             return resolve(position);
-          }).catch(() => reject());
+          }).catch((e) => reject(e));
         return;
       }
       //
@@ -68,9 +68,9 @@ export class MethodDeclarationFinder implements FindInterface {
           this.findMethodDeclaration(params.term, buffer).then((method) => {
             const position = this.createPositionFromMethod(method, fullPathVsCode);
             return resolve(position);
-          }).catch(() => reject());
-        }).catch(() => reject());
-      }).catch(() => reject());
+          }).catch((e) => reject(e));
+        }).catch((e) => reject(e));
+      }).catch((e) => reject(e));
     });
   }
 
@@ -84,7 +84,7 @@ export class MethodDeclarationFinder implements FindInterface {
   /**
    * Returns true whether the current call chain starts calling a method on the
    * current instance
-   * 
+   *
    * @param originalChain call chain
    */
   private isSelfInstance(originalChain: string[]): boolean {
@@ -133,7 +133,7 @@ export class MethodDeclarationFinder implements FindInterface {
               .then((chain) => {
                 const chainTypes = [newChain[0]].concat(chain);
                 resolve(chainTypes);
-              }).catch(() => reject());
+              }).catch((e) => reject(e));
             return;
           }
           FileUtils.read(classUri).then((buffer) => {
@@ -142,10 +142,10 @@ export class MethodDeclarationFinder implements FindInterface {
               .then((chain) => {
                 const chainTypes = [newChain[0]].concat(chain);
                 resolve(chainTypes);
-              }).catch(() => reject());
-          }).catch(() => reject());
-        }).catch(() => reject());
-      }).catch(() => reject());
+              }).catch((e) => reject(e));
+          }).catch((e) => reject(e));
+        }).catch((e) => reject(e));
+      }).catch((e) => reject(e));
     });
   }
 
@@ -156,7 +156,7 @@ export class MethodDeclarationFinder implements FindInterface {
         newChain[1] = classAlias;
         this.resolveChainTypes(newChain.slice(1), findParams, BufferSplitter.split(buffer))
           .then((chain) => resolve(new Array(newChain[0]).concat(chain)))
-          .catch(() => reject());
+          .catch((e) => reject(e));
         return;
       }
       this.findMethodDeclaration(targetMethod, buffer).then((method) => {
@@ -165,11 +165,11 @@ export class MethodDeclarationFinder implements FindInterface {
           newChain[1] = returnType.getName();
           this.resolveChainTypes(newChain.slice(1), findParams, BufferSplitter.split(buffer))
             .then((chain) => resolve(new Array(newChain[0]).concat(chain)))
-            .catch(() => reject());
+            .catch((e) => reject(e));
         } else {
           return reject();
         }
-      }).catch(() => reject());
+      }).catch((e) => reject(e));
     })
   }
 
@@ -185,7 +185,7 @@ export class MethodDeclarationFinder implements FindInterface {
           foundAny = true;
           CobolMethod.parseLines(iterator.row, iterator.column + 1, BufferSplitter.split(buffer))
             .then((method) => resolve(method))
-            .catch(() => reject());
+            .catch((e) => reject(e));
         }
       })
       if (!foundAny) {

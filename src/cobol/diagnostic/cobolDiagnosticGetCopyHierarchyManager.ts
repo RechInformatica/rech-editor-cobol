@@ -20,7 +20,7 @@ export class CobolDiagnosticGetCopyHierarchyManager {
     externalGetCopyHierarchy: (uri: string) => Thenable<string>,
     fileName: string,
     callback: (resultCopyHierarchy: string) => any,
-    errorCallback: () => any
+    errorCallback: (error: any) => any
   ) {
     if (CobolDiagnosticGetCopyHierarchyManager.PreprocessCallbackCalled) {
       CobolDiagnosticGetCopyHierarchyManager.addPendingCallbacks(fileName, callback)
@@ -60,7 +60,7 @@ export class CobolDiagnosticGetCopyHierarchyManager {
   private static runGetCopyHierarchy(
     externalGetCopyHierarchy: (uri: string) => Thenable<string>,
     fileName: string,
-    errorCallback: () => any
+    errorCallback: (error: any) => any
   ) {
     let currentPendingCallbacks: ((buffer: string) => any)[];
     if (CobolDiagnosticGetCopyHierarchyManager.pendingCallbacks.get(fileName) != undefined) {
@@ -86,8 +86,8 @@ export class CobolDiagnosticGetCopyHierarchyManager {
         });
       }
       return;
-    }, () => {
-      return errorCallback()
+    }, (e) => {
+      return errorCallback(e);
     });
   }
 

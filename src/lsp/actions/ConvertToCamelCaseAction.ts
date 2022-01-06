@@ -55,8 +55,8 @@ export class CamelCaseAction implements ActionInterface {
                 .findReferences(word)
                 .then((positions: RechPosition[]) => {
                     return resolve(positions);
-                }).catch(() => {
-                    reject();
+                }).catch((e) => {
+                    reject(e);
                 })
         });
     }

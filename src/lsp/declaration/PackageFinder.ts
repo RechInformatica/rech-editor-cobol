@@ -71,8 +71,8 @@ export class PackageFinder {
           // method to extract the real package name
           this.findClassFileUri(classCobolVariable, line, column, uri)
             .then((classPackage) => resolve(classPackage))
-            .catch(() => reject());
-        }).catch(() => reject());
+            .catch((e) => reject(e));
+        }).catch((e) => reject(e));
       }
     })
   }
@@ -106,9 +106,9 @@ export class PackageFinder {
                 const bufferArray = BufferSplitter.split(buffer);
                 const variable = CobolVariable.parseLines(position.line, bufferArray, variableConfigs);
                 resolve(variable);
-              }).catch(() => reject());
+              }).catch((e) => reject(e));
           }
-        }).catch(() => reject());
+        }).catch((e) => reject(e));
     })
   }
 

@@ -21,14 +21,14 @@ export class SourceExpander {
       if (executor) {
         executor.setPath(currentFile).exec(cacheFile).then((result) => {
           Log.get().info("Source expanded Files:" + files.toString() + " - " + result);
-          resolve();
-        }).catch(() => {
+          resolve(result);
+        }).catch((e) => {
           Log.get().error("Fatal error to expand the source");
-          reject();
+          reject(e);
         });
       } else {
         Log.get().warning("Editor.SourceExpander was undefined");
-        resolve();
+        resolve("");
       }
     });
   }

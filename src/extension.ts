@@ -171,7 +171,10 @@ export * from "./cobol/rechdoc/ElementDocumentationExtractor"
 export * from "./cobol/rechdoc/CobolDocParser"
 export * from "./lsp/declaration/CobolDeclarationFinder";
 export * from "./lsp/declaration/FindInterface";
+export * from "./lsp/completion/method/MethodCompletionUtils";
+export * from "./lsp/completion/method/CompletionTarget";
 export * from "./cobol/diagnostic/cobolDiagnosticFilter";
 export * from "./cobol/ExpandedSourceManager";
 export * from "./cobol/TabStopper";
 export * from "./commons/Log";
+export * from "vscode-languageclient";

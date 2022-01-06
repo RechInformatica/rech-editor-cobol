@@ -47,7 +47,7 @@ export class ExpandedSourceManager {
         if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
           ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
         }
-        return reject()
+        return reject("CallbackSourceExpander not defined")
       }
       Log.get().info("ExpandedSourceManager has callbackSourceExpander");
       ExpandedSourceManager.callbackSourceExpander(this.source, ExpandedSourceManager.buildExpandedSourceFileName(this.source)).then(() => {

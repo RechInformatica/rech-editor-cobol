@@ -35,8 +35,8 @@ export class CobolActionFactory {
           actions = actions.concat(currentAction);
         });
         resolve(actions);
-      }).catch(() => {
-        reject();
+      }).catch((e) => {
+        reject(e);
       });
     });
   }

@@ -265,6 +265,15 @@ function definesMaxCacheTimeFromExpandedSourceConfig() {
 }
 
 /**
+ * Sends a request to the client for Execute the Method Completion
+ *
+ * @param params
+ */
+ export function sendExternalMethodCompletion(params: TextDocumentPositionParams) {
+  return connection.sendRequest<CompletionItem[]>("custom/runExternalMethodCompletion", params);
+}
+
+/**
  * Sends a request to the client for Cobol preprocessor execution
  *
  * @param uri current URI of the file open in editor
@@ -301,8 +310,8 @@ export function getConfig<T>(section: string) {
   return new Promise<T>((resolve, reject) => {
     return connection.sendRequest<T>("custom/getConfig", section).then((config) => {
       return resolve(config);
-    }, () => {
-      reject();
+    }, (e) => {
+      reject(e);
     });
   })
 }
@@ -385,13 +394,13 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 })
 
 // This handler provides the initial list of the completion items.
-connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
-  Log.get().info(`Called callback of onCompletion. File ${_textDocumentPosition.textDocument.uri}`);
+connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
+  Log.get().info(`Called callback of onCompletion. File ${textDocumentPosition.textDocument.uri}`);
   return new Promise((resolve, reject) => {
     getSnippetsRepositories().then((repositories) => {
-      const line = _textDocumentPosition.position.line;
-      const column = _textDocumentPosition.position.character;
-      const uri = _textDocumentPosition.textDocument.uri;
+      const line = textDocumentPosition.position.line;
+      const column = textDocumentPosition.position.character;
+      const uri = textDocumentPosition.textDocument.uri;
       const cacheFileName = buildCacheFileName(uri);
       const fullDocument = documents.get(uri);
       if (fullDocument) {
@@ -399,21 +408,23 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): The
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
           .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
           .setClassCompletion(new ClassCompletion(cacheFileName, uri, getSpecialClassPuller(uri)))
-          .setMethodCompletion(new MethodCompletion(uri))
+          .setMethodCompletion(new MethodCompletion(uri, (_args: any) => {
+            return sendExternalMethodCompletion(textDocumentPosition);
+          }))
           .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
           .generateCompletionItems().then((items) => {
-            Log.get().info(`Generated ${items.length} CompletionItems. File: ${_textDocumentPosition.textDocument.uri}`);
+            Log.get().info(`Generated ${items.length} CompletionItems. File: ${textDocumentPosition.textDocument.uri}`);
             resolve(items);
           }).catch(() => {
-            Log.get().error(`Error loading Completion Items. CobolCompletionItemFactory.generateCompletionItems() is rejected. File: ${_textDocumentPosition.textDocument.uri}`);
+            Log.get().error(`Error loading Completion Items. CobolCompletionItemFactory.generateCompletionItems() is rejected. File: ${textDocumentPosition.textDocument.uri}`);
             reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items"))
           })
       } else {
-        Log.get().error(`Error loading Completion Items. fullDocument is undefined. File: ${_textDocumentPosition.textDocument.uri}`);
+        Log.get().error(`Error loading Completion Items. fullDocument is undefined. File: ${textDocumentPosition.textDocument.uri}`);
         reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
       };
     }).catch(() => {
-      Log.get().error(`Error loading Completion Items. Error to getConfig snippetsRepositories. File: ${_textDocumentPosition.textDocument.uri}`);
+      Log.get().error(`Error loading Completion Items. Error to getConfig snippetsRepositories. File: ${textDocumentPosition.textDocument.uri}`);
       reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
     });
   });
@@ -428,8 +439,8 @@ function getSnippetsRepositories(): Promise<string[]> {
       getConfig<string[]>("snippetsRepositories").then((repositories) => {
         snippetsRepositories = repositories;
         resolve(repositories);
-      }).catch(() => {
-        reject();
+      }).catch((e) => {
+        reject(e);
       })
     }
   })
@@ -712,8 +723,8 @@ export function callCobolReferencesFinder(word: string, documentFullText: string
       .findReferences(word)
       .then((positions: RechPosition[]) => {
         return resolve(positions);
-      }).catch(() => {
-        reject();
+      }).catch((e) => {
+        reject(e);
       })
   });
 }
@@ -785,8 +796,8 @@ export function configureServerLog() {
       if (loggingActive) {
         Log.get().setActive(true);
       }
-    }).catch(() => {
-      return reject();
+    }).catch((e) => {
+      return reject(e);
     });
     loggingConfigured = true;
     return resolve(undefined);

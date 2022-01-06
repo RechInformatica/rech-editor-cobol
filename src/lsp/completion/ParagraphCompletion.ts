@@ -68,8 +68,8 @@ export class ParagraphCompletion implements CompletionInterface {
                     ParagraphCompletion.cacheSourceFileName = this.cacheFileName;
                     ParagraphCompletion.cache = this.generateParagraphCompletion(BufferSplitter.split(buffer.toString()), true);
                     return resolve();
-                }).catch(() => {
-                    return reject();
+                }).catch((e) => {
+                    return reject(e);
                 })
             });
         });

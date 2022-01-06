@@ -41,11 +41,11 @@ export class Diagnostician {
       this.findErrorsAndWarnings(textDocument, preprocessCallback, externalGetCopyHierarchy, externalDiagnosticFilter, isDeprecatedWarning, copyUsageLocator).then(cobolDiagnostic => {
           this.extractDiagnostics(cobolDiagnostic).then(diagnostics => {
             return resolve(diagnostics);
-          }).catch(() => {
-            return reject();
+          }).catch((e) => {
+            return reject(e);
           });
-        }).catch(() => {
-          return reject();
+        }).catch((e) => {
+          return reject(e);
         });
     });
   }
@@ -138,7 +138,7 @@ export class Diagnostician {
             new File(program).loadBuffer("latin1").then((buffer) => {
               this.findErrorsAndWarningsRunningPreproc(
                 buffer,
-                copyPath,
+                new Path(program),
                 dir,
                 (uri: string) => {
                   return preprocessCallback(uri, directory.fileName)
@@ -251,9 +251,9 @@ export class Diagnostician {
             return reject(error);
           });
       },
-      () => {
+      (e) => {
         Log.get().info("FindErrorsAndWarnings from " + documentPath + " has finished with error on runWhenPossible from PreprocManager");
-        return reject();
+        return reject(e);
       }
     );
     });
