@@ -286,10 +286,24 @@ export function sendExternalPreprocessExecution(uri: string, path: string) {
 /**
  * Sends a request to the client for find copy usages
  *
- * @param files copy file
+ * @param copy copy file
  */
-export function sendExternalCopyUsageLocatorExecution(files: string[]) {
-  return connection.sendRequest<string[]>("custom/copyUsageLocator", [files]);
+export function sendExternalCopyUsageLocatorExecution(copy: string): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    getConfig<boolean>("diagnoseCopy").then((diagnoseCopy) => {
+      if (diagnoseCopy) {
+        return connection.sendRequest<string[]>("custom/copyUsageLocator", copy).then((result) => {
+          return resolve(result);
+        }).catch((e) => {
+          return reject(e);
+        });
+      } else {
+        return reject("DiagnoseCopy not enabled");
+      }
+    }).catch((e) => {
+      return reject(e);
+    });
+  });
 }
 
 /**

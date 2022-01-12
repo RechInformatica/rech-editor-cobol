@@ -85,6 +85,11 @@
 					"description": "Controls whether COBOL folding is allowed.",
 					"default": true
 				},
+				"rech.editor.cobol.diagnoseCopy": {
+					"type": "boolean",
+					"description": "Controls whether should diagnose copy files",
+					"default": true
+				},
 				"rech.editor.cobol.log": {
 					"type": "boolean",
 					"description": "Controls whether Rech Cobol extension logging is active.",
