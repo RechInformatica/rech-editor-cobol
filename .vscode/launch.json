@@ -36,9 +36,8 @@
 				"--extensionDevelopmentPath=${workspaceRoot}"
 			],
 			"outFiles": [
-                "${workspaceRoot}/out/**/*.js"
+                "${workspaceFolder}/out/**/*.js"
             ],
-			"preLaunchTask": "npm: compile"
 		},
 		{
 			"type": "node",
@@ -49,7 +48,8 @@
 			"restart": true,
 			"outFiles": [
 				"${workspaceRoot}/out/**/*.js"
-			]
+			],
+			"preLaunchTask": "npm: compile"
 		},
 		{
 			"name": "Language Server E2E Test",

@@ -35,7 +35,7 @@ export class Diagnostician {
     externalGetCopyHierarchy: (uri: string) => Thenable<string>,
     externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>,
     isDeprecatedWarning?: (diagnosticMessage: string) => Thenable<boolean>,
-    copyUsageLocator?: (copys: string[]) => Thenable<string[]>
+    copyUsageLocator?: (copy: string) => Thenable<string[]>
   ): Promise<Diagnostic[]> {
     return new Promise((resolve, reject) => {
       this.findErrorsAndWarnings(textDocument, preprocessCallback, externalGetCopyHierarchy, externalDiagnosticFilter, isDeprecatedWarning, copyUsageLocator).then(cobolDiagnostic => {
@@ -63,7 +63,7 @@ export class Diagnostician {
     externalGetCopyHierarchy: (uri: string) => Thenable<string>,
     externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>,
     isDeprecatedWarning?: (diagnosticMessage: string) => Thenable<boolean>,
-    copyUsageLocator?: (copys: string[]) => Thenable<string[]>
+    copyUsageLocator?: (copy: string) => Thenable<string[]>
   ): Promise<CobolDiagnostic> {
     return new Promise<CobolDiagnostic>((resolve, reject) => {
       // If not a cobol processable source
@@ -121,7 +121,7 @@ export class Diagnostician {
     externalGetCopyHierarchy: (uri: string) => Thenable<string>,
     externalDiagnosticFilter?: (diagnosticMessage: string) => Thenable<boolean>,
     isDeprecatedWarning?: (diagnosticMessage: string) => Thenable<boolean>,
-    copyUsageLocator?: (copys: string[]) => Thenable<string[]>
+    copyUsageLocator?: (copy: string) => Thenable<string[]>
   ): Promise<CobolDiagnostic> {
     return new Promise((resolve, reject) => {
       const directory = new File(new Path(tmpFile.fileName).directory());
@@ -130,7 +130,7 @@ export class Diagnostician {
       }
       tmpFile.saveBuffer(Buffer.from(text), "latin1").then(() => {
         if (copyUsageLocator) {
-          copyUsageLocator([copyPath.fileName()]).then((programs) => {
+          copyUsageLocator(copyPath.fileName()).then((programs) => {
             if (programs.length < 1) {
               return reject("The copy usage locator canot find results from " + copyPath.fullPathWin());
             }

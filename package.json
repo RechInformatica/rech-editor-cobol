@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with Visual Studio Code",
-	"version": "1.0.108",
+	"version": "1.0.109",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.47.0"
@@ -83,6 +83,11 @@
 				"rech.editor.cobol.folding": {
 					"type": "boolean",
 					"description": "Controls whether COBOL folding is allowed.",
+					"default": true
+				},
+				"rech.editor.cobol.diagnoseCopy": {
+					"type": "boolean",
+					"description": "Controls whether should diagnose copy files",
 					"default": true
 				},
 				"rech.editor.cobol.log": {

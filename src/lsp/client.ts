@@ -12,6 +12,7 @@ import { FoldStatusBar } from './fold/FoldStatusBar';
 import { ExpandedSourceStatusBar } from '../cobol/ExpandedSourceStatusBar';
 import * as dj from '../dependencieInjection';
 import { isArray } from 'util';
+import { CopyUsageLocator } from './completion/copy/CopyUsageLocator';
 
 /**
  * Language Server Provider client
@@ -168,9 +169,9 @@ export class Client {
 					});
 				})
 			});
-			Client.client.onRequest("custom/copyUsageLocator", (files: string[]) => {
+			Client.client.onRequest("custom/copyUsageLocator", (copy: string) => {
 				return new Promise<string[]>((resolve, reject) => {
-					Client.createCopyUsageLocatorExecutionPromise(files).then((result) => {
+					Client.createCopyUsageLocatorExecutionPromise(copy).then((result) => {
 						return resolve(result);
 					}).catch((e) => {
 						return reject(e);
@@ -228,23 +229,15 @@ export class Client {
 	/**
 	 * Creates a promise for copy usage locator execution
 	 *
-	 * @param files file array with necessary files
+	 * @param copy Copy file to find uses
 	 */
-	private static createCopyUsageLocatorExecutionPromise(files: string[]): Promise<string[]> {
+	private static createCopyUsageLocatorExecutionPromise(copy: string): Promise<string[]> {
 		return new Promise((resolve, reject) => {
-			const command = Editor.getCopyUsageLocator();
-			if (!command) {
-				return reject("CopyUsageLocator is not defined");
-			}
-			commands.executeCommand(command, files).then((result) => {
-				if (result && isArray(result)) {
-					return resolve(<string[]>result);
-				} else {
-					return reject("Unexpected result of CopyUsageLocator function");
-				}
-			}, (err) => {
-				return reject(err);
-			})
+			CopyUsageLocator.findUsage(copy).then((result) => {
+				return resolve(result);
+			}).catch((e) => {
+				return reject(e);
+			});
 		});
 	}
 
