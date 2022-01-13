@@ -23,7 +23,7 @@ export class CobolDiagnosticPreprocManager {
     file: File,
     fileContent: Buffer,
     callback: (file: string) => any,
-    errorCallback: () => any
+    errorCallback: (error: any) => any
   ) {
     if (CobolDiagnosticPreprocManager.preprocessCallbackCalled) {
       CobolDiagnosticPreprocManager.pendingCallbacks.push(callback);
@@ -50,7 +50,7 @@ export class CobolDiagnosticPreprocManager {
   private static saveSourceAndRunPreproc(preprocessCallback: (uri: string) => Thenable<string>,
   file: File,
   fileContent: Buffer,
-  errorCallback: () => any
+  errorCallback: (error: any) => any
   ) {
     file.saveBuffer(fileContent, "latin1").then(() => {
       CobolDiagnosticPreprocManager.runPreproc(
@@ -58,9 +58,9 @@ export class CobolDiagnosticPreprocManager {
         file,
         errorCallback
       );
-    }).catch(() => {
+    }).catch((e) => {
       Log.get().info("CobolDiagnosticPreprocManager Error to save buffer " + file);
-      errorCallback();
+      errorCallback(e);
     }
     );
   }
@@ -76,7 +76,7 @@ export class CobolDiagnosticPreprocManager {
   private static runPreproc(
     preprocessCallback: (uri: string) => Thenable<string>,
     file: File,
-    errorCallback: () => any
+    errorCallback: (error: any) => any
   ) {
     const currentPendingCallbacks = CobolDiagnosticPreprocManager.pendingCallbacks;
     CobolDiagnosticPreprocManager.pendingCallbacks = [];

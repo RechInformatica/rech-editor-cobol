@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with Visual Studio Code",
-	"version": "1.0.107",
+	"version": "1.0.108",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.47.0"
@@ -130,7 +130,7 @@
 				"editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
 				"editor.trimAutoWhitespace": false,
 				"editor.useTabStops": false,
-				"editor.renderIndentGuides": false
+				"editor.guides.indentation": false
 			}
 		},
 		"languages": [

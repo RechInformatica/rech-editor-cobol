@@ -30,11 +30,11 @@ export class CobolFoldFactory {
           requestToHideFoldStatusBar();
         }
         resolve(result);
-      }).catch(() => {
+      }).catch((e) => {
         if (requestToHideFoldStatusBar) {
           requestToHideFoldStatusBar();
         }
-        reject();
+        return reject(e);
       });
     });
   }
@@ -58,8 +58,8 @@ export class CobolFoldFactory {
           }
         });
         resolve(foldings);
-      }).catch(() => {
-        reject();
+      }).catch((e) => {
+        reject(e);
       })
     })
   }

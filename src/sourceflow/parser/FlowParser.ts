@@ -34,15 +34,15 @@ export class FlowParser {
                     contextArray.forEach((context) => {
                         this.parser(context.lineNumber, buffer).then(() => {
                             return resolve(this.flowMap);
-                        }).catch(() => {
-                            reject();
+                        }).catch((e) => {
+                            return reject(e);
                         });
                     })
                 } else {
                     return resolve(this.flowMap)
                 }
-            }).catch(() => {
-                return reject();
+            }).catch((e) => {
+                return reject(e);
             });
         })
     }

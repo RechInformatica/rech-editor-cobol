@@ -45,8 +45,8 @@ export class VariableCompletion implements CompletionInterface {
             this.lineNumber = line;
             this.rangeColumn = CompletionUtils.findWordStartWithinLine(column, lines[line]) - 1;
             const items: CompletionItem[] = [];
-            this.loadCache().catch(() => {
-                reject();
+            this.loadCache().catch((e) => {
+                reject(e);
             });
             const uri = this.uri ? this.uri : "";
             const cache = VariableCompletion.cache.get(uri);
@@ -122,8 +122,8 @@ export class VariableCompletion implements CompletionInterface {
                             const result = this.generateItemsFromCurrentBuffer(BufferSplitter.split(buffer.toString()), true);
                             VariableCompletion.cache.set(this.uri!, result);
                             return resolve([]);
-                        }).catch(() => {
-                            return reject();
+                        }).catch((e) => {
+                            return reject(e);
                         })
                     } else {
                         VariableCompletion.cache.set(this.uri!, this.generateItemsFromCurrentBuffer(<string[]>this.currentLines, false));

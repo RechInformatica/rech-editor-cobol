@@ -23,6 +23,8 @@ export class Editor {
   private static specialClassPuller: GenericExecutor;
   /** Copy usage locator command */
   private static copyUsageLocator: string;
+  /** External Method completion */
+  private static externalMethodCompletion: string;
 
   constructor() {
     this.editor = <TextEditor>this.getActiveEditor();
@@ -826,6 +828,22 @@ export class Editor {
    */
   public static getCopyUsageLocator() {
     return this.copyUsageLocator
+  }
+
+  /**
+   * Define the external method completion
+   *
+   * @param externalMethodCompletion
+   */
+  public static setExternalMethodCompletion(externalMethodCompletion: string) {
+    this.externalMethodCompletion = externalMethodCompletion
+  }
+
+  /**
+   * Returns the external method completion
+   */
+  public static getExternalMethodCompletion() {
+    return this.externalMethodCompletion
   }
 
   /**

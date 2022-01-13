@@ -26,8 +26,8 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
             this.refresh();
             this.flow.findFlow().then(() => {
                 this.refresh();
-            }).catch(() => {
-                console.log("Error to find flow");
+            }).catch((e) => {
+                console.log("Error to find flow. " + e);
             });
         }));
         context.subscriptions.push(commands.registerCommand('rech.editor.cobol.gotoFlowLine', (node: FlowNode) => {

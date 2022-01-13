@@ -27,8 +27,8 @@ export default class ContextFactory {
                     });
                 });
                 return resolve(result);
-            }).catch(() => {
-                return reject();
+            }).catch((e) => {
+                return reject(e);
             })
         })
     }

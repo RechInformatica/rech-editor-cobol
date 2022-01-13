@@ -66,7 +66,7 @@ export class CobolMethod {
 	 * @param buffer
 	 * @param special
 	 */
-	public static parseLines(lineNumber: number, column: number, buffer: string[]): Promise<CobolMethod | undefined> {
+	public static parseLines(lineNumber: number, column: number, buffer: string[]): Promise<CobolMethod> {
 		return new Promise((resolve, reject) => {
 			const classMatch = /\s+class-id.\s+([\w\-]+)/.exec(buffer.join("\n"))
 			let classs = "";
@@ -87,8 +87,8 @@ export class CobolMethod {
 				CobolMethod.extractThrows(lineNumber, column, buffer).then((throws) => {
 					const documentation = CobolMethod.extractDocumentation(lineNumber, buffer, params, returns, throws);
 					return resolve(new CobolMethod(methodName, lineNumber, column, classs, visibility, params, documentation, throws, returns));
-				}).catch(() => reject());
-			}).catch(() => reject());
+				}).catch((e) => reject(e));
+			}).catch((e) => reject(e));
 		});
 	}
 
@@ -125,7 +125,7 @@ export class CobolMethod {
 				noMatch = false;
 				this.buildCobolVariable(match[1], lineNumber, column, buffer)
 					.then((variable) => resolve(variable))
-					.catch(() => reject());
+					.catch((e) => reject(e));
 				break;
 			}
 			if (noMatch) {
@@ -166,7 +166,7 @@ export class CobolMethod {
 						}
 					});
 					resolve(throws);
-				}).catch(() => reject());
+				}).catch((e) => reject(e));
 			}
 			if (noMatch) {
 				return resolve(throws);
@@ -193,9 +193,9 @@ export class CobolMethod {
 							.then((buffer) => {
 								const bufferArray = BufferSplitter.split(buffer);
 								return resolve(CobolVariable.parseLines(position.line, bufferArray, { noChildren: true, noSection: true, noScope: true, ignoreMethodReturn: true }));
-							}).catch(() => reject());
+							}).catch((e) => reject(e));
 					}
-				}).catch(() => reject());
+				}).catch((e) => reject(e));
 		})
 	}
 

@@ -77,8 +77,8 @@ export class ElementsDisplayerFactory {
       } else {
         FileUtils.read(position.file, "latin1").then((buffer) => {
           resolve(buffer);
-        }).catch(() => {
-          reject()
+        }).catch((e) => {
+          reject(e)
         })
       }
     })

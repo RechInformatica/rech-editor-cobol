@@ -26,7 +26,7 @@ export class CobolDeclarationFinder implements FindInterface {
       this.findDeclarationInBuffer(findParams)
         .then((result) => {
           if (result) {
-            resolve(result);
+            return resolve(result);
           } else {
             new PreprocDeclarationFinder(this.splittedBuffer)
               .findDeclaration(findParams)

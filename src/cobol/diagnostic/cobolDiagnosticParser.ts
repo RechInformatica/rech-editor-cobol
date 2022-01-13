@@ -4,9 +4,8 @@ import { CobolDiagnostic } from "./cobolDiagnostic";
 import { File } from "../../commons/file";
 import { Path } from "../../commons/path";
 import { Scan, BufferSplitter } from "rech-ts-commons";
-import Q, { reject } from "q";
+import Q from "q";
 import { CompletionUtils } from "../../lsp/commons/CompletionUtils";
-import { CobolDiagnosticPreprocManager } from "./cobolDiagnosticPreprocManager";
 import { CobolDiagnosticGetCopyHierarchyManager } from "./cobolDiagnosticGetCopyHierarchyManager";
 
 /**
@@ -42,19 +41,19 @@ export class CobolDiagnosticParser {
       if (CobolDiagnosticParser.copyHierarchy.get(fileName)) {
         this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter, isDeprecatedWarning).then((result) => {
           return resolve(result);
-        }).catch(() => {
-          return reject();
+        }).catch((e) => {
+          return reject(e);
         })
       } else {
         CobolDiagnosticGetCopyHierarchyManager.runWhenPossible(externalGetCopyHierarchy, fileName, (resultCopyHierarchy) => {
           CobolDiagnosticParser.copyHierarchy.set(fileName, resultCopyHierarchy);
           this.extractDiagnostic(preprocResult, fileName, externalDiagnosticFilter, isDeprecatedWarning).then((result) => {
             return resolve(result);
-          }).catch(() => {
-            return reject();
+          }).catch((e) => {
+            return reject(e);
           })
-        }, () => {
-          reject();
+        }, (e) => {
+          return reject(e);
         });
       }
     });
@@ -86,8 +85,8 @@ export class CobolDiagnosticParser {
           }
         });
         return resolve(this.buildCobolDiagnostic(diagnostics));
-      }).catch(() => {
-        return reject();
+      }).catch((e) => {
+        return reject(e);
       })
     });
   }
@@ -175,7 +174,7 @@ export class CobolDiagnosticParser {
             file,
             deprecated
           ));
-        }, () => reject());
+        }, (e) => reject(e));
       } else {
         resolve(this.createDiagnostic(
           fileName,

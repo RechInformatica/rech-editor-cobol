@@ -65,6 +65,7 @@ export class Client {
 			dj.defineCopyHierarchyFunction();
 			dj.defineSpecialClassPullerFunction();
 			dj.defineCopyUsageLocatorFunction();
+			dj.defineExternalMethodCompletionFunction();
 		}).catch();
 	}
 
@@ -73,13 +74,19 @@ export class Client {
 	 */
 	private static configureClientWhenReady() {
 		if (Client.client) {
+			Client.client.onRequest("custom/runExternalMethodCompletion", (params: any) => {
+				return new Promise<any>((resolve, reject) => {
+					Log.get().info("ExternalMethodCompletion was called in client side");
+					Client.createExternalMethodCompletionPromise(params).then((result) => resolve(result)).catch((e) => reject(e));
+				});
+			});
 			Client.client.onRequest("custom/runPreprocExpander", (files: string[]) => {
 				return new Promise<any>((resolve, reject) => {
 					Log.get().info("PreprocExpander was called in client side. Files: " + files);
 					new SourceExpander().createExpanderExecutionPromise(files).then((result) => {
 						resolve(result)
-					}).catch(() => {
-						reject();
+					}).catch((e) => {
+						reject(e);
 					});
 				});
 			});
@@ -88,8 +95,8 @@ export class Client {
 					Log.get().info("Preprocessor was called in client side. Files" + files);
 					Client.createPreprocessorExecutionPromise(files).then((result) => {
 						resolve(result)
-					}).catch(() => {
-						reject();
+					}).catch((e) => {
+						reject(e);
 					});
 				});
 			});
@@ -98,8 +105,8 @@ export class Client {
 					Log.get().info("CopyHierarchy was called in client side. Uri: " + uri);
 					Client.createCopyHierarchyPromise(uri).then((result) => {
 						resolve(result);
-					}).catch(() => {
-						reject();
+					}).catch((e) => {
+						reject(e);
 					});
 				});
 			});
@@ -107,8 +114,8 @@ export class Client {
 				return new Promise<any>((resolve, reject) => {
 					Client.getConfig(section).then((result) => {
 						resolve(result);
-					}).catch(() => {
-						reject();
+					}).catch((e) => {
+						reject(e);
 					})
 				})
 			});
@@ -156,8 +163,8 @@ export class Client {
 				return new Promise<string>((resolve, reject) => {
 					Client.createSpecialClassPullerPromise(uri).then((result) => {
 						resolve(result);
-					}).catch(() => {
-						reject();
+					}).catch((e) => {
+						reject(e);
 					});
 				})
 			});
@@ -199,6 +206,26 @@ export class Client {
 	}
 
 	/**
+	 * Creates a promise for Cobol Preprocessor execution
+	 *
+	 * @param files file array with necessary files
+	 */
+	 private static createExternalMethodCompletionPromise(param: any): Promise<any> {
+		return new Promise<string>((resolve, reject) => {
+			const command = Editor.getExternalMethodCompletion();
+			if (command) {
+				commands.executeCommand(command, param).then((result) => {
+					return resolve(<string> result);
+				}, ((err) => {
+					return reject(err);
+				}));
+			} else {
+				return reject("ExternalMethodCompletion is not defined");
+			}
+		});
+	}
+
+	/**
 	 * Creates a promise for copy usage locator execution
 	 *
 	 * @param files file array with necessary files
@@ -234,8 +261,8 @@ export class Client {
 			if (executor) {
 				executor.setPath(currentFile).setExtraParams([extraCopyDirectory]).exec().then((output) => {
 					resolve(output);
-				}).catch(() => {
-					reject();
+				}).catch((e) => {
+					reject(e);
 				});
 			} else {
 				reject();
@@ -254,8 +281,8 @@ export class Client {
 			if (executor) {
 				executor.setPath(uri).exec().then((buffer) => {
 					resolve(buffer);
-				}).catch(() => {
-					reject();
+				}).catch((e) => {
+					reject(e);
 				});
 			} else {
 				reject();
@@ -272,8 +299,8 @@ export class Client {
 			if (executor) {
 				executor.setPath(uri).exec().then((classes: string) => {
 					resolve(classes);
-				}).catch(() => {
-					reject();
+				}).catch((e) => {
+					reject(e);
 				});
 			} else {
 				reject("No SpecialClassPuller avaliable");

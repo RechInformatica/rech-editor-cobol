@@ -77,3 +77,13 @@ export function defineCopyUsageLocatorFunction() {
         Editor.setCopyUsageLocator(commandForCopyUsageLocator);
     }
 }
+
+/**
+ * Sets external Method completion
+ */
+export function defineExternalMethodCompletionFunction() {
+    const commandToConfigExternalMethodCompletion = new Configuration("rech.editor.cobol.callback").get<string>("externalMethodCompletion");
+    if (commandToConfigExternalMethodCompletion) {
+        Editor.setExternalMethodCompletion(commandToConfigExternalMethodCompletion);
+    }
+}

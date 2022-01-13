@@ -28,8 +28,8 @@ export class Parser {
       }
       Q.all(this.getAllLocalVariables(text)).then(() => {
         return resolve(undefined);
-      }).catch(() => {
-        return reject();
+      }).catch((e) => {
+        return reject(e);
       })
     });
   }
@@ -52,11 +52,11 @@ export class Parser {
             this.getUsesFromVariable(text, variable).then((usesFromVariable) => {
               Q.all(usesFromVariable).then(() => {
                 return resolve(undefined);
-              }).catch(() => {
-                return reject();
+              }).catch((e) => {
+                return reject(e);
               })
-            }).catch(() => {
-              return reject();
+            }).catch((e) => {
+              return reject(e);
             })
             return resolve(undefined);
           } else {
@@ -140,8 +140,8 @@ export class Parser {
           }
         });
         return resolve(copys);
-      }).catch(() => {
-        return reject();
+      }).catch((e) => {
+        return reject(e);
       })
     });
   }
@@ -164,7 +164,7 @@ export class Parser {
               return reject();
             }
             return resolve(copy);
-          }).catch(() => reject());
+          }).catch((e) => reject(e));
         })
       );
     });

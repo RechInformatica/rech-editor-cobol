@@ -125,8 +125,8 @@ export class WhenCompletion implements CompletionInterface {
                     preselect: true,
                     kind: CompletionItemKind.Keyword
                 }]);
-            }).catch(() => {
-                reject();
+            }).catch((e) => {
+                reject(e);
             });
         })
     }
@@ -188,8 +188,8 @@ export class WhenCompletion implements CompletionInterface {
                     }
                 }
                 resolve(result);
-            }).catch(() => {
-                reject();
+            }).catch((e) => {
+                reject(e);
             })
         });
     }
@@ -248,14 +248,13 @@ export class WhenCompletion implements CompletionInterface {
                     const currentLine = parentFileLines[i];
                     if (new ParserCobol().getDeclaracaoVariavelIgnoreReplace(currentLine)) {
                         if (!this.is88LevelDeclaration(currentLine)) {
-                            resolve([new RechPosition(i, 0, position.file), parentFileLines, declarationLine]);
-                            return;
+                            return resolve([new RechPosition(i, 0, position.file), parentFileLines, declarationLine]);
                         }
                     }
                 }
-                reject();
-            }).catch(() => {
-                reject()
+                return reject();
+            }).catch((e) => {
+                return reject(e)
             });
         });
     }

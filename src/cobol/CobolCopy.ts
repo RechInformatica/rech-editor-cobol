@@ -117,8 +117,8 @@ export class CobolCopy {
                 } else {
                     return reject();
                 }
-            }, () => {
-                return reject();
+            }, (e) => {
+                return reject(e);
             });
 
         });

@@ -21,8 +21,8 @@ export default class ParagraphContextOriginFinder implements ContextOriginFinder
                     }
                 });
                 return resolve(result);
-            }).catch(() => {
-                reject();
+            }).catch((e) => {
+                return reject(e);
             });
         });
     }
