@@ -13,6 +13,7 @@ import { ExpandedSourceStatusBar } from '../cobol/ExpandedSourceStatusBar';
 import * as dj from '../dependencieInjection';
 import { isArray } from 'util';
 import { CopyUsageLocator } from './completion/copy/CopyUsageLocator';
+import { ExpandedSourceCacheStatusBar } from '../cobol/ExpandedSourceCacheStatusBar';
 
 /**
  * Language Server Provider client
@@ -189,6 +190,12 @@ export class Client {
 			});
 			Client.client.onRequest("custom/hideStatusBarFromSourceExpander", () => {
 				ExpandedSourceStatusBar.hide();
+			});
+			Client.client.onRequest("custom/showStatusBarFromSourceExpanderCache", (file?: string) => {
+				ExpandedSourceCacheStatusBar.show(file);
+			});
+			Client.client.onRequest("custom/hideStatusBarFromSourceExpanderCache", () => {
+				ExpandedSourceCacheStatusBar.hide();
 			});
 			Client.client.onRequest("custom/sourceOfVariableCompletions", () => {
 				return new Promise<string>((resolve, reject) => {

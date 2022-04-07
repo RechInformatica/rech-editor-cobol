@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with Visual Studio Code",
-	"version": "1.0.110",
+	"version": "1.0.111",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.47.0"
@@ -98,7 +98,13 @@
 				"rech.editor.cobol.maxCacheTimeFromExpandedSource": {
 					"type": "number",
 					"description": "Maximum time to keep expanded source cache in milliseconds",
-					"default": 300
+					"default": 30000
+				},
+				"rech.editor.cobol.returnsLastCacheFromExpandedSource": {
+					"type": "boolean",
+					"description": "Indicates whether to return the last cache when reaching the maximum cache time",
+					"default": true
+
 				},
 				"rech.editor.cobol.invertEspecialColorsInLightTheme": {
 					"type": "boolean",

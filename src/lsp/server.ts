@@ -102,6 +102,10 @@ ExpandedSourceManager.setStatusBarFromSourceExpander((file?: string) => {
   return connection.sendRequest("custom/showStatusBarFromSourceExpander", file);
 }, () => {
   return connection.sendRequest("custom/hideStatusBarFromSourceExpander");
+}, () => {
+  return connection.sendRequest("custom/showStatusBarFromSourceExpanderCache");
+}, () => {
+  return connection.sendRequest("custom/hideStatusBarFromSourceExpanderCache");
 });
 
 /** When requesto to return the declaration position of term */
@@ -137,8 +141,9 @@ documents.onDidSave(document => {
   // Update the folding
   loadFolding(document);
   connection.client.register(FoldingRangeRequest.type, undefined);
+  configureExpandedSourceCache();
   // Update the expanded source
-  new ExpandedSourceManager(uri).expandSource().then().catch()
+  new ExpandedSourceManager(uri).expandSource().then().catch();
   // Clear the variableCompletion cache
   VariableCompletion.removeCache(uri);
   // Clear the copy hierarchy from cache
@@ -147,12 +152,15 @@ documents.onDidSave(document => {
 
 // If the document opened
 documents.onDidOpen(document => {
+  const uri = document.document.uri;
+  // Load the expanded source
+  new ExpandedSourceManager(uri).expandSource().then().catch();
   configureServerLog().then().catch();
   // Validate the document
   validateTextDocument(document.document, true).then().catch();
   // Load the folding
   loadFolding(document);
-  definesMaxCacheTimeFromExpandedSourceConfig();
+  configureExpandedSourceCache();
 });
 
 // If the document closed
@@ -257,11 +265,14 @@ export async function validateTextDocument(textDocument: TextDocument, event: "o
 }
 
 /**
- * Sends a request to the client to get a max cache time from expanded source configuration and configures it on this aplication
+ * Get user configs and configure ExpandedSource cache
  */
-function definesMaxCacheTimeFromExpandedSourceConfig() {
+function configureExpandedSourceCache() {
   getConfig<number>("maxCacheTimeFromExpandedSource").then((maxCacheTime) => {
     ExpandedSourceManager.setMaxCacheTime(maxCacheTime);
+  })
+  getConfig<boolean>("returnsLastCacheFromExpandedSource").then((returnsLastCache) => {
+    ExpandedSourceManager.setReturnLastCache(returnsLastCache);
   })
 }
 

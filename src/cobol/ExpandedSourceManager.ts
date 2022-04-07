@@ -8,7 +8,9 @@ import { Log } from "../commons/Log";
  */
 export class ExpandedSourceManager {
   /** Max cache time in ms */
-  private static maxCacheTime = 300;
+  private static maxCacheTime = 30000;
+  /** Indicates whether to return the last cache when reaching the maximum time */
+  private static returnsLastCache = false;
   /** Expanded sources */
   private static expandedSourceCache: Map<string, {time: number, expandedSource: string}> = new Map();
   /** callback to expander the source */
@@ -17,6 +19,11 @@ export class ExpandedSourceManager {
   private static callbackShowStatusBarFromSourceExpander: ((file?: string) => void) | undefined;
   /** callback to hide SatusBar from SourceExpander */
   private static callbackHideStatusBarFromSourceExpander: (() => void) | undefined;
+  /** callback to show SatusBar from SourceExpander Cache*/
+  private static callbackShowStatusBarFromSourceExpanderCache: ((file?: string) => void) | undefined;
+  /** callback to hide SatusBar from SourceExpander Cache */
+  private static callbackHideStatusBarFromSourceExpanderCache: (() => void) | undefined;
+
   /** Source to expand*/
   private source: string;
 
@@ -27,6 +34,15 @@ export class ExpandedSourceManager {
    */
   public static setMaxCacheTime(maxCacheTime: number) {
     ExpandedSourceManager.maxCacheTime = maxCacheTime;
+  }
+
+  /**
+   * Sets cache behavior when reaching maximum time
+   *
+   * @param returnsLastCache
+   */
+  public static setReturnLastCache(returnsLastCache: boolean) {
+    ExpandedSourceManager.returnsLastCache = returnsLastCache;
   }
 
   constructor(source: string) {
@@ -59,20 +75,20 @@ export class ExpandedSourceManager {
           if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
             ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
           }
-          resolve(buffer)
+          return resolve(buffer)
         }).catch((e) => {
           Log.get().error("Error to load expanded source. " + e);
           if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
             ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
           }
-          reject(e);
+          return reject(e);
         });
       }, (e) => {
         Log.get().error("callbackSourceExpander has returned a error to load expanded source. " + e);
         if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
           ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
         }
-        reject(e);
+        return reject(e);
       });
     });
   }
@@ -92,9 +108,14 @@ export class ExpandedSourceManager {
    * @param callbackSourceExpander
    * @param callbackSourceExpander
    */
-  public static setStatusBarFromSourceExpander(callbackShowStatusBarFromSourceExpander: (file?: string) => void, callbackHideStatusBarFromSourceExpander: () => void) {
+  public static setStatusBarFromSourceExpander(callbackShowStatusBarFromSourceExpander: (file?: string) => void,
+                                               callbackHideStatusBarFromSourceExpander: () => void,
+                                               callbackShowStatusBarFromSourceExpanderCache: (file?: string) => void,
+                                               callbackHideStatusBarFromSourceExpanderCache: () => void) {
     ExpandedSourceManager.callbackShowStatusBarFromSourceExpander = callbackShowStatusBarFromSourceExpander;
     ExpandedSourceManager.callbackHideStatusBarFromSourceExpander = callbackHideStatusBarFromSourceExpander;
+    ExpandedSourceManager.callbackShowStatusBarFromSourceExpanderCache = callbackShowStatusBarFromSourceExpanderCache;
+    ExpandedSourceManager.callbackHideStatusBarFromSourceExpanderCache = callbackHideStatusBarFromSourceExpanderCache;
   }
 
   /**
@@ -136,9 +157,46 @@ export class ExpandedSourceManager {
     const cache = ExpandedSourceManager.expandedSourceCache.get(source);
     if (!cache) return undefined;
     const currentTime = new Date().getTime();
-    if ((currentTime - cache.time) > ExpandedSourceManager.maxCacheTime) {
-      return undefined;
+    let cacheTime = currentTime - cache.time;
+    if (cacheTime > ExpandedSourceManager.maxCacheTime) {
+      Log.get().info("ExpandedSourceManager timeout of cache. Source: " + source + " cache time: " + cacheTime);
+      // Request a new ExpandedSource for update cache
+      Log.get().info("Called expandSource from " + source + " to refresh cache");
+      if (ExpandedSourceManager.callbackShowStatusBarFromSourceExpanderCache) {
+        ExpandedSourceManager.callbackShowStatusBarFromSourceExpanderCache(source);
+      }
+      new ExpandedSourceManager(source).expandSource().then(() => {
+        Log.get().info("expandSource from " + source + " called to refresh cache has finished");
+        if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpanderCache) {
+          ExpandedSourceManager.callbackHideStatusBarFromSourceExpanderCache();
+        }
+      }).catch((err) => {
+        Log.get().info("expandSource from " + source + " called to refresh cache has finished with error" + err);
+        if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpanderCache) {
+          ExpandedSourceManager.callbackHideStatusBarFromSourceExpanderCache();
+        }
+      });
+      if (ExpandedSourceManager.returnsLastCache) {
+        if (!cache.expandedSource) {
+          Log.get().info("Cache of " + source + " is empty, whaiting 500 miliseconds");
+          new Promise((resolve) => {
+            setTimeout(resolve, 500);
+          }).then(() => {
+            Log.get().info("Returned cache of " + source + " after wait.");
+            if (!cache.expandedSource) {
+              Log.get().info("The returned cache of " + source + " after wait is undefined");
+            }
+            return cache.expandedSource;
+          })
+        } else {
+          return cache.expandedSource;
+        }
+      } else {
+        Log.get().info("The returned undefined cache from " + source + " because returnsLastCache config is false");
+        return undefined;
+      }
     }
+    // Ensures that expandedSource is loaded
     return cache.expandedSource;
   }
 
@@ -159,6 +217,17 @@ export class ExpandedSourceManager {
    */
   public static removeSourceOfCache(source: string) {
     ExpandedSourceManager.expandedSourceCache.delete(source);
+  }
+
+  /**
+   * returns all sources on cache
+   */
+  public static getSourcesOnCache(): Array<string> {
+    let result:Array<string> = [];
+    ExpandedSourceManager.expandedSourceCache.forEach((_v, k) => {
+      result.push(k);
+    });
+    return result;
   }
 
   /**
