@@ -29,6 +29,7 @@ import {
   CodeAction,
   FoldingRangeRequest,
   TextDocumentSyncKind,
+  CompletionList
 } from "vscode-languageserver";
 import {
 	TextDocument
@@ -408,7 +409,7 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 })
 
 // This handler provides the initial list of the completion items.
-connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionItem[]> => {
+connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionList> => {
   Log.get().info(`Called callback of onCompletion. File ${textDocumentPosition.textDocument.uri}`);
   return new Promise((resolve, reject) => {
     getSnippetsRepositories().then((repositories) => {
@@ -428,7 +429,7 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Then
           .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
           .generateCompletionItems().then((items) => {
             Log.get().info(`Generated ${items.length} CompletionItems. File: ${textDocumentPosition.textDocument.uri}`);
-            resolve(items);
+            resolve({isIncomplete: false, items: items});
           }).catch(() => {
             Log.get().error(`Error loading Completion Items. CobolCompletionItemFactory.generateCompletionItems() is rejected. File: ${textDocumentPosition.textDocument.uri}`);
             reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items"))
