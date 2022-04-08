@@ -1,7 +1,9 @@
 import { File } from "./file";
 
 /* Log directory */
-const LOG_DIR: string = "C:\\TMP\\RechCobolLogs\\";
+const os = require('os');
+
+const LOG_DIR: string = os.tmpdir() + "\\RechCobolLogs\\";
 
 /**
  * Logger class

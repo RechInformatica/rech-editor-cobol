@@ -17,6 +17,7 @@ import FlowProvider from './sourceflow/treeView/providers/FlowProvider';
 import { IndentUtils } from './indent/indentUtils';
 import { CobolRefactor } from './cobol/refactor/CobolRefactor';
 import { DocumentationDecorator } from './decoration/DocumentationDecorator';
+import { ExpandedSourceCacheStatusBar } from './cobol/ExpandedSourceCacheStatusBar';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -36,6 +37,8 @@ async function _activate(context: any) {
     FoldStatusBar.buildStatusBar();
     // Build the statusBar from SourceExpander
     ExpandedSourceStatusBar.buildStatusBar();
+    // Build the statusBar from SourceExpander Cache
+    ExpandedSourceCacheStatusBar.buildStatusBar();
     // Configures the Logging instance on client side
     Log.get().setActive(configuration.get<boolean>("log"));
     // Starts the LSP Client
