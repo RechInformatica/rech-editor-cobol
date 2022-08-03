@@ -15,8 +15,8 @@ export class MoveInverter {
      * @param buffer buffer with move commands to be inverted
      */
     public invertOperators(buffer: string): string {
-        let regex = /^( +)move\s+([\w\-]+)([\(\w\-\)\, ]*)\s+to\s+([\w\-]+)(\(\w+\-\w+\,\s+\w+\-\w+\)|\(\w+\-\w+\))*(.*$)/gmi;
-        let replacedBuffer = buffer.replace(regex, "$1move $4$5 to $2$3$6");
+        const regex = /^( +)move\s+([\w\-]+)([\(\w\-\)\, ]*)\s+to\s+([\w\-]+)(\(\w+\-\w+\,\s+\w+\-\w+\)|\(\w+\-\w+\))*(.*$)/gmi;
+        const replacedBuffer = buffer.replace(regex, "$1move $4$5 to $2$3$6");
         return replacedBuffer;
     }
 

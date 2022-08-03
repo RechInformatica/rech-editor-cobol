@@ -1,6 +1,6 @@
-
 import { HighlightInterface } from "./HighlightInterface";
-import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
+import { TextDocument } from "vscode-languageserver-textdocument";
+import { DocumentHighlight, Position, Range } from "vscode-languageserver";
 import { BufferSplitter } from "rech-ts-commons";
 
 /** Terms of block */

@@ -44,11 +44,11 @@ export class CobolCopy {
      */
     public static parseLine(line: number, lines: string[], uri: string): Promise<CobolCopy | undefined> {
         return new Promise((resolve, reject) => {
-            let name = new ParserCobol().getCopyDeclaration(lines[line]);
+            const name = new ParserCobol().getCopyDeclaration(lines[line]);
             if (!name) {
                 return reject();
             }
-            let commentArray: string[] = []
+            const commentArray: string[] = []
             for (let i = line - 1; i > 0; i--) {
                 const docLine = lines[i];
                 if (docLine.trimLeft().startsWith("*>")) {
@@ -57,20 +57,20 @@ export class CobolCopy {
                     break;
                 }
             }
-            let localDoc = new CobolDocParser().parseCobolDoc(commentArray).comment;
+            const localDoc = new CobolDocParser().parseCobolDoc(commentArray).comment;
             let comment: string[] = [];
             if (localDoc.length > 0) {
                 comment = localDoc
             }
-            let replacingList = this.getReplacingList(line, lines);
-            let delclarationRawMatcher = /\s+(copy\s+.+(cpy|cpb)).*/.exec(lines[line])
+            const replacingList = this.getReplacingList(line, lines);
+            const declarationRawMatcher = /\s+(copy\s+.+(cpy|cpb)).*/.exec(lines[line])
             let raw = ""
             let extension = ""
-            if (delclarationRawMatcher) {
-                raw = delclarationRawMatcher[1]
-                extension = delclarationRawMatcher[2]
+            if (declarationRawMatcher) {
+                raw = declarationRawMatcher[1]
+                extension = declarationRawMatcher[2]
             }
-            let copyFile = this.buildUri(uri, `${name}.${extension}`);
+            const copyFile = this.buildUri(uri, `${name}.${extension}`);
             this.getHeaderOfCopy(copyFile).then((header) => {
                 return resolve(new CobolCopy(name!, extension, raw, replacingList, copyFile.fileName, line, comment, header));
             }).catch(() => {
@@ -91,8 +91,8 @@ export class CobolCopy {
             }
             const commentExractorFromCopyFilesCommand = new Configuration("rech.editor.cobol.callback").get<string>("commentExractorFromCopyFiles");
             if (!commentExractorFromCopyFilesCommand || commentExractorFromCopyFilesCommand == "") {
-                let copyBuffer = BufferSplitter.split(copy.loadBufferSync("latin1"));
-                let comments: string[] = [];
+                const copyBuffer = BufferSplitter.split(copy.loadBufferSync("latin1"));
+                const comments: string[] = [];
                 for (let lineNumber = 0; lineNumber < copyBuffer.length; lineNumber++) {
                     const line = copyBuffer[lineNumber];
                     if (line.trimLeft().startsWith("*>")) {
@@ -105,7 +105,7 @@ export class CobolCopy {
                         break;
                     }
                 }
-                let comment = new CobolDocParser().parseCobolDoc(comments).comment;
+                const comment = new CobolDocParser().parseCobolDoc(comments).comment;
                 if (!(comment.length > 0)) {
                     return reject();
                 }
@@ -131,11 +131,11 @@ export class CobolCopy {
      * @param uri
      */
     private static buildUri(uri: string, nameAndExtension: string): File {
-        let path = new Path(uri);
+        const path = new Path(uri);
         let file = new File(path.directory() + "/" + nameAndExtension);
         // Return the current file if exist, else returns in default directorie.
         // If not exist the file in default directorie returns te current directorie
-        let currentCopysName = file;
+        const currentCopysName = file;
         if (file.exists()) return currentCopysName;
         file = new File("F:/FONTES/" + nameAndExtension);
         if (file.exists()) return file;
@@ -149,15 +149,15 @@ export class CobolCopy {
      * @param lines
      */
     private static getReplacingList(line: number, lines: string[]): Map<string, string> {
-        let result = new Map<string, string>();
+        const result = new Map<string, string>();
         if (!this.hasReplacing(lines[line])) {
             return result;
         }
         for (let i = line; i < lines.length; i++) {
             const copyLineDeclaration = lines[i];
-            let match = this.getReplacingTerm(copyLineDeclaration)
+            const match = this.getReplacingTerm(copyLineDeclaration)
             if (match) {
-                let term = match[1];
+                const term = match[1];
                 let replacement = match[2];
                 replacement = replacement.replace(/\.$/gm, "");
                 result.set(term, replacement)

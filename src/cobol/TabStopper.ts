@@ -46,7 +46,7 @@ export class TabStopper {
         editor.edit(edit => {
             for (var x = 0; x < sel.length; x++) {
                 if (sel[x].start.line === sel[x].end.line) {
-                    var position = sel[x].start;
+                    const position = sel[x].start;
                     if (inserting) {
                         this.singleSelectionTab(edit, position);
                     } else {
@@ -114,9 +114,9 @@ export class TabStopper {
             var charpos = selection.start.character;
             if (charpos === 0) {
                 const pttrn = /^\s*/;
-                var selline = doc.getText(selection);
+                const selline = doc.getText(selection);
                 if (selline !== null) {
-                    var match = selline.match(pttrn);
+                    const match = selline.match(pttrn);
                     if (match !== null) {
                         charpos = match[0].length;
                     }
@@ -133,7 +133,7 @@ export class TabStopper {
      * @param pos current position
      */
     private tabSize(pos: number) {
-        var tabs = this.getTabs();
+        const tabs = this.getTabs();
         var tab = 0;
         for (var index = 0; index < tabs.length; index++) {
             tab = tabs[index];
@@ -153,7 +153,7 @@ export class TabStopper {
      * @param pos current position
      */
     private unTabSize(pos: number) {
-        var tabs = this.getTabs();
+        const tabs = this.getTabs();
         if (pos > tabs[tabs.length - 1]) {
             if ((pos - tabs[tabs.length - 1]) % 3 === 0) {
                 return 3;
@@ -161,7 +161,7 @@ export class TabStopper {
             return (pos - tabs[tabs.length - 1]) % 3;
         }
         for (var index = tabs.length - 1; index > -1; index--) {
-            var tab = tabs[index];
+            const tab = tabs[index];
             if (tab < pos) {
                 return pos - tab;
             }

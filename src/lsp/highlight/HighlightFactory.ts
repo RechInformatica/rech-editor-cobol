@@ -1,4 +1,5 @@
-import { TextDocument, DocumentHighlight } from "vscode-languageserver";
+import { TextDocument } from "vscode-languageserver-textdocument";
+import { DocumentHighlight } from "vscode-languageserver";
 import { DefaultHighlight } from "./DefaultHighlight";
 import { IfHighlight } from "./IfHighlight";
 import { EvaluateHighlight } from "./EvaluateHighlight";

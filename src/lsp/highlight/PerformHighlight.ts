@@ -1,6 +1,6 @@
-
 import { HighlightInterface } from "./HighlightInterface";
-import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
+import { TextDocument } from "vscode-languageserver-textdocument";
+import { DocumentHighlight, Position, Range } from "vscode-languageserver";
 import { DefaultHighlight } from "./DefaultHighlight";
 import { BufferSplitter } from "rech-ts-commons";
 
@@ -9,12 +9,12 @@ const BEGINBLOCKTERM = "perform"
 const ENDBLOCKTERM = "end-perform"
 
 /**
- * Class to return the behavior of highlight when is a 'if' term
+ * Class to return the behavior of highlight when is a 'perform' term
  */
 export class PerformHighlight implements HighlightInterface {
 
     isABlockTerm(word: string): boolean {
-        let match = /(perform|end-perform)/i.exec(word);
+        const match = /(perform|end-perform)/i.exec(word);
         if (match) {
             return true
         }
@@ -22,11 +22,11 @@ export class PerformHighlight implements HighlightInterface {
     }
 
     positions(text: TextDocument, word: string, currentLine: number, currentCharacter: number): DocumentHighlight[]{
-        let results: DocumentHighlight[] = []
-        let buffer = BufferSplitter.split(text.getText());
-        let currentLineContent = buffer[currentLine];
+        const results: DocumentHighlight[] = []
+        const buffer = BufferSplitter.split(text.getText());
+        const currentLineContent = buffer[currentLine];
         // If is pharagraph perform
-        if (/\s*perform\s*([\w\-]*)((?:\sthru\s.*)|(?:.+\stimes))?[\.|\,]/.exec(currentLineContent.toLowerCase())) {
+        if (/\s*perform.+\s*([\w\-]*)((?:\sthru\s.*)|(?:.+\stimes))?[\.|\,]/.exec(currentLineContent.toLowerCase())) {
             return new DefaultHighlight().positions(text, word, currentLine, currentCharacter)
         }
         let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
