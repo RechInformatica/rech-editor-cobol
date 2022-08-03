@@ -1,5 +1,6 @@
 "use babel";
-import { TextDocument, Diagnostic, DiagnosticRelatedInformation } from "vscode-languageserver";
+import { Diagnostic, DiagnosticRelatedInformation } from "vscode-languageserver";
+import { TextDocument } from "vscode-languageserver-textdocument";
 import { CobolDiagnostic } from "./cobolDiagnostic";
 import { Path } from "../../commons/path";
 import { File } from "../../commons/file";
@@ -69,7 +70,7 @@ export class Diagnostician {
       // If not a cobol processable source
       const documentPath = new Path(textDocument.uri);
       Log.get().info("FindErrorsAndWarnings from " + documentPath);
-      let text = textDocument.getText();
+      const text = textDocument.getText();
       const dir = new File(DIAGNOSTIC_ROOT_DIR + require("os").userInfo().username + "\\");
       if (!dir.exists()) {
         dir.mkdir();
@@ -180,8 +181,8 @@ export class Diagnostician {
    */
   private filterErrorsAndWarningsFromCopyFile(diagnostic: CobolDiagnostic, copyPath: Path): Promise<CobolDiagnostic> {
     return new Promise((resolve, reject) => {
-      let errors = this.adjustDiagnostic(diagnostic.errors, copyPath);
-      let warnings = this.adjustDiagnostic(diagnostic.warnings, copyPath);
+      const errors = this.adjustDiagnostic(diagnostic.errors, copyPath);
+      const warnings = this.adjustDiagnostic(diagnostic.warnings, copyPath);
       if (warnings.length == 0 && errors.length == 0) {
         return reject("Erros and warnings of " + copyPath.baseName() + " not found!");
       }
@@ -200,14 +201,14 @@ export class Diagnostician {
       if (!d.relatedInformation) {
         return new Path(d.source).baseName().toUpperCase() == copyPath.baseName().toUpperCase();
       }
-      let relatedInformation: DiagnosticRelatedInformation = d.relatedInformation[0];
+      const relatedInformation: DiagnosticRelatedInformation = d.relatedInformation[0];
       return new Path(relatedInformation.location.uri).baseName().toUpperCase() == copyPath.baseName().toUpperCase();
     });
     result = result.map((d) => {
       if (!d.relatedInformation) {
         return d;
       }
-      let relatedInformation: DiagnosticRelatedInformation = d.relatedInformation[0];
+      const relatedInformation: DiagnosticRelatedInformation = d.relatedInformation[0];
       d.source = relatedInformation.location.uri;
       d.range = relatedInformation.location.range;
       return d;

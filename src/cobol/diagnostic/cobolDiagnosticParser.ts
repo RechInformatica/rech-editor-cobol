@@ -135,7 +135,7 @@ export class CobolDiagnosticParser {
           if (result) {
             this.buildDiagnosticOfError(fileName, message, file, line, error, isDeprecatedWarning).then((diagnostic) => {
               resolve(diagnostic);
-            });
+            }).catch(() => {});
           } else {
             return reject();
           }

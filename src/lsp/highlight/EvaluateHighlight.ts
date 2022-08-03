@@ -1,6 +1,6 @@
-
 import { HighlightInterface } from "./HighlightInterface";
-import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
+import { TextDocument } from "vscode-languageserver-textdocument";
+import { DocumentHighlight, Position, Range } from "vscode-languageserver";
 import { BufferSplitter } from "rech-ts-commons";
 
 /** Terms of block */
@@ -9,7 +9,7 @@ const ENDBLOCKTERM = "end-evaluate"
 const WHENTERM = "when"
 
 /**
- * Class to return the behavior of highlight when is a 'if' term
+ * Class to return the behavior of highlight when is a 'evaluate' term
  */
 export class EvaluateHighlight implements HighlightInterface {
 

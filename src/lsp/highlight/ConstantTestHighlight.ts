@@ -1,6 +1,6 @@
-
 import { HighlightInterface } from "./HighlightInterface";
-import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
+import { DocumentHighlight, Position, Range } from "vscode-languageserver";
+import { TextDocument } from "vscode-languageserver-textdocument";
 
 /** Clauses from constant test */
 const CLAUSE_IF = "$if";
@@ -21,7 +21,7 @@ export class ConstantTestHighlight implements HighlightInterface {
         return false
     }
 
-    positions(text: TextDocument, _word: string, currentLine: number, _currentCharacter: number): DocumentHighlight[]{
+    positions(text: TextDocument, _word: string, currentLine: number, _currentCharacter: number): DocumentHighlight[] {
         const results: DocumentHighlight[] = []
         const ifPosition = this.findClauseIftOfTest(text.getText().split("\n"), currentLine);
         if (!ifPosition) {
@@ -68,7 +68,7 @@ export class ConstantTestHighlight implements HighlightInterface {
      * Find the $else term from constant test
      *
      * @param buffer
-     * @param currentLine
+     * @param ifPosition
      */
     private findClauseElsetOfTest(buffer: string[], ifPosition: number): number | undefined {
         let numberOfIfs = 0;
@@ -97,7 +97,7 @@ export class ConstantTestHighlight implements HighlightInterface {
      * Find the $end term from constant test
      *
      * @param buffer
-     * @param currentLine
+     * @param ifPosition
      */
     private findClauseEndtOfTest(buffer: string[], ifPosition: number): number | undefined {
         let numberOfIfs = 0;
@@ -120,12 +120,12 @@ export class ConstantTestHighlight implements HighlightInterface {
     /**
      * Builds and returns the DocumentHighlight of the term
      *
-     * @param iterator
+     * @param line
      * @param word
      */
     private buildDocumentHighlight(line: number, word: string): DocumentHighlight {
         return {
-            range:  Range.create(
+            range: Range.create(
                 Position.create(line, START_COLUMN_FOR_TEST),
                 Position.create(line, START_COLUMN_FOR_TEST + word.length)
             )

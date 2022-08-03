@@ -157,7 +157,7 @@ export class ExpandedSourceManager {
     const cache = ExpandedSourceManager.expandedSourceCache.get(source);
     if (!cache) return undefined;
     const currentTime = new Date().getTime();
-    let cacheTime = currentTime - cache.time;
+    const cacheTime = currentTime - cache.time;
     if (cacheTime > ExpandedSourceManager.maxCacheTime) {
       Log.get().info("ExpandedSourceManager timeout of cache. Source: " + source + " cache time: " + cacheTime);
       // Request a new ExpandedSource for update cache
@@ -187,6 +187,8 @@ export class ExpandedSourceManager {
               Log.get().info("The returned cache of " + source + " after wait is undefined");
             }
             return cache.expandedSource;
+          }).catch((err) => {
+            Log.get().info("expandSource from " + source + " called to return last cache has finished with error" + err);
           })
         } else {
           return cache.expandedSource;
@@ -223,7 +225,7 @@ export class ExpandedSourceManager {
    * returns all sources on cache
    */
   public static getSourcesOnCache(): Array<string> {
-    let result:Array<string> = [];
+    const result: Array<string> = [];
     ExpandedSourceManager.expandedSourceCache.forEach((_v, k) => {
       result.push(k);
     });

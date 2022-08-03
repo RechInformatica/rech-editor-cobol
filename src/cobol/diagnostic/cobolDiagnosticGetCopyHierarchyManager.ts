@@ -75,7 +75,7 @@ export class CobolDiagnosticGetCopyHierarchyManager {
         Log.get().info("CobolDiagnosticGetCopyHierarchyManager preproc was called " + fileName);
         currentCallback(buffer);
       });
-      let remaining = CobolDiagnosticGetCopyHierarchyManager.pendingCallbacks;
+      const remaining = CobolDiagnosticGetCopyHierarchyManager.pendingCallbacks;
       if (remaining.size > 0) {
         remaining.forEach((_callback, file) => {
           CobolDiagnosticGetCopyHierarchyManager.runGetCopyHierarchy(

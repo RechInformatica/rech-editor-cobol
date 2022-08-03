@@ -1,4 +1,5 @@
-import { TextDocument, DocumentHighlight } from "vscode-languageserver";
+import { TextDocument } from "vscode-languageserver-textdocument";
+import { DocumentHighlight } from "vscode-languageserver";
 
 /**
  * Interface to return the highlight positions

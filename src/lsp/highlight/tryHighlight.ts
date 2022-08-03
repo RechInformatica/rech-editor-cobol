@@ -1,6 +1,6 @@
-
+import { TextDocument } from "vscode-languageserver-textdocument";
 import { HighlightInterface } from "./HighlightInterface";
-import { TextDocument, DocumentHighlight, Position, Range } from "vscode-languageserver";
+import { DocumentHighlight, Position, Range } from "vscode-languageserver";
 import { BufferSplitter } from "rech-ts-commons";
 
 /** Terms of block */
@@ -10,7 +10,7 @@ const CATCHTERM = "catch"
 const FINALLYTERM = "finally"
 
 /**
- * Class to return the behavior of highlight when is a 'if' term
+ * Class to return the behavior of highlight when is a 'try' term
  */
 export class TryHighlight implements HighlightInterface {
 
@@ -23,7 +23,7 @@ export class TryHighlight implements HighlightInterface {
     }
 
     positions(text: TextDocument, _word: string, currentLine: number, _currentCharacter: number): DocumentHighlight[]{
-        let results: DocumentHighlight[] = []
+        const results: DocumentHighlight[] = []
         let buffer = BufferSplitter.split(text.getText());
         let currentLineContent = buffer[currentLine];
         let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
