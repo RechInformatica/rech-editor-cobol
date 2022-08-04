@@ -1,7 +1,6 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
 import { File } from "../../commons/file";
-import { configuration } from "../../helpers/configuration";
 
 /**
  * Snippets previously loaded from JSON file.

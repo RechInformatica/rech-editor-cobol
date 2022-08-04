@@ -2,6 +2,7 @@
 
 import * as fs from 'fs';
 import { denodeify } from 'q';
+import { Path } from './path';
 
 /** constant function to append file */
 const appendFile = denodeify(fs.appendFile);
@@ -29,7 +30,7 @@ export class File {
    */
   public static tmpFile(): File {
     const timestamp = Date.now().toString();
-    return new File("C:\\tmp\\" + timestamp + ".txt");
+    return new File(Path.tmpdir() + Path.sep() + timestamp + ".txt");
   }
 
   /**

@@ -13,18 +13,32 @@ export class Path {
   }
 
   /**
-   * Retorna o diretório com barra no final
+   * Returns the default path separator
+   */
+  public static sep(): string {
+    return require('path').sep;
+  }
+
+  /**
+   * Returns the current user temp directory
+   */
+  public static tmpdir(): string {
+    return require("os").tmpdir();
+  }
+
+  /**
+   * Returns the directory with final path separator
    */
   directory() {
-    if (this.path.endsWith("\\")) {
+    if (this.path.endsWith(Path.sep())) {
       return this.path;
     } else {
-      return this.path.substring(0, this.path.lastIndexOf('\\') + 1);
+      return this.path.substring(0, this.path.lastIndexOf(Path.sep()) + 1);
     }
   }
 
   fileName() {
-    return this.path.substring(this.path.lastIndexOf('\\') + 1, this.path.length);
+    return this.path.substring(this.path.lastIndexOf(Path.sep()) + 1, this.path.length);
   }
 
   baseName() {
