@@ -239,6 +239,6 @@ export class ExpandedSourceManager {
    */
   public static buildExpandedSourceFileName(source: string): string {
     const path = new Path(source).fullPathWin();
-    return "C:\\TMP\\PREPROC\\" + require("os").userInfo().username.toLowerCase() + "\\" +  new Path(path).fileName();
+    return require("os").tmpdir() + Path.sep() + "PREPROC" + Path.sep() + require("os").userInfo().username.toLowerCase() + Path.sep() +  new Path(path).fileName();
   }
 }
