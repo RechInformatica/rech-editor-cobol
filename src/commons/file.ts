@@ -30,7 +30,7 @@ export class File {
    */
   public static tmpFile(): File {
     const timestamp = Date.now().toString();
-    return new File(require("os").tmpdir() + Path.sep() + timestamp + ".txt");
+    return new File(Path.tmpdir() + Path.sep() + timestamp + ".txt");
   }
 
   /**

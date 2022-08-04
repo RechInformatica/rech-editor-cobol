@@ -762,7 +762,7 @@ export function callCobolReferencesFinder(word: string, documentFullText: string
  */
 export function buildCacheFileName(uri: string) {
   const path = new Path(uri).fullPathWin();
-  return require("os").tmpdir() + Path.sep() + "PREPROC" + Path.sep() + require("os").userInfo().username.toLowerCase() + Path.sep() + new Path(path).fileName();
+  return Path.tmpdir() + Path.sep() + "PREPROC" + Path.sep() + require("os").userInfo().username.toLowerCase() + Path.sep() + new Path(path).fileName();
 }
 
 /**

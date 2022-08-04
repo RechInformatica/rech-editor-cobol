@@ -67,7 +67,7 @@ export class Diagnostician {
       const documentPath = new Path(textDocument.uri);
       Log.get().info("FindErrorsAndWarnings from " + documentPath);
       const text = textDocument.getText();
-      const dir = new File(require("os").tmpdir() + Path.sep() + "Diagnostic" + Path.sep() + require("os").userInfo().username + Path.sep());
+      const dir = new File(Path.tmpdir() + Path.sep() + "Diagnostic" + Path.sep() + require("os").userInfo().username + Path.sep());
       if (!dir.exists()) {
         dir.mkdir();
       }

@@ -20,6 +20,13 @@ export class Path {
   }
 
   /**
+   * Returns the current user temp directory
+   */
+  public static tmpdir(): string {
+    return require("os").tmpdir();
+  }
+
+  /**
    * Returns the directory with final path separator
    */
   directory() {
