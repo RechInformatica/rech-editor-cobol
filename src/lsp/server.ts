@@ -125,7 +125,7 @@ connection.onRequest("custom/findDeclarationPosition", (word: string, referenceL
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
-  validateTextDocument(change.document, "onChange").then().catch();
+  validateTextDocument(change.document, "onChange").then().catch(() => {});
   // Clear the folding cache
   // Does this not folding if the source has any changes
   CobolFoldFactory.foldingCache.delete(change.document.uri);
@@ -137,13 +137,13 @@ documents.onDidChangeContent(change => {
 documents.onDidSave(document => {
   const uri = document.document.uri;
   // Validate the document
-  validateTextDocument(document.document, "onSave").then().catch();
+  validateTextDocument(document.document, "onSave").then().catch(() => {});
   // Update the folding
   loadFolding(document);
   connection.client.register(FoldingRangeRequest.type, undefined);
   configureExpandedSourceCache();
   // Update the expanded source
-  new ExpandedSourceManager(uri).expandSource().then().catch();
+  new ExpandedSourceManager(uri).expandSource().then().catch(() => {});
   // Clear the variableCompletion cache
   VariableCompletion.removeCache(uri);
   // Clear the copy hierarchy from cache
@@ -154,10 +154,10 @@ documents.onDidSave(document => {
 documents.onDidOpen(document => {
   const uri = document.document.uri;
   // Load the expanded source
-  new ExpandedSourceManager(uri).expandSource().then().catch();
-  configureServerLog().then().catch();
+  new ExpandedSourceManager(uri).expandSource().then().catch(() => {});
+  configureServerLog().then().catch(() => {});
   // Validate the document
-  validateTextDocument(document.document, true).then().catch();
+  validateTextDocument(document.document, true).then().catch(() => {});
   // Load the folding
   loadFolding(document);
   configureExpandedSourceCache();
@@ -204,7 +204,7 @@ export function loadFolding(document: TextDocumentChangeEvent<TextDocument>) {
             () => sendRequestToHideFoldStatusBar()
           )
           .then()
-          .catch();
+          .catch(() => {});
       } else {
         sendRequestToHideFoldStatusBar();
       }

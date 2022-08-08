@@ -79,7 +79,9 @@ export class Diagnostician {
           Log.get().info("Rejected because: " + error + ". extension: " + documentPath.extension().toUpperCase());
           return reject(error);
         }).finally(() => {
-          tmpFile.delete();
+          if (tmpFile.exists()) {
+            tmpFile.delete();
+          }
         });
       } else {
         this.findErrorsAndWarningsRunningPreproc(text,

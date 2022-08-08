@@ -126,7 +126,7 @@ export class CobolDiagnosticParser {
     return new Promise((resolve, reject) => {
       const match = pattern.exec(currentLine);
       if (!match) {
-        return reject();
+        return reject(`Line ${currentLine} not match ${pattern}`);
       }
       let fullError, message: any, file: any, line: any, error: any;
       [fullError, message, file, line, error] = match;
@@ -134,10 +134,12 @@ export class CobolDiagnosticParser {
         externalDiagnosticFilter(message).then((result) => {
           if (result) {
             this.buildDiagnosticOfError(fileName, message, file, line, error, isDeprecatedWarning).then((diagnostic) => {
-              resolve(diagnostic);
-            }).catch(() => {});
+              return resolve(diagnostic);
+            }).catch((e) => {
+              return reject(e);
+            });
           } else {
-            return reject();
+            return reject('result of externalDiagnosticFilter is empty');
           }
         });
       } else {

@@ -77,9 +77,9 @@ export class File {
       }
       fs.readFile(this.fileName, { encoding: encoding }, (err, buffer)=> {
         if (err) {
-          reject(err);
+          return reject(err);
         }
-        resolve(buffer)
+        return resolve(buffer)
       });
     });
   }
