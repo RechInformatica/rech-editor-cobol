@@ -89,9 +89,9 @@ export class CobolFoldFactory {
           folded = true;
           resolve(cobolFold.fold(line, lines));
         }
-      })
+      });
       if (!folded) {
-        reject();
+        return reject("invalid folded");
       }
     });
   }

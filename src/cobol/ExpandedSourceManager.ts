@@ -69,6 +69,12 @@ export class ExpandedSourceManager {
       ExpandedSourceManager.callbackSourceExpander(this.source, ExpandedSourceManager.buildExpandedSourceFileName(this.source)).then(() => {
         Log.get().info("ExpandedSourceManager.callbackSourceExpander was finality");
         const file = new File(ExpandedSourceManager.buildExpandedSourceFileName(this.source));
+        if (!file.exists()) {
+          if (ExpandedSourceManager.callbackHideStatusBarFromSourceExpander) {
+            ExpandedSourceManager.callbackHideStatusBarFromSourceExpander();
+          }
+          return reject(`File ${file.fileName} not exist`);
+        }
         file.loadBuffer("latin1").then((buffer) => {
           ExpandedSourceManager.setExpandedSourceInCache(this.source, buffer);
           Log.get().info("Expanded source loaded successfully");
