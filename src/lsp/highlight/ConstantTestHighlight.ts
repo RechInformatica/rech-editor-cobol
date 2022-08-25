@@ -23,12 +23,12 @@ export class ConstantTestHighlight implements HighlightInterface {
 
     positions(text: TextDocument, _word: string, currentLine: number, _currentCharacter: number): DocumentHighlight[] {
         const results: DocumentHighlight[] = []
-        const ifPosition = this.findClauseIftOfTest(text.getText().split("\n"), currentLine);
+        const ifPosition = this.findClauseIftOfTest(text.getText().replace(/\r/g, "").split("\n"), currentLine);
         if (!ifPosition) {
             return results;
         }
-        const elsePosition = this.findClauseElsetOfTest(text.getText().split("\n"), ifPosition);
-        const endPosition = this.findClauseEndtOfTest(text.getText().split("\n"), ifPosition);
+        const elsePosition = this.findClauseElsetOfTest(text.getText().replace(/\r/g, "").split("\n"), ifPosition);
+        const endPosition = this.findClauseEndtOfTest(text.getText().replace(/\r/g, "").split("\n"), ifPosition);
         if (!endPosition) {
             return results;
         }
