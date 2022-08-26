@@ -76,7 +76,7 @@ export class ClassCompletion implements CompletionInterface {
    */
   private parserSpecialClasses(classes: string): Map<string, CompletionItem> {
     const items: Map<string, CompletionItem> = new Map;
-    const buffer = classes.split("\n");
+    const buffer = classes.replace(/\r/g, "").split("\n");
     for (let i = 0; i < buffer.length; i++) {
       const linha = buffer[i];
       if (!linha.trim().startsWith("#")) {

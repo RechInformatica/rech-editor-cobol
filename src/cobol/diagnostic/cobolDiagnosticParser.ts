@@ -375,7 +375,7 @@ export class CobolDiagnosticParser {
     const pattern = new RegExp("^[^*]*" + source, "gi");
     let copyArray;
     if (copys) {
-      copyArray = copys.split("\n");
+      copyArray = copys.replace(/\r/g, "").split("\n");
     } else {
       return "Copy not found";
     }

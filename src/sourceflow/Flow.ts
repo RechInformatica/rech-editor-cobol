@@ -19,7 +19,7 @@ export default class Flow {
         editor.showInformationMessage("Finding possible flows starting from current line...");
         return new Promise((resolve, reject) => {
             this.startingLine = editor.getCurrentRow();
-            this.currentBuffer = editor.getEditorBuffer().split("\n");
+            this.currentBuffer = editor.getEditorBuffer().replace(/\r/g, "").split("\n");
             new FlowParser().parser(this.startingLine, this.currentBuffer).then((map) => {
                 this.flowMap = map;
                 editor.showInformationMessage("Flow finding ended successfully!");

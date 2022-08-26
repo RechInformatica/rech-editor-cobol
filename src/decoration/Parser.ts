@@ -26,11 +26,11 @@ export class Parser {
       if (!this.needDifferentiateVariablesByScope(text)) {
         return resolve(undefined);
       }
-      Q.all(this.getAllLocalVariables(text)).then(() => {
+      Q.allSettled(this.getAllLocalVariables(text)).then((_r) => {
         return resolve(undefined);
       }).catch((e) => {
         return reject(e);
-      })
+      });
     });
   }
 
@@ -43,13 +43,18 @@ export class Parser {
   private getAllLocalVariables(text: string): Promise<undefined>[] {
     const PromiseArray:Promise<undefined>[] = []
     // Regexp to find variables declarations in source
+    const textLF = text.replace(/\r/g, "");
     const regex = /^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm
-    new Scan(text).scan(regex, (iterator: any) => {
+    new Scan(textLF).scan(regex, (iterator: any) => {
       PromiseArray.push(
         new Promise((resolve, reject) => {
-          const variable = CobolVariable.parseLines(iterator.row, text.split("\n"), {noChildren: true, noSection: true, ignoreMethodReturn: true, noComment: true});
+          const buffer = textLF.split("\n");
+          if (buffer[iterator.row].trim().length == 0) {
+            return resolve(undefined);
+          }
+          const variable = CobolVariable.parseLines(iterator.row, buffer, {noChildren: true, noSection: true, ignoreMethodReturn: true, noComment: true});
           if (VariableUtils.isLocalScope(variable)) {
-            this.getUsesFromVariable(text, variable).then((usesFromVariable) => {
+            this.getUsesFromVariable(textLF, variable).then((usesFromVariable) => {
               Q.all(usesFromVariable).then(() => {
                 return resolve(undefined);
               }).catch((e) => {
@@ -89,7 +94,7 @@ export class Parser {
       if (!endMethodLine) {
         return reject();
       }
-      shortText = shortText.substr(0, endMethodLine.index + endMethodLine[1].length)
+      shortText = shortText.substr(0, endMethodLine.index + endMethodLine[1].length).replace(/\r/g, "")
       new Scan(shortText).scan(variableUseRegex, (iterator: any) => {
         PromiseArray.push(
           new Promise((resolve, _reject) => {

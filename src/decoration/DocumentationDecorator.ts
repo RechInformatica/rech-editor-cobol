@@ -78,7 +78,7 @@ export class DocumentationDecorator {
         const colors = new Configuration("rech.editor.cobol").get<any>("especialColors");
         const color = { dark: {color: colors.rechAutoDocumentation, backgroundColor: "transparent"},
                        light: {color: DocumentationDecorator.parser.invertHex(colors.rechAutoDocumentation), backgroundColor: "transparent"} };
-        const lines = activeEditor.document.getText().split("\n");
+        const lines = activeEditor.document.getText().replace(/\r/g, "").split("\n");
         if (this.copyDocumentationDecorationType) {
             this.copyDocumentationDecorationType.dispose();
         }
