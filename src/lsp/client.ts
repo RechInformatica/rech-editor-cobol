@@ -86,9 +86,9 @@ export class Client {
 				return new Promise<any>((resolve, reject) => {
 					Log.get().info("PreprocExpander was called in client side. Files: " + files);
 					new SourceExpander().createExpanderExecutionPromise(files).then((result) => {
-						resolve(result)
+						return resolve(result)
 					}).catch((e) => {
-						reject(e);
+						return reject(e);
 					});
 				});
 			});
@@ -96,9 +96,9 @@ export class Client {
 				return new Promise<any>((resolve, reject) => {
 					Log.get().info("Preprocessor was called in client side. Files" + files);
 					Client.createPreprocessorExecutionPromise(files).then((result) => {
-						resolve(result)
+						return resolve(result)
 					}).catch((e) => {
-						reject(e);
+						return reject(e);
 					});
 				});
 			});
@@ -106,18 +106,18 @@ export class Client {
 				return new Promise<any>((resolve, reject) => {
 					Log.get().info("CopyHierarchy was called in client side. Uri: " + uri);
 					Client.createCopyHierarchyPromise(uri).then((result) => {
-						resolve(result);
+						return resolve(result);
 					}).catch((e) => {
-						reject(e);
+						return reject(e);
 					});
 				});
 			});
 			Client.client.onRequest("custom/getConfig", (section: string) => {
 				return new Promise<any>((resolve, reject) => {
 					Client.getConfig(section).then((result) => {
-						resolve(result);
+						return resolve(result);
 					}).catch((e) => {
-						reject(e);
+						return reject(e);
 					})
 				})
 			});
@@ -125,9 +125,9 @@ export class Client {
 				return new Promise<any>((resolve, reject) => {
 					const result = cobolDiagnosticFilter.getAutoDiagnostic();
 					if (result !== undefined) {
-						resolve(result);
+						return resolve(result);
 					} else {
-						reject();
+						return reject();
 					}
 				});
 			});
@@ -135,9 +135,9 @@ export class Client {
 				return new Promise<Boolean>((resolve, reject) => {
 					const result = cobolDiagnosticFilter.isDiagnosticValid(diagnosticMessage);
 					if (result !== undefined) {
-						resolve(result);
+						return resolve(result);
 					} else {
-						reject();
+						return reject();
 					}
 				})
 			});
@@ -145,9 +145,9 @@ export class Client {
 				return new Promise<Boolean>((resolve, reject) => {
 					const result = cobolDiagnosticFilter.isDeprecatedWarning(diagnosticMessage);
 					if (result !== undefined) {
-						resolve(result);
+						return resolve(result);
 					} else {
-						reject(false);
+						return reject(false);
 					}
 				})
 			});
@@ -155,18 +155,18 @@ export class Client {
 				return new Promise<string>((resolve, reject) => {
 					const result = SourceOfCompletions.getSourceOfParagraphCompletions();
 					if (result !== undefined) {
-						resolve(result);
+						return resolve(result);
 					} else {
-						reject();
+						return reject();
 					}
 				})
 			});
 			Client.client.onRequest("custom/specialClassPuller", (uri: string) => {
 				return new Promise<string>((resolve, reject) => {
 					Client.createSpecialClassPullerPromise(uri).then((result) => {
-						resolve(result);
+						return resolve(result);
 					}).catch((e) => {
-						reject(e);
+						return reject(e);
 					});
 				})
 			});
@@ -201,9 +201,9 @@ export class Client {
 				return new Promise<string>((resolve, reject) => {
 					const result = SourceOfCompletions.getSourceOfVariableCompletions();
 					if (result !== undefined) {
-						resolve(result);
+						return resolve(result);
 					} else {
-						reject();
+						return reject();
 					}
 				})
 			});
@@ -260,12 +260,12 @@ export class Client {
 			const executor = Editor.getPreprocessor();
 			if (executor) {
 				executor.setPath(currentFile).setExtraParams([extraCopyDirectory]).exec().then((output) => {
-					resolve(output);
+					return resolve(output);
 				}).catch((e) => {
-					reject(e);
+					return reject(e);
 				});
 			} else {
-				reject();
+				return reject();
 			}
 		});
 	}
@@ -280,12 +280,12 @@ export class Client {
 			const executor = Editor.getCopyHierarchy();
 			if (executor) {
 				executor.setPath(uri).exec().then((buffer) => {
-					resolve(buffer);
+					return resolve(buffer);
 				}).catch((e) => {
-					reject(e);
+					return reject(e);
 				});
 			} else {
-				reject();
+				return reject();
 			}
 		});
 	}
@@ -298,12 +298,12 @@ export class Client {
 			const executor = Editor.getSpecialClassPuller();
 			if (executor) {
 				executor.setPath(uri).exec().then((classes: string) => {
-					resolve(classes);
+					return resolve(classes);
 				}).catch((e) => {
-					reject(e);
+					return reject(e);
 				});
 			} else {
-				reject("No SpecialClassPuller avaliable");
+				return reject("No SpecialClassPuller avaliable");
 			}
 		});
 	}
@@ -317,9 +317,9 @@ export class Client {
 		return new Promise<any>((resolve, reject) => {
 			const result = configuration.get(section, defaultValue);
 			if (result) {
-				resolve(result);
+				return resolve(result);
 			} else {
-				reject();
+				return reject();
 			}
 		});
 	}
@@ -344,13 +344,13 @@ export class Client {
 				const params = [word, referenceLine, referenceColumn, fullDocument, uri];
 				return Client.client.sendRequest<RechPosition | undefined>("custom/findDeclarationPosition", params).then((position) => {
 					if (position) {
-						resolve(position)
+						return resolve(position);
 					} else {
-						reject()
+						return reject();
 					}
 				})
 			} else {
-				reject()
+				return reject();
 			}
 		});
 	}

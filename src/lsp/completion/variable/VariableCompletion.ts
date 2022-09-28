@@ -31,9 +31,9 @@ export class VariableCompletion implements CompletionInterface {
     /** Column where user started typing variable name. This column tells VSCode where replacement should start within the current line */
     private rangeColumn: number = 0;
     /** Source of completions */
-    private sourceOfCompletions: Thenable<string> | undefined;
+    private sourceOfCompletions: (() => Thenable<string>) | undefined;
 
-    constructor(uri?: string, sourceOfCompletions?: Thenable<string>) {
+    constructor(uri?: string, sourceOfCompletions?: () => Thenable<string>) {
         this.uri = uri;
         this.sourceOfCompletions = sourceOfCompletions;
         this.insertTextBuilder = new VariableNameInsertTextBuilder();
@@ -46,7 +46,7 @@ export class VariableCompletion implements CompletionInterface {
             this.rangeColumn = CompletionUtils.findWordStartWithinLine(column, lines[line]) - 1;
             const items: CompletionItem[] = [];
             this.loadCache().catch((e) => {
-                reject(e);
+                return reject(e);
             });
             const uri = this.uri ? this.uri : "";
             const cache = VariableCompletion.cache.get(uri);
@@ -111,12 +111,12 @@ export class VariableCompletion implements CompletionInterface {
     private loadCache() {
         return new Promise((resolve, reject) => {
             if (!this.uri) {
-                reject();
+                return reject();
             }
             let awaitsResult = false;
             if (this.sourceOfCompletions) {
                 awaitsResult = true;
-                this.sourceOfCompletions.then((sourceOfCompletions) => {
+                this.sourceOfCompletions()!.then((sourceOfCompletions) => {
                     if (sourceOfCompletions == "expanded") {
                         ExpandedSourceManager.getExpandedSource(this.uri!).then((buffer) => {
                             const result = this.generateItemsFromCurrentBuffer(BufferSplitter.split(buffer.toString()), true);

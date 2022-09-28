@@ -174,7 +174,6 @@ export class CobolCompletionItemFactory {
   public generateConditionalCompletionItems(): Promise<CompletionItem[]> {
     return new Promise(async (resolve) => {
       try {
-
         switch (true) {
           case this.isCommentLine(): {
             return resolve([]);
@@ -234,7 +233,7 @@ export class CobolCompletionItemFactory {
           }
         }
       } catch(e) {
-        resolve([]);
+        return resolve([]);
       }
     });
   }
