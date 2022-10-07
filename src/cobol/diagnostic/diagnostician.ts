@@ -80,7 +80,7 @@ export class Diagnostician {
           return reject(error);
         }).finally(() => {
           if (tmpFile.exists()) {
-            tmpFile.delete();
+            tmpFile.deleteRetrying();
           }
         });
       } else {

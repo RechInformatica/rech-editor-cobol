@@ -2,13 +2,15 @@
 
 import * as fs from 'fs';
 import { denodeify } from 'q';
+import { Log } from './Log';
 import { Path } from './path';
 
 /** constant function to append file */
 const appendFile = denodeify(fs.appendFile);
 /** constant function to write file */
 const writeFile = denodeify(fs.writeFile);
-
+/** maximum number of deletion attempts */
+const max_deletion_attempts = 30;
 /**
  * Class to manipulate files
  */
@@ -137,7 +139,46 @@ export class File {
    * Delete file
    */
   public delete() {
-    fs.unlinkSync(this.fileName);
+    try {
+      fs.unlinkSync(this.fileName);
+    } catch (e) {
+      Log.get().error((e as Error).message);
+    }
+  }
+
+  /**
+   * Delete file Retrying
+   */
+  public async deleteRetrying() {
+    try {
+      await this.deleteRetryingLoop(0);
+    } catch (e) {
+      Log.get().error((e as any));
+    }
+  }
+
+  /**
+   * Delete file Retrying loop
+   */
+  private deleteRetryingLoop(i: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.delete();
+      if (!this.exists()) {
+        return resolve(true);
+      } else {
+        if (i >= max_deletion_attempts) {
+          return reject(false);
+        } else {
+          setTimeout(() => {
+            return this.deleteRetryingLoop(i + 1).then((r) => {
+              return resolve(r);
+            }).catch((e) => {
+              return reject(e);
+            });
+          }, 1000);
+        }
+      }
+    });
   }
 
   /**
