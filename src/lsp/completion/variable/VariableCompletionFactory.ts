@@ -8,9 +8,9 @@ export class VariableCompletionFactory {
     /** Uri of source file */
     private uri: string;
     /** Source of completions */
-    private sourceOfCompletions: Thenable<string>;
+    private sourceOfCompletions: () => Thenable<string>;
 
-    constructor(uri: string, sourceOfCompletions: Thenable<string>) {
+    constructor(uri: string, sourceOfCompletions: () => Thenable<string>) {
         this.uri = uri;
         this.sourceOfCompletions = sourceOfCompletions;
     }

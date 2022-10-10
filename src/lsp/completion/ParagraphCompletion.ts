@@ -29,7 +29,7 @@ export class ParagraphCompletion implements CompletionInterface {
     /** Column where user started typing paragraph name. This column tells VSCode where replacement should start within the current line */
     private rangeColumn: number = 0;
 
-    constructor(private cacheFileName: string, private uri: string, private sourceOfCompletions: Thenable<string>) {
+    constructor(private cacheFileName: string, private uri: string, private sourceOfCompletions: () => Thenable<string>) {
         this.parserCobol = new ParserCobol();
         this.cobolDocParser = new CobolDocParser();
     }
@@ -46,7 +46,7 @@ export class ParagraphCompletion implements CompletionInterface {
             } else {
                 items = Array.from(this.generateParagraphCompletion(this.currentLines, false).values());
             }
-            resolve(items);
+            return resolve(items);
         });
     }
 
@@ -58,7 +58,7 @@ export class ParagraphCompletion implements CompletionInterface {
      */
     private loadCache(): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.sourceOfCompletions.then((sourceOfCompletions) => {
+            this.sourceOfCompletions().then((sourceOfCompletions) => {
                 if (sourceOfCompletions == "local") {
                     ParagraphCompletion.cache = this.generateParagraphCompletion(<string[]>this.currentLines, false)
                     ParagraphCompletion.cacheSourceFileName = this.cacheFileName;

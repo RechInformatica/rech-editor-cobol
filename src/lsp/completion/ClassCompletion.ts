@@ -25,10 +25,10 @@ export class ClassCompletion implements CompletionInterface {
   /** Current lines in the source */
   private currentLines: string[] | undefined;
   /** Special class puller  */
-  private specialClassPuller: Thenable<string>;
+  private specialClassPuller: () => Thenable<string>;
 
 
-  constructor(cacheFileName: string, uri: string, specialClassPuller: Thenable<string>) {
+  constructor(cacheFileName: string, uri: string, specialClassPuller: () => Thenable<string>) {
     this.parserCobol = new ParserCobol();
     this.cobolDocParser = new CobolDocParser();
     this.cacheFileName = cacheFileName;
@@ -44,7 +44,7 @@ export class ClassCompletion implements CompletionInterface {
       if (ClassCompletion.cache && ClassCompletion.cacheSourceFileName == this.cacheFileName) {
         items = Array.from(ClassCompletion.cache.values());
       }
-      resolve(items);
+      return resolve(items);
     });
   }
 
@@ -56,12 +56,11 @@ export class ClassCompletion implements CompletionInterface {
    */
   private loadCache(): Promise<void> {
     return new Promise((resolve, _reject) => {
-      this.specialClassPuller.then((classes: string) => {
+      this.specialClassPuller().then((classes: string) => {
         ClassCompletion.cache = this.parserSpecialClasses(classes)
         ClassCompletion.cacheSourceFileName = this.cacheFileName;
         return resolve();
-      }, (cause)=> {
-        console.log(cause);
+      }, (_cause)=> {
         ClassCompletion.cache = this.generateClassCompletion(<string[]>this.currentLines)
         ClassCompletion.cacheSourceFileName = this.cacheFileName;
         return resolve();

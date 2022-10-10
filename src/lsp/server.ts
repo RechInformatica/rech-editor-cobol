@@ -432,26 +432,26 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Then
       if (fullDocument) {
         new CobolCompletionItemFactory(line, column, BufferSplitter.split(fullDocument.getText()), uri)
           .addCompletionImplementation(new DynamicJsonCompletion(repositories, uri))
-          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, getCurrentSourceOfParagraphCompletions()))
-          .setClassCompletion(new ClassCompletion(cacheFileName, uri, getSpecialClassPuller(uri)))
+          .setParagraphCompletion(new ParagraphCompletion(cacheFileName, uri, () => getCurrentSourceOfParagraphCompletions()))
+          .setClassCompletion(new ClassCompletion(cacheFileName, uri, () => getSpecialClassPuller(uri)))
           .setMethodCompletion(new MethodCompletion(uri, (_args: any) => {
             return sendExternalMethodCompletion(textDocumentPosition);
           }))
-          .setVariableCompletionFactory(new VariableCompletionFactory(uri, getCurrentSourceOfVariableCompletions()))
+          .setVariableCompletionFactory(new VariableCompletionFactory(uri, () => getCurrentSourceOfVariableCompletions()))
           .generateCompletionItems().then((items) => {
             Log.get().info(`Generated ${items.length} CompletionItems. File: ${textDocumentPosition.textDocument.uri}`);
-            resolve({isIncomplete: false, items: items});
-          }).catch(() => {
-            Log.get().error(`Error loading Completion Items. CobolCompletionItemFactory.generateCompletionItems() is rejected. File: ${textDocumentPosition.textDocument.uri}`);
-            reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items"))
+            return resolve({isIncomplete: false, items: items});
+          }).catch((err) => {
+            Log.get().error(`Error loading Completion Items. CobolCompletionItemFactory.generateCompletionItems() is rejected ${err}. File: ${textDocumentPosition.textDocument.uri}`);
+            return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items"))
           })
       } else {
         Log.get().error(`Error loading Completion Items. fullDocument is undefined. File: ${textDocumentPosition.textDocument.uri}`);
-        reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
+        return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
       };
-    }).catch(() => {
-      Log.get().error(`Error loading Completion Items. Error to getConfig snippetsRepositories. File: ${textDocumentPosition.textDocument.uri}`);
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
+    }).catch((err) => {
+      Log.get().error(`Error loading Completion Items. Error to getConfig snippetsRepositories.  Err ${err}. File: ${textDocumentPosition.textDocument.uri}`);
+      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
     });
   });
 });
@@ -460,13 +460,13 @@ let snippetsRepositories: string[] | undefined;
 function getSnippetsRepositories(): Promise<string[]> {
   return new Promise((resolve, reject) => {
     if (snippetsRepositories) {
-      resolve(snippetsRepositories)
+      return resolve(snippetsRepositories)
     } else {
       getConfig<string[]>("snippetsRepositories").then((repositories) => {
         snippetsRepositories = repositories;
-        resolve(repositories);
+        return resolve(repositories);
       }).catch((e) => {
-        reject(e);
+        return reject(e);
       })
     }
   })
@@ -570,14 +570,14 @@ connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location 
       Log.get().info(`Found declaration for ${word} starting`);
       createPromiseForWordDeclaration(text, params.position.line, params.position.character, word, params.textDocument.uri).then((location) => {
         Log.get().info("Found declaration for " + word + " in " + location.uri + ". Key pressed in " + params.textDocument.uri);
-        resolve(location);
+        return resolve(location);
       }).catch((e) => {
         Log.get().warning("Could not find declaration for " + word + ". Key pressed in " + params.textDocument.uri + " Error: " + e);
-        resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration1"));
+        return resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration1"));
       });
     } else {
       Log.get().error("Error to get the fullDocument within onDefinition");
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration2"));
+      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration2"));
     }
   })
 });
@@ -600,13 +600,13 @@ connection.onReferences((params: ReferenceParams): Thenable<Location[] | Respons
             locations.push(createLocation(params.textDocument.uri, currentPosition));
           }
         })
-        resolve(locations);
+        return resolve(locations);
       }).catch(() => {
-          resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references1"));
+        return resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references1"));
         });
     } else {
       Log.get().error("Error to get the fullDocument within onReferences");
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references2"));
+      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references2"));
     }
   });
 });
@@ -619,14 +619,14 @@ connection.onRenameRequest((params: RenameParams): Thenable<WorkspaceEdit | Resp
       const word = getLineText(text, params.position.line, params.position.character);
       callCobolReferencesFinder(word, text).then((positions: RechPosition[]) => {
         const textEdits = RenamingUtils.createEditsFromPositions(positions, word, params.newName);
-        resolve({ changes: { [params.textDocument.uri]: textEdits } });
+        return resolve({ changes: { [params.textDocument.uri]: textEdits } });
       })
         .catch(() => {
-          resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename1"));
+          return resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename1"));
         });
     } else {
       Log.get().error("Error to get the fullDocument within onRenameRequest");
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename2"));
+      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename2"));
     }
   });
 
@@ -643,13 +643,13 @@ connection.onCodeAction((params: CodeActionParams): Thenable<CodeAction[] | Resp
       new CobolActionFactory(range, BufferSplitter.split(text), uri)
         .generateActions(diagnostics)
         .then((actions) => {
-          resolve(actions);
+          return resolve(actions);
         }).catch(() => {
-          reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction inside CobolActionFactory"));
+          return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction inside CobolActionFactory"));
         });
     } else {
       Log.get().error("Error to get the fullDocument within onCodeAction");
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction because some information is undefined"));
+      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction because some information is undefined"));
     }
   });
 });
@@ -700,14 +700,14 @@ export function createPromiseForWordDeclaration(documentFullText: string, refere
       // If the delcaration was found on an external file
       if (position.file) {
         // Retrieves the location on the external file
-        resolve(createLocation(position.file, position));
+        return resolve(createLocation(position.file, position));
       } else {
         // Retrieves the location on the current file
-        resolve(createLocation(uri, position));
+        return resolve(createLocation(uri, position));
       }
     })
       .catch((e) => {
-        reject(e);
+        return reject(e);
       });
   });
 }
@@ -731,7 +731,7 @@ export function callCobolDeclarationFinder(word: string, referenceLine: number, 
       .then((position: RechPosition) => {
         return resolve(position);
       }).catch((e) => {
-        reject(e);
+        return reject(e);
       })
   })
 }
@@ -750,7 +750,7 @@ export function callCobolReferencesFinder(word: string, documentFullText: string
       .then((positions: RechPosition[]) => {
         return resolve(positions);
       }).catch((e) => {
-        reject(e);
+        return reject(e);
       })
   });
 }
