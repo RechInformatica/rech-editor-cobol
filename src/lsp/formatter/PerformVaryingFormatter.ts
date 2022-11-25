@@ -8,7 +8,7 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 export class PerformVaryingFormatter implements FormatterInterface {
 
     /** RegExp that identifies if it is the until of Perform varying clause*/
-    public static UNTIL_REGEXP = /^\s+(UNTIL|until)\s+.*/i;
+    public static UNTIL_REGEXP = /^ +(UNTIL|until)\s+.*/i;
 
     /**
      * Returns the line of the 'UNTIL' clause

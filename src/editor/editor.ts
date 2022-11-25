@@ -528,7 +528,7 @@ export class Editor {
    * Go to the next paragraph
    */
   findNextParagraph() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
     if (positionsToReturn) {
       this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
@@ -540,7 +540,7 @@ export class Editor {
    * Go to the previous paragraph
    */
   findPreviousParagraph() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
     if (positionsToReturn) {
       this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
@@ -552,7 +552,7 @@ export class Editor {
    * Get next paragraph position
    */
   getNextParagraphPosition() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
     if (positionsToReturn) {
       return new RechPosition(positionsToReturn[0].line, 7);
     } else {
@@ -564,7 +564,7 @@ export class Editor {
    * Go to the previous paragraph
    */
   getPreviousParagraphPosition() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
     if (positionsToReturn) {
       return new RechPosition(positionsToReturn[0].line, 7);
     } else {
@@ -577,7 +577,7 @@ export class Editor {
    */
   findNextBlankLine() {
     // Find a next blank line
-    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s*$/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^ *$/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
     // If not found a blank line or the line found is the last line
     if (positionsToReturn == undefined || positionsToReturn[0].line >= (this.editor.document.lineCount - 1)) {
       this.showInformationMessage("Next blank line not found");
@@ -598,7 +598,7 @@ export class Editor {
    */
   findPreviousBlankLine() {
     // Find a previous blank line
-    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^\s*$/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    let positionsToReturn = new PositionFinder(this.editor).findPositions(/^ *$/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
     // If not found a blank line or the line found is the last line
     if (positionsToReturn == undefined) {
       this.showInformationMessage("Previous blank line not found");

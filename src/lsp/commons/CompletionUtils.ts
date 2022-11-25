@@ -215,10 +215,10 @@ export class CompletionUtils {
    * @param lineText
    */
   public static isTheParagraphOrMethodDeclaration(lineText: string): boolean {
-    if (/^\s{7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g.exec(lineText)) {
+    if (/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g.exec(lineText)) {
       return true;
     }
-    if (/^\s+method-id\..*/gi.exec(lineText)) {
+    if (/^ +method-id\..*/gi.exec(lineText)) {
       return true;
     }
     return false;

@@ -144,7 +144,7 @@ export class CobolVariable {
         let firstChildrenLevel = 0;
         for (let index = line + 1; index < lines.length; index++) {
             const currentLine = lines[index];
-            const match = /^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/g.exec(currentLine);
+            const match = /^ +\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/g.exec(currentLine);
             if (match) {
                 const splitted = CobolVariable.splitVariableInfo(currentLine);
                 const currentLevel = Number.parseInt(splitted[0]);

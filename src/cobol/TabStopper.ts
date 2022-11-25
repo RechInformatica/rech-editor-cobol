@@ -113,7 +113,7 @@ export class TabStopper {
         for (let line = selection.start.line; line <= selection.end.line; line++) {
             var charpos = selection.start.character;
             if (charpos === 0) {
-                const pttrn = /^\s*/;
+                const pttrn = /^ */;
                 const selline = doc.getText(selection);
                 if (selline !== null) {
                     const match = selline.match(pttrn);

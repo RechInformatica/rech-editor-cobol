@@ -8,7 +8,7 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 export class PerformUntilFolding implements CobolFoldInterface {
 
     mustFolding(line: string): boolean {
-        return /^\s+perform\s+until\s+exit,?/gi.test(line);
+        return /^ +perform\s+until\s+exit,?/gi.test(line);
     }
 
     fold(line: number, lines: string[]): FoldingRange {

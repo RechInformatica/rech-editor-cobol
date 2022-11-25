@@ -122,7 +122,7 @@ export class GeradorCobol {
    */
   async centralizeComment() {
     let lineText = this.editor.getCurrentLine();
-    let regexComment = /^\s*\*>.*/;
+    let regexComment = /^ *\*>.*/;
     let commentContent = lineText.match(regexComment);
     let regexCommentType = /\*>(->)*/;
     let startComment = lineText.match(regexCommentType);
