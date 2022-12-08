@@ -44,7 +44,7 @@ import { CobolCompletionItemFactory } from "./completion/CobolCompletionItemFact
 import { DynamicJsonCompletion } from "./completion/DynamicJsonCompletion";
 import { ParagraphCompletion } from "./completion/ParagraphCompletion";
 import { HighlightFactory } from "./highlight/HighlightFactory";
-import { CobolFoldFactory } from "./fold/CobolFoldFactory";
+import { CobolFoldFactory } from "./fold/cobolFoldFactory";
 import { ExpandedSourceManager } from "../cobol/ExpandedSourceManager";
 import { VariableCompletion } from "./completion/variable/VariableCompletion";
 import { VariableCompletionFactory } from "./completion/variable/VariableCompletionFactory";
