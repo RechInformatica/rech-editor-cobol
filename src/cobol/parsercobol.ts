@@ -46,7 +46,7 @@ export class ParserCobol {
    * @param line
    */
   public getDeclaracaoParagrafo(line: string): string | undefined {
-    let match = /^\s\s\s\s\s\s\s([\w\-]+)\.(\s*\*\>.*)?/g.exec(line);
+    let match = /^ \s\s\s\s\s\s([\w\-]+)\.(\s*\*\>.*)?/g.exec(line);
     if (match == null) {
       match = /\s+procedure\s+division.+/gi.exec(line);
       if (match == null) {
@@ -65,10 +65,10 @@ export class ParserCobol {
    */
   public getDeclaracaoVariavel(line: string): string | undefined {
     // variable
-    let match = /^\s+\d\d\s+(?:\([^\s]+\))?([\w\-]+)(\s+|\.).*/i.exec(line);
+    let match = /^ +\d\d\s+(?:\([^\s]+\))?([\w\-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
       // $SET CONSTANT
-      match = /^\s+\$SET\s+CONSTANT\s+(?:\([^\s]+\))?([\w\-]+)\s+.*/i.exec(line);
+      match = /^ +\$SET\s+CONSTANT\s+(?:\([^\s]+\))?([\w\-]+)\s+.*/i.exec(line);
       if (match == null) {
         return undefined;
       }
@@ -83,10 +83,10 @@ export class ParserCobol {
    */
   public getDeclaracaoVariavelIgnoreReplace(line: string): string | undefined {
     // variable
-    let match = /^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/i.exec(line);
+    let match = /^ +\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
       // $SET CONSTANT
-      match = /^\s+\$SET\s+CONSTANT\s+(?:\(.*\))?([\w\-]+)\s+.*/i.exec(line);
+      match = /^ +\$SET\s+CONSTANT\s+(?:\(.*\))?([\w\-]+)\s+.*/i.exec(line);
       if (match == null) {
         return undefined;
       }
@@ -100,7 +100,7 @@ export class ParserCobol {
    * @param line
    */
   public getCopyDeclaration(line: string): string | undefined {
-    const match = /^\s+COPY\s+([A-Za-z0-9-_]+).(?:CPY|CPB).*/i.exec(line);
+    const match = /^ +COPY\s+([A-Za-z0-9-_]+).(?:CPY|CPB).*/i.exec(line);
     if (match == null) {
       return undefined;
     }
@@ -113,7 +113,7 @@ export class ParserCobol {
    * @param line
    */
   private getDeclaracaoSelect(line: string): string | undefined {
-    const match = /^\s+SELECT ([\w\-]+)\s+ASSIGN.*/i.exec(line);
+    const match = /^ +SELECT ([\w\-]+)\s+ASSIGN.*/i.exec(line);
     if (match == null) {
       return undefined;
     }
@@ -127,10 +127,10 @@ export class ParserCobol {
    */
   public getDeclaracaoClasse(line: string): string | undefined {
     // IS Format
-    let match = /^\s+CLASS\s+([\w]+)\s+AS.*/i.exec(line);
+    let match = /^ +CLASS\s+([\w]+)\s+AS.*/i.exec(line);
     if (match == null) {
       // MF Format
-      match = /^\s+([\w]+)\s+IS\s+CLASS.*/i.exec(line);
+      match = /^ +([\w]+)\s+IS\s+CLASS.*/i.exec(line);
       if (match == null) {
         return undefined;
       }
@@ -145,7 +145,7 @@ export class ParserCobol {
    */
   public getDeclaracaoMethod(line: string): string | undefined {
     // IS Format
-    const match = /^\s+METHOD-ID\.\s+([\w]+)[\s\,\.]+.*/i.exec(line);
+    const match = /^ +METHOD-ID\.\s+([\w]+)[\s\,\.]+.*/i.exec(line);
     if (match == null) {
       return undefined;
     }

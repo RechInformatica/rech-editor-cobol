@@ -283,6 +283,6 @@ export class WhenCompletion implements CompletionInterface {
      * @param line
      */
     private hasReplacing(line: string) {
-        return /^\s+88\s([A-Za-z0-9-]+)?(\(.*\))([A-Za-z0-9-]+)/.exec(line);
+        return /^ +88\s([A-Za-z0-9-]+)?(\(.*\))([A-Za-z0-9-]+)/.exec(line);
     }
 }

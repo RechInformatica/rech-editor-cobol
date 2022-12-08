@@ -11,7 +11,7 @@ import { CommandSeparatorFormatter } from "./CommandSeparatorFormatter";
 export class EvaluateFormatter implements FormatterInterface {
 
     /** RegExp that identifies if it is the EVALUATE clause */
-    public static EVALUATE_REGEXP = /^\s+(EVALUATE|evaluate).*/;
+    public static EVALUATE_REGEXP = /^ +(EVALUATE|evaluate).*/;
 
     /**
      * Generates an array of Text Edits for source code formatting

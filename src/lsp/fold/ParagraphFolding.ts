@@ -8,7 +8,7 @@ import { ParserCobol } from "../../cobol/parsercobol";
 export class ParagraphFolding implements CobolFoldInterface {
 
     mustFolding(line: string): boolean {
-        return /^\s\s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm.test(line);
+        return /^ \s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm.test(line);
     }
 
     fold(line: number, lines: string[]): FoldingRange {

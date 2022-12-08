@@ -54,7 +54,7 @@ export default class ContextFactory {
      * @param currentLine
      */
     private static isParagraph(currentLine: string) {
-        return /^\s{7}([\w\-]+)\.(?:\s*\*\>.*)?/gi.test(currentLine);
+        return /^ {7}([\w\-]+)\.(?:\s*\*\>.*)?/gi.test(currentLine);
     }
     /**
      * Returns true if line is a goto

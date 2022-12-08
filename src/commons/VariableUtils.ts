@@ -99,12 +99,12 @@ export class VariableUtils {
         for (let i = line; i >= 0; i--) {
             const currentLine = lines[i];
             let match;
-            match = /^\s*(repository|factory|object)[\.\,]?\s*$/i.exec(currentLine)
+            match = /^ *(repository|factory|object)[\.\,]?\s*$/i.exec(currentLine)
             if (match) {
                 section = match[1].toLowerCase();
                 break;
             }
-            match = /^\s*method-id[\.]?\s(.+)[\.]?\s*$/i.exec(currentLine)
+            match = /^ *method-id[\.]?\s(.+)[\.]?\s*$/i.exec(currentLine)
             if (match) {
                 section = match[1].split(" ")[0];
                 break;

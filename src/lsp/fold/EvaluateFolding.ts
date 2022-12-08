@@ -8,7 +8,7 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 export class EvaluateFolding implements CobolFoldInterface {
 
     mustFolding(line: string): boolean {
-        return /^\s+evaluate\s+.*/gi.test(line);
+        return /^ +evaluate\s+.*/gi.test(line);
     }
 
     fold(line: number, lines: string[]): FoldingRange {

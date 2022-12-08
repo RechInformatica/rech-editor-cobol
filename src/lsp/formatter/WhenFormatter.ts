@@ -12,9 +12,9 @@ const END_COBOL_COLUMN = 120;
 export class WhenFormatter implements FormatterInterface {
 
   /** RegExp that identifies if it is the WHEN clause*/
-  public static WHEN_REGEXP = /^\s+(WHEN|when).*/;
+  public static WHEN_REGEXP = /^ +(WHEN|when).*/;
   /** RegExp that identifies if it is the WHEN clause with parameters*/
-  public static WHEN_WITH_PARAM_REGEXP = /^\s+(WHEN|when)\s+.+/;
+  public static WHEN_WITH_PARAM_REGEXP = /^ +(WHEN|when)\s+.+/;
 
   /**
    * Generates an array of Text Edits for source code formatting

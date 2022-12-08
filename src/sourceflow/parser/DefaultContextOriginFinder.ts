@@ -20,7 +20,7 @@ export default class DefaultContextOriginFinder implements ContextOriginFinderIn
      * @param currentLine
      */
     private isConditionalLine(currentLine: string): boolean {
-        if (currentLine.match(/^\s{7}([\w\-]+)\.(?:\s*\*\>.*)?/gi)) {
+        if (currentLine.match(/^ {7}([\w\-]+)\.(?:\s*\*\>.*)?/gi)) {
             return true;
         }
         return false;

@@ -5,7 +5,7 @@ export default class ParagraphContextOriginFinder implements ContextOriginFinder
 
     identify(line: number, buffer: string[]): Promise<number[]> {
         return new Promise((resolve, reject) => {
-            const paragraphDeclarationRegex = /^\s{7}([\w\-]+)\.(?:\s*\*\>.*)?/gi;
+            const paragraphDeclarationRegex = /^ {7}([\w\-]+)\.(?:\s*\*\>.*)?/gi;
             let result = new Array()
             let match = paragraphDeclarationRegex.exec(buffer[line]);
             let paragraphName;

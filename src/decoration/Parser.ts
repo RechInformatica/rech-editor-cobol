@@ -44,7 +44,7 @@ export class Parser {
     const PromiseArray:Promise<undefined>[] = []
     // Regexp to find variables declarations in source
     const textLF = text.replace(/\r/g, "");
-    const regex = /^\s+\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm
+    const regex = /^ +\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm
     new Scan(textLF).scan(regex, (iterator: any) => {
       PromiseArray.push(
         new Promise((resolve, reject) => {
@@ -125,7 +125,7 @@ export class Parser {
    * @param text
    */
   private needDifferentiateVariablesByScope(text: string): boolean {
-    return /^\s+method-id\./gmi.test(text);
+    return /^ +method-id\./gmi.test(text);
   }
 
 
@@ -160,7 +160,7 @@ export class Parser {
    private getAllCopys(text: string, fileName: string): Promise<CobolCopy>[] {
     const PromiseArray:Promise<CobolCopy>[] = []
     // Regexp to find variables declarations in source
-    const regex = /^\s+copy\s+(.+\.cp.+)[\.,]/gm
+    const regex = /^ +copy\s+(.+\.cp.+)[\.,]/gm
     new Scan(text).scan(regex, (iterator: any) => {
       PromiseArray.push(
         new Promise((resolve, reject) => {

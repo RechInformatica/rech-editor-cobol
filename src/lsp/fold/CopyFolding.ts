@@ -7,7 +7,7 @@ import { FoldingRange } from "vscode-languageserver";
 export class CopyFolding implements CobolFoldInterface {
 
     mustFolding(line: string): boolean {
-        return /^\s+copy\s+.+replacing.+/gi.test(line);
+        return /^ +copy\s+.+replacing.+/gi.test(line);
     }
 
     fold(line: number, lines: string[]): FoldingRange {
