@@ -5,7 +5,7 @@ import { CobolDiagnostic } from "./cobolDiagnostic";
 import { Path } from "../../commons/path";
 import { File } from "../../commons/file";
 import { CobolDiagnosticParser } from "./cobolDiagnosticParser";
-import { CobolDiagnosticPreprocManager } from "./cobolDiagnosticPreprocManager";
+import { CobolDiagnosticPreprocManager } from "./CobolDiagnosticPreprocManager";
 import { Log } from "../../commons/Log";
 
 /**
@@ -134,7 +134,7 @@ export class Diagnostician {
               return reject("The copy usage locator canot find results from " + copyPath.fullPathWin());
             }
             const program = programs[0].trim();
-            new File(program).loadBuffer("latin1").then((buffer) => {
+            new File(program).loadBuffer("latin1").then((buffer: any) => {
               this.findErrorsAndWarningsRunningPreproc(
                 buffer,
                 new Path(program),
