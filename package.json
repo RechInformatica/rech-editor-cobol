@@ -452,7 +452,7 @@
 		"package": "vsce package --out F:/DIV/VSCode/extension/market/rech-editor-cobol/rech-editor-cobol.vsix",
 		"compile": "npm run tslint && tsc --build --force ./tsconfig.json",
 		"watch": "tsc -watch -p ./",
-        "postinstall": "if not defined vs_cobol_not_post node ./node_modules/vscode/bin/install",
+		"postinstall": "cross-env-shell node $npm_config_local_prefix/node_modules/vscode/bin/install",
 		"test": "npm run compile && mocha -r ts-node/register ./src/test/**/*.test.ts",
 		"tslint": "tslint --project tsconfig.json --config tslint.json"
 	},
@@ -463,16 +463,17 @@
 		"chai": "4.2.0",
 		"iconv-lite": "^0.4.24",
 		"q": "^1.4.1",
+		"rech-ts-commons": "^1.0.0",
 		"ts-node": "^7.0.1",
 		"tslint": "^5.14.0",
-		"vscode-languageserver": "^6.1.0-next.9",
 		"vscode-languageclient": "^6.1.0-next.9",
-		"vscode-languageserver-textdocument": "^1.0.1",
-		"rech-ts-commons": "^1.0.0"
+		"vscode-languageserver": "^6.1.0-next.9",
+		"vscode-languageserver-textdocument": "^1.0.1"
 	},
 	"devDependencies": {
 		"@types/mocha": "^2.2.48",
 		"@types/node": "^8.10.25",
+		"cross-env": "^7.0.3",
 		"mocha": "^5.2.0",
 		"typescript": "^3.0.0",
 		"vsce": "^1.53.0",
