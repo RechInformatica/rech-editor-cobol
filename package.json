@@ -452,7 +452,7 @@
 		"package": "vsce package --out F:/DIV/VSCode/extension/market/rech-editor-cobol/rech-editor-cobol.vsix",
 		"compile": "npm run tslint && tsc --build --force ./tsconfig.json",
 		"watch": "tsc -watch -p ./",
-        "postinstall": "if defined vs_cobol_dir (node %vs_cobol_dir%/node_modules/vscode/bin/install) else (node %cd%/node_modules/vscode/bin/install)",
+        "postinstall": "if not defined vs_cobol_not_post node ./node_modules/vscode/bin/install",
 		"test": "npm run compile && mocha -r ts-node/register ./src/test/**/*.test.ts",
 		"tslint": "tslint --project tsconfig.json --config tslint.json"
 	},
