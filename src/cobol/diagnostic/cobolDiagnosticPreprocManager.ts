@@ -81,19 +81,24 @@ export class CobolDiagnosticPreprocManager {
     const currentPendingCallbacks = CobolDiagnosticPreprocManager.pendingCallbacks;
     CobolDiagnosticPreprocManager.pendingCallbacks = [];
     preprocessCallback(file.fileName).then(buffer => {
-      CobolDiagnosticPreprocManager.preprocessCallbackCalled = false;
       currentPendingCallbacks.forEach(currentCallback => {
         Log.get().info("CobolDiagnosticPreprocManager preproc was called " + file);
         currentCallback(buffer);
       });
       if (CobolDiagnosticPreprocManager.pendingCallbacks.length > 0) {
+        Log.get().info("CobolDiagnosticPreprocManager preproc was recalled " + file);
         CobolDiagnosticPreprocManager.saveSourceAndRunPreproc(
           preprocessCallback,
           file,
           CobolDiagnosticPreprocManager.lastFileContent,
           errorCallback
         );
+      } else {
+        CobolDiagnosticPreprocManager.preprocessCallbackCalled = false;
       }
+    }, (err) => {
+      Log.get().info("Error on runPreproc: " + err);
+      CobolDiagnosticPreprocManager.preprocessCallbackCalled = false;
     });
   }
 
