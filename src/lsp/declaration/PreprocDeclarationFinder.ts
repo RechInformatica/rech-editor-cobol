@@ -46,7 +46,7 @@ export class PreprocDeclarationFinder implements FindInterface {
       let result: RechPosition | undefined = undefined;
       let file = path.fileName();
       new Scan(buffer).scan(/\s+\*\>\sOpções:.*/gi, (iterator: any) => {
-        const match = /^ +\*\>\sOpções:\s([_A-Za-z0-9\\:]+\.(?:CBL|COB))/gm.exec(iterator.lineContent)
+        const match = /^ +\*\>\sOpções:\s([_A-Za-z0-9\\:.]+\.(?:CBL|COB))/gm.exec(iterator.lineContent)
         if (match) {
           file = new Path(match[1]).fileName();
           iterator.stop();
