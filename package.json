@@ -1,14 +1,15 @@
 {
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
-	"description": "Edit COBOL files with Visual Studio Code",
+	"description": "Edit COBOL files with vscode.",
 	"version": "1.0.121",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.47.0"
 	},
 	"icon": "images/cobol.png",
-	"license": "SEE LICENSE IN LICENSE.txt",
+	"license": "MIT",
+	"homepage": "https://github.com/RechInformatica/rech-editor-cobol",
 	"bugs": {
 		"url": "https://github.com/RechInformatica/rech-editor-cobol/issues",
 		"email": "infra@rech.com.br"
@@ -34,7 +35,7 @@
 				"properties": {
 					"source": {
 						"type": "string",
-						"description": "Source to be compiled"
+						"description": "Source to be compiled."
 					}
 				},
 				"required": []
@@ -65,11 +66,11 @@
 						34,
 						50
 					],
-					"description": "COBOL tabstops"
+					"description": "COBOL tabstops."
 				},
 				"rech.editor.cobol.formatter.location": {
 					"type": "string",
-					"description": "COBOL external formatter location."
+					"description": "External COBOL formatter location."
 				},
 				"rech.editor.cobol.snippetsRepositories": {
 					"type": "array",
@@ -87,22 +88,22 @@
 				},
 				"rech.editor.cobol.diagnoseCopy": {
 					"type": "boolean",
-					"description": "Controls whether should diagnose copy files",
+					"description": "Controls whether should diagnose copy files.",
 					"default": true
 				},
 				"rech.editor.cobol.log": {
 					"type": "boolean",
-					"description": "Controls whether Rech Cobol extension logging is active.",
+					"description": "Controls whether Rech COBOL extension logging is active.\nFind log files in your system temporary folder, i.e. %TEMP%\\RechCobolLogs.",
 					"default": false
 				},
 				"rech.editor.cobol.maxCacheTimeFromExpandedSource": {
 					"type": "number",
-					"description": "Maximum time to keep expanded source cache in milliseconds",
+					"description": "Sets maximum time to keep expanded source cache in milliseconds.",
 					"default": 30000
 				},
 				"rech.editor.cobol.returnsLastCacheFromExpandedSource": {
 					"type": "boolean",
-					"description": "Indicates whether to return the last cache when reaching the maximum cache time",
+					"description": "Indicates whether to return the last cache when reaching the maximum cache time.",
 					"default": true
 				},
 				"rech.editor.cobol.invertEspecialColorsInLightTheme": {
@@ -112,7 +113,7 @@
 				},
 				"rech.editor.cobol.especialColors": {
 					"type": "object",
-					"description": "Special color settings for terms interpreted by the Rech Cobol extension.",
+					"description": "Special color settings for terms interpreted by the Rech COBOL extension.",
 					"default": {
 						"rechdocToken": "#b294bb",
 						"rechdocVariable": "#c5c8c6",
@@ -122,7 +123,7 @@
 				},
 				"rech.editor.cobol.specialAutoDocumentation": {
 					"type": "boolean",
-					"description": "Controls whether special auto documentation of some language objects is active",
+					"description": "Controls whether special auto documentation of some language objects is active.",
 					"default": false
 				}
 			}
@@ -147,7 +148,6 @@
 			{
 				"id": "COBOL",
 				"aliases": [
-					"COBOL",
 					"Cobol",
 					"cobol"
 				],
@@ -179,7 +179,7 @@
 			"activitybar": [
 				{
 					"id": "cobolflow",
-					"title": "Cobol Flow",
+					"title": "COBOL Flow",
 					"icon": "images/flow.svg"
 				}
 			]
@@ -188,7 +188,7 @@
 			"cobolflow": [
 				{
 					"id": "cobolflowview",
-					"name": "Cobol Flow View"
+					"name": "COBOL Flow View"
 				}
 			]
 		},
