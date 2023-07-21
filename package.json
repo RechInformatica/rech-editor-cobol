@@ -1,7 +1,7 @@
 {
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
-	"description": "Edit COBOL files with vscode",
+	"description": "Edit COBOL files with vscode.",
 	"version": "1.0.121",
 	"publisher": "rechinformatica",
 	"engines": {
@@ -35,7 +35,7 @@
 				"properties": {
 					"source": {
 						"type": "string",
-						"description": "Source to be compiled"
+						"description": "Source to be compiled."
 					}
 				},
 				"required": []
@@ -66,15 +66,15 @@
 						34,
 						50
 					],
-					"description": "COBOL tabstops"
+					"description": "COBOL tabstops."
 				},
 				"rech.editor.cobol.formatter.location": {
 					"type": "string",
-					"description": "External COBOL formatter location"
+					"description": "External COBOL formatter location."
 				},
 				"rech.editor.cobol.snippetsRepositories": {
 					"type": "array",
-					"description": "Repositories where JSON snippets are located"
+					"description": "Repositories where JSON snippets are located."
 				},
 				"rech.editor.cobol.variableSuggestion": {
 					"type": "boolean",
@@ -93,7 +93,7 @@
 				},
 				"rech.editor.cobol.log": {
 					"type": "boolean",
-					"description": "Controls whether Rech COBOL extension logging is active.\nFind log files in your system temporary folder, i.e. %TEMP%\RechCobolLogs.",
+					"description": "Controls whether Rech COBOL extension logging is active.\nFind log files in your system temporary folder, i.e. %TEMP%\\RechCobolLogs.",
 					"default": false
 				},
 				"rech.editor.cobol.maxCacheTimeFromExpandedSource": {
