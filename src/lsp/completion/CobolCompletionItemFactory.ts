@@ -19,6 +19,7 @@ import { FlagCompletion } from "./FlagCompletion";
 import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
 import { UsageCompletion } from "./UsageCompletion";
+import { TypedefCompletion } from "./TypedefCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
 import Q from "q";
@@ -379,6 +380,7 @@ export class CobolCompletionItemFactory {
         if (!this.isValueDeclared()) {
           let items: Promise<CompletionItem[]>[] = [];
           items = items.concat(this.generate(new ValueCompletion()));
+          items = items.concat(this.generate(new TypedefCompletion()));
           if (this.isInPictureXDeclaration()) {
             items = items.concat(this.generate(new AnyLengthCompletion()));
           }
@@ -547,8 +549,8 @@ export class CobolCompletionItemFactory {
   /**
    * Returns true if the level and the name of the Cobol variable are declared.
    *
-   * This regular expression checks if the variable is ready to receive the 'PIC'
-   * and 'VALUE IS' clauses.
+   * This regular expression checks if the variable is ready to receive the 'PIC',
+   * 'USAGE' and 'VALUE IS' clauses.
    */
   private isVariableLevelAndNameDeclared() {
     const variableNamePositionOnDeclaration = 2;
