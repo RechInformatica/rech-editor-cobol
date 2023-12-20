@@ -41,7 +41,9 @@ export class ValueCompletion implements CompletionInterface {
         let text = CompletionUtils.fillSpacesFromWordStart(VALUE_COLUMN_DECLARATION, column, currentLineText);
         if (variable.getType() == Type.Alphanumeric) {
             text = text.concat("value is ${1:spaces}");
-        } else {
+        } else if (variable.getType() == Type.Typedef) {
+            text = text.concat("value is ${1}");
+        }else {
             text = text.concat("value is ${1:zeros}");
             text = text.concat(this.createCompIfNeeded(variable));
         }
