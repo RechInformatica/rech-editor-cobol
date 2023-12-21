@@ -262,8 +262,8 @@ export class CobolVariable {
      * @param picture variable picture
      */
     private static detectType(picture: string): Type {
-        if (CobolVariable.isTypedef(picture)) {
-            return Type.Typedef;
+        if (CobolVariable.isInteger(picture)) {
+            return Type.Integer;
         }
         if (CobolVariable.isAlphanumeric(picture)) {
             return Type.Alphanumeric;
@@ -271,7 +271,7 @@ export class CobolVariable {
         if (CobolVariable.isDecimal(picture)) {
             return Type.Decimal;
         }
-        return Type.Integer;
+        return Type.Typedef;
     }
 
     /**
@@ -295,12 +295,12 @@ export class CobolVariable {
     }
 
     /**
-     * Returns true if the picture represents a typedef variable
+     * Returns true if the picture represents a integer variable
     *
     * @param picture variable picture
     */
-   private static isTypedef(picture: string): boolean {
-        const decRegExp: RegExp = /^[A-Za-z][A-Za-z0-9_]*-[A-Za-z0-9_-]*$/i;
+   private static isInteger(picture: string): boolean {
+        const decRegExp: RegExp = /^[s9z]+(\(\d+\))*[9z]*$/i;
         return decRegExp.test(picture);
     }
 
