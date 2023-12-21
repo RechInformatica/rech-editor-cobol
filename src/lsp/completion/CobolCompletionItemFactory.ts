@@ -18,6 +18,8 @@ import { ExitCycleCompletion } from "./ExitCycleCompletion";
 import { FlagCompletion } from "./FlagCompletion";
 import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
+import { UsageCompletion } from "./UsageCompletion";
+import { TypedefCompletion } from "./TypedefCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
 import Q from "q";
@@ -365,9 +367,10 @@ export class CobolCompletionItemFactory {
   private createVariableCompletions(): Promise<CompletionItem[]> {
     return new Promise((resolve) => {
       if (!this.isVariableDeclarationFinalized()) {
-        if (!this.isPictureOrObjectReferenceDeclared()) {
+        if (!this.isPictureOrUsageOrObjectReferenceDeclared()) {
           let items: Promise<CompletionItem[]>[] = [];
           items = items.concat(this.generate(new PictureCompletion()));
+          items = items.concat(this.generate(new UsageCompletion()));
           items = items.concat(this.generate(new ObjectReferenceCompletion()));
           return resolve(this.createWrappingPromise(items));
         }
@@ -377,6 +380,7 @@ export class CobolCompletionItemFactory {
         if (!this.isValueDeclared()) {
           let items: Promise<CompletionItem[]>[] = [];
           items = items.concat(this.generate(new ValueCompletion()));
+          items = items.concat(this.generate(new TypedefCompletion()));
           if (this.isInPictureXDeclaration()) {
             items = items.concat(this.generate(new AnyLengthCompletion()));
           }
@@ -422,8 +426,8 @@ export class CobolCompletionItemFactory {
   /**
    * Returns true if the var Picture is declared on the current line
    */
-  private isPictureOrObjectReferenceDeclared(): boolean {
-    return this.lineText.toUpperCase().includes(" PIC ") || this.isObjectReferenceDeclared();
+  private isPictureOrUsageOrObjectReferenceDeclared(): boolean {
+    return this.lineText.toUpperCase().includes(" PIC ") || this.lineText.toUpperCase().includes(" USAGE ") || this.isObjectReferenceDeclared();
   }
 
   /**
@@ -545,8 +549,8 @@ export class CobolCompletionItemFactory {
   /**
    * Returns true if the level and the name of the Cobol variable are declared.
    *
-   * This regular expression checks if the variable is ready to receive the 'PIC'
-   * and 'VALUE IS' clauses.
+   * This regular expression checks if the variable is ready to receive the 'PIC',
+   * 'USAGE' and 'VALUE IS' clauses.
    */
   private isVariableLevelAndNameDeclared() {
     const variableNamePositionOnDeclaration = 2;

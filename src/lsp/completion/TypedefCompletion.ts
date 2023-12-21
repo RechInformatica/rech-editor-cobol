@@ -3,13 +3,12 @@ import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { CobolVariable, Type } from "./CobolVariable";
 
-// Cobol column for 'VALUE' clause declaration
-const VALUE_COLUMN_DECLARATION = 51;
-
+// Cobol column for 'COMP/TYPEDEF' clause declaration
+const COMP_TYPEDEF_COLUMN_DECLARATION = 66;
 /**
- * Class to generate LSP Completion Items for Cobol value
+ * Class to generate LSP Completion Items for Cobol picture
  */
-export class ValueCompletion implements CompletionInterface {
+export class TypedefCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
@@ -18,36 +17,29 @@ export class ValueCompletion implements CompletionInterface {
             const text = this.generateTextFromVariable(variable, column, currentLineText);
             resolve(
                 [{
-                    label: 'Complete VALUE declaration',
-                    detail: 'VALUE clause will be inserted on the most appropriate place',
+                    label: 'Complete TYPEDEF declaration',
+                    detail: 'TYPEDEF clause will be inserted on the most appropriate place.',
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
-                    filterText: "value",
+                    filterText: "typedef",
                     preselect: true,
                     kind: CompletionItemKind.Variable
                 }]
             );
-        });
+        })
     }
 
     /**
-     * Generate the value text from the specified variable and column number
+     * Generate the typedef text from the specified variable and column number
      *
      * @param variable Cobol variable
      * @param column column
      * @param currentLineText current line text
      */
     private generateTextFromVariable(variable: CobolVariable, column: number, currentLineText: string): string {
-        let text = CompletionUtils.fillSpacesFromWordStart(VALUE_COLUMN_DECLARATION, column, currentLineText);
-        if (variable.getType() == Type.Alphanumeric) {
-            text = text.concat("value is ${1:spaces}");
-        } else if (variable.getType() == Type.Typedef) {
-            text = text.concat("value is ${1}");
-        }else {
-            text = text.concat("value is ${1:zeros}");
-            text = text.concat(this.createCompIfNeeded(variable));
-        }
-        text = text.concat(".");
+        let text = CompletionUtils.fillSpacesFromWordStart(COMP_TYPEDEF_COLUMN_DECLARATION, column, currentLineText);
+        text = text.concat(this.createCompIfNeeded(variable));
+        text = text.concat("typedef.");
         return text;
     }
 
@@ -59,9 +51,9 @@ export class ValueCompletion implements CompletionInterface {
     private createCompIfNeeded(variable: CobolVariable): string {
         if (!variable.isDisplay()) {
             if (variable.getType() == Type.Decimal || variable.isAllowNegative()) {
-                return " ${2:comp}";
+                return "${2:comp} ";
             }
-            return " ${2:comp-x}";
+            return "${2:comp-x} ";
         }
         return "";
     }

@@ -237,7 +237,7 @@ export class CobolVariable {
         let picture = "";
         let comp = "";
         for (let i = 0; i < splitted.length; i++) {
-            if (splitted[i].toUpperCase() === "PIC") {
+            if (splitted[i].toUpperCase() === "PIC" || splitted[i].toUpperCase() === "USAGE") {
                 foundPicClause = true;
                 continue;
             }
@@ -262,13 +262,16 @@ export class CobolVariable {
      * @param picture variable picture
      */
     private static detectType(picture: string): Type {
+        if (CobolVariable.isInteger(picture)) {
+            return Type.Integer;
+        }
         if (CobolVariable.isAlphanumeric(picture)) {
             return Type.Alphanumeric;
         }
         if (CobolVariable.isDecimal(picture)) {
             return Type.Decimal;
         }
-        return Type.Integer;
+        return Type.Typedef;
     }
 
     /**
@@ -277,16 +280,28 @@ export class CobolVariable {
      * @param picture variable picture
      */
     private static isAlphanumeric(picture: string): boolean {
-        return picture.includes("X") || picture.includes("/");
+        const alfaRegExp: RegExp = /^x+(\(\d+\))*$/i;
+        return alfaRegExp.test(picture) || picture.includes("/");
     }
 
     /**
      * Returns true if the picture represents a decimal variable
-     *
-     * @param picture variable picture
-     */
-    private static isDecimal(picture: string): boolean {
-        return picture.includes(",") || picture.includes("V");
+    *
+    * @param picture variable picture
+    */
+   private static isDecimal(picture: string): boolean {
+        const decRegExp: RegExp = /^[9s\-z][z9\-\.]*(\(\d+\))*[,v][z9\-\.]*(\(\d+\))*$/i;
+        return decRegExp.test(picture);
+    }
+
+    /**
+     * Returns true if the picture represents a integer variable
+    *
+    * @param picture variable picture
+    */
+   private static isInteger(picture: string): boolean {
+        const decRegExp: RegExp = /^[s9z]+(\(\d+\))*[9z]*$/i;
+        return decRegExp.test(picture);
     }
 
     /**
@@ -627,5 +642,6 @@ export class CobolVariable {
 export enum Type {
     Integer,
     Decimal,
-    Alphanumeric
+    Alphanumeric,
+    Typedef
 }
