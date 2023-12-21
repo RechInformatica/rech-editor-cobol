@@ -280,7 +280,7 @@ export class CobolVariable {
      * @param picture variable picture
      */
     private static isAlphanumeric(picture: string): boolean {
-        const alfaRegExp: RegExp = /x\(\d+\)/i;
+        const alfaRegExp: RegExp = /^x+(\(\d+\))*$/i;
         return alfaRegExp.test(picture) || picture.includes("/");
     }
 
