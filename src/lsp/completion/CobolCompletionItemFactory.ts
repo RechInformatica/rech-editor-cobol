@@ -19,7 +19,8 @@ import { FlagCompletion } from "./FlagCompletion";
 import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
 import { UsageCompletion } from "./UsageCompletion";
-import { TypedefCompletion } from "./TypedefCompletion";
+import { TypedefClauseCompletion } from "./TypedefClauseCompletion";
+import { TypedefCompletion } from "./typedef/TypedefCompletion";
 import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
 import Q from "q";
@@ -67,6 +68,8 @@ export class CobolCompletionItemFactory {
   private methodCompletion: CompletionInterface;
   /** Completion class to generate the CompletionItem for variables */
   private variableCompletionFactory: VariableCompletionFactory | undefined;
+  /** Completion class to generate the CompletionItem for typedef */
+  private typedefCompletion: CompletionInterface;
   /** uri of source file */
   private uri: string | undefined;
 
@@ -88,6 +91,7 @@ export class CobolCompletionItemFactory {
     this.paragraphCompletion = new EmptyCompletion();
     this.classCompletion = new EmptyCompletion();
     this.methodCompletion = new EmptyCompletion();
+    this.typedefCompletion = new EmptyCompletion();
   }
 
   /**
@@ -137,6 +141,16 @@ export class CobolCompletionItemFactory {
    */
   public setVariableCompletionFactory(variableCompletionFactory: VariableCompletionFactory): CobolCompletionItemFactory {
     this.variableCompletionFactory = variableCompletionFactory;
+    return this;
+  }
+
+  /**
+   * Completion class to generate the CompletionItem for typedefs
+   *
+   * @param typedefCompletion
+   */
+  public setTypedefCompletion(typedefCompletion: TypedefCompletion): CobolCompletionItemFactory {
+    this.typedefCompletion = typedefCompletion;
     return this;
   }
 
@@ -214,6 +228,9 @@ export class CobolCompletionItemFactory {
           }
           case this.isWhen(): {
             return resolve(await this.createWhenCompletions());
+          }
+          case this.isUsageClause(): {
+            return resolve(await this.generate(this.typedefCompletion));
           }
           case this.isVarDeclaration(): {
             return resolve(await this.createVariableCompletions());
@@ -380,7 +397,9 @@ export class CobolCompletionItemFactory {
         if (!this.isValueDeclared()) {
           let items: Promise<CompletionItem[]>[] = [];
           items = items.concat(this.generate(new ValueCompletion()));
-          items = items.concat(this.generate(new TypedefCompletion()));
+          if (!this.isUsageDeclared()){
+            items = items.concat(this.generate(new TypedefClauseCompletion()));
+          }
           if (this.isInPictureXDeclaration()) {
             items = items.concat(this.generate(new AnyLengthCompletion()));
           }
@@ -425,9 +444,24 @@ export class CobolCompletionItemFactory {
 
   /**
    * Returns true if the var Picture is declared on the current line
+  */
+ private isPictureOrUsageOrObjectReferenceDeclared(): boolean {
+   return this.lineText.toUpperCase().includes(" PIC ") || this.isUsageDeclared() || this.isObjectReferenceDeclared();
+  }
+
+  /**
+   * Returns true if the usage clause is declared on the current line
    */
-  private isPictureOrUsageOrObjectReferenceDeclared(): boolean {
-    return this.lineText.toUpperCase().includes(" PIC ") || this.lineText.toUpperCase().includes(" USAGE ") || this.isObjectReferenceDeclared();
+  private isUsageDeclared(): boolean {
+    return this.lineText.toUpperCase().includes(" USAGE ")
+  }
+
+  /**
+   * Returns true if the var usage clause is the last word on the current line
+   */
+  private isUsageClause(): boolean {
+    let match = this.lineText.match(/^.*USAGE *$/gi);
+    return match != null;
   }
 
   /**
