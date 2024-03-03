@@ -57,6 +57,7 @@ import { CobolReferencesFinder } from "./references/CobolReferencesFinder";
 import { CobolActionFactory } from "./actions/CobolActionFactory";
 import { RenamingUtils } from "./commons/RenamingUtils";
 import { TypedefCompletion } from "./completion/typedef/TypedefCompletion";
+import { ValueCompletion } from "./completion/ValueCompletion";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -440,6 +441,7 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Then
           }))
           .setVariableCompletionFactory(new VariableCompletionFactory(uri, () => getCurrentSourceOfVariableCompletions()))
           .setTypedefCompletion(new TypedefCompletion(uri, () => getCurrentSourceOfVariableCompletions()) )
+          .setValueCompletion(new ValueCompletion(uri, () => getCurrentSourceOfVariableCompletions()) )
           .generateCompletionItems().then((items) => {
             Log.get().info(`Generated ${items.length} CompletionItems. File: ${textDocumentPosition.textDocument.uri}`);
             return resolve({isIncomplete: false, items: items});

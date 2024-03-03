@@ -22,7 +22,6 @@ export class TypedefCompletion implements CompletionInterface {
     constructor(uri?: string, sourceOfCompletions?: () => Thenable<string>) {
         this.uri = uri;
         this.sourceOfCompletions = sourceOfCompletions;
-        // this.insertTextBuilder = new VariableNameInsertTextBuilder();
     }
 
     public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {

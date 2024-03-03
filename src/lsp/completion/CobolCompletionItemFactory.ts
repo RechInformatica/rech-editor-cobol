@@ -70,6 +70,8 @@ export class CobolCompletionItemFactory {
   private variableCompletionFactory: VariableCompletionFactory | undefined;
   /** Completion class to generate the CompletionItem for typedef */
   private typedefCompletion: CompletionInterface;
+  /** Completion class to generate the CompletionItem for value */
+  private valueCompletion: CompletionInterface;
   /** uri of source file */
   private uri: string | undefined;
 
@@ -92,6 +94,7 @@ export class CobolCompletionItemFactory {
     this.classCompletion = new EmptyCompletion();
     this.methodCompletion = new EmptyCompletion();
     this.typedefCompletion = new EmptyCompletion();
+    this.valueCompletion = new EmptyCompletion();
   }
 
   /**
@@ -151,6 +154,16 @@ export class CobolCompletionItemFactory {
    */
   public setTypedefCompletion(typedefCompletion: TypedefCompletion): CobolCompletionItemFactory {
     this.typedefCompletion = typedefCompletion;
+    return this;
+  }
+
+  /**
+   * Completion class to generate the CompletionItem for value
+   *
+   * @param valueCompletion
+   */
+  public setValueCompletion(valueCompletion: ValueCompletion): CobolCompletionItemFactory {
+    this.valueCompletion = valueCompletion;
     return this;
   }
 
@@ -396,7 +409,7 @@ export class CobolCompletionItemFactory {
         }
         if (!this.isValueDeclared()) {
           let items: Promise<CompletionItem[]>[] = [];
-          items = items.concat(this.generate(new ValueCompletion()));
+          items = items.concat(this.generate(this.valueCompletion));
           if (!this.isUsageDeclared()){
             items = items.concat(this.generate(new TypedefClauseCompletion()));
           }
