@@ -2,6 +2,8 @@ import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-lan
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { CobolVariable, Type } from "./CobolVariable";
+import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
+import { reject } from "q";
 
 // Cobol column for 'VALUE' clause declaration
 const VALUE_COLUMN_DECLARATION = 51;
@@ -11,22 +13,53 @@ const VALUE_COLUMN_DECLARATION = 51;
  */
 export class ValueCompletion implements CompletionInterface {
 
+    /** Uri of source file */
+    private uri: string | undefined
+    /** Expanded source */
+    private sourceLines: Map<string | undefined, string[]>
+    /** Source of completions */
+    private sourceOfCompletions: (() => Thenable<string>) | undefined;
+
+    constructor(uri?: string, sourceOfCompletions?: () => Thenable<string>) {
+        this.uri = uri;
+        this.sourceOfCompletions = sourceOfCompletions;
+        this.sourceLines = new Map();
+    }
+
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
+            if (this.sourceOfCompletions) {
+                this.sourceOfCompletions()!.then((sourceOfCompletions) => {
+                    if (sourceOfCompletions == "expanded") {
+                        ExpandedSourceManager.getExpandedSource(this.uri!).then((buffer) => {
+                            this.sourceLines.set(this.uri, buffer.split("\n"));
+                        }).catch((e) => {
+                            return reject(e);
+                        })
+                    } else {
+                        this.sourceLines.set(this.uri, lines);
+                        return resolve([]);
+                    }
+                })
+            }
             const currentLineText = lines[line];
-            const variable = CobolVariable.parseLines(line, lines);
+            const bufferLines = this.sourceLines.get(this.uri);
+            let variable;
+            if (bufferLines) {
+                variable = CobolVariable.parseLines(line, bufferLines);
+            } else {
+                variable = CobolVariable.parseLines(line, lines);
+            }
             const text = this.generateTextFromVariable(variable, column, currentLineText);
-            resolve(
-                [{
-                    label: 'Complete VALUE declaration',
-                    detail: 'VALUE clause will be inserted on the most appropriate place',
-                    insertText: text,
-                    insertTextFormat: InsertTextFormat.Snippet,
-                    filterText: "value",
-                    preselect: true,
-                    kind: CompletionItemKind.Variable
-                }]
-            );
+            resolve([{
+                label: 'Complete VALUE declaration',
+                detail: 'VALUE clause will be inserted on the most appropriate place',
+                insertText: text,
+                insertTextFormat: InsertTextFormat.Snippet,
+                filterText: "value",
+                preselect: true,
+                kind: CompletionItemKind.Variable
+            }]);
         });
     }
 
@@ -45,7 +78,9 @@ export class ValueCompletion implements CompletionInterface {
             text = text.concat("value is ${1}");
         }else {
             text = text.concat("value is ${1:zeros}");
-            text = text.concat(this.createCompIfNeeded(variable));
+            if (!currentLineText.toUpperCase().includes("USAGE")) {
+                text = text.concat(this.createCompIfNeeded(variable));
+            }
         }
         text = text.concat(".");
         return text;

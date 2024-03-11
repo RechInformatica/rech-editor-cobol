@@ -8,7 +8,7 @@ const COMP_TYPEDEF_COLUMN_DECLARATION = 66;
 /**
  * Class to generate LSP Completion Items for Cobol picture
  */
-export class TypedefCompletion implements CompletionInterface {
+export class TypedefClauseCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
