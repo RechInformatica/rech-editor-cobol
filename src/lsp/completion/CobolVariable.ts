@@ -274,7 +274,7 @@ export class CobolVariable {
      */
     private static extractPictureFromTypedef(typedef: string, buffer: string[]): string {
         const regexString =  "^ +\\d\\d +" +typedef + " +(?:pic(?: is)?)(.*) +typedef.*";
-        const regex = new RegExp(regexString, "gm");
+        const regex = new RegExp(regexString, "gim");
         let match = regex.exec(buffer.join("\n"));
         let picture = "";
         if (match) {

@@ -146,7 +146,7 @@ export class VariableCompletion implements CompletionInterface {
     private generateItemsFromCurrentBuffer(lines: string[], useCache: boolean): Map<string, CompletionItem> {
         const itemsMap: Map<string, CompletionItem> = new Map;
         const buffer = lines.join("\n");
-        new Scan(buffer).scan(/^ +\d\d +(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm, (iterator: any) => {
+        new Scan(buffer).scan(/^ +\d\d +(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gim, (iterator: any) => {
             const variable = CobolVariable.parseLines(iterator.row, lines, {noChildren: true, noScope: true, noSection: true, ignoreMethodReturn: true});
             if (!this.shouldIgnoreVariable(variable)) {
                 const variableItem = this.createVariableCompletion(variable);

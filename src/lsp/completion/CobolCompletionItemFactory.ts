@@ -152,7 +152,7 @@ export class CobolCompletionItemFactory {
    *
    * @param typedefCompletion
    */
-  public setTypedefCompletion(typedefCompletion: TypedefCompletion): CobolCompletionItemFactory {
+  public setTypedefCompletion(typedefCompletion: CompletionInterface): CobolCompletionItemFactory {
     this.typedefCompletion = typedefCompletion;
     return this;
   }
@@ -162,7 +162,7 @@ export class CobolCompletionItemFactory {
    *
    * @param valueCompletion
    */
-  public setValueCompletion(valueCompletion: ValueCompletion): CobolCompletionItemFactory {
+  public setValueCompletion(valueCompletion: CompletionInterface): CobolCompletionItemFactory {
     this.valueCompletion = valueCompletion;
     return this;
   }
