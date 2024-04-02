@@ -22,7 +22,6 @@ export class TypedefCompletion implements CompletionInterface {
     constructor(uri?: string, sourceOfCompletions?: () => Thenable<string>) {
         this.uri = uri;
         this.sourceOfCompletions = sourceOfCompletions;
-        // this.insertTextBuilder = new VariableNameInsertTextBuilder();
     }
 
     public generate(_line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
@@ -88,7 +87,7 @@ export class TypedefCompletion implements CompletionInterface {
     private generateItemsFromCurrentBuffer(lines: string[], _useCache: boolean): Map<string, CompletionItem> {
         const itemsMap: Map<string, CompletionItem> = new Map;
         const buffer = lines.join("\n");
-        new Scan(buffer).scan(/^ +\d\d +(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*typedef.*/gm, (iterator: any) => {
+        new Scan(buffer).scan(/^ +\d\d +(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*typedef.*/gim, (iterator: any) => {
             const typedefVariable = CobolVariable.parseLines(iterator.row, lines, { noChildren: true, noScope: true, noSection: true, ignoreMethodReturn: true });
             const typedefItem = this.createTypedefCompletion(typedefVariable);
             itemsMap.set(typedefVariable.getName(), typedefItem);

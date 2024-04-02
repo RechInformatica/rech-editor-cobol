@@ -99,7 +99,7 @@ export class CobolVariable {
         const level = Number.parseInt(splitted[0]);
         const name = splitted[1].replace(".", "");
         const redefines = line.toLowerCase().includes(" redefines ");
-        const picture = CobolVariable.extractPicture(splitted);
+        const picture = CobolVariable.extractPicture(splitted, buffer);
         let children = new Array();
         if (!special || !special.noChildren) {
             children = CobolVariable.parseAndGetChildren(level, lineNumber, buffer);
@@ -229,16 +229,21 @@ export class CobolVariable {
      *
      * @param splitted splitted variable information
      */
-    private static extractPicture(splitted: string[]): string {
+    private static extractPicture(splitted: string[], buffer: string[]): string {
         if (splitted[splitted.length - 1].endsWith(".")) {
             splitted[splitted.length - 1] = splitted[splitted.length - 1].slice(0, -1);
         }
         let foundPicClause = false;
+        let foundUsageClause = false;
         let picture = "";
         let comp = "";
         for (let i = 0; i < splitted.length; i++) {
-            if (splitted[i].toUpperCase() === "PIC" || splitted[i].toUpperCase() === "USAGE") {
+            if (splitted[i].toUpperCase() === "PIC") {
                 foundPicClause = true;
+                continue;
+            }
+            if (splitted[i].toUpperCase() === "USAGE") {
+                foundUsageClause = true;
                 continue;
             }
             if (foundPicClause) {
@@ -249,11 +254,33 @@ export class CobolVariable {
                 }
                 foundPicClause = false;
             }
+            if (foundUsageClause) {
+                const typedef = splitted[i];
+                picture = CobolVariable.extractPictureFromTypedef(typedef, buffer);
+                break;
+            }
             if (splitted[i].toUpperCase().startsWith("COMP")) {
                 comp = splitted[i];
             }
         }
         return picture + comp;
+    }
+
+    /**
+     * Extracts the picture from typedef variable information
+     *
+     * @param typedef Typedef name variable
+     * @param buffer Source buffer lines
+     */
+    private static extractPictureFromTypedef(typedef: string, buffer: string[]): string {
+        const regexString =  "^ +\\d\\d +" +typedef + " +(?:pic(?: is)?)(.*) +typedef.*";
+        const regex = new RegExp(regexString, "gim");
+        let match = regex.exec(buffer.join("\n"));
+        let picture = "";
+        if (match) {
+            picture = match[1].split(/\s+/)[1];
+        }
+        return picture;
     }
 
     /**
