@@ -73,7 +73,7 @@ export class CobolDiagnosticParser {
     return new Promise((resolve, reject) => {
       const interpreters: Array<Promise<Diagnostic>> = [];
       const lines = BufferSplitter.split(preprocResult);
-      const pattern = /\*\*\*\sWarning:\s(.*);\sfile\s=\s([A-Za-z0-9.]+),\sline\s=\s(\d+)\s?(\(Erro\))?/;
+      const pattern = /\*\*\*\sWarning:\s(.*);\sfile\s=\s([A-Za-z0-9-_.]+),\sline\s=\s(\d+)\s?(\(Erro\))?/;
       lines.forEach(currentLine => {
         interpreters.push(this.interpretsTheErrorMessage(fileName, pattern, currentLine, externalDiagnosticFilter, isDeprecatedWarning));
       });
