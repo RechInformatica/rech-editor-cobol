@@ -111,7 +111,7 @@ export class TypedefCompletion implements CompletionInterface {
         const typedefPic = variable.getPicture();
         return {
             label: typedefName,
-            detail: typedefPic + comments.join(" | "),
+            detail: typedefPic + " " + comments.join(" | "),
             insertText: typedefName,
             insertTextFormat: InsertTextFormat.Snippet,
             filterText: typedefPic + " " + typedefName,

@@ -1,5 +1,10 @@
 import { StatusBarItem, window, StatusBarAlignment } from "vscode";
 
+/** Literals from paragraph and variables sources */
+const PARAGRAPH_SOURCE_EXPANDED_FILE = "ParagraphSource - Expanded File";
+const PARAGRAPH_SOURCE_LOCAL_FILE = "ParagraphSource - Local File";
+const VARIABLE_SOURCE_EXPANDED_FILE = "VariableSource - Expanded File";
+const VARIABLE_SOURCE_LOCAL_FILE = "VariableSource - Local File";
 /** Paragraph status bar priority */
 const PARAGRAPHSTATUSBARPRIORITY = 200;
 /** Variable status bar priority */
@@ -11,8 +16,8 @@ export class SourceOfCompletions {
 
     private static paragraphStatusBar: StatusBarItem | undefined;
     private static variableStatusBar: StatusBarItem | undefined;
-    private static paragraphSource: "local" | "expanded" = "local";
-    private static variableSource: "local" | "expanded" = "local";
+    private static paragraphSource: "local" | "expanded" = "expanded";
+    private static variableSource: "local" | "expanded" = "expanded";
     private static isVisible: boolean = false;
 
     /**
@@ -21,11 +26,11 @@ export class SourceOfCompletions {
     public static buildStatusBar() {
         SourceOfCompletions.paragraphStatusBar = window.createStatusBarItem(StatusBarAlignment.Right, PARAGRAPHSTATUSBARPRIORITY)
         SourceOfCompletions.paragraphStatusBar.command = "rech.editor.cobol.changeParagraphSource"
-        SourceOfCompletions.paragraphStatusBar.text = "ParagraphSource - Local File"
+        SourceOfCompletions.paragraphStatusBar.text = PARAGRAPH_SOURCE_EXPANDED_FILE
         //
         SourceOfCompletions.variableStatusBar = window.createStatusBarItem(StatusBarAlignment.Right, VARIABLESTATUSBARPRIORITY)
         SourceOfCompletions.variableStatusBar.command = "rech.editor.cobol.changeVariableSource"
-        SourceOfCompletions.variableStatusBar.text = "VariableSource - Local File"
+        SourceOfCompletions.variableStatusBar.text = VARIABLE_SOURCE_EXPANDED_FILE
     }
 
     /**
@@ -50,10 +55,10 @@ export class SourceOfCompletions {
     public static toggleTheParagraphSource() {
         if (SourceOfCompletions.paragraphSource == "local") {
             SourceOfCompletions.paragraphSource = "expanded";
-            SourceOfCompletions.paragraphStatusBar!.text = "ParagraphSource - Expanded File"
+            SourceOfCompletions.paragraphStatusBar!.text = PARAGRAPH_SOURCE_EXPANDED_FILE
         } else {
             SourceOfCompletions.paragraphSource = "local";
-            SourceOfCompletions.paragraphStatusBar!.text = "ParagraphSource - Local File"
+            SourceOfCompletions.paragraphStatusBar!.text = PARAGRAPH_SOURCE_LOCAL_FILE
         }
     }
 
@@ -63,10 +68,10 @@ export class SourceOfCompletions {
     public static toggleTheVariableSource() {
         if (SourceOfCompletions.variableSource == "local") {
             SourceOfCompletions.variableSource = "expanded";
-            SourceOfCompletions.variableStatusBar!.text = "VariableSource - Expanded File"
+            SourceOfCompletions.variableStatusBar!.text = VARIABLE_SOURCE_EXPANDED_FILE
         } else {
             SourceOfCompletions.variableSource = "local";
-            SourceOfCompletions.variableStatusBar!.text = "VariableSource - Local File"
+            SourceOfCompletions.variableStatusBar!.text = VARIABLE_SOURCE_LOCAL_FILE
         }
     }
 
