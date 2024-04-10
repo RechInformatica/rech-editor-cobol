@@ -127,7 +127,7 @@ export class ClassCompletion implements CompletionInterface {
         kind: MarkupKind.Markdown,
         value: cobolDoc.elementsAsMarkdown()
       },
-      filterText: classs + " " + packagex ? packagex : cobolDoc.elementsAsMarkdown(),
+      filterText: classs + " " + (packagex ? packagex : cobolDoc.elementsAsMarkdown()),
       kind: CompletionItemKind.Class
     };
   }
