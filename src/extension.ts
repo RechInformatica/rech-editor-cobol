@@ -31,6 +31,7 @@ export async function activate(context: any) {
  * @param context
  */
 async function _activate(context: any) {
+    console.log("Extensão Teste")
     // Build the statusBar to control the source of completions suggested in the server side
     SourceOfCompletions.buildStatusBar();
     // Build the statusBar from folding

@@ -18,7 +18,7 @@ export class SourceExpander {
       const currentFile = files[0];
       const cacheFile = files[1];
       const executor = Editor.getSourceExpander();
-      if (executor) {
+      if (executor && typeof executor.setPath === 'function') {
         executor.setPath(currentFile).exec(cacheFile).then((result) => {
           Log.get().info("Source expanded Files:" + files.toString() + " - " + result);
           resolve(result);
