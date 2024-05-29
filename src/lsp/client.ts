@@ -258,7 +258,7 @@ export class Client {
 			const currentFile = files[0];
 			const extraCopyDirectory = files[1];
 			const executor = Editor.getPreprocessor();
-			if (executor && typeof executor.setPath === 'function') {
+			if (executor) {
 				executor.setPath(currentFile).setExtraParams([extraCopyDirectory]).exec().then((output) => {
 					return resolve(output);
 				}).catch((e) => {
@@ -278,7 +278,7 @@ export class Client {
 	private static createCopyHierarchyPromise(uri: string): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
 			const executor = Editor.getCopyHierarchy();
-			if (executor && typeof executor.setPath === 'function') {
+			if (executor) {
 				executor.setPath(uri).exec().then((buffer) => {
 					return resolve(buffer);
 				}).catch((e) => {
@@ -296,7 +296,7 @@ export class Client {
 	private static createSpecialClassPullerPromise(uri: string): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
 			const executor = Editor.getSpecialClassPuller();
-			if (executor && typeof executor.setPath === 'function') {
+			if (executor) {
 				executor.setPath(uri).exec().then((classes: string) => {
 					return resolve(classes);
 				}).catch((e) => {

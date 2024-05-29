@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { commands, window } from 'vscode';
+import { commands, extensions, window } from 'vscode';
 import { GeradorCobol } from './cobol/gerador-cobol';
 import { Editor } from './editor/editor';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
