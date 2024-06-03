@@ -4,7 +4,7 @@ import { Path } from "../commons/path";
 import { File } from "../commons/file";
 import { BufferSplitter } from "rech-ts-commons";
 import { Configuration } from "../helpers/configuration";
-import { commands } from "vscode";
+import { commands, extensions } from "vscode";
 import { CobolVariable } from "../lsp/completion/CobolVariable";
 
 /**
@@ -85,12 +85,12 @@ export class CobolCopy {
      * @param copy
      */
     private static getHeaderOfCopy(copy: File): Promise<string[]> {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (!copy.exists()) {
                 return reject();
             }
-            const commentExractorFromCopyFilesCommand = new Configuration("rech.editor.cobol.callback").get<string>("commentExractorFromCopyFiles");
-            if (!commentExractorFromCopyFilesCommand || commentExractorFromCopyFilesCommand == "") {
+            const rechInternal = extensions.getExtension('rechinformatica.rech-editor-internal');
+            if (!rechInternal) {
                 const copyBuffer = BufferSplitter.split(copy.loadBufferSync("latin1"));
                 const comments: string[] = [];
                 for (let lineNumber = 0; lineNumber < copyBuffer.length; lineNumber++) {
@@ -111,16 +111,11 @@ export class CobolCopy {
                 }
                 return resolve(comment);
             }
-            commands.executeCommand<string[]>(commentExractorFromCopyFilesCommand, copy.fileName).then((result) => {
-                if (result) {
-                    return resolve(result);
-                } else {
-                    return reject();
-                }
-            }, (e) => {
-                return reject(e);
-            });
-
+            await rechInternal.activate();
+            const commandForCopyUsageLocator = rechInternal.exports.getAutogrepRunner();
+            if (commandForCopyUsageLocator) {
+                return commandForCopyUsageLocator(copy.fileName);
+            }
         });
     }
 
