@@ -9,7 +9,7 @@ import { FormatterUtils } from "./FormatterUtils";
 export class IfFormatter implements FormatterInterface {
 
     /** RegExp that identifies if it is the IF clause*/
-    public static IF_REGEXP = /\s+(IF|if).*/;
+    public static IF_REGEXP = /\s+(IF|if)\s+/;
 
     /**
      * Generates an array of Text Edits for source code formatting
@@ -22,8 +22,8 @@ export class IfFormatter implements FormatterInterface {
         let ifLineText = lines[line - 1];
         let ifStartColumn = CompletionUtils.countSpacesAtBeginning(ifLineText);
         const edits: TextEdit[] = [FormatterUtils.createIndentTextEdit(line, 0)];
-        let enfIfClause = "end-if";
-        if (FormatterUtils.isClauseMissing(line + 1, ifStartColumn, lines, enfIfClause, [enfIfClause, "else"])) {
+        let endIfClause = "end-if";
+        if (FormatterUtils.isClauseMissing(line + 1, ifStartColumn, lines, endIfClause, [endIfClause, "else"])) {
             edits.push(this.createEndIfTextEdit(line + 1, ifStartColumn + 1));
         }
         return edits;
