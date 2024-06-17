@@ -38,16 +38,16 @@ export class PerformVaryingFormatter implements FormatterInterface {
      */
     public generate(line: number, _column: number, lines: string[]): TextEdit[] {
         let untilLine = line
-        let currentLineText = lines[untilLine - 1];
+        const currentLineText = lines[untilLine - 1];
         let untilLineText = currentLineText
         if (!PerformVaryingFormatter.UNTIL_REGEXP.exec(currentLineText)) {
             untilLine = PerformVaryingFormatter.LineOfUntilClause(line, lines)!
             untilLineText = lines[untilLine];
         }
-        let untilStartColumn = CompletionUtils.countSpacesAtBeginning(untilLineText);
+        const untilStartColumn = CompletionUtils.countSpacesAtBeginning(untilLineText);
         if (/.*\s(?:or|and|=|>|<|=>|=<|<>)$/.test(currentLineText.toLowerCase())) {
-            let condition = currentLineText.substring(untilStartColumn + 5);
-            let conditionColumn = condition.length - condition.trimLeft().length + untilStartColumn + 8
+            const condition = currentLineText.substring(untilStartColumn + 5);
+            const conditionColumn = condition.length - condition.trimLeft().length + untilStartColumn + 8
             return [this.createIndentofUntilTextEdit(line, conditionColumn, lines[line].trim())];;
         }
         return [this.createIndentofUntilTextEdit(line, untilStartColumn, lines[line].trim())];;

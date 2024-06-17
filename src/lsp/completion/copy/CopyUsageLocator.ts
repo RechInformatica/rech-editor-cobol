@@ -18,7 +18,7 @@ export class CopyUsageLocator {
     public static findUsage(copy: string): Promise<string[]> {
         return new Promise((resolve, reject) => {
             if (this.cache.has(copy)) {
-                let result = this.cache.get(copy)!;
+                const result = this.cache.get(copy)!;
                 if (new Date().getTime() - result.time < MAX_CACHE_TIME) {
                     return resolve(result.usages);
                 }

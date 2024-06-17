@@ -12,9 +12,9 @@ export class PerformUntilFolding implements CobolFoldInterface {
     }
 
     fold(line: number, lines: string[]): FoldingRange {
-        let startLine = line;
-        let startColumn = lines[startLine].length;
-        let endLine = this.findEndOfPerformUntilDeclaration(line, lines)
+        const startLine = line;
+        const startColumn = lines[startLine].length;
+        const endLine = this.findEndOfPerformUntilDeclaration(line, lines)
         return {
             startLine: startLine,
             startCharacter: startColumn,
@@ -30,12 +30,12 @@ export class PerformUntilFolding implements CobolFoldInterface {
      * @param lines
      */
     private findEndOfPerformUntilDeclaration(line: number, lines: string[]): number {
-        let performDeclarationLine = lines[line];
-        let performDeclarationColumn = CompletionUtils.countSpacesAtBeginning(performDeclarationLine);
+        const performDeclarationLine = lines[line];
+        const performDeclarationColumn = CompletionUtils.countSpacesAtBeginning(performDeclarationLine);
         for (let index = line; index < lines.length; index++) {
-            let currentLine = lines[index];
+            const currentLine = lines[index];
             if (currentLine.trimLeft().toLowerCase().startsWith("end-perform")) {
-                let currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+                const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == performDeclarationColumn) {
                     return index - 1;
                 }

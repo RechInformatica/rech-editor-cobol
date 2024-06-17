@@ -100,7 +100,7 @@ export class RemoveVariableAction implements ActionInterface {
         let foundDeepestChild: boolean = false;
         let lastVariable = CobolVariable.parseLines(line, lines);
         while (!foundDeepestChild) {
-            let children = lastVariable.getChildren();
+            const children = lastVariable.getChildren();
             if (children && children.length > 0) {
                 lastVariable = children[children.length - 1];
             } else {

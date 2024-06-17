@@ -52,7 +52,7 @@ export class Posicionamento {
    * Posiciona na coluna especificada
    */
   posicionaColuna(coluna: number) {
-    let editor = new Editor();
+    const editor = new Editor();
     editor.setColumn(coluna - 1).then().catch();
   }
 

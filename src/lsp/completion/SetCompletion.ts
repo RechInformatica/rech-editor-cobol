@@ -9,7 +9,7 @@ export class SetCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let text = "set" + CompletionUtils.fillSpacesFromWordReplacementEnd(20, column, _lines[_line], "set") + "${0}";            
+            const text = "set" + CompletionUtils.fillSpacesFromWordReplacementEnd(20, column, _lines[_line], "set") + "${0}";
             resolve(
                 [{
                     label: 'SET command',

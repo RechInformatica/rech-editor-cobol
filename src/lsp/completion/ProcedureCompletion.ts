@@ -33,7 +33,7 @@ export class ProcedureCompletion implements CompletionInterface {
                     }
                 })
             }
-            let returnedVariable = this.findReturnedVariable(line, lines);
+            const returnedVariable = this.findReturnedVariable(line, lines);
             if (returnedVariable != undefined) {
                 text = text + " returning " + returnedVariable.getName();
             }
@@ -60,7 +60,7 @@ export class ProcedureCompletion implements CompletionInterface {
      * @param lines
      */
     private findReturnedVariable(line: number, lines: string[]): CobolVariable | undefined {
-        let workingLine = this.getWorkingLine(line, lines);
+        const workingLine = this.getWorkingLine(line, lines);
         if (workingLine == undefined) {
             return undefined;
         }
@@ -89,11 +89,11 @@ export class ProcedureCompletion implements CompletionInterface {
      * @param lines
      */
     private findLinkageVariables(line: number, lines: string[]): CobolVariable[] {
-        let linkageLine = this.getLinkageLine(line, lines);
+        const linkageLine = this.getLinkageLine(line, lines);
         if (linkageLine == undefined) {
             return [];
         }
-        let result = [];
+        const result = [];
         for (let index = linkageLine + 1; index < lines.length; index++) {
             const lineText = lines[index];
             if (!this.isCommentOrEmptyLine(lineText)) {
@@ -117,7 +117,7 @@ export class ProcedureCompletion implements CompletionInterface {
      * @param line
      */
     public isCommentOrEmptyLine(line: string): boolean {
-        let trimmed = line.trim();
+        const trimmed = line.trim();
         return trimmed.startsWith("*>") || trimmed === "";
     }
 

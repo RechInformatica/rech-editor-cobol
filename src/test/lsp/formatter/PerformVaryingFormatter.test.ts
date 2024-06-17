@@ -6,7 +6,7 @@ import { PerformVaryingFormatter } from '../../../lsp/formatter/PerformVaryingFo
   describe('Find the until clause', () => {
 
     it('Not Find the line of the until clause for teste before perform loop in until exit loop', () => {
-      let buffer = [
+      const buffer = [
         "      *>-> Laço de navegação entre as janelas",
         "           PERFORM                UNTIL EXIT",
         "      *>-> Avalia a janela que deve ser aceita",
@@ -16,7 +16,7 @@ import { PerformVaryingFormatter } from '../../../lsp/formatter/PerformVaryingFo
     });
 
     it('Find the line of the until clause for teste before perform loop upercase', () => {
-      let buffer = [
+      const buffer = [
         "      *>-> Teste de laço",
         "           PERFORM",
         "              VARYING             W-IDV FROM 1 BY 1",
@@ -30,7 +30,7 @@ import { PerformVaryingFormatter } from '../../../lsp/formatter/PerformVaryingFo
     });
 
     it('Find the line of the until clause for teste before perform loop lowercase', () => {
-      let buffer = [
+      const buffer = [
         "      *>-> Teste de laço",
         "           perform",
         "              varying             w-idv from 1 by 1",

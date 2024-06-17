@@ -12,9 +12,9 @@ export class PerformWithTest implements CobolFoldInterface {
     }
 
     fold(line: number, lines: string[]): FoldingRange {
-        let startLine = this.findStartOfPerformDeclaration(line, lines);
-        let startColumn = lines[startLine].length;
-        let endLine = this.findEndOfPerformDeclaration(line, lines)
+        const startLine = this.findStartOfPerformDeclaration(line, lines);
+        const startColumn = lines[startLine].length;
+        const endLine = this.findEndOfPerformDeclaration(line, lines)
         return {
             startLine: startLine,
             startCharacter: startColumn,
@@ -44,7 +44,7 @@ export class PerformWithTest implements CobolFoldInterface {
      * @param currentLine
      */
     private belongsToThePerformDeclarationBlock(currentLine: number, lines: string[]) {
-        let lineContent = lines[currentLine].trim();
+        const lineContent = lines[currentLine].trim();
         if (lineContent == "") {
             return true;
         }
@@ -55,12 +55,12 @@ export class PerformWithTest implements CobolFoldInterface {
             return true;
         }
         if (currentLine > 0) {
-            let previousLineWords = lines[currentLine - 1].trim().split(" ");
+            const previousLineWords = lines[currentLine - 1].trim().split(" ");
             if (CompletionUtils.isOperator(previousLineWords[previousLineWords.length - 1])) {
                 return true;
             }
         }
-        let lineWords = lineContent.split(" ");
+        const lineWords = lineContent.split(" ");
         if (CompletionUtils.isOperator(lineWords[0])) {
             return true;
         }
@@ -74,12 +74,12 @@ export class PerformWithTest implements CobolFoldInterface {
      * @param lines
      */
     private findEndOfPerformDeclaration(line: number, lines: string[]): number {
-        let performDeclarationLine = lines[line];
-        let performDeclarationColumn = CompletionUtils.countSpacesAtBeginning(performDeclarationLine);
+        const performDeclarationLine = lines[line];
+        const performDeclarationColumn = CompletionUtils.countSpacesAtBeginning(performDeclarationLine);
         for (let index = line; index < lines.length; index++) {
-            let currentLine = lines[index];
+            const currentLine = lines[index];
             if (currentLine.trimLeft().toLowerCase().startsWith("end-perform")) {
-                let currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+                const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == performDeclarationColumn) {
                     return index - 1;
                 }

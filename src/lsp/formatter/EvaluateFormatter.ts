@@ -21,11 +21,11 @@ export class EvaluateFormatter implements FormatterInterface {
      * @param lines document lines
      */
     public generate(line: number, _column: number, lines: string[]): TextEdit[] {
-        let evaluateLineText = lines[line - 1];
-        let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(evaluateLineText);
+        const evaluateLineText = lines[line - 1];
+        const evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(evaluateLineText);
         const edits: TextEdit[] = this.completeTextEditWithComma(line, lines);
         edits.push(this.createWhenTextEdit(line, evaluateStartColumn + 3));
-        let endEvaluateClause = "end-evaluate";
+        const endEvaluateClause = "end-evaluate";
         if (FormatterUtils.isClauseMissing(line + 1, evaluateStartColumn, lines, endEvaluateClause, [endEvaluateClause, "when"])) {
             edits.push(this.createEndEvaluateTextEdit(line + 1, evaluateStartColumn + 1));
         }
@@ -39,9 +39,9 @@ export class EvaluateFormatter implements FormatterInterface {
      * @param lines
      */
     private completeTextEditWithComma(line: number, lines: string[]): TextEdit[] {
-        let currentLineText = lines[line];
-        let previousLineText = lines[line - 1];
-        let previousLineNumber = line - 1;
+        const currentLineText = lines[line];
+        const previousLineText = lines[line - 1];
+        const previousLineNumber = line - 1;
         if (previousLineText.endsWith(",")) {
             return [];
         }
@@ -55,7 +55,7 @@ export class EvaluateFormatter implements FormatterInterface {
      * @param whenColumn
      */
     private createWhenTextEdit(line: number, whenColumn: number): TextEdit {
-        let result = new WhenFormatter().createWhenTextEdit(line, whenColumn);
+        const result = new WhenFormatter().createWhenTextEdit(line, whenColumn);
         result.newText += " ";
         return result;
     }

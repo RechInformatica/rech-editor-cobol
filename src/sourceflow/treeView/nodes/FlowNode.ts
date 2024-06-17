@@ -18,14 +18,14 @@ export default class FlowNode implements NodeInterface {
         let labelAux : RegExpMatchArray | null;
         let finalLabel: string;
         finalLabel = " ";
-        let children = this.flow.getFlowMap() ? this.flow.getFlowMap()!.get(this.lineNumber) : undefined;
+        const children = this.flow.getFlowMap() ? this.flow.getFlowMap()!.get(this.lineNumber) : undefined;
         labelAux = this.flow.getCurrentBuffer()![this.lineNumber].trim().match(/(\S+)/g)
         if (labelAux) {
             labelAux.forEach( e => {
                 finalLabel += " " + e;
             });
         };
-        let label = (this.lineNumber + 1) + ":" + finalLabel;
+        const label = (this.lineNumber + 1) + ":" + finalLabel;
         if (children && children.length > 0) {
             item = new FlowItem(label, TreeItemCollapsibleState.Collapsed);
         } else {
@@ -40,7 +40,7 @@ export default class FlowNode implements NodeInterface {
 
     public getChildren(): NodeInterface[] {
         const result = new Array();
-        let children = this.flow.getFlowMap() ? this.flow.getFlowMap()!.get(this.lineNumber) : undefined;
+        const children = this.flow.getFlowMap() ? this.flow.getFlowMap()!.get(this.lineNumber) : undefined;
         if (children) {
             children.forEach((value) => {
                 result.push(new FlowNode(value.lineNumber, this.flow));

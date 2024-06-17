@@ -10,7 +10,7 @@ export class CatchCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let textEdit = new CatchFormatter().generate(line, column, lines)[0];
+            const textEdit = new CatchFormatter().generate(line, column, lines)[0];
             textEdit.newText = textEdit.newText + " $1";
             resolve(
                 [{

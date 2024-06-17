@@ -20,12 +20,12 @@ export class TryFormatter implements FormatterInterface {
      * @param lines document lines
      */
     public generate(line: number, _column: number, lines: string[]): TextEdit[] {
-        let tryLineText = lines[line - 1];
-        let tryStartColumn = CompletionUtils.countSpacesAtBeginning(tryLineText);
+        const tryLineText = lines[line - 1];
+        const tryStartColumn = CompletionUtils.countSpacesAtBeginning(tryLineText);
         let edits: TextEdit[] = [FormatterUtils.createIndentTextEdit(line, 0)];
-        let endTryClause = "end-try"
-        let catchClause = "catch"
-        let identClauses = [endTryClause, catchClause, "finally"]
+        const endTryClause = "end-try"
+        const catchClause = "catch"
+        const identClauses = [endTryClause, catchClause, "finally"]
         if (FormatterUtils.isClauseMissing(line + 1, tryStartColumn, lines, catchClause, identClauses)) {
             edits = edits.concat(new CatchFormatter().generate(line + 1, tryStartColumn, lines));
         }

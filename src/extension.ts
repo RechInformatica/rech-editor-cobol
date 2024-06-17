@@ -144,7 +144,7 @@ async function _activate(context: any) {
         new Editor().indent("D").then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indentParagraph', () => {
-        let cursors = new Editor().getCursors();
+        const cursors = new Editor().getCursors();
         IndentUtils.indentWholeParagraph().then(() => new Editor().setCursors(cursors)).catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.extractParagraph', () => {

@@ -36,7 +36,7 @@ export class ParserCobol {
    * @param line
    */
   public isCommentOrEmptyLine(line: string): boolean {
-    let trimmed = line.trim();
+    const trimmed = line.trim();
     return trimmed.startsWith("*>") || trimmed === "";
   }
 

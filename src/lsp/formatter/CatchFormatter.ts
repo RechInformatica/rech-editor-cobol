@@ -21,7 +21,7 @@ export class CatchFormatter implements FormatterInterface {
    * @param lines document lines
    */
   public generate(line: number, _column: number, lines: string[]): TextEdit[] {
-    let startColumn = this.findStartColumn(line, lines);
+    const startColumn = this.findStartColumn(line, lines);
     return [this.createCatchTextEdit(line, startColumn)];
   }
 
@@ -58,7 +58,7 @@ export class CatchFormatter implements FormatterInterface {
      * @param column column where the 'catch' clause will be inserted
      */
   public createCatchTextEdit(line: number, column: number): TextEdit {
-    let text = CompletionUtils.fillSpacesBetween(0, column) + "catch";
+    const text = CompletionUtils.fillSpacesBetween(0, column) + "catch";
     return {
       range: {
         start: {

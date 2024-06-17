@@ -6,7 +6,7 @@ import { VariableInsertTextBuilder } from '../../../../lsp/completion/variable/V
 import { BufferSplitter } from 'rech-ts-commons';
 
 //
-let buffer = "      *>--------------------------------------------------------------------------------------------------------------<*\r\n" +
+const buffer = "      *>--------------------------------------------------------------------------------------------------------------<*\r\n" +
     "      *>                                                Calcula o ICMS                                                <*\r\n" +
     "      *>--------------------------------------------------------------------------------------------------------------<*\r\n" +
     "       identification             division.\r\n" +
@@ -98,13 +98,13 @@ let buffer = "      *>----------------------------------------------------------
     "              end-if,\r\n" +
     "           end-perform.\r\n" +
     "      *>--------------------------------------------- CALICM.cbl -----------------------------------------------------<*";
-let lines = BufferSplitter.split(buffer);
+    const lines = BufferSplitter.split(buffer);
 
 describe('Cobol variable completion', () => {
 
     it('Checks cobol variable completion including enums', async () => {
         //
-        let expectedItems: CompletionItem[] = [];
+        const expectedItems: CompletionItem[] = [];
         expectedItems.push({
             label: "w78-nomprg",
             detail: "Nome do programa"
@@ -167,7 +167,7 @@ describe('Cobol variable completion', () => {
 
     it('Checks cobol variable completion ignoring enums', async () => {
         //
-        let expectedItems: CompletionItem[] = [];
+        const expectedItems: CompletionItem[] = [];
         expectedItems.push({
             label: "w78-nomprg",
             detail: "Nome do programa"
@@ -206,7 +206,7 @@ describe('Cobol variable completion', () => {
 
     it('Checks cobol variable completion ignoring displays and enums', async () => {
         //
-        let expectedItems: CompletionItem[] = [];
+        const expectedItems: CompletionItem[] = [];
         expectedItems.push({
             label: "w78-nomprg",
             insertText: "w78-nomprg",
@@ -232,7 +232,7 @@ describe('Cobol variable completion', () => {
 
     it('Checks cobol variable completion using specific VariableInsertTextBuilder', async () => {
         //
-        let expectedItems: CompletionItem[] = [];
+        const expectedItems: CompletionItem[] = [];
         expectedItems.push({
             label: "w78-nomprg",
             insertText: "antes w78-nomprg dummy",

@@ -25,10 +25,10 @@ export class WhenFormatter implements FormatterInterface {
    */
   public generate(line: number, _column: number, lines: string[]): TextEdit[] {
     // If enter is typed subtract it from line number
-    let lineText = lines[line];
-    let match = WhenFormatter.WHEN_WITH_PARAM_REGEXP.exec(lineText);
+    const lineText = lines[line];
+    const match = WhenFormatter.WHEN_WITH_PARAM_REGEXP.exec(lineText);
     if (!match) {
-      let whenStartColumn = this.evaluateColumn(line, lines) + 3;
+      const whenStartColumn = this.evaluateColumn(line, lines) + 3;
       return [this.createWhenTextEdit(line, whenStartColumn)];
     }
     return [];
@@ -56,7 +56,7 @@ export class WhenFormatter implements FormatterInterface {
    * @param column column where the 'when' clause will be inserted
    */
   public createWhenTextEdit(line: number, column: number): TextEdit {
-    let textToInsert = "when";
+    const textToInsert = "when";
     let whenText = "";
     whenText = CompletionUtils.fillSpacesBetween(0, column) + textToInsert;
     return {

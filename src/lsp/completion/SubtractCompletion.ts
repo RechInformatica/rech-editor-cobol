@@ -9,7 +9,7 @@ export class SubtractCompletion implements CompletionInterface {
 
     public generate(_line: number, _column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let text = "subtract ${0}";
+            const text = "subtract ${0}";
             resolve(
                 [{
                     label: 'SUBTRACT command',

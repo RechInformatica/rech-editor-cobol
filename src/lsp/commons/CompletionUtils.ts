@@ -35,7 +35,7 @@ export class CompletionUtils {
    * @param currentLineText text of current line
    */
   public static fillSpacesFromWordStart(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string): string {
-    let initialWordColumn = CompletionUtils.findWordStartWithinLine(currentCursorColumn, currentLineText);
+    const initialWordColumn = CompletionUtils.findWordStartWithinLine(currentCursorColumn, currentLineText);
     return CompletionUtils.fillSpacesBetween(initialWordColumn, targetFinalColumn);
   }
 
@@ -51,7 +51,7 @@ export class CompletionUtils {
    * @param lastWordReplacement word to replace the last word currently found in currentText
    */
   public static fillSpacesFromWordReplacementEnd(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string, lastWordReplacement: string): string {
-    let futureLine = CompletionUtils.replaceLastWord(currentLineText, lastWordReplacement);
+    const futureLine = CompletionUtils.replaceLastWord(currentLineText, lastWordReplacement);
     return CompletionUtils.fillSpacesFromWordEnd(targetFinalColumn, currentCursorColumn, futureLine);
   }
 
@@ -64,7 +64,7 @@ export class CompletionUtils {
    * @param currentLineText text of current line
    */
   public static fillSpacesFromWordEnd(targetFinalColumn: number, currentCursorColumn: number, currentLineText: string): string {
-    let initialWordColumn = CompletionUtils.findWordEndWithinLine(currentCursorColumn, currentLineText);
+    const initialWordColumn = CompletionUtils.findWordEndWithinLine(currentCursorColumn, currentLineText);
     return CompletionUtils.fillSpacesOrSingleSpace(initialWordColumn, targetFinalColumn);
   }
 
@@ -78,7 +78,7 @@ export class CompletionUtils {
     if (currentText.length == 0) {
       return lastWordReplacement;
     }
-    let withoutLastWord = currentText.substring(0, currentText.lastIndexOf(" ") + 1);
+    const withoutLastWord = currentText.substring(0, currentText.lastIndexOf(" ") + 1);
     return withoutLastWord + lastWordReplacement;
   }
 
@@ -92,7 +92,7 @@ export class CompletionUtils {
    * @param finalColumn final column
    */
   public static fillSpacesOrSingleSpace(initialColumn: number, finalColumn: number): string {
-    let spacesBetween = CompletionUtils.fillSpacesBetween(initialColumn, finalColumn);
+    const spacesBetween = CompletionUtils.fillSpacesBetween(initialColumn, finalColumn);
     if (spacesBetween.length == 0) {
       return " ";
     }
@@ -106,7 +106,7 @@ export class CompletionUtils {
    * @param finalColumn final column
    */
   public static fillSpacesBetween(initialColumn: number, finalColumn: number): string {
-    let spaceCount = finalColumn - initialColumn;
+    const spaceCount = finalColumn - initialColumn;
     let text = "";
     for (var i = 0; i < spaceCount; i++) {
       text = text.concat(" ");
@@ -126,7 +126,7 @@ export class CompletionUtils {
       if (initialWordColumn == 0) {
         break;
       }
-      let lastChar = currentLineText.charAt(initialWordColumn - 1);
+      const lastChar = currentLineText.charAt(initialWordColumn - 1);
       if (lastChar === " ") {
         break;
       }
@@ -148,7 +148,7 @@ export class CompletionUtils {
       if (finalWordColumn >= currentLineText.length) {
         break;
       }
-      let lastChar = currentLineText.charAt(finalWordColumn + 1);
+      const lastChar = currentLineText.charAt(finalWordColumn + 1);
       if (lastChar === " ") {
         break;
       }
@@ -274,7 +274,7 @@ export class CompletionUtils {
    * @param line line to clean
    */
   public static createCleanLineTextEdit(line: number): TextEdit {
-    let textEdit =  {
+    const textEdit =  {
       range: {
         start: {
           line: line,

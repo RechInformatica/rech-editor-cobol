@@ -11,10 +11,10 @@ export class CopyFolding implements CobolFoldInterface {
     }
 
     fold(line: number, lines: string[]): FoldingRange {
-        let currentLine = lines[line];
-        let startLine = line;
-        let startColumn = currentLine.toLowerCase().indexOf(".cpy") + 4;
-        let endLine = this.findEndOfCopyDeclaration(line, lines)
+        const currentLine = lines[line];
+        const startLine = line;
+        const startColumn = currentLine.toLowerCase().indexOf(".cpy") + 4;
+        const endLine = this.findEndOfCopyDeclaration(line, lines)
         return {
             startLine: startLine,
             startCharacter: startColumn,
@@ -31,7 +31,7 @@ export class CopyFolding implements CobolFoldInterface {
      */
     private findEndOfCopyDeclaration(line: number, lines: string[]): number {
         for (let index = line; index < lines.length; index++) {
-            let currentLine = lines[index].trimRight();
+            const currentLine = lines[index].trimRight();
             if (currentLine.trim().startsWith("*>")) {
                 continue;
             }

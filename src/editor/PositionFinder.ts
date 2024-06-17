@@ -60,7 +60,7 @@ export class PositionFinder {
       return;
     }
     for (let lineNumber = startLine; lineNumber < document.lineCount; lineNumber++) {
-      let p = this.findMacherAtLine(regex, lineNumber, document);
+      const p = this.findMacherAtLine(regex, lineNumber, document);
       if (p) {
         positionsToReturn = positionsToReturn.concat(p)
         if (returnFrst) {
@@ -84,7 +84,7 @@ export class PositionFinder {
   private findPreviousPositions(regex: RegExp, startLine: number, document: TextDocument, returnFrst?: boolean): RechPosition[] | undefined {
     let positionsToReturn = new Array<RechPosition>();
     for (let lineNumber = startLine; lineNumber > 0; lineNumber--) {
-      let p = this.findMacherAtLine(regex, lineNumber, document);
+      const p = this.findMacherAtLine(regex, lineNumber, document);
       if (p) {
         positionsToReturn = positionsToReturn.concat(p)
         if (returnFrst) {
@@ -105,9 +105,9 @@ export class PositionFinder {
    * @param document
    */
   private findMacherAtLine(regex: RegExp, lineNumber: number, document: TextDocument): RechPosition[] | undefined {
-    let result: RechPosition[] = [];
-    let lineText = document.lineAt(lineNumber);
-    let matcher = lineText.text.match(regex);
+    const result: RechPosition[] = [];
+    const lineText = document.lineAt(lineNumber);
+    const matcher = lineText.text.match(regex);
     if (matcher) {
       matcher.forEach((match) => {
         let column = lineText.text.indexOf(match);

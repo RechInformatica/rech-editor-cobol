@@ -18,7 +18,7 @@ export class GeradorCobol {
    */
   endLineToggle(char: string) {
     let line = this.editor.getCurrentLine();
-    let lastChar = line.charAt(line.length - 1);
+    const lastChar = line.charAt(line.length - 1);
     if (lastChar == char) {
       return;
     }
@@ -37,7 +37,7 @@ export class GeradorCobol {
    */
   async invertMoveOperators() {
     this.editor.selectWholeLines();
-    let selectedBuffer = this.editor.getSelectionBuffer();
+    const selectedBuffer = this.editor.getSelectionBuffer();
     const replacedBuffer = new MoveInverter().invertOperators(selectedBuffer[0]);
     await this.editor.replaceSelection(replacedBuffer);
     await this.editor.indent("N");
@@ -47,7 +47,7 @@ export class GeradorCobol {
    * Paste clipboard in a new line wherever the cursor is
    */
   async pasteLine() {
-    let cursor = this.editor.getCursors()[0];
+    const cursor = this.editor.getCursors()[0];
     await this.editor.clipboardPaste();
     this.editor.setCursor(cursor.line, cursor.column);
   }
@@ -56,7 +56,7 @@ export class GeradorCobol {
    * Insert a new line above, keeping the cursor in the same position
    */
   async newLineAbove() {
-    let position = this.editor.getCursors()[0].column;
+    const position = this.editor.getCursors()[0].column;
     await this.editor.insertLineAbove();
     // Somente realoca o cursor se a coluna original já não era zero.
     // Obs: insertLineAbove() já deixa o cursor posicionado na coluna 0
@@ -110,7 +110,7 @@ export class GeradorCobol {
    * Insert a Cobol line separator
    */
   async insertLineSeparator() {
-    let position = this.editor.getCursors()[0];
+    const position = this.editor.getCursors()[0];
     await this.editor.insertLineAbove();
     await this.editor.type("      *>--------------------------------------------------------------------------------------------------------------<*");
     await this.editor.setCursorPosition(new RechPosition(position.line + 1, position.column));
@@ -121,19 +121,19 @@ export class GeradorCobol {
    * Centralize a cobol comment
    */
   async centralizeComment() {
-    let lineText = this.editor.getCurrentLine();
-    let regexComment = /^ *\*>.*/;
+    const lineText = this.editor.getCurrentLine();
+    const regexComment = /^ *\*>.*/;
     let commentContent = lineText.match(regexComment);
-    let regexCommentType = /\*>(->)*/;
-    let startComment = lineText.match(regexCommentType);
+    const regexCommentType = /\*>(->)*/;
+    const startComment = lineText.match(regexCommentType);
     if (isNull(commentContent) || isNull(startComment)) return;
-    let startCommentDelimiter = startComment[0];
-    let endCommentDelimiter = startCommentDelimiter.split("").reverse().join("").replace(/>/g, "<");
-    let regexCommentContent = /[^\>]*\b.*(\b|\B)/;
+    const startCommentDelimiter = startComment[0];
+    const endCommentDelimiter = startCommentDelimiter.split("").reverse().join("").replace(/>/g, "<");
+    const regexCommentContent = /[^\>]*\b.*(\b|\B)/;
     commentContent = regexCommentContent.exec(commentContent[0].toString().replace(endCommentDelimiter, ""));
     if (isNull(commentContent)) return;
     let comment = commentContent[0].toString().trim();
-    let commentSizeMax = (Colunas.COLUNA_FIM - Colunas.AREA_A - startCommentDelimiter.length - endCommentDelimiter.length + 2);
+    const commentSizeMax = (Colunas.COLUNA_FIM - Colunas.AREA_A - startCommentDelimiter.length - endCommentDelimiter.length + 2);
 
     if (!/[a-z]/.exec(commentContent.toString())) {
       comment = this.removeHighlight(comment);
@@ -164,13 +164,13 @@ export class GeradorCobol {
     * Remove Highlight from text
     */
   private removeHighlight(comment: string): string {
-    let spaces = /\s+/.exec(comment);
+    const spaces = /\s+/.exec(comment);
     if (isNull(spaces)) return comment;
-    let spaceLengthGreater = spaces.reduce((p, v) => (p.length > v.length ? v : p)).length;
-    let spaceLengthLesser = spaces.reduce((p, v) => (p.length < v.length ? v : p)).length;
+    const spaceLengthGreater = spaces.reduce((p, v) => (p.length > v.length ? v : p)).length;
+    const spaceLengthLesser = spaces.reduce((p, v) => (p.length < v.length ? v : p)).length;
     if (spaceLengthGreater === 1) return comment;
-    let spaceLength = spaceLengthGreater === spaceLengthLesser ? spaceLengthGreater : spaceLengthGreater - 1;
-    let spaceRegex = new RegExp(`\\s{${spaceLength}}`, "g");
+    const spaceLength = spaceLengthGreater === spaceLengthLesser ? spaceLengthGreater : spaceLengthGreater - 1;
+    const spaceRegex = new RegExp(`\\s{${spaceLength}}`, "g");
     comment = comment.replace(spaceRegex, "");
     return comment;
   }
@@ -179,8 +179,8 @@ export class GeradorCobol {
    * Inserts or removes dots in the end of the current line
    */
   async updateLineDots() {
-    let originalPosotion = this.editor.getCursors()[0];
-    let lineText = this.editor.getCurrentLine().trimRight();
+    const originalPosotion = this.editor.getCursors()[0];
+    const lineText = this.editor.getCurrentLine().trimRight();
     switch (true) {
       case lineText.length > Colunas.COLUNA_FIM: {
         this.removeExceedingDots(lineText).then().catch();
@@ -228,7 +228,7 @@ export class GeradorCobol {
    */
   private async fillLineWithDots(lineText: string) {
     let dots = "";
-    let missingDotsNumber = Colunas.COLUNA_FIM - lineText.length;
+    const missingDotsNumber = Colunas.COLUNA_FIM - lineText.length;
     if (missingDotsNumber > 0) {
       for (var i = 1; i <= missingDotsNumber; i++) {
         dots = dots.concat(".");

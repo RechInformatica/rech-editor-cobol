@@ -16,9 +16,9 @@ export class CommandSeparatorFormatter implements FormatterInterface {
      * @param lineText document lines
      */
     public generate(line: number, _column: number, lines: string[]): TextEdit[] {
-        let previousLineText = lines[line - 1];
-        let previousLineNumber = line - 1;
-        let currentLineText = lines[line];
+        const previousLineText = lines[line - 1];
+        const previousLineNumber = line - 1;
+        const currentLineText = lines[line];
         return [this.createKeepDotOrCommaTextEdit(previousLineText, previousLineNumber, currentLineText)]
     }
 
@@ -30,7 +30,7 @@ export class CommandSeparatorFormatter implements FormatterInterface {
      * @param currentLineText text of the current line
      */
     public createKeepDotOrCommaTextEdit(previousLineText: string, previousLineNumber: number, currentLineText: string): TextEdit {
-        let targetChar = this.getCommandDelimiter(currentLineText);
+        const targetChar = this.getCommandDelimiter(currentLineText);
         return {
             range: {
                 start: {

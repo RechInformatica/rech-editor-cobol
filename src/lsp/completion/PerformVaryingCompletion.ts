@@ -14,14 +14,14 @@ export class PerformVaryingCompletion implements CompletionInterface {
             const performClause = "perform";
             const varyingClause = "varying";
             const untilClause = "until";
-            let startColumn = CompletionUtils.findWordStartWithinLine(column, _lines[_line]);
+            const startColumn = CompletionUtils.findWordStartWithinLine(column, _lines[_line]);
             let text = "";
             text = text.concat(performClause).concat("\n");
             text = text.concat(CompletionUtils.fillSpacesBetween(startColumn, startColumn + 3) + varyingClause);
             text = text.concat(CompletionUtils.fillSpacesOrSingleSpace(startColumn + varyingClause.length + 2, PARAM_COLUMN_DECLARATION - 1) + "${1} from ${2:} by ${3:1}\n");
             text = text.concat(CompletionUtils.fillSpacesBetween(startColumn, startColumn + 6) + untilClause);
             text = text.concat(CompletionUtils.fillSpacesOrSingleSpace(startColumn + untilClause.length + 5, PARAM_COLUMN_DECLARATION - 1) + "${1} ${4}");
-            let endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, startColumn)];
+            const endPerform: TextEdit[] = [this.createEndPerformTextEdit(_line + 1, startColumn)];
             resolve(
                 [{
                     label: 'PERFORM VARYING loop',

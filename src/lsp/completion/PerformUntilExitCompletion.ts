@@ -11,7 +11,7 @@ export class PerformUntilExitCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let text = "perform" + CompletionUtils.fillSpacesFromWordReplacementEnd(UNTIL_COLUMN_DECLARATION, column, _lines[_line], "perform") + "until exit";
+            const text = "perform" + CompletionUtils.fillSpacesFromWordReplacementEnd(UNTIL_COLUMN_DECLARATION, column, _lines[_line], "perform") + "until exit";
             resolve(
                 [{
                     label: 'PERFORM UNTIL EXIT loop',

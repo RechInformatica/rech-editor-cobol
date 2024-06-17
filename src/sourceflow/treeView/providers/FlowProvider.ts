@@ -32,7 +32,7 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
         }));
         context.subscriptions.push(commands.registerCommand('rech.editor.cobol.gotoFlowLine', (node: FlowNode) => {
             if (!node) return;
-            let editor = new Editor();
+            const editor = new Editor();
             editor.setCursor(node.getLineNumber(), 120);
         }));
     }
@@ -49,7 +49,7 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
                 children = (<NodeInterface[]> element.getChildren());
             } else {
                 if (this.flow && this.flow.getFlowMap()) {
-                    let key = this.flow.getStartingLine()!;
+                    const key = this.flow.getStartingLine()!;
                     if (key) children.push(new FlowNode(key, this.flow))
 
                 }
