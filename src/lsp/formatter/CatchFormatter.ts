@@ -1,7 +1,6 @@
 import { TextEdit } from "vscode-languageserver";
 import { FormatterInterface } from "./FormatterInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
-import { IfFormatter } from "./IfFormatter";
 
 /** End Cobol column */
 const END_COBOL_COLUMN = 120;
