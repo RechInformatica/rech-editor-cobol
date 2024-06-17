@@ -1,7 +1,6 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
-import { TextEdit } from "vscode";
 
 /**
  * Class to generate LSP Completion Items for Cobol any length

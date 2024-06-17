@@ -20,8 +20,6 @@ import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
 import { UsageCompletion } from "./UsageCompletion";
 import { TypedefClauseCompletion } from "./TypedefClauseCompletion";
-import { TypedefCompletion } from "./typedef/TypedefCompletion";
-import { ValueCompletion } from "./ValueCompletion";
 import { ElseCompletion } from "./ElseCompletion";
 import Q from "q";
 import { VariableCompletion } from "./variable/VariableCompletion";
@@ -680,7 +678,8 @@ export class CobolCompletionItemFactory {
    * @returns
    */
   public isEmptyLine(): boolean {
-    return this.lineText.trim().split(" ").length < 2;
+    const EMPTY_LENGHT = 1
+    return this.lineText.trim().split(" ").length <= EMPTY_LENGHT;
   }
 
   /**

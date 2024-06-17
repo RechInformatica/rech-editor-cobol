@@ -1,6 +1,5 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
-import { CompletionUtils } from "../commons/CompletionUtils";
 
 /**
  * Class to generate LSP Completion Items for Cobol 'subtract' clause
