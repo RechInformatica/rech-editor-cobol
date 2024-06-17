@@ -57,19 +57,25 @@ export class CobolDocParser {
                     parsingRechDoc = false;
                 }
                 if (parsingRechDoc) {
-                    if (!this.ignoreElementsInCobolDoc && currentLine.match(/@param/)) {
-                        this.updateDocElement(params, currentLine);
+                    if (currentLine.match(/@param/)) {
+                        if (!this.ignoreElementsInCobolDoc) {
+                            this.updateDocElement(params, currentLine);
+                        }
                         extractingComment = false;
                     }
-                    if (!this.ignoreElementsInCobolDoc && currentLine.match(/@return/)) {
+                    if (currentLine.match(/@return/)) {
+                        if (!this.ignoreElementsInCobolDoc) {
+                            this.updateDocElement(returns, currentLine);
+                        }
                         extractingComment = false;
-                        this.updateDocElement(returns, currentLine);
                     }
-                    if (!this.ignoreElementsInCobolDoc && currentLine.match(/@throws/)) {
+                    if (currentLine.match(/@throws/)) {
+                        if (!this.ignoreElementsInCobolDoc) {
+                            this.updateDocElement(throws, currentLine);
+                        }
                         extractingComment = false;
-                        this.updateDocElement(throws, currentLine);
                     }
-                    if (!this.ignoreElementsInCobolDoc && currentLine.match(/(@enum|@optional|@default|@extends)/)) {
+                    if (currentLine.match(/(@enum|@optional|@default|@extends)/)) {
                         extractingComment = false;
                     }
                     if (extractingComment) {
@@ -134,14 +140,16 @@ export class CobolDocParser {
      * @param currentLine current line to create a document element
      */
     private createDocElementFromLine(currentLine: string): DocElement | undefined {
+        const NAME_POSITION = 2;
+        const COMMENT_POSITION = 3;
         const docElementRegex = /\s+\*>\s+(@param|@return|@throws)\s+([\w-]+)\s?(.*)?/.exec(currentLine);
         if (docElementRegex) {
-            if (docElementRegex[3]) {
-                docElementRegex[3]
-                return new DocElement(docElementRegex[2], "", this.removeLineCommentIfNeed(docElementRegex[3]));
+            if (docElementRegex[COMMENT_POSITION]) {
+                docElementRegex[COMMENT_POSITION]
+                return new DocElement(docElementRegex[NAME_POSITION], "", this.removeLineCommentIfNeed(docElementRegex[COMMENT_POSITION]));
             }
-            if (docElementRegex[2]) {
-                return new DocElement(docElementRegex[2], "", "");
+            if (docElementRegex[NAME_POSITION]) {
+                return new DocElement(docElementRegex[NAME_POSITION], "", "");
             }
         }
         return undefined;
