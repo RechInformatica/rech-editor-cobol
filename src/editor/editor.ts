@@ -248,7 +248,7 @@ export class Editor {
    * @param endPos End position
    */
   setSelection(startPos: RechPosition, endPos: RechPosition) {
-    let range = new Range(startPos.line, startPos.column, endPos.line - 1, endPos.column)
+    const range = new Range(startPos.line, startPos.column, endPos.line - 1, endPos.column)
     this.setSelectionRange(range);
   }
 

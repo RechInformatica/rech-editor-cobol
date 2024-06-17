@@ -11,7 +11,7 @@ export class UsageCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let text =  CompletionUtils.fillSpacesFromWordStart(USAGE_COLUMN_DECLARATION, column, _lines[_line]) + "usage $1";
+            const text =  CompletionUtils.fillSpacesFromWordStart(USAGE_COLUMN_DECLARATION, column, _lines[_line]) + "usage $1";
             resolve(
                 [{
                     label: 'Complete USAGE declaration',

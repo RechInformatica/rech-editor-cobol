@@ -12,9 +12,9 @@ export class EvaluateFolding implements CobolFoldInterface {
     }
 
     fold(line: number, lines: string[]): FoldingRange {
-        let startLine = line;
-        let startColumn = lines[startLine].length;
-        let endLine = this.findEndOfEvaluateDeclaration(line, lines)
+        const startLine = line;
+        const startColumn = lines[startLine].length;
+        const endLine = this.findEndOfEvaluateDeclaration(line, lines)
         return {
             startLine: startLine,
             startCharacter: startColumn,
@@ -30,12 +30,12 @@ export class EvaluateFolding implements CobolFoldInterface {
      * @param lines
      */
     private findEndOfEvaluateDeclaration(line: number, lines: string[]): number {
-        let ifDeclarationLine = lines[line];
-        let ifDeclarationColumn = CompletionUtils.countSpacesAtBeginning(ifDeclarationLine);
+        const ifDeclarationLine = lines[line];
+        const ifDeclarationColumn = CompletionUtils.countSpacesAtBeginning(ifDeclarationLine);
         for (let index = line; index < lines.length; index++) {
-            let currentLine = lines[index];
+            const currentLine = lines[index];
             if (currentLine.trimLeft().toLowerCase().startsWith("end-evaluate")) {
-                let currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+                const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == ifDeclarationColumn) {
                     return index - 1;
                 }

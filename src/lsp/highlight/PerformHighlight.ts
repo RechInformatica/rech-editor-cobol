@@ -29,9 +29,9 @@ export class PerformHighlight implements HighlightInterface {
         if (/\s*perform.+\s*([\w\-]*)((?:\sthru\s.*)|(?:.+\stimes))?[\.|\,]/.exec(currentLineContent.toLowerCase())) {
             return new DefaultHighlight().positions(text, word, currentLine, currentCharacter)
         }
-        let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
-        let beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
-        let endLine = this.findTheEndOfBlock(text, currentLine, commandColumn);
+        const commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
+        const beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
+        const endLine = this.findTheEndOfBlock(text, currentLine, commandColumn);
         if (beginLine && endLine) {
             results.push(this.buildDocumentHighlight(beginLine, commandColumn, BEGINBLOCKTERM))
             results.push(this.buildDocumentHighlight(endLine, commandColumn, ENDBLOCKTERM))
@@ -70,10 +70,10 @@ export class PerformHighlight implements HighlightInterface {
      * @param commandColumn
      */
     private findLineOfBlockTerm(text: TextDocument, currentLine: number, term: string, commandColumn: number, forward: boolean) {
-        let buffer = BufferSplitter.split(text.getText());
+        const buffer = BufferSplitter.split(text.getText());
         let index = currentLine;
         while ((forward && index < buffer.length) || (!forward && index > 0)) {
-            let line = buffer[index];
+            const line = buffer[index];
             if (line.trimLeft().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
                 return index
             }

@@ -473,7 +473,7 @@ export class CobolCompletionItemFactory {
    * Returns true if the var usage clause is the last word on the current line
    */
   private isUsageClause(): boolean {
-    let match = this.lineText.match(/^.*USAGE *$/gi);
+    const match = this.lineText.match(/^.*USAGE *$/gi);
     return match != null;
   }
 
@@ -488,8 +488,8 @@ export class CobolCompletionItemFactory {
    * Returns true if the cursor is in Picture X declaration
    */
   private isInPictureXDeclaration(): boolean {
-    let text = this.lineText.substr(0, this.column);
-    let match = text.match(/^.*\sPIC\sIS\sX(?:\(\w*\)?)?\s?$/gi);
+    const text = this.lineText.substr(0, this.column);
+    const match = text.match(/^.*\sPIC\sIS\sX(?:\(\w*\)?)?\s?$/gi);
     return match != null;
   }
 

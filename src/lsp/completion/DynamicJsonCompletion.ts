@@ -56,7 +56,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
             let items: CompletionItem[] = [];
             if (this.shouldSuggestJsonCompletions(line, lines)) {
                 this.repositories.forEach(currentRepo => {
-                    let jsonFiles = this.retrieveJsonFilesForRepo(currentRepo);
+                    const jsonFiles = this.retrieveJsonFilesForRepo(currentRepo);
                     jsonFiles.forEach(currentFile => {
                         items = items.concat(this.handleJsonFile(currentRepo + currentFile));
                     });
@@ -74,7 +74,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
      * @param lines document lines
      */
     private shouldSuggestJsonCompletions(line: number, lines: string[]): boolean {
-        let currentLine = lines[line].trimLeft();
+        const currentLine = lines[line].trimLeft();
         if (!currentLine.includes(" ")) {
             return true;
         }
@@ -103,7 +103,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
      * @param repository respository where JSON files are located
      */
     private loadFromDirectory(repository: string): string[] {
-        let jsonFilesForRepo: string[] = [];
+        const jsonFilesForRepo: string[] = [];
         new File(repository).dirFiles(".json").forEach(currentFile => {
             jsonFilesForRepo.push(currentFile);
         });
@@ -116,7 +116,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
      * @param jsonFile target JSON file
      */
     private handleJsonFile(jsonFile: string): CompletionItem[] {
-        let parsedJson = JSON.parse(this.loadJsonBuffer(jsonFile));
+        const parsedJson = JSON.parse(this.loadJsonBuffer(jsonFile));
         if (parsedJson && this.shouldCreateItems(parsedJson.conditions)) {
             return this.createItemsFromJson(parsedJson.snippets);
         };
@@ -130,7 +130,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
      */
     private shouldCreateItems(conditions: ConditionsStructure) {
         if (conditions && conditions.sourceFileNameRegex) {
-            let result = new RegExp(conditions.sourceFileNameRegex).exec(this.sourceFileName);
+            const result = new RegExp(conditions.sourceFileNameRegex).exec(this.sourceFileName);
             if (!result) {
                 return false;
             }
@@ -159,7 +159,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
      * @param parsedJson
      */
     private createItemsFromJson(snippets: SnippetStructure[]) {
-        let items: CompletionItem[] = [];
+        const items: CompletionItem[] = [];
         snippets.forEach((currentSnippet: SnippetStructure) => {
             items.push(this.createItemFromSnippet(currentSnippet));
         });

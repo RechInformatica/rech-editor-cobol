@@ -95,7 +95,7 @@ export class MethodCompletionUtils {
    */
   public static findTargetClassDeclaration(uri: string, target: CompletionTarget, line: number, lines: string[]): Promise<CobolVariable> {
     return new Promise((resolve, reject) => {
-      let referencePosition: RechPosition = this.extractTargetPositionFromBuffer(target, line);
+      const referencePosition: RechPosition = this.extractTargetPositionFromBuffer(target, line);
       if (referencePosition.column == 0 || referencePosition.line == 0) {
         return reject();
       }

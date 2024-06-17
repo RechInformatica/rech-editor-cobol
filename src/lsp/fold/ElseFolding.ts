@@ -12,9 +12,9 @@ export class ElseFolding implements CobolFoldInterface {
     }
 
     fold(line: number, lines: string[]): FoldingRange {
-        let startLine = line;
-        let startColumn = lines[startLine].length;
-        let endLine = this.findEndOfElseDeclaration(line, lines)
+        const startLine = line;
+        const startColumn = lines[startLine].length;
+        const endLine = this.findEndOfElseDeclaration(line, lines)
         return {
             startLine: startLine,
             startCharacter: startColumn,
@@ -30,12 +30,12 @@ export class ElseFolding implements CobolFoldInterface {
      * @param lines
      */
     private findEndOfElseDeclaration(line: number, lines: string[]): number {
-        let elseDeclarationLine = lines[line];
-        let elseDeclarationColumn = CompletionUtils.countSpacesAtBeginning(elseDeclarationLine);
+        const elseDeclarationLine = lines[line];
+        const elseDeclarationColumn = CompletionUtils.countSpacesAtBeginning(elseDeclarationLine);
         for (let index = line; index < lines.length; index++) {
-            let currentLine = lines[index];
+            const currentLine = lines[index];
             if (currentLine.trimLeft().toLowerCase().startsWith("end-if")) {
-                let currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+                const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == elseDeclarationColumn) {
                     return index - 1;
                 }

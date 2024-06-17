@@ -9,7 +9,7 @@ import { CobolVariable } from "../completion/CobolVariable";
 export class VariableFolding implements CobolFoldInterface {
 
     mustFolding(line: string): boolean {
-        let match = new ParserCobol().getDeclaracaoVariavelIgnoreReplace(line)
+        const match = new ParserCobol().getDeclaracaoVariavelIgnoreReplace(line)
         if (match) {
             return true;
         }
@@ -17,10 +17,10 @@ export class VariableFolding implements CobolFoldInterface {
     }
 
     fold(line: number, lines: string[]): FoldingRange {
-        let currentLine = lines[line];
-        let startLine = line;
-        let startColumn = currentLine.length;
-        let endLine = this.findEndOfVariableDeclaration(line, lines)
+        const currentLine = lines[line];
+        const startLine = line;
+        const startColumn = currentLine.length;
+        const endLine = this.findEndOfVariableDeclaration(line, lines)
         return {
             startLine: startLine,
             startCharacter: startColumn,
@@ -36,16 +36,16 @@ export class VariableFolding implements CobolFoldInterface {
      * @param lines
      */
     private findEndOfVariableDeclaration(line: number, lines: string[]): number {
-        let pattern = /\s+(\d\d)\s+.*/;
-        let currentVariableLevel = pattern.exec(lines[line])![1]
+        const pattern = /\s+(\d\d)\s+.*/;
+        const currentVariableLevel = pattern.exec(lines[line])![1]
         for (let index = line + 1; index < lines.length; index++) {
-            let currentLine = lines[index];
+            const currentLine = lines[index];
             if (currentLine.trim().startsWith("*>")) {
                 continue;
             }
-            let match = pattern.exec(currentLine)
+            const match = pattern.exec(currentLine)
             if (match) {
-                let level = match[1];
+                const level = match[1];
                 if (level <= currentVariableLevel || CobolVariable.isEspecialVariableType(level)) {
                     return this.startOfDeclaration(index - 1, lines);
                 }
@@ -68,7 +68,7 @@ export class VariableFolding implements CobolFoldInterface {
         }
         let hasDocumentation = false;
         for (let i = line; i > 0; i--) {
-            let currentLine = lines[i].trimLeft();
+            const currentLine = lines[i].trimLeft();
             if (hasDocumentation && !currentLine.startsWith("*>")) {
                 return i;
             }

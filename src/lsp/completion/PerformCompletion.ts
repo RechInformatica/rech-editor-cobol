@@ -9,8 +9,8 @@ export class PerformCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let startColumn = CompletionUtils.findWordStartWithinLine(column, _lines[_line]);
-            let text = "perform" + CompletionUtils.fillSpacesFromWordReplacementEnd(35, column, _lines[_line], "perform") + "${0}" + CompletionUtils.separatorForColumn(startColumn);
+            const startColumn = CompletionUtils.findWordStartWithinLine(column, _lines[_line]);
+            const text = "perform" + CompletionUtils.fillSpacesFromWordReplacementEnd(35, column, _lines[_line], "perform") + "${0}" + CompletionUtils.separatorForColumn(startColumn);
             resolve(
                 [{
                     label: 'PERFORM command',

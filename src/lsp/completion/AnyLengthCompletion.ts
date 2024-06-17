@@ -12,7 +12,7 @@ export class AnyLengthCompletion implements CompletionInterface {
         return new Promise((resolve) => {
             const regex = /pic\s+is\s+x.*\(.*/gi;
             let text = lines[line];
-            let match = lines[line].match(regex);
+            const match = lines[line].match(regex);
             if (match != null) {
                 text = lines[line].replace(regex, "pic x any length");
             } else {

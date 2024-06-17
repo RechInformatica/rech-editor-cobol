@@ -12,10 +12,10 @@ export class ParagraphFolding implements CobolFoldInterface {
     }
 
     fold(line: number, lines: string[]): FoldingRange {
-        let currentLine = lines[line];
-        let startLine = line;
-        let startColumn = currentLine.length;
-        let endLine = this.findEndOfParagraphDeclaration(line, lines)
+        const currentLine = lines[line];
+        const startLine = line;
+        const startColumn = currentLine.length;
+        const endLine = this.findEndOfParagraphDeclaration(line, lines)
         return {
             startLine: startLine,
             startCharacter: startColumn,
@@ -32,7 +32,7 @@ export class ParagraphFolding implements CobolFoldInterface {
      */
     private findEndOfParagraphDeclaration(line: number, lines: string[]): number {
         for (let index = line + 1; index < lines.length; index++) {
-            let currentLine = lines[index];
+            const currentLine = lines[index];
             if (currentLine.trim().startsWith("*>")) {
                 continue;
             }
@@ -58,7 +58,7 @@ export class ParagraphFolding implements CobolFoldInterface {
         }
         let hasDocumentation = false;
         for (let i = line; i > 0; i--) {
-            let currentLine = lines[i].trimLeft();
+            const currentLine = lines[i].trimLeft();
             if (hasDocumentation && !currentLine.startsWith("*>")) {
                 return i;
             }

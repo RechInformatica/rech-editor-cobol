@@ -593,7 +593,7 @@ connection.onReferences((params: ReferenceParams): Thenable<Location[] | Respons
       const text = fullDocument.getText();
       const word = getLineText(text, params.position.line, params.position.character);
       callCobolReferencesFinder(word, text).then((positions: RechPosition[]) => {
-        let locations: Location[] = [];
+        const locations: Location[] = [];
         positions.forEach((currentPosition) => {
           // If the delcaration was found on an external file
           if (currentPosition.file) {

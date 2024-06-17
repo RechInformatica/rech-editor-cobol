@@ -9,7 +9,7 @@ export class AssignerCommandParser {
    * @param lineText current line text
    */
   public getFirstContentElement(lineText: string): string {
-    let elements = this.splitCommandElements(lineText);
+    const elements = this.splitCommandElements(lineText);
     if (elements == undefined) {
       return "";
     }
@@ -23,11 +23,11 @@ export class AssignerCommandParser {
    * @param clause clause to be tested
    */
   public shouldSuggestClause(lineText: string, clause: string): boolean {
-    let lineContainsClause = lineText.toUpperCase().includes(" " + clause + " ");
+    const lineContainsClause = lineText.toUpperCase().includes(" " + clause + " ");
     if (lineContainsClause) {
       return false;
     }
-    let elements = this.splitCommandElements(lineText);
+    const elements = this.splitCommandElements(lineText);
     if (elements == undefined) {
       return false;
     }
@@ -37,9 +37,9 @@ export class AssignerCommandParser {
     if (elements[2] != undefined && elements[3] == undefined) {
       return lineText.endsWith(" ");
     }
-    let clauseUpper = clause.toUpperCase();
-    let splittedUpper = elements[3].toUpperCase().trim();
-    let startsWith = clauseUpper.startsWith(splittedUpper);
+    const clauseUpper = clause.toUpperCase();
+    const splittedUpper = elements[3].toUpperCase().trim();
+    const startsWith = clauseUpper.startsWith(splittedUpper);
     return startsWith;
   }
 
@@ -49,7 +49,7 @@ export class AssignerCommandParser {
    * @param lineText current line text
    */
   private splitCommandElements(lineText: string): RegExpExecArray | null {
-    let trimmedLine = lineText.trim();
+    const trimmedLine = lineText.trim();
     return /(MOVE|SET|SUBTRACT|ADD)(\s+(?:".*"|'.*'|[A-Za-z0-9-\(\)]+))?(\s+(?:[A-Za-z]+))?/gi.exec(trimmedLine);
   }
 

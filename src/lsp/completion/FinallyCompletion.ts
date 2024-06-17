@@ -10,7 +10,7 @@ export class FinallyCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let textEdit = new FinallyFormatter().generate(line, column, lines)[0];
+            const textEdit = new FinallyFormatter().generate(line, column, lines)[0];
             textEdit.newText = textEdit.newText + "\n" + CompletionUtils.fillSpacesBetween(0, CompletionUtils.countSpacesAtBeginning(textEdit.newText)) + "   ";
             resolve(
                 [{

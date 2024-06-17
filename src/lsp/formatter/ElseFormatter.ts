@@ -22,7 +22,7 @@ export class ElseFormatter implements FormatterInterface {
    * @param lines document lines
    */
   public generate(line: number, _column: number, lines: string[]): TextEdit[] {
-    let startColumn = this.findStartColumn(line, lines);
+    const startColumn = this.findStartColumn(line, lines);
     return [this.createElseTextEdit(line, startColumn)];
   }
 
@@ -35,7 +35,7 @@ export class ElseFormatter implements FormatterInterface {
   public findStartColumn(line: number, lines: string[]) {
     let depth = 0;
     for (let i = line; i > 0; i--) {
-      let trimLine = lines[i].trim();
+      const trimLine = lines[i].trim();
       if (CompletionUtils.isTheParagraphOrMethodDeclaration(lines[i])) {
         break
       }
@@ -60,7 +60,7 @@ export class ElseFormatter implements FormatterInterface {
      * @param column column where the 'else' clause will be inserted
      */
   public createElseTextEdit(line: number, column: number): TextEdit {
-    let text = CompletionUtils.fillSpacesBetween(0, column) + "else,";
+    const text = CompletionUtils.fillSpacesBetween(0, column) + "else,";
     return {
       range: {
         start: {

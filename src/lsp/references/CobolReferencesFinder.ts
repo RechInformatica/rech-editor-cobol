@@ -37,7 +37,7 @@ export class CobolReferencesFinder {
         reject();
         return;
       }
-      let result : RechPosition[] = [];
+      const result : RechPosition[] = [];
       new Scan(this.text).scan(CobolRegexUtils.createRegexForVariableUsage(term), (iterator: any) => {
         result.push(new RechPosition(iterator.row, iterator.column + 1));
       });

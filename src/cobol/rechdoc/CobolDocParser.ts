@@ -106,11 +106,11 @@ export class CobolDocParser {
      * @param variable variable to have it's type returned
      */
     private getVariableType(variable: CobolVariable): string {
-        let objectReferenceType = variable.getObjectReferenceOf();
+        const objectReferenceType = variable.getObjectReferenceOf();
         if (objectReferenceType) {
             return objectReferenceType;
         } else {
-            let picture = variable.getPicture();
+            const picture = variable.getPicture();
             return picture;
         }
     }

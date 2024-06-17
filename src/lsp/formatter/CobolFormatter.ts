@@ -47,7 +47,7 @@ export class CobolFormatter {
    * Formats the Cobol source when Enter is pressed
    */
   public formatWhenEnterIsPressed(): TextEdit[] {
-    let currentText = this.lines[this.line - 1];
+    const currentText = this.lines[this.line - 1];
     if (this.isCommentary(currentText)) {
       return this.generate(new CommentaryFormatter());
     }
@@ -91,7 +91,7 @@ export class CobolFormatter {
    * Formats the Cobol source when the 'E' letter is pressed
    */
   public formatWhenEIsPressed(): TextEdit[] {
-    let currentText = this.lines[this.line];
+    const currentText = this.lines[this.line];
     if (this.isCommentary(currentText)) {
       return [];
     }
@@ -105,7 +105,7 @@ export class CobolFormatter {
    * Formats the Cobol source when 'N' is pressed
    */
   public formatWhenNIsPressed(): TextEdit[] {
-    let currentText = this.lines[this.line];
+    const currentText = this.lines[this.line];
     if (this.isCommentary(currentText)) {
       return [];
     }
@@ -119,7 +119,7 @@ export class CobolFormatter {
    * Formats the Cobol source when 'H' is pressed
    */
   public formatWhenHIsPressed(): TextEdit[] {
-    let currentText = this.lines[this.line];
+    const currentText = this.lines[this.line];
     if (this.isCommentary(currentText)) {
       return [];
     }
@@ -133,7 +133,7 @@ export class CobolFormatter {
    * Formats the Cobol source when 'Y' is pressed
    */
   public formatWhenYIsPressed(): TextEdit[] {
-    let currentText = this.lines[this.line];
+    const currentText = this.lines[this.line];
     if (this.isCommentary(currentText)) {
       return [];
     }
@@ -238,10 +238,10 @@ export class CobolFormatter {
     if (PerformVaryingFormatter.UNTIL_REGEXP.exec(currentText)) {
       return true;
     }
-    let currentStartColumn = CompletionUtils.countSpacesAtBeginning(currentText);
-    let untilLine = PerformVaryingFormatter.LineOfUntilClause(this.line, this.lines);
+    const currentStartColumn = CompletionUtils.countSpacesAtBeginning(currentText);
+    const untilLine = PerformVaryingFormatter.LineOfUntilClause(this.line, this.lines);
     if (untilLine) {
-      let conditionStartColum = CompletionUtils.countSpacesAtBeginning(this.lines[untilLine].replace("until", "     "))
+      const conditionStartColum = CompletionUtils.countSpacesAtBeginning(this.lines[untilLine].replace("until", "     "))
       return currentStartColumn == conditionStartColum;
     } else {
       return false
@@ -275,7 +275,7 @@ export class CobolFormatter {
    * @param completion implementation used to generate completion items
    */
   private generate(completion: FormatterInterface): TextEdit[] {
-    let result = completion.generate(this.line, this.column, this.lines);
+    const result = completion.generate(this.line, this.column, this.lines);
     if (!CompletionUtils.isLowerCaseSource(this.lines)) {
       return this.toUpperCase(result);
     }

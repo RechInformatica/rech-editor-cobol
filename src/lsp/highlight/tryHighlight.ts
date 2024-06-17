@@ -15,7 +15,7 @@ const FINALLYTERM = "finally"
 export class TryHighlight implements HighlightInterface {
 
     isABlockTerm(word: string): boolean {
-        let match = /^(try|catch|finally|end-try)$/i.exec(word);
+        const match = /^(try|catch|finally|end-try)$/i.exec(word);
         if (match) {
             return true
         }
@@ -24,17 +24,17 @@ export class TryHighlight implements HighlightInterface {
 
     positions(text: TextDocument, _word: string, currentLine: number, _currentCharacter: number): DocumentHighlight[]{
         const results: DocumentHighlight[] = []
-        let buffer = BufferSplitter.split(text.getText());
-        let currentLineContent = buffer[currentLine];
-        let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
-        let beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
-        let endLine = this.findTheEndOfBlock(text, currentLine, commandColumn);
+        const buffer = BufferSplitter.split(text.getText());
+        const currentLineContent = buffer[currentLine];
+        const commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
+        const beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
+        const endLine = this.findTheEndOfBlock(text, currentLine, commandColumn);
         if (beginLine && endLine) {
-            let catchLine = this.findLineOfBlockTerm(text, beginLine, CATCHTERM, commandColumn, true)
+            const catchLine = this.findLineOfBlockTerm(text, beginLine, CATCHTERM, commandColumn, true)
             if (catchLine && catchLine < endLine) {
                 results.push(this.buildDocumentHighlight(catchLine, commandColumn, CATCHTERM))
             }
-            let finallyLine = this.findLineOfBlockTerm(text, beginLine, FINALLYTERM, commandColumn, true)
+            const finallyLine = this.findLineOfBlockTerm(text, beginLine, FINALLYTERM, commandColumn, true)
             if (finallyLine && finallyLine < endLine) {
                 results.push(this.buildDocumentHighlight(finallyLine, commandColumn, FINALLYTERM))
             }
@@ -75,10 +75,10 @@ export class TryHighlight implements HighlightInterface {
      * @param commandColumn
      */
     private findLineOfBlockTerm(text: TextDocument, currentLine: number, term: string, commandColumn: number, forward: boolean) {
-        let buffer = BufferSplitter.split(text.getText());
+        const buffer = BufferSplitter.split(text.getText());
         let index = currentLine;
         while ((forward && index < buffer.length) || (!forward && index > 0)) {
-            let line = buffer[index];
+            const line = buffer[index];
             if (line.trimLeft().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
                 return index
             }

@@ -9,7 +9,7 @@ export class TryCompletion implements CompletionInterface {
 
     public generate(_line: number, _column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let text = "try";
+            const text = "try";
             resolve(
                 [{
                     label: 'TRY command',

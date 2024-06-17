@@ -24,7 +24,7 @@ export class EndCompletion implements CompletionInterface {
    * Return the opens blocks to suggest the end command
    */
   private findOpenBlocks(line: number, lines: string[]): CompletionItem[] {
-    let result: CompletionItem[] = [];
+    const result: CompletionItem[] = [];
     let findIf = false
     let findEvaluate = false
     let findPerform = false
@@ -36,8 +36,8 @@ export class EndCompletion implements CompletionInterface {
         break;
       }
       if (!findIf && this.ifIfDeclaration(currentLine)) {
-        let endIfClause = "end-if"
-        let ifStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+        const endIfClause = "end-if"
+        const ifStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
         if (FormatterUtils.isClauseMissing(i + 1, ifStartColumn, lines, endIfClause, [endIfClause, "else"])) {
           result.push(this.buildEndCompletion(endIfClause, line, ifStartColumn))
           findIf = true
@@ -46,8 +46,8 @@ export class EndCompletion implements CompletionInterface {
         continue;
       }
       if (!findEvaluate && this.evaluateDeclaration(currentLine)) {
-        let endEvaluateClause = "end-evaluate"
-        let evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+        const endEvaluateClause = "end-evaluate"
+        const evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
         if (FormatterUtils.isClauseMissing(i + 1, evaluateStartColumn, lines, endEvaluateClause, [endEvaluateClause, "when"])) {
           result.push(this.buildEndCompletion(endEvaluateClause, line, evaluateStartColumn))
           findEvaluate = true
@@ -56,9 +56,9 @@ export class EndCompletion implements CompletionInterface {
         continue;
       }
       if (!findMethod && this.methodDeclaration(currentLine)) {
-        let endMethodClause = "end method"
-        let methodStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
-        let identClauses = [endMethodClause, "working-storage", "linkage", "procedure", "environment", "data", "77", "01",
+        const endMethodClause = "end method"
+        const methodStartColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+        const identClauses = [endMethodClause, "working-storage", "linkage", "procedure", "environment", "data", "77", "01",
                             "configuration", "input-output", "file-control", "i-o-control", "source-computer", "object-computer",
                             "special-names", "repository", "file", "local-storage", "report", "screen"];
         if (FormatterUtils.isClauseMissing(i + 1, methodStartColumn, lines, endMethodClause, identClauses)) {
@@ -69,8 +69,8 @@ export class EndCompletion implements CompletionInterface {
         continue;
       }
       if (!findPerform && this.performDeclaration(currentLine)) {
-        let endPerformClause = "end-perform"
-        let performColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+        const endPerformClause = "end-perform"
+        const performColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
         if (FormatterUtils.isClauseMissing(i + 1, performColumn, lines, endPerformClause, [endPerformClause])) {
           result.push(this.buildEndCompletion(endPerformClause, line, performColumn))
           findPerform = true
@@ -79,8 +79,8 @@ export class EndCompletion implements CompletionInterface {
         continue;
       }
       if (!findTry && this.tryDeclaration(currentLine)) {
-        let endTryClause = "end-try"
-        let tryColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
+        const endTryClause = "end-try"
+        const tryColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
         if (FormatterUtils.isClauseMissing(i + 1, tryColumn, lines, endTryClause, [endTryClause, "catch", "finally"])) {
           result.push(this.buildEndCompletion(endTryClause, line, tryColumn))
           findTry = true
@@ -145,7 +145,7 @@ export class EndCompletion implements CompletionInterface {
    * @param generatePerform
    */
   private buildEndCompletion(label: string, line: number, column: number): CompletionItem {
-    let text = CompletionUtils.fillSpacesBetween(0, column) + label + CompletionUtils.separatorForColumn(column);
+    const text = CompletionUtils.fillSpacesBetween(0, column) + label + CompletionUtils.separatorForColumn(column);
     return {
       label: label,
       insertText: "\n",

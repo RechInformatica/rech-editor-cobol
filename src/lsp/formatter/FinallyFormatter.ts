@@ -22,7 +22,7 @@ export class FinallyFormatter implements FormatterInterface {
    * @param lines document lines
    */
   public generate(line: number, _column: number, lines: string[]): TextEdit[] {
-    let startColumn = this.findStartColumn(line, lines);
+    const startColumn = this.findStartColumn(line, lines);
     return [this.createFinallyTextEdit(line, startColumn)];
   }
 
@@ -59,7 +59,7 @@ export class FinallyFormatter implements FormatterInterface {
      * @param column column where the 'catch' clause will be inserted
      */
   public createFinallyTextEdit(line: number, column: number): TextEdit {
-    let text = CompletionUtils.fillSpacesBetween(0, column) + "finally";
+    const text = CompletionUtils.fillSpacesBetween(0, column) + "finally";
     return {
       range: {
         start: {

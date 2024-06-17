@@ -44,13 +44,13 @@ export class FormatterUtils {
      * @param identClauses clauses to be ignored
      */
     public static isClauseMissing(line: number, column: number, lines: string[], clause:string, identClauses: string[]): boolean {
-        let parser = new ParserCobol();
-        let indentedClauses: string[] = [];
+        const parser = new ParserCobol();
+        const indentedClauses: string[] = [];
         identClauses.forEach(currentClause => {
             indentedClauses.push(CompletionUtils.fillSpacesBetween(0, column) + currentClause.toLowerCase());
         });
         for (let index = line; index < lines.length; index++) {
-            let lineText = lines[index];
+            const lineText = lines[index];
             if (!parser.isCommentOrEmptyLine(lineText)) {
                 // If it's a new paragraph declaration then the 'if' clause was not closed on the current
                 // paragraph and the 'end-if' needs to be inserted

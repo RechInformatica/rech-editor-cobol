@@ -34,9 +34,9 @@ export class copyDisplayer {
    */
   private createItemsFromCopy(copy: CobolCopy) {
     this.addTheBasicInformation(copy);
-    let replacings = copy.getReplacings()
+    const replacings = copy.getReplacings()
     if (replacings && replacings.size > 0) {
-      let replacingsItems = new CopyElement("Replacings");
+      const replacingsItems = new CopyElement("Replacings");
       this.controller.addElement(this.insertReplacings(replacingsItems, replacings, copy));
     }
   }
@@ -51,7 +51,7 @@ export class copyDisplayer {
     .setDescription(copy.getUri())
     .setDetail(copy.getRaw())
     .setOnSelection((selectItem) => {
-      let editor = new Editor();
+      const editor = new Editor();
       editor.openFile(new Path(selectItem.description).fullPathWin())
       this.controller.dispose();
     }));
@@ -60,9 +60,9 @@ export class copyDisplayer {
         new CopyElement("Header")
         .setDetail(copy.getHeader()!.join(" | "))
         .setOnSelection(async (selectItem) => {
-          let obj = selectItem.object
+          const obj = selectItem.object
           if (obj) {
-            let comments = (<CobolCopy>obj).getHeader();
+            const comments = (<CobolCopy>obj).getHeader();
             if (comments) {
               await this.insertCommentInEditor((<CobolCopy>obj).getHeader()!)
               this.controller.dispose();
@@ -79,8 +79,8 @@ export class copyDisplayer {
    * @param comments
    */
   private async insertCommentInEditor(comments: string[]) {
-    let editor = new Editor();
-    let cursor = editor.getCursors()[0]
+    const editor = new Editor();
+    const cursor = editor.getCursors()[0]
     for (let i = comments.length - 1; i >= 0; i--) {
       await new GeradorCobol().insertCommentLineWithText(comments[i]);
     }
@@ -95,7 +95,7 @@ export class copyDisplayer {
    */
   private insertReplacings(replacingsItems: CopyElement, replacings: Map<string, string>, copy: CobolCopy): CopyElement {
     replacings.forEach((replace, term) => {
-      let replacingItem = new CopyElement(term)
+      const replacingItem = new CopyElement(term)
       .setDescription("by " + replace)
       .setDetail("Modify replcaement")
       .setOnSelection((selectItem) => {
@@ -114,25 +114,25 @@ export class copyDisplayer {
    * @param copy
    */
   private createReplacingOnSelecionCallback(copy: CobolCopy, label: string) {
-    let editor = new Editor();
+    const editor = new Editor();
     window.showInputBox({value: "New replace"}).then((newValue) => {
       if (newValue) {
-        let document = window.activeTextEditor
+        const document = window.activeTextEditor
         if (document) {
-          let replaces = copy.getReplacings();
-          let term = replaces!.get(label)!.trim();
+          const replaces = copy.getReplacings();
+          const term = replaces!.get(label)!.trim();
           if (term.startsWith("==") && term.endsWith("==")) {
             if (!(newValue.startsWith("==") && newValue.endsWith("=="))) {
               newValue = `==${newValue}==`
             }
           }
-          let regexp = new RegExp(label!.replace(/\(/g, "\\(").replace(/\)/g, "\\)").replace(/\""/g, "\""), "g")
-          let positionsToReturn = new PositionFinder(document).findPositions(regexp, PositionFinder.FindNext, document.document.lineAt(copy.getLineDeclaration()), true);
+          const regexp = new RegExp(label!.replace(/\(/g, "\\(").replace(/\)/g, "\\)").replace(/\""/g, "\""), "g")
+          const positionsToReturn = new PositionFinder(document).findPositions(regexp, PositionFinder.FindNext, document.document.lineAt(copy.getLineDeclaration()), true);
           if (positionsToReturn) {
-            let column = editor.getLine(positionsToReturn[0].line).indexOf(term!)
+            const column = editor.getLine(positionsToReturn[0].line).indexOf(term!)
             editor.setCursor(positionsToReturn[0].line, column)
-            let start = editor.getCursors()[0];
-            let end = new RechPosition(start.line, start.column + term!.length)
+            const start = editor.getCursors()[0];
+            const end = new RechPosition(start.line, start.column + term!.length)
             editor.selectRange(start, end);
             editor.replaceSelection(newValue);
           }

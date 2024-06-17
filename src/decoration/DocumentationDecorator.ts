@@ -1,7 +1,6 @@
 import { Configuration } from "../helpers/configuration";
 import { ExtensionContext, TextEditor, window, workspace, debug, Position, DecorationOptions, Range, ThemeColor, TextEditorDecorationType, ThemableDecorationAttachmentRenderOptions } from 'vscode';
 import { CobolCopy } from '../cobol/CobolCopy';
-import { Editor } from '../extension';
 import { Parser } from './Parser';
 
 /** Max lines to decorate source, preventing UI freezing */
@@ -89,8 +88,8 @@ export class DocumentationDecorator {
           });
         const copyDecorations: DecorationOptions[] = [];
         copys.forEach((copy) => {
-            let header = copy.getHeader() ? copy.getHeader()!.join(" ") : "";
-            let comment = copy.getComment() ? copy.getComment()!.join(" ") : "";
+            const header = copy.getHeader() ? copy.getHeader()!.join(" ") : "";
+            const comment = copy.getComment() ? copy.getComment()!.join(" ") : "";
             if (header && header != "" && header.toUpperCase() != comment.toUpperCase()) {
                 const startPos = new Position(copy.getLineDeclaration(), 0);
                 const endPos = new Position(copy.getLineDeclaration(), lines[copy.getLineDeclaration()].trimRight().length);

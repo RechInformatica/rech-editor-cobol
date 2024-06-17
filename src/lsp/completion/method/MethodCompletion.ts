@@ -115,7 +115,7 @@ export class MethodCompletion implements CompletionInterface {
    */
   private findTargetClassDeclaration(target: CompletionTarget, line: number, lines: string[]): Promise<CobolVariable> {
     return new Promise((resolve, reject) => {
-      let referencePosition: RechPosition = this.extractTargetPositionFromBuffer(target, line);
+      const referencePosition: RechPosition = this.extractTargetPositionFromBuffer(target, line);
       if (referencePosition.column == 0 || referencePosition.line == 0) {
         return reject();
       }
@@ -327,7 +327,7 @@ export class MethodCompletion implements CompletionInterface {
   private buildMethodCompletion(method: CobolMethod): CompletionItem {
     const label = method.getName();
     const documentation = method.getDocumentation().asMarkdown()
-    let text = this.buildMethodCompletionText(method);
+    const text = this.buildMethodCompletionText(method);
     return {
       label: label,
       documentation: {

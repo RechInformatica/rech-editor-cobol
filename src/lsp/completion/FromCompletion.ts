@@ -12,8 +12,8 @@ export class FromCompletion implements CompletionInterface {
 
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            let currentText = lines[line];
-            let text = this.buildFromText(currentText, column);
+            const currentText = lines[line];
+            const text = this.buildFromText(currentText, column);
             resolve(
                 [{
                     label: 'FROM command',
@@ -45,9 +45,9 @@ export class FromCompletion implements CompletionInterface {
      * @param column current cursor column
      */
     private buildFromTextWithIndent(currentText: string, column: number): string {
-        let wordReplacement =  CompletionUtils.fillSpacesFromWordStart(FROM_COLUMN_DECLARATION, column, currentText) + "from";
-        let futureLine = CompletionUtils.replaceLastWord(currentText, wordReplacement);
-        let finalText = wordReplacement + CompletionUtils.fillSpacesFromWordEnd(35, futureLine.length, futureLine);
+        const wordReplacement =  CompletionUtils.fillSpacesFromWordStart(FROM_COLUMN_DECLARATION, column, currentText) + "from";
+        const futureLine = CompletionUtils.replaceLastWord(currentText, wordReplacement);
+        const finalText = wordReplacement + CompletionUtils.fillSpacesFromWordEnd(35, futureLine.length, futureLine);
         return finalText;
     }
 
