@@ -325,11 +325,15 @@ export class MethodCompletion implements CompletionInterface {
    * Build the CompletionItem instance for the given method.
    */
   private buildMethodCompletion(method: CobolMethod): CompletionItem {
-    const label = method.getName();
+    const methodName = method.getName();
+    const methodParams = method.getDocumentation().params.map(param => param.name).join(", ");
+    const label = `${methodName}(${methodParams})`;
+    const returns = method.getDocumentation().returns.map(methodReturn => methodReturn.name).join(", ");
     const documentation = method.getDocumentation().asMarkdown()
     const text = this.buildMethodCompletionText(method);
     return {
       label: label,
+      detail: returns,
       documentation: {
         kind: MarkupKind.Markdown,
         value: documentation

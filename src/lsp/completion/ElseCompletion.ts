@@ -1,4 +1,4 @@
-import { CompletionItemKind, CompletionItem, InsertTextFormat, TextEdit } from "vscode-languageserver";
+import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
 import { ElseFormatter } from "../formatter/ElseFormatter";
 import { CompletionUtils } from "../commons/CompletionUtils";

@@ -1,5 +1,5 @@
 import { Configuration } from "../helpers/configuration";
-import { ExtensionContext, TextEditor, window, workspace, debug, Position, DecorationOptions, Range, ThemeColor, TextEditorDecorationType, ThemableDecorationAttachmentRenderOptions } from 'vscode';
+import { ExtensionContext, TextEditor, window, workspace, Position, DecorationOptions, Range, TextEditorDecorationType } from 'vscode';
 import { CobolCopy } from '../cobol/CobolCopy';
 import { Parser } from './Parser';
 
@@ -63,7 +63,8 @@ export class DocumentationDecorator {
             if (timeout) {
                 clearTimeout(timeout);
             }
-            timeout = setTimeout(updateDecorations, 600);
+            const TIME_MS = 600;
+            timeout = setTimeout(updateDecorations, TIME_MS);
         }
     }
 
