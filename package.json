@@ -68,6 +68,18 @@
 					],
 					"description": "COBOL tabstops."
 				},
+				"rech.editor.cobol.showConditionalBlockCobolFlow": {
+                    "type": [
+                        "boolean",
+                        "boolean"
+                    ],
+                    "enum": [
+                        false,
+                        true
+                    ],
+                    "description": "Show conditional blocks on COBOL Flow Tree View.",
+                    "default": true
+                },
 				"rech.editor.cobol.formatter.location": {
 					"type": "string",
 					"description": "External COBOL formatter location."
@@ -180,7 +192,7 @@
 				{
 					"id": "cobolflow",
 					"title": "COBOL Flow",
-					"icon": "images/flow.svg"
+					"icon": "images/sourceflow/flow.svg"
 				}
 			]
 		},
@@ -221,16 +233,16 @@
 				"title": "Rech COBOL: Go to selected line in flow view",
 				"enablement": "view == cobolflowview",
 				"icon": {
-					"dark": "images/goto-icon-dark.svg",
-					"light": "images/goto-icon-light.svg"
+					"dark": "images/sourceflow/goto-icon-dark.svg",
+					"light": "images/sourceflow/goto-icon-light.svg"
 				}
 			},
 			{
 				"command": "rech.editor.cobol.flowparser",
 				"title": "Rech COBOL: Analyze source code flow",
 				"icon": {
-					"dark": "images/flow-parser-dark.svg",
-					"light": "images/flow-parser-light.svg"
+					"dark": "images/sourceflow/flow-parser-dark.svg",
+					"light": "images/sourceflow/flow-parser-light.svg"
 				}
 			},
 			{
