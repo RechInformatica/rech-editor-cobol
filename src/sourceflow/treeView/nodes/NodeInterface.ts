@@ -8,11 +8,16 @@ export default interface NodeInterface {
   /**
    * Returns the children
    */
-  getChildren(): NodeInterface[] | Promise<NodeInterface[]>;
+  getChildren(): NodeInterface[];
 
   /**
    * Returns this tree item
    */
-  getTreeItem(): TreeItem | Promise<TreeItem>;
+  getTreeItem(): TreeItem;
+
+  /**
+   * Returns the row number
+   */
+  getRow(): number;
 
 }
