@@ -1,6 +1,8 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
+import { configuration } from "../../helpers/configuration";
+import { CompletionConfig } from "./CompletionConfig";
 
 // Cobol column for 'PIC' clause declaration
 const PIC_COLUMN_DECLARATION = 35;
@@ -11,7 +13,8 @@ export class PictureCompletion implements CompletionInterface {
 
     public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            const text =  CompletionUtils.fillSpacesFromWordStart(PIC_COLUMN_DECLARATION, column, _lines[_line]) + "pic is $1($2)";
+            const verboseSuggestion = CompletionConfig.getVerboseSuggestion();
+            const text =  CompletionUtils.fillSpacesFromWordStart(PIC_COLUMN_DECLARATION, column, _lines[_line]) + `pic${verboseSuggestion ? " is " : " "}$1($2)`;
             resolve(
                 [{
                     label: 'Complete PIC declaration',

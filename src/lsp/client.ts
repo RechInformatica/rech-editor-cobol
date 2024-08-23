@@ -316,7 +316,7 @@ export class Client {
 	private static getConfig(section: string, defaultValue?: any): Promise<any> {
 		return new Promise<any>((resolve, reject) => {
 			const result = configuration.get(section, defaultValue);
-			if (result) {
+			if (result != undefined) {
 				return resolve(result);
 			} else {
 				return reject();

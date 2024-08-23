@@ -4,6 +4,7 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 import { CobolVariable, Type } from "./CobolVariable";
 import { ExpandedSourceManager } from "../../cobol/ExpandedSourceManager";
 import { reject } from "q";
+import { CompletionConfig } from "./CompletionConfig";
 
 // Cobol column for 'VALUE' clause declaration
 const VALUE_COLUMN_DECLARATION = 51;
@@ -71,13 +72,15 @@ export class ValueCompletion implements CompletionInterface {
      * @param currentLineText current line text
      */
     private generateTextFromVariable(variable: CobolVariable, column: number, currentLineText: string): string {
+        const verboseSuggestion = CompletionConfig.getVerboseSuggestion();
         let text = CompletionUtils.fillSpacesFromWordStart(VALUE_COLUMN_DECLARATION, column, currentLineText);
+        text = text.concat(`value${verboseSuggestion ? " is " : " "}`);
         if (variable.getType() == Type.Alphanumeric) {
-            text = text.concat("value is ${1:spaces}");
+            text = text.concat("${1:spaces}");
         } else if (variable.getType() == Type.Typedef) {
-            text = text.concat("value is ${1}");
+            text = text.concat("${1}");
         }else {
-            text = text.concat("value is ${1:zeros}");
+            text = text.concat("${1:zeros}");
             if (!currentLineText.toUpperCase().includes("USAGE")) {
                 text = text.concat(this.createCompIfNeeded(variable));
             }
