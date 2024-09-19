@@ -31,9 +31,13 @@
 		"prefix": "cr",
 		"body": "compute ${1:<var>} rounded = ${0:<formula>},"
 	},
-	"value is": {
+	"value": {
 		"prefix": "vl",
-		"body": "value is ${0:<value>}."
+		"body": "value ${0:<value>}."
+	},
+	"value ": {
+		"prefix": "value",
+		"body": "value ${0:<value>}."
 	},
 	"initialize": {
 		"prefix": "in",
@@ -159,64 +163,64 @@
 			],
 		"description": "initialize ... replacing alphanumeric"
 	},
-	"fun length" : {
-		"prefix": "fun length",
-		"body": "function length(${0:<var>})",
+	"$length" : {
+		"prefix": "$length",
+		"body": "$length(${0:<var>})",
 		"description": "Returns an integer equal to the length of the variable specified in argument-1"
 	},
-	"fun date" : {
-		"prefix": "fun date",
-		"body": "function current-date",
+	"$date" : {
+		"prefix": "$date",
+		"body": "$current-date",
 		"description": "Returns in an integer 9(12) of the current date. Format AAAAMMDDHHMM"
 	},
-	"fun upper" : {
-		"prefix": "fun upper",
-		"body": "function upper-case(${0:<var>})",
+	"$upper" : {
+		"prefix": "$upper",
+		"body": "$upper-case(${0:<var>})",
 		"description": "Returns the value of argument-1 in uppercase"
 	},
-	"fun lower" : {
-		"prefix": "fun lower",
-		"body": "function lower-case(${0:<var>})",
+	"$lower" : {
+		"prefix": "$lower",
+		"body": "$lower-case(${0:<var>})",
 		"description": "Returns the value of argument-1 in lowercase"
 	},
-	"fun mod" : {
-		"prefix": "fun mod",
-		"body": "function mod(${0:<var>})",
+	"$mod" : {
+		"prefix": "$mod",
+		"body": "$mod(${0:<var>})",
 		"description": "Returns the rest of the division between argument-1 and argument-2"
 	},
-	"fun integer" : {
-		"prefix": "fun integer",
-		"body": "function integer(${0:<var>})",
+	"$integer" : {
+		"prefix": "$integer",
+		"body": "$integer(${0:<var>})",
 		"description": "Returns the largest integer value before argument-1"
 	},
-	"fun comp" : {
-		"prefix": "fun comp",
-		"body": "function when-compiled",
+	"$comp" : {
+		"prefix": "$comp",
+		"body": "$when-compiled",
 		"description": "Returns date and time that the program was compiled. Format YYYYMMDDHHMMSSCC-TIMEZONE"
 	},
-	"fun numval" : {
-		"prefix": "fun numval",
-		"body": "function numval(${0:<var>})",
+	"$numval" : {
+		"prefix": "$numval",
+		"body": "$numval(${0:<var>})",
 		"description": "Returns a numeric value for the alphanumeric value of argument-1"
 	},
-	"fun log10" : {
-		"prefix": "fun log10",
-		"body": "function log10(${0:<var>})",
+	"$log10" : {
+		"prefix": "$log10",
+		"body": "$log10(${0:<var>})",
 		"description": "Returns an approximate numeric value for the base-10 logarithm of argument-1"
 	},
-	"fun rem" : {
-		"prefix": "fun rem",
-		"body": "function rem(${0:<var>})",
+	"$rem" : {
+		"prefix": "$rem",
+		"body": "$rem(${0:<var>})",
 		"description": "returns a numeric value that is the remainder of argument-1 divided by argument-2"
 	},
-	"fun abs" : {
-		"prefix": "fun abs",
-		"body": "function abs(${0:<var>})",
+	"$abs" : {
+		"prefix": "$abs",
+		"body": "$abs(${0:<var>})",
 		"description": "Returns the absolute (integer) value of argument-1"
 	},
-	"fun sqrt" : {
-		"prefix": "fun sqrt",
-		"body": "function sqrt(${0:<var>})",
+	"$sqrt" : {
+		"prefix": "$sqrt",
+		"body": "$sqrt(${0:<var>})",
 		"description": "Returns the square root of argument-1"
 	}
 }
