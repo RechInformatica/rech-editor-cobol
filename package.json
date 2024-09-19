@@ -123,6 +123,11 @@
 					"description": "Controls whether specials colors should be reversed when using a light theme.",
 					"default": false
 				},
+				"rech.editor.cobol.verboseSuggestion": {
+					"type": "boolean",
+					"description": "Uses verbose suggestion as cluase 'is' in 'pic' or 'value'.",
+					"default": true
+				},
 				"rech.editor.cobol.especialColors": {
 					"type": "object",
 					"description": "Special color settings for terms interpreted by the Rech COBOL extension.",

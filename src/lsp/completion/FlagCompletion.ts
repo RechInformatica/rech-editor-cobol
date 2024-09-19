@@ -2,13 +2,14 @@ import { CompletionItemKind, CompletionItem, InsertTextFormat, TextEdit } from "
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { CobolVariable } from "./CobolVariable";
+import { CompletionConfig } from "./CompletionConfig";
 
 // Cobol column for 'VALUE' clause declaration
 const VALUE_COLUMN = 51;
 
 /**
  * Class to generate LSP Completion Items for Cobol flags
- */
+*/
 export class FlagCompletion implements CompletionInterface {
 
     public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
@@ -70,10 +71,11 @@ export class FlagCompletion implements CompletionInterface {
      * @param value flag value
      */
     private buildCurrentFlagText(firstWordColumn: number, variableName: string, suffix: string, value: number): string {
+        const verboseSuggestion = CompletionConfig.getVerboseSuggestion();
         let text = "";
         text = text.concat(CompletionUtils.fillSpacesBetween(1, firstWordColumn + 3) + "88 " + variableName + suffix);
         text = text.concat(CompletionUtils.fillSpacesBetween(text.length + 1, VALUE_COLUMN));
-        text = text.concat("value is " + value + ".");
+        text = text.concat(`value${verboseSuggestion ? " is " : " "}` + value + ".");
         return text;
     }
 

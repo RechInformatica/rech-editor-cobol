@@ -58,6 +58,7 @@ import { CobolActionFactory } from "./actions/CobolActionFactory";
 import { RenamingUtils } from "./commons/RenamingUtils";
 import { TypedefCompletion } from "./completion/typedef/TypedefCompletion";
 import { ValueCompletion } from "./completion/ValueCompletion";
+import { CompletionConfig } from "./completion/CompletionConfig";
 
 /** Max lines in the source to active the folding */
 const MAX_LINE_IN_SOURCE_TO_FOLDING = 10000
@@ -425,6 +426,13 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
 connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Thenable<CompletionList> => {
   Log.get().info(`Called callback of onCompletion. File ${textDocumentPosition.textDocument.uri}`);
   return new Promise((resolve, reject) => {
+      // Configure verbose mode in suggestions
+    getConfig<boolean>("verboseSuggestion").then((verboseSuggestion) => {
+      CompletionConfig.setVerboseSuggestion(verboseSuggestion);
+    }).catch((err) => {
+      Log.get().error(`Error setting verbose mode. Error to getConfig verboseSuggestion.  Err ${err}. File: ${textDocumentPosition.textDocument.uri}`);
+      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
+    });
     getSnippetsRepositories().then((repositories) => {
       const line = textDocumentPosition.position.line;
       const column = textDocumentPosition.position.character;
