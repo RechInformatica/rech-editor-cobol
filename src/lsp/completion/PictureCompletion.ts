@@ -1,7 +1,6 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
-import { configuration } from "../../helpers/configuration";
 import { CompletionConfig } from "./CompletionConfig";
 
 // Cobol column for 'PIC' clause declaration
