@@ -35,10 +35,6 @@
 		"prefix": "vl",
 		"body": "value ${0:<value>}."
 	},
-	"value ": {
-		"prefix": "value",
-		"body": "value ${0:<value>}."
-	},
 	"initialize": {
 		"prefix": "in",
 		"body": "initialize ${0:<var>},"
