@@ -82,7 +82,7 @@ export class ValueCompletion implements CompletionInterface {
         }else {
             text = text.concat("${1:zeros}");
             if (!currentLineText.toUpperCase().includes("USAGE")) {
-                text = text.concat(this.createCompIfNeeded(variable));
+                text = text.concat(this.createCompIfNeeded(variable, verboseSuggestion));
             }
         }
         text = text.concat(".");
@@ -94,12 +94,13 @@ export class ValueCompletion implements CompletionInterface {
      *
      * @param variable Cobol variable
      */
-    private createCompIfNeeded(variable: CobolVariable): string {
+    private createCompIfNeeded(variable: CobolVariable, verboseSuggestion: boolean): string {
         if (!variable.isDisplay()) {
+            let text = (verboseSuggestion ? " " : "    ");
             if (variable.getType() == Type.Decimal || variable.isAllowNegative()) {
-                return " ${2:comp}";
+                return text.concat("${2:comp}");
             }
-            return " ${2:comp-x}";
+            return text.concat("${2:comp-x}");
         }
         return "";
     }
