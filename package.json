@@ -186,12 +186,6 @@
 				"path": "./syntaxes/COBOL.tmLanguage.json"
 			}
 		],
-		"snippets": [
-			{
-				"language": "COBOL",
-				"path": "./snippets/cobol.json"
-			}
-		],
 		"viewsContainers": {
 			"activitybar": [
 				{
