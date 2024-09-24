@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with vscode.",
-	"version": "1.0.133",
+	"version": "1.0.134",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.47.0"
@@ -184,6 +184,12 @@
 				"language": "COBOL",
 				"scopeName": "source.cobol",
 				"path": "./syntaxes/COBOL.tmLanguage.json"
+			}
+		],
+				"snippets": [
+			{
+				"language": "COBOL",
+				"path": "./snippets/cobol.json"
 			}
 		],
 		"viewsContainers": {
