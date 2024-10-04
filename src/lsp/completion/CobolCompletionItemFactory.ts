@@ -487,7 +487,7 @@ export class CobolCompletionItemFactory {
    */
   private isInPictureXDeclaration(): boolean {
     const text = this.lineText.substr(0, this.column);
-    const match = text.match(/^.*\sPIC\sIS\sX(?:\(\w*\)?)?\s?$/gi);
+    const match = text.match(/^.*\sPIC(?:\sIS)?\sX(?:\(\w*\)?)?\s?$/gi);
     return match != null;
   }
 

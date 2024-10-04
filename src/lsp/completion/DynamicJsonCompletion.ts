@@ -51,15 +51,17 @@ export class DynamicJsonCompletion implements CompletionInterface {
      * @param column column number where cursor is positioned
      * @param lines document lines
      */
-    public generate(_line: number, _column: number, _lines: string[]): Promise<CompletionItem[]> {
+    public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
             let items: CompletionItem[] = [];
+            if (this.shouldSuggestJsonCompletions(line, lines)) {
                 this.repositories.forEach(currentRepo => {
                     const jsonFiles = this.retrieveJsonFilesForRepo(currentRepo);
                     jsonFiles.forEach(currentFile => {
                         items = items.concat(this.handleJsonFile(currentRepo + currentFile));
                     });
                 });
+            }
             resolve(items)
         });
     }

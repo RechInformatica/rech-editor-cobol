@@ -9,7 +9,7 @@ export class AnyLengthCompletion implements CompletionInterface {
 
     public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            const regex = /pic\s+is\s+x.*\(.*/gi;
+            const regex = /pic(?:\s+is)?\s+x.*\(.*/gi;
             let text = lines[line];
             const match = lines[line].match(regex);
             if (match != null) {
