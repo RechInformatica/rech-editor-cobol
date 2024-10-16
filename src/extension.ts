@@ -32,7 +32,7 @@ export async function activate(context: any) {
  */
 async function _activate(context: any) {
     // Build the statusBar to control the source of completions suggested in the server side
-    SourceOfCompletions.buildStatusBar();
+    SourceOfCompletions.buildStatusBar(context);
     // Build the statusBar from folding
     FoldStatusBar.buildStatusBar();
     // Build the statusBar from SourceExpander
@@ -47,8 +47,12 @@ async function _activate(context: any) {
     CustomDecorator.activate(context);
     // Decorators to show hints of elements
     DocumentationDecorator.activate(context);
-    //
-    SourceOfCompletions.show();
+    // Show source of completion status bar
+    const activeEditor = window.activeTextEditor;
+    if (activeEditor) {
+        const document = activeEditor.document;
+        SourceOfCompletions.show(document.fileName);
+    }
 
     // This register the provider from the Flow list view
     const flowProvider = new FlowProvider(context);
@@ -126,13 +130,25 @@ async function _activate(context: any) {
         new Editor().setColumn(AREA_A - 1).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeParagraphSource', () => {
-        SourceOfCompletions.toggleTheParagraphSource();
+        const activeEditor = window.activeTextEditor;
+        if (activeEditor) {
+            const document = activeEditor.document;
+            SourceOfCompletions.toggleTheParagraphSource(document.fileName, context);
+        }
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeVariableSource', () => {
-        SourceOfCompletions.toggleTheVariableSource();
+        const activeEditor = window.activeTextEditor;
+        if (activeEditor) {
+            const document = activeEditor.document;
+            SourceOfCompletions.toggleTheVariableSource(document.fileName, context);
+        }
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.definesSourceExpander', () => {
-        SourceOfCompletions.toggleTheVariableSource();
+        const activeEditor = window.activeTextEditor;
+        if (activeEditor) {
+            const document = activeEditor.document;
+            SourceOfCompletions.toggleTheVariableSource(document.fileName, context);
+        }
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indent', () => {
         new Editor().indent("N").then().catch();
