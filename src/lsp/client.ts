@@ -1,4 +1,4 @@
-import { commands, ExtensionContext } from 'vscode';
+import { commands, ExtensionContext, window } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ResponseError, ServerOptions, TransportKind } from 'vscode-languageclient';
 import { Editor } from '../editor/editor';
 import * as path from 'path';
@@ -153,12 +153,17 @@ export class Client {
 			});
 			Client.client.onRequest("custom/sourceOfParagraphCompletions", () => {
 				return new Promise<string>((resolve, reject) => {
-					const result = SourceOfCompletions.getSourceOfParagraphCompletions();
-					if (result !== undefined) {
-						return resolve(result);
-					} else {
-						return reject();
+					const activeEditor = window.activeTextEditor;
+					if (activeEditor) {
+						const document = activeEditor.document;
+						const result = SourceOfCompletions.getSourceOfParagraphCompletions(document.fileName);
+						if (result !== undefined) {
+							return resolve(result);
+						} else {
+							return reject();
+						}
 					}
+					return reject();
 				})
 			});
 			Client.client.onRequest("custom/specialClassPuller", (uri: string) => {
@@ -199,16 +204,25 @@ export class Client {
 			});
 			Client.client.onRequest("custom/sourceOfVariableCompletions", () => {
 				return new Promise<string>((resolve, reject) => {
-					const result = SourceOfCompletions.getSourceOfVariableCompletions();
-					if (result !== undefined) {
-						return resolve(result);
-					} else {
-						return reject();
+					const activeEditor = window.activeTextEditor;
+					if (activeEditor) {
+						const document = activeEditor.document;
+						const result = SourceOfCompletions.getSourceOfVariableCompletions(document.fileName);
+						if (result !== undefined) {
+							return resolve(result);
+						} else {
+							return reject();
+						}
 					}
+					return reject();
 				})
 			});
 			if (Editor.getSourceExpander()) {
-				SourceOfCompletions.show();
+				const activeEditor = window.activeTextEditor;
+				if (activeEditor) {
+					const document = activeEditor.document;
+					SourceOfCompletions.show(document.fileName);
+				}
 			}
 		}
 	}

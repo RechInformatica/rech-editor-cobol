@@ -1,5 +1,6 @@
 import { ExtensionContext, TextEditor, window, workspace, debug } from 'vscode';
 import { Parser } from './Parser';
+import { SourceOfCompletions } from '../lsp/commons/SourceOfCompletions';
 
 /** Max lines to decorate source, preventing UI freezing */
 const DECORATION_MAX_LINES = 30000;
@@ -35,6 +36,7 @@ export class CustomDecorator {
         window.onDidChangeActiveTextEditor(editor => {
             activeEditor = editor;
             if (editor) {
+                SourceOfCompletions.updateText(editor.document.fileName);
                 // Trigger update to set decorations for newly active file
                 triggerUpdateDecorations();
             }
