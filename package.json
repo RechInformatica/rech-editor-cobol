@@ -69,17 +69,17 @@
 					"description": "COBOL tabstops."
 				},
 				"rech.editor.cobol.showConditionalBlockCobolFlow": {
-                    "type": [
-                        "boolean",
-                        "boolean"
-                    ],
-                    "enum": [
-                        false,
-                        true
-                    ],
-                    "description": "Show conditional blocks on COBOL Flow Tree View.",
-                    "default": true
-                },
+					"type": [
+						"boolean",
+						"boolean"
+					],
+					"enum": [
+						false,
+						true
+					],
+					"description": "Show conditional blocks on COBOL Flow Tree View.",
+					"default": true
+				},
 				"rech.editor.cobol.formatter.location": {
 					"type": "string",
 					"description": "External COBOL formatter location."
@@ -186,7 +186,7 @@
 				"path": "./syntaxes/COBOL.tmLanguage.json"
 			}
 		],
-				"snippets": [
+		"snippets": [
 			{
 				"language": "COBOL",
 				"path": "./snippets/cobol.json"
@@ -349,6 +349,18 @@
 			{
 				"command": "rech.editor.cobol.extractParagraph",
 				"title": "Rech COBOL: Extract selected lines to a new paragraph"
+			},
+			{
+				"command": "rech.editor.cobol.changeParagraphSource",
+				"title": "Rech COBOL: Muda fonte de análise do autocompletar para parágrafos"
+			},
+			{
+				"command": "rech.editor.cobol.changeVariableSource",
+				"title": "Rech COBOL: Muda fonte de análise do autocompletar para variáveis"
+			},
+			{
+				"command": "rech.editor.cobol.changeBothSourceOfCompletion",
+				"title": "Rech COBOL: Muda fonte de análise do autocompletar para parágrafos/variáveis"
 			}
 		],
 		"keybindings": [
@@ -458,9 +470,9 @@
 				"when": "editorLangId == COBOL"
 			},
 			{
-				"command": "rech.editor.cobol.showElementProperties",
-				"key": "shift+alt+q",
-				"when": "editorLangId == COBOL"
+				"command": "rech.editor.cobol.changeSourceOfCompletion",
+				"key": "ctrl+alt+j",
+				"title": "Rech COBOL: Muda fonte de análise do autocompletar para parágrafos/variáveis"
 			}
 		]
 	},

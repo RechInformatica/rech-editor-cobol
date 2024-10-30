@@ -106,6 +106,25 @@ export class SourceOfCompletions {
     }
 
     /**
+     * Toggles both paragraph and variable sources, ensuring they match and then inverting them.
+     * Paragraph will always toggle, and variable toggles only if it differs.
+     *
+     * @param fileName - The name of the file currently being edited.
+     * @param context - The extension context used to save the updated state.
+     */
+    public static toggleBothSource(fileName: string, context: ExtensionContext) {
+        this.toggleTheParagraphSource(fileName, context);
+
+        const paragraphSource = SourceOfCompletions.getSourceOfParagraphCompletions(fileName);
+        const variableSource = SourceOfCompletions.getSourceOfVariableCompletions(fileName);
+
+        if (paragraphSource !== variableSource) {
+            this.toggleTheVariableSource(fileName, context);
+        }
+    }
+
+
+    /**
      * Toggles the paragraph source between "local" and "expanded" for the given file.
      *
      * @param fileName - The name of the file currently being edited.
@@ -128,10 +147,10 @@ export class SourceOfCompletions {
      * @param fileName - The name of the file currently being edited.
      * @param context - The extension context used to save the updated state.
      */
-   public static toggleTheVariableSource(fileName: string, context: ExtensionContext) {
-       if (SourceOfCompletions.getSourceOfVariableCompletions(fileName) == SOURCE_LOCAL) {
-           SourceOfCompletions.variableSource.set(fileName, SOURCE_EXPANDED);
-           SourceOfCompletions.variableStatusBar!.text = VARIABLE_SOURCE_EXPANDED_FILE
+    public static toggleTheVariableSource(fileName: string, context: ExtensionContext) {
+        if (SourceOfCompletions.getSourceOfVariableCompletions(fileName) == SOURCE_LOCAL) {
+            SourceOfCompletions.variableSource.set(fileName, SOURCE_EXPANDED);
+            SourceOfCompletions.variableStatusBar!.text = VARIABLE_SOURCE_EXPANDED_FILE
         } else {
             SourceOfCompletions.variableSource.set(fileName, SOURCE_LOCAL);
             SourceOfCompletions.variableStatusBar!.text = VARIABLE_SOURCE_LOCAL_FILE
@@ -159,7 +178,7 @@ export class SourceOfCompletions {
      * @param fileName - The name of the file for which to get the source.
      * @returns The source of variable completions ("local" or "expanded").
      */
-   public static getSourceOfVariableCompletions(fileName: string) {
+    public static getSourceOfVariableCompletions(fileName: string) {
         const config = SourceOfCompletions.variableSource.get(fileName);
         if (config) {
             return config
