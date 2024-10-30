@@ -470,6 +470,11 @@
 				"when": "editorLangId == COBOL"
 			},
 			{
+				"command": "rech.editor.cobol.showElementProperties",
+				"key": "shift+alt+q",
+				"when": "editorLangId == COBOL"
+			},
+			{
 				"command": "rech.editor.cobol.changeSourceOfCompletion",
 				"key": "ctrl+alt+j",
 				"title": "Rech COBOL: Muda fonte de análise do autocompletar para parágrafos/variáveis"
