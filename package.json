@@ -475,7 +475,7 @@
 				"when": "editorLangId == COBOL"
 			},
 			{
-				"command": "rech.editor.cobol.changeSourceOfCompletion",
+				"command": "rech.editor.cobol.changeBothSourceOfCompletion",
 				"key": "ctrl+alt+j",
 				"title": "Rech COBOL: Muda fonte de análise do autocompletar para parágrafos/variáveis"
 			}
