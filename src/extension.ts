@@ -143,6 +143,13 @@ async function _activate(context: any) {
             SourceOfCompletions.toggleTheVariableSource(document.fileName, context);
         }
     }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.changeBothSourceOfCompletion', () => {
+        const activeEditor = window.activeTextEditor;
+        if (activeEditor) {
+            const document = activeEditor.document;
+            SourceOfCompletions.toggleBothSource(document.fileName, context);
+        }
+    }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.definesSourceExpander', () => {
         const activeEditor = window.activeTextEditor;
         if (activeEditor) {
