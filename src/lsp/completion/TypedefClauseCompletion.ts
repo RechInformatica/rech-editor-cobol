@@ -22,6 +22,7 @@ export class TypedefClauseCompletion implements CompletionInterface {
                     insertText: text,
                     insertTextFormat: InsertTextFormat.Snippet,
                     filterText: "typedef",
+                    sortText: "002",
                     preselect: true,
                     kind: CompletionItemKind.Variable
                 }]
