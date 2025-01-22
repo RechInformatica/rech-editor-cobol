@@ -58,6 +58,7 @@ export class ValueCompletion implements CompletionInterface {
                 insertText: text,
                 insertTextFormat: InsertTextFormat.Snippet,
                 filterText: "value",
+                sortText: "001",
                 preselect: true,
                 kind: CompletionItemKind.Variable
             }]);
