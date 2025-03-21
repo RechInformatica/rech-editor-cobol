@@ -4,6 +4,7 @@ import { ParserCobol } from "../../cobol/parsercobol";
 import { CobolDocParser } from "../../cobol/rechdoc/CobolDocParser";
 import { Scan } from "rech-ts-commons";
 import { CobolVariable } from "./CobolVariable";
+import { getConfig } from "../server";
 
 /**
  * Class to generate LSP Completion Items for Cobol 'add' clause
@@ -57,9 +58,11 @@ export class ClassCompletion implements CompletionInterface {
   private loadCache(): Promise<void> {
     return new Promise((resolve, _reject) => {
       this.specialClassPuller().then((classes: string) => {
-        ClassCompletion.cache = this.parserSpecialClasses(classes)
-        ClassCompletion.cacheSourceFileName = this.cacheFileName;
-        return resolve();
+        this.specialClassesPullerFilter().then((filters) => {
+          ClassCompletion.cache = this.parserSpecialClasses(classes, filters);
+          ClassCompletion.cacheSourceFileName = this.cacheFileName;
+          return resolve();
+        });
       }, (_cause)=> {
         ClassCompletion.cache = this.generateClassCompletion(<string[]>this.currentLines)
         ClassCompletion.cacheSourceFileName = this.cacheFileName;
@@ -73,7 +76,7 @@ export class ClassCompletion implements CompletionInterface {
    *
    * @param classes
    */
-  private parserSpecialClasses(classes: string): Map<string, CompletionItem> {
+  private parserSpecialClasses(classes: string, filter: RegExp[]): Map<string, CompletionItem> {
     const items: Map<string, CompletionItem> = new Map;
     const buffer = classes.replace(/\r/g, "").split("\n");
     for (let i = 0; i < buffer.length; i++) {
@@ -82,13 +85,31 @@ export class ClassCompletion implements CompletionInterface {
         const parts = linha.split("=");
         const className = parts[0];
         const packagex = parts[1] ? parts[1] : ""
-        const documentation = "*>-> " + packagex.replace("\r", "");
-        const classItem = this.createClassCompletion(className, [documentation], packagex);
-        items.set(className, classItem);
+        for (let j = 0; j < filter.length; j++) {
+          if (filter[j].test(className) || filter[j].test(packagex)) {
+            const documentation = "*>-> " + packagex.replace("\r", "");
+            const classItem = this.createClassCompletion(className, [documentation], packagex);
+            items.set(className, classItem);
+            break;
+          }
+        }
       }
     }
     return items;
   }
+
+    /**
+   * Returns the configured tabstops or default values if no tabstop is configured
+   * as a list of regex patterns.
+   */
+    private specialClassesPullerFilter(): Promise<RegExp[]> {
+      return new Promise((resolve, _reject) => {
+        getConfig<string[]>("specialClassesPullerFilter").then(specialClassesPullerFilter => {
+          const filter = specialClassesPullerFilter;
+          resolve(filter.map(pattern => new RegExp(`^${pattern}`, 'i')));
+        });
+      });
+    }
 
   /**
    * Generates completions based on statement of class

@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with vscode.",
-	"version": "1.0.141",
+	"version": "1.0.142",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.47.0"
@@ -67,6 +67,23 @@
 						50
 					],
 					"description": "COBOL tabstops."
+				},
+				"rech.editor.cobol.specialClassesPullerFilter": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"title": "specialClassesPullerFilter",
+						"properties": {
+							"specialClassesPullerFilter": {
+								"type": "string",
+								"description": "specialClassesPullerFilter"
+							}
+						}
+					},
+					"default": [
+						"FUN.*"
+					],
+					"description": "Special classes puller filter using regular expressions."
 				},
 				"rech.editor.cobol.showConditionalBlockCobolFlow": {
 					"type": [
