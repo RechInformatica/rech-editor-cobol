@@ -144,15 +144,34 @@ export class Editor {
   }
 
   /**
-   * Selects the current word
+   * Selects the current word. If the cursor is at the end of the word with active selection, it selects the word to the left. If the cursor is at the beginning of the word or withou active selection, it selects the word to the right.
    */
   selectCurrentWord() {
-    //
-    // None of the functions below works in all cases. Testing where is the cursor can detect which one to use
-    //
-    // If cursor is exactly on word's left position (blank character at left)
-    if (this.getCursors()[0].column == 0 ||
-      this.getCurrentLine().charAt(this.getCursors()[0].column - 1) == ' ') {
+    let copyWordRight = true;
+
+    const cursor = this.getCursors()[0];
+    const range = this.getSelectionRange()[0];
+
+    // If cursor is after word and word is selected
+    if (range.start.character != range.end.character &&
+        this.getRangeBuffer(range).trim().length > 0 &&
+        cursor.column > range.start.character) {
+        copyWordRight = false;
+    }
+
+    // If cursor is exactly on word's right position (blank character at right)
+    if (range.start.character == range.end.character &&
+        this.getCurrentLine().charAt(cursor.column) == ' ' &&
+        this.getCurrentLine().charAt(cursor.column - 1) != ' ') {
+        copyWordRight = false;
+    }
+
+    // If cursor is at the end of the line and word is selected
+    if (cursor.column == this.getLine(cursor.line).length) {
+        copyWordRight = false;
+    }
+
+    if (copyWordRight) {
       commands.executeCommand("cursorWordRight");
       commands.executeCommand("cursorWordLeftSelect");
     } else {
@@ -269,7 +288,7 @@ export class Editor {
   getCursors() {
     const cursors: RechPosition[] = new Array();
     this.editor.selections.forEach(cursor => {
-      cursors.push(new RechPosition(cursor.start.line, cursor.start.character));
+      cursors.push(new RechPosition(cursor.active.line, cursor.active.character));
     });
     return cursors;
   }
