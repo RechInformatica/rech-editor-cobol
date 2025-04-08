@@ -154,21 +154,21 @@ export class Editor {
 
     // If cursor is after word and word is selected
     if (range.start.character != range.end.character &&
-        this.getRangeBuffer(range).trim().length > 0 &&
-        cursor.column > range.start.character) {
-        copyWordRight = false;
+      this.getRangeBuffer(range).trim().length > 0 &&
+      cursor.column > range.start.character) {
+      copyWordRight = false;
     }
 
     // If cursor is exactly on word's right position (blank character at right)
     if (range.start.character == range.end.character &&
-        this.getCurrentLine().charAt(cursor.column) == ' ' &&
-        this.getCurrentLine().charAt(cursor.column - 1) != ' ') {
-        copyWordRight = false;
+      this.getCurrentLine().charAt(cursor.column) == ' ' &&
+      this.getCurrentLine().charAt(cursor.column - 1) != ' ') {
+      copyWordRight = false;
     }
 
     // If cursor is at the end of the line and word is selected
     if (cursor.column == this.getLine(cursor.line).length) {
-        copyWordRight = false;
+      copyWordRight = false;
     }
 
     if (copyWordRight) {
@@ -356,6 +356,14 @@ export class Editor {
   }
 
   /**
+   * Inserts a line break based on the file's line ending (CRLF or LF)
+   */
+  insertLineBreak() {
+    const eol = this.editor.document.eol === 1 ? '\n' : '\r\n';
+    return this.insertText(eol);
+  }
+
+  /**
    * Moves the cursor down
    */
   moveDown() {
@@ -499,6 +507,24 @@ export class Editor {
     this.clipboardPaste();
   }
 
+  /**
+   * Copies the current selection to clipboard, replacing the current selection with the copied text
+   */
+  copyLines() {
+    const currentCursors = this.getCursors();
+    const ranges = this.getSelectionRange();
+    const cursors: RechPosition[] = [];
+    for (let i = 0; i < ranges.length; i++) {
+      const range = ranges[i];
+      for (let j = range.start.line; j <= range.end.line; j++) {
+        cursors.push(new RechPosition(j, range.start.character, this.getCurrentFileName()));
+      }
+    }
+
+    this.setCursors(cursors);
+    commands.executeCommand("editor.action.clipboardCopyAction");
+    this.setCursors(currentCursors);
+  }
   /**
    * Copies the current selection to clipboard
    */
