@@ -5,6 +5,7 @@ import * as Colunas from './colunas';
 import * as os from 'os';
 import { isNull } from 'util';
 import { MoveInverter } from './MoveInverter';
+import { env } from 'vscode';
 
 export class GeradorCobol {
   editor: Editor;
@@ -47,9 +48,26 @@ export class GeradorCobol {
    * Paste clipboard in a new line wherever the cursor is
    */
   async pasteLine() {
-    const cursor = this.editor.getCursors()[0];
+    const startCursors = this.editor.getCursors();
+    const cursorsStartLine = [];
+    for (let i = 0; i < startCursors.length; i++) {
+      cursorsStartLine.push(new RechPosition(startCursors[i].line, 0));
+    }
+
+    this.editor.setCursors(cursorsStartLine);
+    const clipboardText = await env.clipboard.readText();
+    const clipboardLines = clipboardText.split("\n").length - 1;
     await this.editor.clipboardPaste();
-    this.editor.setCursor(cursor.line, cursor.column);
+    if (cursorsStartLine.length > 1 &&
+        cursorsStartLine.length == clipboardLines) {
+      await this.editor.insertLineBreak();
+    }
+
+    const finalCursors = this.editor.getCursors();
+    for (let i = 0; i < finalCursors.length; i++) {
+      finalCursors[i].column = startCursors[i].column;
+    }
+    this.editor.setCursors(finalCursors);
   }
 
   /**
