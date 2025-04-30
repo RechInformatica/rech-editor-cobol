@@ -707,10 +707,12 @@ export class Editor {
       if (indenter.isAllCommentaryLines(selectionBuffer)) {
         // Asynchronous process for comment indentation
         await new Promise<void>((resolve) => {
-          indenter.indentCommentary(selectionBuffer, (buffer) => {
-            this.replaceSelection(buffer.toString())
-              .then(() => resolve());
-          });
+          indenter.indentCommentary(selectionBuffer,
+            async (buffer) => {
+              await this.replaceSelection(buffer.toString());
+              // Adjusts the selection to the new buffer size
+              this.adjustSelectionAndResolve(buffer, selectionBuffer, selections, cursors, i, resolve);
+            });
         });
         continue;
       }
@@ -725,21 +727,8 @@ export class Editor {
           async (buffer) => {
             try {
               await this.replaceSelection(buffer.toString());
-
               // Adjusts the selection to the new buffer size
-              const linesDiff = buffer.join().split(/\n/).length
-                - selectionBuffer.join().split(/\n/).length;
-
-              for (let j = i; j < selections.length; j++) {
-                const newStartLine = selections[j].start.line + linesDiff;
-                const newEndLine = selections[j].end.line + linesDiff;
-                selections[j] = new Selection(
-                  new Position(newStartLine, selections[j].start.character),
-                  new Position(newEndLine, selections[j].end.character)
-                );
-              }
-
-              resolve();
+              this.adjustSelectionAndResolve(buffer, selectionBuffer, selections, cursors, i, resolve);
             } catch (error) {
               reject(error);
             }
@@ -754,6 +743,29 @@ export class Editor {
 
     // Restore the cursor position
     this.setCursors(cursors);
+  }
+
+  /**
+   * Adjusts the selection and cursor positions to the new buffer size and resolves the promise.
+   */
+  private adjustSelectionAndResolve(buffer: string[], selectionBuffer: string[], selections: Selection[], cursors: RechPosition[], position: number, resolve: () => void) {
+    const linesDiff = buffer.join().split(/\n/).length - selectionBuffer.join().split(/\n/).length;
+
+    for (let j = position; j < selections.length; j++) {
+      const newStartLine = selections[j].start.line + linesDiff;
+      const newEndLine = selections[j].end.line + linesDiff;
+      selections[j] = new Selection(
+        new Position(newStartLine, selections[j].start.character),
+        new Position(newEndLine, selections[j].end.character)
+      );
+    }
+
+    // Adjust cursor positions
+    for (let j = position; j < cursors.length; j++) {
+      cursors[j].line += linesDiff;
+    }
+
+    resolve();
   }
 
   /**
