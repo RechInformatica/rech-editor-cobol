@@ -273,7 +273,9 @@ export class Client {
 			const extraCopyDirectory = files[1];
 			const executor = Editor.getPreprocessor();
 			if (executor) {
-				executor.setPath(currentFile).setExtraParams([extraCopyDirectory]).exec().then((output) => {
+				const extraParams = new Map<string, string[]>();
+				extraParams.set("dc", [extraCopyDirectory])
+				executor.setPath(currentFile).setExtraParams(extraParams).exec().then((output) => {
 					return resolve(output);
 				}).catch((e) => {
 					return reject(e);
