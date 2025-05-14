@@ -117,6 +117,19 @@ export class Editor {
   /**
    * Adjusts selection to select the whole line
    */
+  selectWholeLineFromSelection(selection: Selection) {
+    if (selection.end.character != 0) {
+      const range = new Range(new Position(selection.start.line, 0), new Position(selection.end.line + 1, 0));
+      this.setSelectionRange(range);
+    } else {
+      const range = new Range(new Position(selection.start.line, 0), selection.end);
+      this.setSelectionRange(range);
+    }
+  }
+
+  /**
+   * Adjusts selection to select the whole line
+   */
   selectWholeLines() {
     const ranges: Range[] = new Array();
     // Adjusts each range to fill whole line with selection
@@ -680,24 +693,79 @@ export class Editor {
    * Indent the selection Buffer
    */
   async indent(alignment: string) {
-    // If there is no selection saves actual cursor to restore it later
-    let restoreCursor: RechPosition;
-    const selection = this.getSelectionRange();
-    if (selection.length == 1 && selection[0].isEmpty) {
-      restoreCursor = this.getCursors()[0];
+    const selections = this.editor.selections;
+    const cursors = this.getCursors();
+
+    for (let i = 0; i < selections.length; i++) {
+      const selection = selections[i];
+
+      this.selectWholeLineFromSelection(selection);
+
+      const indenter = new Indenta();
+      const selectionBuffer = this.getSelectionBuffer();
+
+      if (indenter.isAllCommentaryLines(selectionBuffer)) {
+        // Asynchronous process for comment indentation
+        await new Promise<void>((resolve) => {
+          indenter.indentCommentary(selectionBuffer,
+            async (buffer) => {
+              await this.replaceSelection(buffer.toString());
+              // Adjusts the selection to the new buffer size
+              this.adjustSelectionAndResolve(buffer, selectionBuffer, selections, cursors, i, resolve);
+            });
+        });
+        continue;
+      }
+
+      // Asynchronous process for normal indentation
+      await new Promise<void>((resolve, reject) => {
+        indenter.indenta(
+          alignment,
+          selectionBuffer,
+          this.getPath().toString(),
+          this.editor.selection.start.line,
+          async (buffer) => {
+            try {
+              await this.replaceSelection(buffer.toString());
+              // Adjusts the selection to the new buffer size
+              this.adjustSelectionAndResolve(buffer, selectionBuffer, selections, cursors, i, resolve);
+            } catch (error) {
+              reject(error);
+            }
+          },
+          (bufferErr) => {
+            this.showWarningMessage(bufferErr);
+            reject(bufferErr);
+          }
+        );
+      });
     }
-    // Select whole lines of the selection range
-    this.selectWholeLines();
-    const indenter = new Indenta();
-    const selectionBuffer = this.getSelectionBuffer();
-    if (indenter.isAllCommentaryLines(selectionBuffer)) {
-      indenter.indentCommentary(selectionBuffer, (buffer) => this.replaceBuffer(buffer, restoreCursor));
-      return;
+
+    // Restore the cursor position
+    this.setCursors(cursors);
+  }
+
+  /**
+   * Adjusts the selection and cursor positions to the new buffer size and resolves the promise.
+   */
+  private adjustSelectionAndResolve(buffer: string[], selectionBuffer: string[], selections: Selection[], cursors: RechPosition[], position: number, resolve: () => void) {
+    const linesDiff = buffer.join().split(/\n/).length - selectionBuffer.join().split(/\n/).length;
+
+    for (let j = position; j < selections.length; j++) {
+      const newStartLine = selections[j].start.line + linesDiff;
+      const newEndLine = selections[j].end.line + linesDiff;
+      selections[j] = new Selection(
+        new Position(newStartLine, selections[j].start.character),
+        new Position(newEndLine, selections[j].end.character)
+      );
     }
-    //Indent the selection range
-    await indenter.indenta(alignment, selectionBuffer, this.getPath().toString(), this.editor.selection.start.line, (buffer) => {
-      this.replaceBuffer(buffer, restoreCursor);
-    }, (bufferErr) => { this.showWarningMessage(bufferErr); });
+
+    // Adjust cursor positions
+    for (let j = position; j < cursors.length; j++) {
+      cursors[j].line += linesDiff;
+    }
+
+    resolve();
   }
 
   /**
