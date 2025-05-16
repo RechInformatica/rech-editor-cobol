@@ -17,6 +17,8 @@ export class Editor {
   private static sourceExpander: GenericExecutor;
   /** function to return the copy hierarchy */
   private static copyHierarchy: GenericExecutor;
+  /** function to return the copy hierarchy */
+  private static elementPropertiesExtractor: GenericExecutor;
   /** Source preprocessor function */
   private static preprocessor: GenericExecutor;
   /** Special class puller */
@@ -781,6 +783,23 @@ export class Editor {
   public static getCopyHierarchy() {
     return Editor.copyHierarchy
   }
+
+  /**
+   * Define the function to return element properties
+   *
+   * @param elementPropertiesExtractor
+   */
+    public static setElementPropertiesExtractor(elementPropertiesExtractor: GenericExecutor) {
+      Editor.elementPropertiesExtractor = elementPropertiesExtractor
+    }
+
+  /**
+   * Returns the function to return element properties
+   */
+    public static getElementPropertiesExtractor() {
+      return Editor.elementPropertiesExtractor;
+    }
+
 
   /**
    * Define the function to return the available classes

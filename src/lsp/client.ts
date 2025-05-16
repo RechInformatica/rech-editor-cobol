@@ -65,6 +65,7 @@ export class Client {
 			dj.definePreprocessor();
 			dj.defineDianosticConfigs();
 			dj.defineCopyHierarchyFunction();
+			dj.defineElementPropertiesExtractor();
 			dj.defineSpecialClassPullerFunction();
 			dj.defineCopyUsageLocatorFunction();
 			dj.defineExternalMethodCompletionFunction();

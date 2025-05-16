@@ -64,6 +64,20 @@ export async function defineCopyHierarchyFunction() {
 }
 
 /**
+ * Sets element properties extractor
+*/
+export async function defineElementPropertiesExtractor() {
+    const rechInternal = extensions.getExtension('rechinformatica.rech-editor-internal');
+    if (rechInternal) {
+        await rechInternal.activate();
+        const elementProperties: GenericExecutor = rechInternal.exports.getElementPropertiesExtractor();
+        if (elementProperties) {
+            Editor.setElementPropertiesExtractor(<GenericExecutor>elementProperties);
+        }
+    }
+}
+
+/**
  * Sets special Class puller for Cobol source
 */
 export async function defineSpecialClassPullerFunction() {
