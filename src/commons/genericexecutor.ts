@@ -19,7 +19,7 @@ export interface GenericExecutor {
    *
    * @param params
    */
-  setExtraParams(params: string[]): GenericExecutor;
+  setExtraParams(params: Map<string, string[]>): GenericExecutor;
 
   /**
    * Execute

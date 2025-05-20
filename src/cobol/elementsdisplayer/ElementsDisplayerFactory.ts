@@ -43,7 +43,7 @@ export class ElementsDisplayerFactory {
       case this.isVariable(lines[position.line]):
         const variable = CobolVariable.parseLines(position.line, lines)
         variable.setDeclarationPosition(position);
-        new VariableDisplayer().show(variable)
+        new VariableDisplayer().show(uri, variable, lines)
         break;
       case this.isClass(lines[position.line]):
         const classs = CobolVariable.parseLines(position.line, lines)

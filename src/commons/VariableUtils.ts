@@ -1,5 +1,6 @@
 import { ElementDocumentationExtractor } from "../cobol/rechdoc/ElementDocumentationExtractor";
 import { CobolVariable } from "../lsp/completion/CobolVariable";
+import { Scan } from "rech-ts-commons";
 
 /**
  * Utility class for Cobol variables
@@ -109,7 +110,7 @@ export class VariableUtils {
                 section = match[1].split(" ")[0];
                 break;
             }
-            if (/^.*data\s+division[\.\,]?\s*$/i.test(currentLine)) {
+            if (/^.*data\s+division[\.\,]?\s*$/i.test(currentLine) || /^ *end method[\.]?/i.test(currentLine)) {
                 break;
             }
         }
@@ -143,6 +144,41 @@ export class VariableUtils {
             }
         }
         return false;
+    }
+
+
+    /**
+     * Determines the method number (occurrence) in which a given COBOL variable is declared.
+     *
+     * @param variable - The COBOL variable whose method number is to be determined.
+     * @param lines - An array of strings representing the lines of the COBOL source code.
+     * @returns The method number (1-based index) where the variable is declared, or -1 if the
+     *          variable's declaration position or scope (method name) is not found.
+     *
+     */
+    public static getMethodNumber(variable: CobolVariable, lines: string[]): number {
+        let methodCount = 0;
+
+        const position = variable.getDeclarationPosition();
+        if (!position) {
+            return methodCount;
+        }
+
+        const methodName = variable.getScope();
+        if (!methodName) {
+            return methodCount;
+        }
+
+        const regex = new RegExp(`method-id\\.\\s+${methodName}`, "gi");
+
+        new Scan(lines.join("\n")).scan(regex, (iterator: any) => {
+            methodCount++;
+            if (iterator.row >= position.line) {
+                iterator.stop();
+            }
+        });
+
+        return methodCount;
     }
 
 }
