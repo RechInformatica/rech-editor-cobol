@@ -70,7 +70,11 @@ export class ParserCobol {
       // $SET CONSTANT
       match = /^ +\$SET\s+CONSTANT\s+(?:\([^\s]+\))?([\w\-]+)\s+.*/i.exec(line);
       if (match == null) {
-        return undefined;
+        // declare
+        match = /\s+declare\s+(\S+)\s+as[\s\S]+/i.exec(line);
+        if (match == null) {
+          return undefined;
+        }
       }
     }
     return match[1];
