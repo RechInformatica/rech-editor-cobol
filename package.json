@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with vscode.",
-	"version": "1.0.146",
+	"version": "1.0.147",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.47.0"
