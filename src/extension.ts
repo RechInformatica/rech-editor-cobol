@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { commands, extensions, window } from 'vscode';
+import { commands, extensions, window, languages } from 'vscode';
 import { GeradorCobol } from './cobol/gerador-cobol';
 import { Editor } from './editor/editor';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
@@ -18,6 +18,7 @@ import { IndentUtils } from './indent/indentUtils';
 import { CobolRefactor } from './cobol/refactor/CobolRefactor';
 import { DocumentationDecorator } from './decoration/DocumentationDecorator';
 import { ExpandedSourceCacheStatusBar } from './cobol/ExpandedSourceCacheStatusBar';
+import { CobolDocumentSymbolProvider } from './lsp/outline/CobolDocumentSymbolProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -57,6 +58,13 @@ async function _activate(context: any) {
     // This register the provider from the Flow list view
     const flowProvider = new FlowProvider(context);
     window.registerTreeDataProvider("cobolflowview", flowProvider);
+
+    context.subscriptions.push(
+        languages.registerDocumentSymbolProvider(
+          { language: 'COBOL' },
+          new CobolDocumentSymbolProvider()
+        )
+      );
 
     //
     // The command has been defined in the package.json file
