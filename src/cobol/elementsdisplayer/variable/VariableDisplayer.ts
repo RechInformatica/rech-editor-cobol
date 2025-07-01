@@ -28,7 +28,7 @@ export class VariableDisplayer {
       extraParams.set("var", [variable.getName() + methodName]);
       elementPropertiesExtractor.setPath(uri);
       elementPropertiesExtractor.setExtraParams(extraParams);
-      elementPropertiesExtractor.exec().then((output) => {
+      elementPropertiesExtractor.exec(uri).then((output) => {
         try {
           const jsonMatch = output.match(/({[\s\S]*})/);
           if (!jsonMatch) {
