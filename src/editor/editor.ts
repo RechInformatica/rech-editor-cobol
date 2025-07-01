@@ -697,6 +697,7 @@ export class Editor {
   async indent(alignment: string) {
     const selections = this.editor.selections;
     const cursors = this.getCursors();
+    const newSelections: Selection[] = [];
 
     for (let i = 0; i < selections.length; i++) {
       const selection = selections[i];
@@ -712,6 +713,7 @@ export class Editor {
           indenter.indentCommentary(selectionBuffer,
             async (buffer) => {
               await this.replaceSelection(buffer.toString());
+              newSelections.push(this.editor.selection);
               // Adjusts the selection to the new buffer size
               this.adjustSelectionAndResolve(buffer, selectionBuffer, selections, cursors, i, resolve);
             });
@@ -729,6 +731,7 @@ export class Editor {
           async (buffer) => {
             try {
               await this.replaceSelection(buffer.toString());
+              newSelections.push(this.editor.selection);
               // Adjusts the selection to the new buffer size
               this.adjustSelectionAndResolve(buffer, selectionBuffer, selections, cursors, i, resolve);
             } catch (error) {
@@ -743,8 +746,9 @@ export class Editor {
       });
     }
 
-    // Restore the cursor position
+    // Restore the cursor position and selections, considering the indentation lines added
     this.setCursors(cursors);
+    this.editor.selections = newSelections;
   }
 
   /**
