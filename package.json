@@ -159,6 +159,11 @@
 					"type": "boolean",
 					"description": "Controls whether special auto documentation of some language objects is active.",
 					"default": false
+				},
+				"rech.editor.cobol.enableJIntSubstitution": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable automatic JInt type substitution for variables in PERFORM VARYING loop completions"
 				}
 			}
 		},
