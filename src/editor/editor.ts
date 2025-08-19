@@ -694,7 +694,7 @@ export class Editor {
   /**
    * Indent the selection Buffer
    */
-  async indent(alignment: string) {
+  async indent(alignment: string, isSpecialIndent: boolean = false): Promise<void> {
     const selections = this.editor.selections;
     const cursors = this.getCursors();
     const newSelections: Selection[] = [];
@@ -728,6 +728,7 @@ export class Editor {
           selectionBuffer,
           this.getPath().toString(),
           this.editor.selection.start.line,
+          isSpecialIndent,
           async (buffer) => {
             try {
               await this.replaceSelection(buffer.toString());

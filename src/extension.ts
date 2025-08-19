@@ -166,13 +166,16 @@ async function _activate(context: any) {
         }
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indent', () => {
-        new Editor().indent("N").then().catch();
+        new Editor().indent("N", false).then().catch();
+    }));
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indentSpecial', () => {
+        new Editor().indent("N", true).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indentLeft', () => {
-        new Editor().indent("E").then().catch();
+        new Editor().indent("E", false).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indentRight', () => {
-        new Editor().indent("D").then().catch();
+        new Editor().indent("D", false).then().catch();
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.indentParagraph', () => {
         const cursors = new Editor().getCursors();

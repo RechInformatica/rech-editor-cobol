@@ -164,6 +164,16 @@
 					"type": "boolean",
 					"default": true,
 					"description": "Enable automatic JInt type substitution for variables in PERFORM VARYING loop completions"
+				},
+				"rech.editor.cobol.formatter.indentCommandLine": {
+					"type": "string",
+					"default": "{file};{source};{line};{alignment};F;S -lines:3;{source};{line};{alignment};F;S",
+					"description": "Command line template for COBOL indent formatting. Use placeholders: {file}, {source}, {line}, {alignment}"
+				},
+				"rech.editor.cobol.formatter.indentSpecialCommandLine": {
+					"type": "string",
+					"default": "{file};{source};{line};{alignment};F;N -joinWorkLiterals",
+					"description": "Command line template for COBOL special indent formatting. Use placeholders: {file}, {source}, {line}, {alignment}"
 				}
 			}
 		},
@@ -309,6 +319,10 @@
 				"title": "Rech COBOL: Indents selected range or indents current line when no range is selected"
 			},
 			{
+				"command": "rech.editor.cobol.indentSpecial",
+				"title": "Rech COBOL: Indents selected range or indents current line when no range is selected with special rules"
+			},
+			{
 				"command": "rech.editor.cobol.indentLeft",
 				"title": "Rech COBOL: Indents source to left"
 			},
@@ -429,6 +443,11 @@
 			{
 				"command": "rech.editor.cobol.indent",
 				"key": "alt+shift+f",
+				"when": "editorLangId == COBOL"
+			},
+			{
+				"command": "rech.editor.cobol.indentSpecial",
+				"key": "ctrl+alt+f",
 				"when": "editorLangId == COBOL"
 			},
 			{
