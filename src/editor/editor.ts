@@ -120,7 +120,7 @@ export class Editor {
    * Adjusts selection to select the whole line
    */
   selectWholeLineFromSelection(selection: Selection) {
-    if (selection.end.character != 0) {
+    if (selection.end.character != 0 || selection.start.line == selection.end.line) {
       const range = new Range(new Position(selection.start.line, 0), new Position(selection.end.line + 1, 0));
       this.setSelectionRange(range);
     } else {
