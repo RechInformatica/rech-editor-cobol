@@ -141,10 +141,11 @@ export class Indenta {
    * @param alignment indentation alignment
    * @param targetSourceCode target source code to be indented
    * @param sourceFileName name of the source file to be indented
+   * @param isSpecialIndent indicates if this is a special indentation
    * @param callback callback executed when no indenting errors are found
    * @param err callback executed when indenting errors are found
    */
-  public async indenta(alignment: string, targetSourceCode: string[], sourceFileName: string, referenceLine: number, callback: (buffer: string[]) => any, err: (bufferErr: string) => any): Promise<void> {
+  public async indenta(alignment: string, targetSourceCode: string[], sourceFileName: string, referenceLine: number, isSpecialIndent: boolean, callback: (buffer: string[]) => any, err: (bufferErr: string) => any): Promise<void> {
     const inputFile = this.createInputFileInstance();
     if (inputFile.exists()) {
       return;
@@ -159,7 +160,7 @@ export class Indenta {
       return;
     }
     // Runs the Cobol indenter
-    const commandLine = this.buildCommandLine(alignment, sourceFileName, referenceLine);
+    const commandLine = this.buildCommandLine(alignment, sourceFileName, referenceLine, isSpecialIndent);
     if (commandLine.length == 0) {
       return err("No COBOL formatter configured! Please configure formatter location on Rech COBOL extension settings.");
     }
@@ -231,14 +232,39 @@ export class Indenta {
   /**
    * Build a command line to run the indenter
    */
-  private buildCommandLine(alignment: string, fonte: string, referenceLine: number): string {
+  private buildCommandLine(alignment: string, fonte: string, referenceLine: number, isSpecialIndent: boolean = false): string {
     let cmd = this.getConfiguredFormatterLocation();
     if (cmd.length == 0) {
       return "";
     }
-    cmd += " " + this.buildTmpFileName();
-    cmd += ";" + fonte + ";" + (referenceLine + 1) + ";" + alignment + ";F;S -lines:3";
+
+    const tmpFileName = this.buildTmpFileName();
+    const lineNumber = (referenceLine + 1).toString();
+
+    if (isSpecialIndent) {
+      // Use special indent command line
+      const indentSpecialCommandLine = configuration.get("formatter.indentSpecialCommandLine", "{file};{source};{line};{alignment};F;N --joinWorkLiterals");
+      const specialCommand = this.replacePlaceholders(indentSpecialCommandLine, tmpFileName, fonte, lineNumber, alignment);
+      cmd += " " + specialCommand;
+    } else {
+      // Use normal indent command line
+      const indentCommandLine = configuration.get("formatter.indentCommandLine", "{file};{source};{line};{alignment};F;S;{source};{line};{alignment};F;S");
+      const normalCommand = this.replacePlaceholders(indentCommandLine, tmpFileName, fonte, lineNumber, alignment);
+      cmd += " " + normalCommand;
+    }
+
     return cmd;
+  }
+
+  /**
+   * Replace placeholders in command line template
+   */
+  private replacePlaceholders(template: string, file: string, source: string, line: string, alignment: string): string {
+    return template
+      .replace(/\{file\}/g, file)
+      .replace(/\{source\}/g, source)
+      .replace(/\{line\}/g, line)
+      .replace(/\{alignment\}/g, alignment);
   }
 
   /**
