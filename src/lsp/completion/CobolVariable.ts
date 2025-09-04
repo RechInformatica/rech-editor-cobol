@@ -96,10 +96,17 @@ export class CobolVariable {
     public static parseLines(lineNumber: number, buffer: string[], special?:{noChildren?: boolean, noScope?: boolean, noSection?: boolean, ignoreMethodReturn?: boolean, noComment?: boolean}): CobolVariable {
         const line = buffer[lineNumber];
         const splitted = CobolVariable.splitVariableInfo(line);
-        const level = Number.parseInt(splitted[0]);
-        const name = splitted[1].replace(".", "");
-        const redefines = line.toLowerCase().includes(" redefines ");
+        let level: number;
+        let redefines: boolean;
+        if (splitted[0].includes('declare')) {
+            level = 0;
+            redefines = false;
+        } else {
+            level = Number.parseInt(splitted[0]);
+            redefines = line.toLowerCase().includes(" redefines ");
+        }
         const picture = CobolVariable.extractPicture(splitted, buffer);
+        const name = splitted[1].replace(".", "");
         let children = new Array();
         if (!special || !special.noChildren) {
             children = CobolVariable.parseAndGetChildren(level, lineNumber, buffer);
@@ -235,6 +242,7 @@ export class CobolVariable {
         }
         let foundPicClause = false;
         let foundUsageClause = false;
+        let foundAsClause = false;
         let picture = "";
         let comp = "";
         for (let i = 0; i < splitted.length; i++) {
@@ -245,6 +253,9 @@ export class CobolVariable {
             if (splitted[i].toUpperCase() === "USAGE") {
                 foundUsageClause = true;
                 continue;
+            }
+            if (splitted[i].toUpperCase() === "AS") {
+                foundAsClause = true;
             }
             if (foundPicClause) {
                 if (splitted[i].toUpperCase() === "IS" && splitted[i + 1]) {
@@ -258,6 +269,10 @@ export class CobolVariable {
                 const typedef = splitted[i];
                 picture = CobolVariable.extractPictureFromTypedef(typedef, buffer);
                 break;
+            }
+            if (foundAsClause) {
+                const typedef = splitted[i];
+                picture = CobolVariable.extractPictureFromTypedef(typedef, buffer);
             }
             if (splitted[i].toUpperCase().startsWith("COMP")) {
                 comp = splitted[i];
