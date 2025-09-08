@@ -1,6 +1,7 @@
 import { SymbolParser } from './symbolParser';
 import { ParseContext } from '../context/parseContext';
-import { DocumentSymbol, Range, SymbolKind } from 'vscode';
+import { DocumentSymbol, Position, Range, SymbolKind } from 'vscode';
+import { ContextType } from '../context/parentContext';
 
 /**
  * Parser for handling COBOL `COPY` statements in the source code.
@@ -25,12 +26,18 @@ export class CopyParser implements SymbolParser {
     /**
      * Handles closing parent symbols. This parser does not require any specific
      * logic for closing parent symbols, so this method is a no-op.
-     * @param _line The current line of code.
-     * @param _lineIndex The index of the current line.
-     * @param _context The parsing context.
+     * @param line The current line of code.
+     * @param lineIndex The index of the current line.
+     * @param context The parsing context.
      */
-    closeParents(_line: string, _lineIndex: number, _context: ParseContext): void {
-        return;
+    closeParents(line: string, lineIndex: number, context: ParseContext): void {
+        while (context.getParentType() !== undefined && context.getParentType() !== ContextType.DataDivision &&
+               context.getParentType() !== ContextType.WorkingStorageSection && context.getParentType() !== ContextType.ProcedureDivision &&
+               context.getParentType() !== ContextType.LinkageSection && context.getParentType() !== ContextType.Method &&
+               context.getParentType() !== ContextType.Paragraph) {
+            const endPos = context.getCurrentParent()?.selectionRange.end || new Position(lineIndex - 1, line.length);
+            context.exitParent(endPos);
+        }
     }
 
     /**
@@ -58,5 +65,6 @@ export class CopyParser implements SymbolParser {
 
         // Add the symbol to the parsing context.
         context.addSymbol(symbol);
+        context.exitParent(new Position(lineIndex, line.length));
     }
 }

@@ -32,9 +32,14 @@ export class ParagraphParser implements SymbolParser {
    * @param context The parsing context.
    */
   closeParents(line: string, lineIndex: number, context: ParseContext): void {
-    if (context.getParentType() === ContextType.Paragraph) {
-      const endPos = new Position(lineIndex - 1, line.length);
-      context.exitParent(endPos);
+    while (context.getParentType() === ContextType.Paragraph || context.getParentType() === ContextType.DeclareVariable) {
+      if (context.getParentType() === ContextType.Paragraph) {
+        const endPos = new Position(lineIndex - 1, line.length);
+        context.exitParent(endPos);
+      } else if (context.getParentType() === ContextType.DeclareVariable) {
+        const endPos = context.getCurrentParent()?.selectionRange.end || new Position(lineIndex - 1, line.length);
+        context.exitParent(endPos);
+      }
     }
   }
 
