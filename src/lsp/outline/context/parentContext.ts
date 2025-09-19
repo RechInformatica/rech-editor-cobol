@@ -49,5 +49,6 @@ export enum ContextType {
     Object,
     Paragraph,
     Variable,
+    DeclareVariable,
     Method
 }

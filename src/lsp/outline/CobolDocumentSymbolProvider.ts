@@ -11,6 +11,7 @@ import { CopyParser } from './parsers/copyParser';
 import { ProcedureDivisionParser } from './parsers/procedureDivisionParser';
 import { WorkingStorageSectionParser } from './parsers/WorkingStorageSectionParser';
 import { LinkageSectionParser } from './parsers/linkageSectionParser';
+import { DeclareVariableParser } from './parsers/declareVariableParser';
 
 /**
  * Provides document symbols for COBOL source files.
@@ -44,6 +45,7 @@ export class CobolDocumentSymbolProvider implements DocumentSymbolProvider {
     dispatcher.register(new CopyParser());
     dispatcher.register(new ParagraphParser());
     dispatcher.register(new VariableParser());
+    dispatcher.register(new DeclareVariableParser());
 
     dispatcher.parseDocument(context);
 
