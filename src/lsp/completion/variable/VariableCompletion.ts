@@ -153,13 +153,24 @@ export class VariableCompletion implements CompletionInterface {
                 itemsMap.set(variable.getName(), variableItem);
             }
         });
-        new Scan(buffer).scan(/^ +declare +(?:[\w\-]+) +as +(?:[\w\-]+).*/gim, (iterator: any) => {
-            const variable = CobolVariable.parseLines(iterator.row, lines, {noChildren: true, noScope: true, noSection: true, ignoreMethodReturn: true});
-            if (!this.shouldIgnoreVariable(variable)) {
-                const variableItem = this.createVariableCompletion(variable);
-                itemsMap.set(variable.getName(), variableItem);
-            }
+
+        new Scan(buffer).reverseScan(/^ \s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm, this.lineNumber, (iteratorLimit: any) => {
+            const limitLine = iteratorLimit.row;
+            iteratorLimit.stop();
+            new Scan(buffer).reverseScan(/^ +declare +(?:[\w\-]+) +as +(?:[\w\-]+).*/gim, this.lineNumber, (iterator: any) => {
+                if (iterator.row < limitLine) {
+                    iterator.stop();
+                    return;
+                }
+                const variable = CobolVariable.parseLines(iterator.row, lines, {noChildren: true, noScope: true, noSection: true, ignoreMethodReturn: true});
+                if (!this.shouldIgnoreVariable(variable)) {
+                    const variableItem = this.createVariableCompletion(variable);
+                    itemsMap.set(variable.getName(), variableItem);
+                }
+            });
+
         });
+
         // Merge the cache with the local variables
         if (useCache) {
             this.generateItemsFromCurrentBuffer(<string[]>this.currentLines, false).forEach((value, key) => {

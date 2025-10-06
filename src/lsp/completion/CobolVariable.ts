@@ -240,12 +240,17 @@ export class CobolVariable {
         if (splitted[splitted.length - 1].endsWith(".")) {
             splitted[splitted.length - 1] = splitted[splitted.length - 1].slice(0, -1);
         }
+        let foundDeclareClause = false;
         let foundPicClause = false;
         let foundUsageClause = false;
         let foundAsClause = false;
         let picture = "";
         let comp = "";
         for (let i = 0; i < splitted.length; i++) {
+            if (splitted[i].toUpperCase() === "DECLARE") {
+                foundDeclareClause = true;
+                continue;
+            }
             if (splitted[i].toUpperCase() === "PIC") {
                 foundPicClause = true;
                 continue;
@@ -256,6 +261,7 @@ export class CobolVariable {
             }
             if (splitted[i].toUpperCase() === "AS") {
                 foundAsClause = true;
+                continue;
             }
             if (foundPicClause) {
                 if (splitted[i].toUpperCase() === "IS" && splitted[i + 1]) {
@@ -270,7 +276,7 @@ export class CobolVariable {
                 picture = CobolVariable.extractPictureFromTypedef(typedef, buffer);
                 break;
             }
-            if (foundAsClause) {
+            if (foundAsClause && !foundDeclareClause) {
                 const typedef = splitted[i];
                 picture = CobolVariable.extractPictureFromTypedef(typedef, buffer);
             }
@@ -288,6 +294,8 @@ export class CobolVariable {
      * @param buffer Source buffer lines
      */
     private static extractPictureFromTypedef(typedef: string, buffer: string[]): string {
+        // Escape special regex characters in typedef to avoid breaking the regex
+        typedef = typedef.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
         const regexString =  "^ +\\d\\d +" +typedef + " +(?:pic(?: is)?)(.*) +typedef.*";
         const regex = new RegExp(regexString, "gim");
         const match = regex.exec(buffer.join("\n"));
