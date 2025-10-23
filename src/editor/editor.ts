@@ -990,4 +990,11 @@ export class Editor {
     return ((fs.statSync(this.editor.document.uri.fsPath).mode & 146) == 0)
   }
 
+  /**
+   * Returns if editor has sucefully loaded
+   */
+  public isEditorLoaded(): boolean {
+    return !!this.editor?.document;
+  }
+
 }
