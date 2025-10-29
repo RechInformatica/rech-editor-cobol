@@ -151,7 +151,7 @@ export class Editor {
    * Returns the current word
    */
   getCurrentWord() {
-    const range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-9ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÞÂÀãÃÊËÈÞÞÞÌÓÔÒõÕÚÛÙüÉì_\-])+/g);
+    const range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-9ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÞÂÀãÃÊËÈÞÞÞÌÓÔÒõÕÚÛÙüÉì_-])+/g);
     if (range === undefined) {
       return '';
     }
@@ -588,7 +588,7 @@ export class Editor {
    * Go to the next paragraph
    */
   findNextParagraph() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
     if (positionsToReturn) {
       this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
@@ -600,7 +600,7 @@ export class Editor {
    * Go to the previous paragraph
    */
   findPreviousParagraph() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
     if (positionsToReturn) {
       this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
@@ -612,7 +612,7 @@ export class Editor {
    * Get next paragraph position
    */
   getNextParagraphPosition() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
     if (positionsToReturn) {
       return new RechPosition(positionsToReturn[0].line, 7);
     } else {
@@ -624,7 +624,7 @@ export class Editor {
    * Go to the previous paragraph
    */
   getPreviousParagraphPosition() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
     if (positionsToReturn) {
       return new RechPosition(positionsToReturn[0].line, 7);
     } else {

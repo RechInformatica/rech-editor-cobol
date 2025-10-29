@@ -107,7 +107,11 @@ export class File {
     const partsOfFileName = this.fileName.split("\\");
     let directory = "";
     partsOfFileName.forEach((currentPart) => {
-      directory == "" ? directory = currentPart : directory = directory + "\\" + currentPart;
+      if (directory == "") {
+        directory = currentPart
+      } else {
+        directory = directory + "\\" + currentPart;
+      }
       if (!new File(directory).exists()) {
         try {
           fs.mkdirSync(directory);

@@ -147,7 +147,7 @@ export class GeradorCobol {
     if (isNull(commentContent) || isNull(startComment)) return;
     const startCommentDelimiter = startComment[0];
     const endCommentDelimiter = startCommentDelimiter.split("").reverse().join("").replace(/>/g, "<");
-    const regexCommentContent = /[^\>]*\b.*(\b|\B)/;
+    const regexCommentContent = /[^>]*\b.*(\b|\B)/;
     commentContent = regexCommentContent.exec(commentContent[0].toString().replace(endCommentDelimiter, ""));
     if (isNull(commentContent)) return;
     let comment = commentContent[0].toString().trim();

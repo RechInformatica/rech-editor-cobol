@@ -10,7 +10,7 @@ import { ContextType } from '../context/parentContext';
  */
 export class MethodParser implements SymbolParser {
 
-    private startRegex = /^\s*method-id\.\s+([a-z0-9\-]+)(?:\s+private)?\./i;
+    private startRegex = /^\s*method-id\.\s+([a-z0-9-]+)(?:\s+private)?\./i;
     private matchStart: RegExpExecArray | null = null;
     private endRegex = /^\s*end\s+method\./i;
     private matchEnd: RegExpExecArray | null = null;

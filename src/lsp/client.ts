@@ -24,8 +24,8 @@ export class Client {
 	private static client: LanguageClient | undefined;
 
 	/**
-     * Starts the LSP server and establishes communication between them
-     */
+	 * Starts the LSP server and establishes communication between them
+	 */
 	public static startServerAndEstablishCommunication(context: ExtensionContext) {
 		// The server is implemented in node
 		const serverModule = context.asAbsolutePath(
@@ -233,12 +233,12 @@ export class Client {
 	 *
 	 * @param files file array with necessary files
 	 */
-	 private static createExternalMethodCompletionPromise(param: any): Promise<any> {
+	private static createExternalMethodCompletionPromise(param: any): Promise<any> {
 		return new Promise<string>((resolve, reject) => {
 			const command = Editor.getExternalMethodCompletion();
 			if (command) {
 				commands.executeCommand(command, param).then((result) => {
-					return resolve(<string> result);
+					return resolve(<string>result);
 				}, ((err) => {
 					return reject(err);
 				}));

@@ -4,6 +4,7 @@
  * ------------------------------------------------------------------------------------------ */
 "use strict";
 
+import os from "os";
 import {
   createConnection,
   TextDocuments,
@@ -535,16 +536,16 @@ connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) =
           Log.get().info(`Formatting with enter. File: ${params.textDocument.uri}`);
           return reolve(formatter.formatWhenEnterIsPressed());
         case params.ch.toUpperCase() == "E":
-          Log.get().info(`Formatting with \"E\". File: ${params.textDocument.uri}`);
+          Log.get().info(`Formatting with "E". File: ${params.textDocument.uri}`);
           return reolve(formatter.formatWhenEIsPressed());
         case params.ch.toUpperCase() == "N":
-          Log.get().info(`Formatting with \"N\". File: ${params.textDocument.uri}`);
+          Log.get().info(`Formatting with "N". File: ${params.textDocument.uri}`);
           return reolve(formatter.formatWhenNIsPressed());
         case params.ch.toUpperCase() == "H":
-          Log.get().info(`Formatting with \"H\". File: ${params.textDocument.uri}`);
+          Log.get().info(`Formatting with "H". File: ${params.textDocument.uri}`);
           return reolve(formatter.formatWhenHIsPressed());
         case params.ch.toUpperCase() == "Y":
-          Log.get().info(`Formatting with \"Y\". File: ${params.textDocument.uri}`);
+          Log.get().info(`Formatting with "Y". File: ${params.textDocument.uri}`);
           return reolve(formatter.formatWhenYIsPressed());
         default:
           Log.get().error(`Error formatting file: ${params.textDocument.uri}`);
@@ -774,7 +775,7 @@ export function callCobolReferencesFinder(word: string, documentFullText: string
  */
 export function buildCacheFileName(uri: string) {
   const path = new Path(uri).fullPathWin();
-  return Path.tmpdir() + Path.sep() + "PREPROC" + Path.sep() + require("os").userInfo().username.toLowerCase() + Path.sep() + new Path(path).fileName();
+  return Path.tmpdir() + Path.sep() + "PREPROC" + Path.sep() + os.userInfo().username.toLowerCase() + Path.sep() + new Path(path).fileName();
 }
 
 /**

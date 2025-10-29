@@ -1,5 +1,5 @@
 import { CommandNode } from "../treeView/nodes/commandNode";
-import NodeInterface from "../treeView/nodes/nodeInterface";
+import NodeInterface from "../treeView/nodes/NodeInterface";
 import { ParagraphNode } from "../treeView/nodes/paragraphNode";
 import { NodeType } from "./nodeType";
 import { MethodNode } from "../treeView/nodes/methodNode copy";
@@ -48,7 +48,7 @@ export class CobolFlowAnalyzer {
      * @returns {NodeInterface} A node representing paragraph perform thru statement.
      */
     public getPerformThruParents(currentRow: number): NodeInterface | undefined {
-        const performThruDeclarationList = [];
+        const performThruDeclarationList: Array<{row: number, begin: string, end: string}> = [];
         const regex = new RegExp(`\\s+perform\\s+([\\w-]+)\\s+thru\\s+([\\w-]+).*$`, 'gm');
         new Scan(this.buffer.join('\n')).scan(regex, (iterator: any) => {
             const beginParagraph = iterator.match[1];
@@ -62,13 +62,13 @@ export class CobolFlowAnalyzer {
 
         const performInsideThruList = new Map();
         performThruDeclarationList.forEach((performThru) => {
-            const regexBegin = new RegExp(`^ {7}${performThru.begin}\.(?:\\s*\\*\\>.*)?`, 'gm');
+            const regexBegin = new RegExp(`^ {7}${performThru.begin}\\.(?:\\s*\\*\\>.*)?`, 'gm');
             let firstParagraphPosition = 0;
             new Scan(this.buffer.join('\n')).scan(regexBegin, (iterator: any) => {
                 firstParagraphPosition = iterator.row;
             });
 
-            const regexEnd = new RegExp(`^ {7}${performThru.end}\.(?:\\s*\\*\\>.*)?`, 'gm');
+            const regexEnd = new RegExp(`^ {7}${performThru.end}\\.(?:\\s*\\*\\>.*)?`, 'gm');
             let lastParagraphPosition = 0;
             new Scan(this.buffer.join('\n')).scan(regexEnd, (iterator: any) => {
                 lastParagraphPosition = iterator.row;
@@ -98,7 +98,7 @@ export class CobolFlowAnalyzer {
      * @returns {NodeInterface[]} A list of nodes representing method calls statements.
      */
     public getMethodCalls(currentRow: number): NodeInterface[] {
-        const performList = [];
+        const performList: NodeInterface[] = [];
         const currentLine = this.buffer[currentRow];
         const methodName = CobolFlowAnalyzer.getMethodDeclaration(currentLine);
         const regex = new RegExp(`^.*self:>${methodName}[.,\\s$]`, 'gm');
@@ -114,7 +114,7 @@ export class CobolFlowAnalyzer {
      * @returns {NodeInterface[]} A list of nodes representing perform/goto statements.
      */
     public getPerformGotoParagraphList(currentRow: number): NodeInterface[] {
-        const performList = [];
+        const performList: NodeInterface[] = [];
         const currentLine = this.buffer[currentRow];
         const paragraphName = CobolFlowAnalyzer.getParagraphDeclaration(currentLine);
         const regex = new RegExp(`^\\s*(perform|go to)\\s+${paragraphName}[.,\\s$]`, 'gm');
@@ -291,7 +291,7 @@ export class CobolFlowAnalyzer {
     }
 
     private static getParagraphDeclaration(line: string): string | undefined {
-        const paragraphDeclarationRegex = /^ {7}([\w\-]+)\.(?:\s*\*\>.*)?/gi;
+        const paragraphDeclarationRegex = /^ {7}([\w-]+)\.(?:\s*\*>.*)?/gi;
         const match = paragraphDeclarationRegex.exec(line);
         let paragraphName;
         if (match && match[1]) {

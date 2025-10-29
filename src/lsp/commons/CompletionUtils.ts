@@ -122,15 +122,17 @@ export class CompletionUtils {
    */
   public static findWordStartWithinLine(currentCursorColumn: number, currentLineText: string): number {
     let initialWordColumn = currentCursorColumn;
-    while (true) {
+    let foundWordChar = false;
+    while (!foundWordChar) {
       if (initialWordColumn == 0) {
-        break;
+        foundWordChar = true;
+      } else {
+        const lastChar = currentLineText.charAt(initialWordColumn - 1);
+        if (lastChar !== " ") {
+          initialWordColumn--;
+        }
+        foundWordChar = true;
       }
-      const lastChar = currentLineText.charAt(initialWordColumn - 1);
-      if (lastChar === " ") {
-        break;
-      }
-      initialWordColumn--;
     }
     initialWordColumn++;
     return initialWordColumn;
@@ -144,15 +146,17 @@ export class CompletionUtils {
    */
   private static findWordEndWithinLine(currentCursorColumn: number, currentLineText: string): number {
     let finalWordColumn = currentCursorColumn;
-    while (true) {
+    let foundWordChar = false;
+    while (!foundWordChar) {
       if (finalWordColumn >= currentLineText.length) {
-        break;
+        foundWordChar = true;
+      } else {
+        const lastChar = currentLineText.charAt(finalWordColumn + 1);
+        if (lastChar !== " ") {
+          finalWordColumn++;
+        }
+        foundWordChar = true;
       }
-      const lastChar = currentLineText.charAt(finalWordColumn + 1);
-      if (lastChar === " ") {
-        break;
-      }
-      finalWordColumn++;
     }
     finalWordColumn++;
     return finalWordColumn;
@@ -215,7 +219,7 @@ export class CompletionUtils {
    * @param lineText
    */
   public static isTheParagraphOrMethodDeclaration(lineText: string): boolean {
-    if (/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g.exec(lineText)) {
+    if (/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g.exec(lineText)) {
       return true;
     }
     if (/^ +method-id\..*/gi.exec(lineText)) {
@@ -274,7 +278,7 @@ export class CompletionUtils {
    * @param line line to clean
    */
   public static createCleanLineTextEdit(line: number): TextEdit {
-    const textEdit =  {
+    const textEdit = {
       range: {
         start: {
           line: line,

@@ -83,7 +83,7 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      * @returns {NodeInterface[]} A new list of nodes containing only ParagraphNode and MethodNode instances.
      */
     private removeConditionalChildrens(children: NodeInterface[]): NodeInterface[] {
-        const filteredChildren = [];
+        const filteredChildren: NodeInterface[] = [];
         children.forEach((node => {
             if (node instanceof ParagraphNode || node instanceof MethodNode || node instanceof CommandNode) {
                 filteredChildren.push(node);

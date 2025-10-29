@@ -1,10 +1,11 @@
+import * as os from "os";
 import { Path } from "../commons/path";
 import { File } from "../commons/file";
 import { Log } from "../commons/Log";
 
 
 /**
- * Class to manager the expanded source
+ * Class to manage the expanded source
  */
 export class ExpandedSourceManager {
   /** Max cache time in ms */
@@ -14,7 +15,7 @@ export class ExpandedSourceManager {
   /** Expanded sources */
   private static expandedSourceCache: Map<string, {time: number, expandedSource: string}> = new Map();
   /** callback to expander the source */
-  private static callbackSourceExpander: ((uri: string, cacheFileName: string) => Thenable<{}>) | undefined;
+  private static callbackSourceExpander: ((uri: string, cacheFileName: string) => Thenable<{unknown: any}>) | undefined;
   /** callback to show SatusBar from SourceExpander */
   private static callbackShowStatusBarFromSourceExpander: ((file?: string) => void) | undefined;
   /** callback to hide SatusBar from SourceExpander */
@@ -245,6 +246,6 @@ export class ExpandedSourceManager {
    */
   public static buildExpandedSourceFileName(source: string): string {
     const path = new Path(source).fullPathWin();
-    return Path.tmpdir() + Path.sep() + "PREPROC" + Path.sep() + require("os").userInfo().username.toLowerCase() + Path.sep() +  new Path(path).fileName();
+    return Path.tmpdir() + Path.sep() + "PREPROC" + Path.sep() + os.userInfo().username.toLowerCase() + Path.sep() +  new Path(path).fileName();
   }
 }

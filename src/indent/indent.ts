@@ -5,6 +5,8 @@ import { Executor } from '../commons/executor';
 import * as iconv from 'iconv-lite';
 import { BufferSplitter } from 'rech-ts-commons';
 import { configuration } from '../helpers/configuration';
+import * as os from 'os';
+import * as path from 'path';
 
 /** Time in millis representing an old indent file */
 const INDENT_OLD_FILE_IN_MILLIS: number = 3000;
@@ -16,10 +18,6 @@ const WINDOWS_1252_ENCODING: string = "win1252";
 const INDENT_LIMIT_COLUMN: number = 120;
 /** Start commentary column in the line */
 const START_COMMENTARY_COLUMN: number = 7;
-/** OS module */
-const os = require("os");
-/** Path module */
-const path = require("path");
 
 /**
  * Class to indent sources
@@ -89,7 +87,7 @@ export class Indenta {
       }
       const word = words[i];
       if (result[result.length - 1].length + word.length > INDENT_LIMIT_COLUMN) {
-        result[result.length - 1] = result[result.length - 1].trimRight() + "\n"
+        result[result.length - 1] = result[result.length - 1].trimEnd() + "\n"
         result = this.startCommentary(result, true);
       }
       result[result.length - 1] += word + " "
@@ -127,7 +125,7 @@ export class Indenta {
     let result = true;
     buffer.forEach((occurs) => {
       BufferSplitter.split(occurs).forEach((line) => {
-        if (!line.trimLeft().startsWith("*>->") && line !== "") {
+        if (!line.trimStart().startsWith("*>->") && line !== "") {
           result = false;
         }
       });

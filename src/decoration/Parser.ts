@@ -44,7 +44,7 @@ export class Parser {
     const PromiseArray:Promise<undefined>[] = []
     // Regexp to find variables declarations in source
     const textLF = text.replace(/\r/g, "");
-    const regex = /^ +\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gm
+    const regex = /^ +\d\d\s+(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*/gm
     new Scan(textLF).scan(regex, (iterator: any) => {
       PromiseArray.push(
         new Promise((resolve, reject) => {
@@ -160,7 +160,7 @@ export class Parser {
    private getAllCopys(text: string, fileName: string): Promise<CobolCopy>[] {
     const PromiseArray:Promise<CobolCopy>[] = []
     // Regexp to find variables declarations in source
-    const regex = /^ +copy\s+(.+\.cp.+)[\.,]/gm
+    const regex = /^ +copy\s+(.+.cp.+)[.,]/gm
     new Scan(text).scan(regex, (iterator: any) => {
       PromiseArray.push(
         new Promise((resolve, reject) => {
@@ -186,16 +186,14 @@ export class Parser {
     return new Promise((resolve, _reject) => {
       const text = activeEditor.document.getText();
       // Regex to search documentation comment blocks between "*>/**   *>*/"
-      const blockCommentRegEx = /(^|[ \t])(\*\>\/\*\*)+([\s\S]*?)(\*\/)/igm;
+      const blockCommentRegEx = /(^|[ \t])(\*>\/\*\*)+([\s\S]*?)(\*\/)/igm;
       // Regex to find parameter lines inside a documentation block
-      const lineParameterRegEx = new RegExp(/([ \t]*\*>[ \t]*)(@param|@enum|@return|@throws|@optional|@default|@extends)([ ]*|[:])+([a-zA-Z0-9_\-(?)]*) *([^*/][^\r\n]*)/, "ig");
+      const lineParameterRegEx = /([ \t]*\*>[ \t]*)(@param|@enum|@return|@throws|@optional|@default|@extends)([ ]*|[:])+([a-zA-Z0-9_()?-]*) *([^*/][^\r\n]*)/ig;
       // Find all documentation comment blocks on text
-      let match: any;
-      while (match = blockCommentRegEx.exec(text)) {
+      for (const match of text.matchAll(blockCommentRegEx)) {
         const commentBlock = match[0];
         // Find all parameter lines inside a block
-        let line;
-        while (line = lineParameterRegEx.exec(commentBlock)) {
+        for (const line of commentBlock.matchAll(lineParameterRegEx)) {
           // Parts from line
           const fisrtPart = 1;
           const token = 2;

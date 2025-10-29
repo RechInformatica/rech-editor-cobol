@@ -1,5 +1,5 @@
 import { ThemeIcon, TreeItem, TreeItemCollapsibleState } from "vscode";
-import NodeInterface from "./nodeInterface";
+import NodeInterface from "./NodeInterface";
 import { CobolFlowAnalyzer } from '../../utils/cobolFlowAnalyzer';
 import { NodeType } from '../../utils/nodeType';
 

@@ -3,8 +3,7 @@ import { CobolDocParser } from "./rechdoc/CobolDocParser";
 import { Path } from "../commons/path";
 import { File } from "../commons/file";
 import { BufferSplitter } from "rech-ts-commons";
-import { Configuration } from "../helpers/configuration";
-import { commands, extensions } from "vscode";
+import { extensions } from "vscode";
 import { CobolVariable } from "../lsp/completion/CobolVariable";
 
 /**
@@ -80,43 +79,42 @@ export class CobolCopy {
     }
 
     /**
-     * Returns the copys header
+     * Returns the copy's header
      *
      * @param copy
      */
-    private static getHeaderOfCopy(copy: File): Promise<string[]> {
-        return new Promise(async (resolve, reject) => {
-            if (!copy.exists()) {
-                return reject();
-            }
-            const rechInternal = extensions.getExtension('rechinformatica.rech-editor-internal');
-            if (!rechInternal) {
-                const copyBuffer = BufferSplitter.split(copy.loadBufferSync("latin1"));
-                const comments: string[] = [];
-                for (let lineNumber = 0; lineNumber < copyBuffer.length; lineNumber++) {
-                    const line = copyBuffer[lineNumber];
-                    if (line.trimLeft().startsWith("*>")) {
-                        comments.push(line);
-                    } else {
-                        // If the last line is a variable declaration, remove the last comment line because it's not make part of copy header
-                        if (CobolVariable.parseLines(lineNumber, copyBuffer, {noChildren: true, noScope: true, noSection: true, noComment: true})) {
-                            comments.pop();
-                        }
-                        break;
+    private static async getHeaderOfCopy(copy: File): Promise<string[]> {
+        if (!copy.exists()) {
+            throw new Error('Copy file does not exist');
+        }
+        const rechInternal = extensions.getExtension('rechinformatica.rech-editor-internal');
+        if (!rechInternal) {
+            const copyBuffer = BufferSplitter.split(copy.loadBufferSync("latin1"));
+            const comments: string[] = [];
+            for (let lineNumber = 0; lineNumber < copyBuffer.length; lineNumber++) {
+                const line = copyBuffer[lineNumber];
+                if (line.trimStart().startsWith("*>")) {
+                    comments.push(line);
+                } else {
+                    // If the last line is a variable declaration, remove the last comment line because it's not make part of copy header
+                    if (CobolVariable.parseLines(lineNumber, copyBuffer, {noChildren: true, noScope: true, noSection: true, noComment: true})) {
+                        comments.pop();
                     }
+                    break;
                 }
-                const comment = new CobolDocParser().parseCobolDoc(comments).comment;
-                if (!(comment.length > 0)) {
-                    return reject();
-                }
-                return resolve(comment);
             }
-            await rechInternal.activate();
-            const commandForCopyUsageLocator = rechInternal.exports.getAutogrepRunner();
-            if (commandForCopyUsageLocator) {
-                return commandForCopyUsageLocator(copy.fileName);
+            const comment = new CobolDocParser().parseCobolDoc(comments).comment;
+            if (!(comment.length > 0)) {
+                throw new Error('No header comments found');
             }
-        });
+            return comment;
+        }
+        await rechInternal.activate();
+        const commandForCopyUsageLocator = rechInternal.exports.getAutogrepRunner();
+        if (commandForCopyUsageLocator) {
+            return commandForCopyUsageLocator(copy.fileName);
+        }
+        throw new Error('Command for copy usage locator not found');
     }
 
 
@@ -157,7 +155,7 @@ export class CobolCopy {
                 replacement = replacement.replace(/\.$/gm, "");
                 result.set(term, replacement)
             }
-            if (copyLineDeclaration.trimRight().endsWith(".")) {
+            if (copyLineDeclaration.trimEnd().endsWith(".")) {
                 break;
             }
         }
