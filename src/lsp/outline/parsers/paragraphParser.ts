@@ -9,7 +9,7 @@ import { ContextType } from '../context/parentContext';
  */
 export class ParagraphParser implements SymbolParser {
 
-  private regex = /^ \s{6}([\w\-]+)\.(?:\s*\*\>.*)?/;
+  private regex = /^ \s{6}([\w-]+)\.(?:\s*\*>.*)?/;
   private reservedWords = ['program-id', 'class-id', 'special-names', 'repository'];
 
   /**

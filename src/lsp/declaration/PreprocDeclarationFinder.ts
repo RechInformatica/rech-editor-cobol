@@ -45,8 +45,8 @@ export class PreprocDeclarationFinder implements FindInterface {
     return new Promise((resolve, reject) => {
       let result: RechPosition | undefined = undefined;
       let file = path.fileName();
-      new Scan(buffer).scan(/\s+\*\>\sOpções:.*/gi, (iterator: any) => {
-        const match = /^ +\*\>\sOpções:\s([_A-Za-z0-9\\:.]+\.(?:CBL|COB))/gm.exec(iterator.match[0])
+      new Scan(buffer).scan(/\s+\*>\sOpções:.*/gi, (iterator: any) => {
+        const match = /^ +\*>\sOpções:\s([_A-Za-z0-9\\:.]+\.(?:CBL|COB))/gm.exec(iterator.match[0])
         if (match) {
           file = new Path(match[1]).fileName();
           iterator.stop();
@@ -76,7 +76,7 @@ export class PreprocDeclarationFinder implements FindInterface {
   }
 
   private buildPositionFromPreprocessedLine(file: string, path: Path, lineContent: string, column: number): RechPosition {
-    const match = <RegExpMatchArray>/.*\*\>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(lineContent);
+    const match = <RegExpMatchArray>/.*\*>\s+\d+\s+(\d+)(?:\s+(.+\....)\s+\(\d+\))?/.exec(lineContent);
     const line = parseInt(match[1]) - 1;
     const filePositionGroup = 2;
     if (match[filePositionGroup]) {

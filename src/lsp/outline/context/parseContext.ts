@@ -63,13 +63,15 @@ export class ParseContext {
    * This ensures that all open contexts are properly closed.
    */
   public exitAllParents() {
-    while (true) {
+    let shouldCloseParents = true;
+    while (shouldCloseParents) {
       const symbol = this.getCurrentParent();
       if (symbol === undefined) {
-        break;
+        shouldCloseParents = false;
+      } else {
+        const position = new Position(this.lines.length, this.lines[this.lines.length - 1].length);
+        this.exitParent(position);
       }
-      const position = new Position(this.lines.length, this.lines[this.lines.length - 1].length);
-      this.exitParent(position);
     }
   }
 

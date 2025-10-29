@@ -46,7 +46,7 @@ export class ParserCobol {
    * @param line
    */
   public getDeclaracaoParagrafo(line: string): string | undefined {
-    let match = /^ \s\s\s\s\s\s([\w\-]+)\.(\s*\*\>.*)?/g.exec(line);
+    let match = /^ \s\s\s\s\s\s([\w-]+)\.(\s*\*>.*)?/g.exec(line);
     if (match == null) {
       match = /\s+procedure\s+division.+/gi.exec(line);
       if (match == null) {
@@ -65,10 +65,10 @@ export class ParserCobol {
    */
   public getDeclaracaoVariavel(line: string): string | undefined {
     // variable
-    let match = /^ +\d\d\s+(?:\([^\s]+\))?([\w\-]+)(\s+|\.).*/i.exec(line);
+    let match = /^ +\d\d\s+(?:\([^\s]+\))?([\w-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
       // $SET CONSTANT
-      match = /^ +\$SET\s+CONSTANT\s+(?:\([^\s]+\))?([\w\-]+)\s+.*/i.exec(line);
+      match = /^ +\$SET\s+CONSTANT\s+(?:\([^\s]+\))?([\w-]+)\s+.*/i.exec(line);
       if (match == null) {
         // declare
         match = /\s+declare\s+(\S+)\s+as[\s\S]+/i.exec(line);
@@ -87,10 +87,10 @@ export class ParserCobol {
    */
   public getDeclaracaoVariavelIgnoreReplace(line: string): string | undefined {
     // variable
-    let match = /^ +\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/i.exec(line);
+    let match = /^ +\d\d\s+(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
       // $SET CONSTANT
-      match = /^ +\$SET\s+CONSTANT\s+(?:\(.*\))?([\w\-]+)\s+.*/i.exec(line);
+      match = /^ +\$SET\s+CONSTANT\s+(?:\(.*\))?([\w-]+)\s+.*/i.exec(line);
       if (match == null) {
         return undefined;
       }
@@ -117,7 +117,7 @@ export class ParserCobol {
    * @param line
    */
   private getDeclaracaoSelect(line: string): string | undefined {
-    const match = /^ +SELECT ([\w\-]+)\s+ASSIGN.*/i.exec(line);
+    const match = /^ +SELECT ([\w-]+)\s+ASSIGN.*/i.exec(line);
     if (match == null) {
       return undefined;
     }
@@ -149,7 +149,7 @@ export class ParserCobol {
    */
   public getDeclaracaoMethod(line: string): string | undefined {
     // IS Format
-    const match = /^ +METHOD-ID\.\s+([\w]+)[\s\,\.]+.*/i.exec(line);
+    const match = /^ +METHOD-ID\.\s+([\w]+)[\s,.]+.*/i.exec(line);
     if (match == null) {
       return undefined;
     }

@@ -42,9 +42,9 @@ export class TabStopper {
      * @param sel selection
      * @param inserting boolean indicating whether the editor is inserting or removing a tab
      */
-    private executeTab(editor: TextEditor, doc: TextDocument, sel: Selection[], inserting: boolean) {
+    private executeTab(editor: TextEditor, doc: TextDocument, sel: readonly Selection[], inserting: boolean) {
         editor.edit(edit => {
-            for (var x = 0; x < sel.length; x++) {
+            for (let x = 0; x < sel.length; x++) {
                 if (sel[x].start.line === sel[x].end.line) {
                     const position = sel[x].start;
                     if (inserting) {
@@ -111,7 +111,7 @@ export class TabStopper {
      */
     private multipleSelectionUnTab(edit: TextEditorEdit, doc: TextDocument, selection: Selection) {
         for (let line = selection.start.line; line <= selection.end.line; line++) {
-            var charpos = selection.start.character;
+            let charpos = selection.start.character;
             if (charpos === 0) {
                 const pttrn = /^ */;
                 const selline = doc.getText(selection);
@@ -134,8 +134,8 @@ export class TabStopper {
      */
     private tabSize(pos: number) {
         const tabs = this.getTabs();
-        var tab = 0;
-        for (var index = 0; index < tabs.length; index++) {
+        let tab = 0;
+        for (let index = 0; index < tabs.length; index++) {
             tab = tabs[index];
 
             if (tab > pos) {
@@ -160,7 +160,7 @@ export class TabStopper {
             }
             return (pos - tabs[tabs.length - 1]) % 3;
         }
-        for (var index = tabs.length - 1; index > -1; index--) {
+        for (let index = tabs.length - 1; index > -1; index--) {
             const tab = tabs[index];
             if (tab < pos) {
                 return pos - tab;

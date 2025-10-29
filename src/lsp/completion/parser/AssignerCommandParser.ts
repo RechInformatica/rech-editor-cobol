@@ -50,7 +50,7 @@ export class AssignerCommandParser {
    */
   private splitCommandElements(lineText: string): RegExpExecArray | null {
     const trimmedLine = lineText.trim();
-    return /(MOVE|SET|SUBTRACT|ADD)(\s+(?:".*"|'.*'|[A-Za-z0-9-\(\)]+))?(\s+(?:[A-Za-z]+))?/gi.exec(trimmedLine);
+    return /(MOVE|SET|SUBTRACT|ADD)(\s+(?:".*"|'.*'|[A-Za-z0-9-()]+))?(\s+(?:[A-Za-z]+))?/gi.exec(trimmedLine);
   }
 
 }

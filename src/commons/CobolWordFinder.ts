@@ -39,14 +39,14 @@ export class CobolWordFinder {
      * Returns the Cobol Word Regex
      */
     private getCobolWordWithIndexRegex(): RegExp {
-        return /([a-zA-Z0-9_\-\(\)])+/g;
+        return /([a-zA-Z0-9_\-()])+/g;
     }
 
     /**
      * Returns the Cobol Word Regex
      */
     private getCobolWordRegex(): RegExp {
-        return /([a-zA-Z0-9_\-])+/g;
+        return /([a-zA-Z0-9_-])+/g;
     }
 
 

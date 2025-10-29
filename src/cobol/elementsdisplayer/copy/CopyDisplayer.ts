@@ -126,7 +126,7 @@ export class copyDisplayer {
               newValue = `==${newValue}==`
             }
           }
-          const regexp = new RegExp(label!.replace(/\(/g, "\\(").replace(/\)/g, "\\)").replace(/\""/g, "\""), "g")
+          const regexp = new RegExp(label!.replace(/\(/g, "\\(").replace(/\)/g, "\\)").replace(/""/g, "\""), "g")
           const positionsToReturn = new PositionFinder(document).findPositions(regexp, PositionFinder.FindNext, document.document.lineAt(copy.getLineDeclaration()), true);
           if (positionsToReturn) {
             const column = editor.getLine(positionsToReturn[0].line).indexOf(term!)

@@ -1,0 +1,59 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "deprecation"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    // Equivalent to TSLint's "no-floating-promises"
+    "@typescript-eslint/no-floating-promises": "warn",
+
+    // Equivalent to TSLint's "deprecation"
+    "deprecation/deprecation": "warn",
+
+    // Equivalent to TSLint's "no-duplicate-imports"
+    "no-duplicate-imports": "warn",
+
+    // Equivalent to TSLint's "no-magic-numbers"
+    "@typescript-eslint/no-magic-numbers": [
+      "warn",
+      {
+        "ignore": [0, 1, -1],
+        "ignoreArrayIndexes": true,
+        "ignoreDefaultValues": true,
+        "ignoreEnums": true,
+        "ignoreReadonlyClassProperties": true
+      }
+    ],
+
+    // Equivalent to TSLint's "prefer-const"
+    "prefer-const": "warn",
+
+    // Additional useful rules (disabled but available)
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "out",
+    "dist",
+    "**/*.d.ts",
+    "node_modules"
+  ]
+}

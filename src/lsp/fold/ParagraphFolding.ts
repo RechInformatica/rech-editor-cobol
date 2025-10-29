@@ -1,6 +1,5 @@
 import { CobolFoldInterface } from "./cobolFoldInterface";
 import { FoldingRange } from "vscode-languageserver";
-import { ParserCobol } from "../../cobol/parsercobol";
 
 /**
 * Class to folding Cobol paragraph declarations
@@ -8,7 +7,7 @@ import { ParserCobol } from "../../cobol/parsercobol";
 export class ParagraphFolding implements CobolFoldInterface {
 
     mustFolding(line: string): boolean {
-        return /^ \s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm.test(line);
+        return /^ \s\s\s\s\s\s([\w-]+)\.(?:\s*\*>.*)?/gm.test(line);
     }
 
     fold(line: number, lines: string[]): FoldingRange {

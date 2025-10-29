@@ -1,5 +1,5 @@
 import { ThemeIcon, TreeItem, TreeItemCollapsibleState } from "vscode";
-import NodeInterface from "./nodeInterface";
+import NodeInterface from "./NodeInterface";
 import { CobolFlowAnalyzer } from '../../utils/cobolFlowAnalyzer';
 import { NodeType } from '../../utils/nodeType';
 
@@ -27,7 +27,7 @@ export class ElseNode implements NodeInterface {
      * @returns {NodeInterface[]} An array of child nodes.
      */
     getChildren(): NodeInterface[] {
-        const children = new Array();
+        const children = [];
         children.push(CobolFlowAnalyzer.getInstance().getBlockAt(this.rowNumber - 1, NodeType.Else));
         return children;
     }
