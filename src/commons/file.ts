@@ -46,38 +46,38 @@ export class File {
   }
 
   /**
-   * Synchronously save a buffer in file
+   * Save a buffer in file
    *
    * @param buffer
    * @param encoding
    */
-  public saveBufferSync(buffer: Buffer, encoding?: string): void {
+  public saveBufferSync(buffer: Buffer, encoding?: BufferEncoding): void {
     fs.writeFileSync(this.fileName, buffer, { encoding: encoding });
   }
 
   /**
    * Append a buffer in file
    */
-  public appendBuffer(buffer: Buffer, encoding?: string): Q.Promise<any> {
+  public appendBuffer(buffer: Buffer, encoding?: BufferEncoding): Q.Promise<any> {
     return appendFile(this.fileName, buffer, { encoding: encoding });
   }
 
   /**
    * Append a buffer in file Synchronously
    */
-  public appendBufferSync(buffer: Buffer, encoding?: string): void {
+  public appendBufferSync(buffer: Buffer, encoding?: BufferEncoding): void {
     fs.appendFileSync(this.fileName, buffer, { encoding: encoding });
   }
 
   /**
    * Load the file content
    */
-  public loadBuffer(encoding?: string): Promise<string> {
+  public loadBuffer(encoding?: BufferEncoding): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!encoding) {
         encoding = "latin1";
       }
-      fs.readFile(this.fileName, { encoding: encoding }, (err, buffer)=> {
+      fs.readFile(this.fileName, { encoding: encoding }, (err: NodeJS.ErrnoException | null, buffer: string) => {
         if (err) {
           return reject(err);
         }
@@ -89,7 +89,7 @@ export class File {
   /**
    * Load the file content synchronously
    */
-  public loadBufferSync(encoding: string): string {
+  public loadBufferSync(encoding: BufferEncoding): string {
     return fs.readFileSync(this.fileName, { encoding: encoding });
   }
 

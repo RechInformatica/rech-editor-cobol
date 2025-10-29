@@ -9,7 +9,7 @@ import { configuration } from '../helpers/configuration';
 /** Time in millis representing an old indent file */
 const INDENT_OLD_FILE_IN_MILLIS: number = 3000;
 /** Binary encoding */
-const BINARY_ENCODING: string = "binary";
+const BINARY_ENCODING: BufferEncoding = "binary";
 /** Windows 1252 encoding */
 const WINDOWS_1252_ENCODING: string = "win1252";
 /** Limit column of line */

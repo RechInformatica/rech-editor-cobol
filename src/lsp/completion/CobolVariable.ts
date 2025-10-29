@@ -107,7 +107,7 @@ export class CobolVariable {
         }
         const picture = CobolVariable.extractPicture(splitted, buffer);
         const name = splitted[1].replace(".", "");
-        let children = new Array();
+        let children: CobolVariable[] = [];
         if (!special || !special.noChildren) {
             children = CobolVariable.parseAndGetChildren(level, lineNumber, buffer);
         }
@@ -146,7 +146,7 @@ export class CobolVariable {
      * @param line
      * @param lines
      */
-    private static parseAndGetChildren(level: Number, line: number, lines: string[]) {
+    private static parseAndGetChildren(level: number, line: number, lines: string[]) {
         const allChildren: CobolVariable[] = [];
         let firstChildrenLevel = 0;
         for (let index = line + 1; index < lines.length; index++) {
@@ -155,7 +155,7 @@ export class CobolVariable {
             if (match) {
                 const splitted = CobolVariable.splitVariableInfo(currentLine);
                 const currentLevel = Number.parseInt(splitted[0]);
-                if (currentLevel > level &&
+                if (currentLevel > level.valueOf() &&
                     !CobolVariable.isEspecialVariableType(splitted[0])) {
                     const children = CobolVariable.parseLines(index, lines);
                     if (firstChildrenLevel == 0) {

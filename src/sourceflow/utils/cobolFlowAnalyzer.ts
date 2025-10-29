@@ -48,7 +48,7 @@ export class CobolFlowAnalyzer {
      * @returns {NodeInterface} A node representing paragraph perform thru statement.
      */
     public getPerformThruParents(currentRow: number): NodeInterface | undefined {
-        const performThruDeclarationList = new Array();
+        const performThruDeclarationList = [];
         const regex = new RegExp(`\\s+perform\\s+([\\w-]+)\\s+thru\\s+([\\w-]+).*$`, 'gm');
         new Scan(this.buffer.join('\n')).scan(regex, (iterator: any) => {
             const beginParagraph = iterator.match[1];
@@ -74,7 +74,7 @@ export class CobolFlowAnalyzer {
                 lastParagraphPosition = iterator.row;
             });
 
-            const paragraphRows = new Array();
+            const paragraphRows = [];
             for (let row = firstParagraphPosition; row < lastParagraphPosition; row++) {
                 const paragraphDeclaration = CobolFlowAnalyzer.getParagraphDeclaration(this.buffer[row]);
                 if (paragraphDeclaration) {
@@ -98,7 +98,7 @@ export class CobolFlowAnalyzer {
      * @returns {NodeInterface[]} A list of nodes representing method calls statements.
      */
     public getMethodCalls(currentRow: number): NodeInterface[] {
-        const performList = new Array();
+        const performList = [];
         const currentLine = this.buffer[currentRow];
         const methodName = CobolFlowAnalyzer.getMethodDeclaration(currentLine);
         const regex = new RegExp(`^.*self:>${methodName}[.,\\s$]`, 'gm');
@@ -114,7 +114,7 @@ export class CobolFlowAnalyzer {
      * @returns {NodeInterface[]} A list of nodes representing perform/goto statements.
      */
     public getPerformGotoParagraphList(currentRow: number): NodeInterface[] {
-        const performList = new Array();
+        const performList = [];
         const currentLine = this.buffer[currentRow];
         const paragraphName = CobolFlowAnalyzer.getParagraphDeclaration(currentLine);
         const regex = new RegExp(`^\\s*(perform|go to)\\s+${paragraphName}[.,\\s$]`, 'gm');

@@ -1,6 +1,7 @@
 import { CompletionItem } from "vscode-languageserver";
 import { ParserCobol } from "../../cobol/parsercobol";
 import { PerformCompletion } from "./PerformCompletion";
+import { DeclareCompletion } from "./DeclareCompletion";
 import { MoveCompletion } from "./MoveCompletion";
 import { ToCompletion } from "./ToCompletion";
 import { CompletionInterface } from "./CompletionInterface";
@@ -209,25 +210,25 @@ export class CobolCompletionItemFactory {
             return resolve(await this.generate(this.methodCompletion));
           }
           case this.isDisplay() || this.isAccept(): {
-            let result = new Array();
+            let result = [];
             result = result.concat(await this.generate(this.createVariableSuggestionWithoutEnum()));
             result = result.concat(await this.generate(this.classCompletion))
             return resolve(result);
           }
           case this.isIf(): {
-            let result = new Array();
+            let result = [];
             result = result.concat(await this.generate(this.createVariableSuggestionWithEnum()));
             result = result.concat(await this.generate(this.classCompletion))
             return resolve(result);
           }
           case this.isCompute(): {
-            let result = new Array();
+            let result = [];
             result = result.concat(await this.generate(this.createVariableSuggestionWithoutEnumAndDisplay()));
             result = result.concat(await this.generate(this.classCompletion))
             return resolve(result);
           }
           case this.isMethodDeclaration(): {
-            let result = new Array();
+            let result = [];
             result = result.concat(await this.generate(new MethodModifyersCompletion("public")));
             result = result.concat(await this.generate(new MethodModifyersCompletion("protected")));
             result = result.concat(await this.generate(new MethodModifyersCompletion("static")));
@@ -276,7 +277,7 @@ export class CobolCompletionItemFactory {
       if (this.shouldSuggestClause("TO")) {
         return resolve(await this.createToCompletions());
       } else {
-        let result = new Array();
+        let result = [];
         let varCompletion: VariableCompletion;
         if (this.isSet()) {
           varCompletion = this.createVariableSuggestionWithEnum();
@@ -309,7 +310,7 @@ export class CobolCompletionItemFactory {
       if (this.shouldSuggestClause("FROM")) {
         return resolve(await this.generate(new FromCompletion()));
       } else {
-        let result = new Array();
+        let result = [];
         const varCompletion: VariableCompletion = this.createVariableSuggestionWithoutEnum();
         if (this.lineContainsFrom()) {
           varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
@@ -757,6 +758,7 @@ export class CobolCompletionItemFactory {
   private createDefaultCompletions(): Promise<CompletionItem[]> {
     let items: Promise<CompletionItem[]>[] = [];
     items = items.concat(this.generate(new PerformCompletion()));
+    items = items.concat(this.generate(new DeclareCompletion()));
     items = items.concat(this.generate(new MoveCompletion()));
     items = items.concat(this.generate(new SetCompletion()));
     items = items.concat(this.generate(new AddCompletion()));

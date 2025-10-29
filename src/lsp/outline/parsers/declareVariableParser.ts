@@ -52,7 +52,7 @@ export class DeclareVariableParser implements SymbolParser {
     const varName = this.match[1];
     const detail = this.match[2]?.replace('as', '').trim() || '';
 
-    let kind = SymbolKind.Variable;
+    const kind = SymbolKind.Variable;
 
     const symbol = new DocumentSymbol(
       varName,

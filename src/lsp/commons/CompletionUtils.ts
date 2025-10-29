@@ -108,7 +108,7 @@ export class CompletionUtils {
   public static fillSpacesBetween(initialColumn: number, finalColumn: number): string {
     const spaceCount = finalColumn - initialColumn;
     let text = "";
-    for (var i = 0; i < spaceCount; i++) {
+    for (let i = 0; i < spaceCount; i++) {
       text = text.concat(" ");
     }
     return text;

@@ -97,7 +97,7 @@ export class ValueCompletion implements CompletionInterface {
      */
     private createCompIfNeeded(variable: CobolVariable, verboseSuggestion: boolean): string {
         if (!variable.isDisplay()) {
-            let text = (verboseSuggestion ? " " : "    ");
+            const text = (verboseSuggestion ? " " : "    ");
             if (variable.getType() == Type.Decimal || variable.isAllowNegative()) {
                 return text.concat("${2:comp}");
             }

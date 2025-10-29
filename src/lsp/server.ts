@@ -17,11 +17,10 @@ import {
   CompletionItem,
   DocumentOnTypeFormattingParams,
   DocumentHighlight,
-  FoldingRangeRequestParam,
   FoldingRange,
   ResponseError,
   TextDocumentChangeEvent,
-  ErrorCodes,
+  LSPErrorCodes,
   ReferenceParams,
   WorkspaceEdit,
   RenameParams,
@@ -29,8 +28,9 @@ import {
   CodeAction,
   FoldingRangeRequest,
   TextDocumentSyncKind,
-  CompletionList
-} from "vscode-languageserver";
+  CompletionList,
+  FoldingRangeParams
+} from "vscode-languageserver/node";
 import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
@@ -120,7 +120,7 @@ connection.onRequest("custom/findDeclarationPosition", (word: string, referenceL
       resolve(position);
     }).catch(() => {
       Log.get().warning("Could not find declaration position request for " + word + " request on " + uri);
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration"));
+      reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to find declaration"));
     });
   })
 })
@@ -376,7 +376,7 @@ export function externalDeprecatedWarning(diagnosticMessage: string) {
   );
 }
 
-connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam): Thenable<FoldingRange[] | ResponseError<undefined>> => {
+connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeParams): Thenable<FoldingRange[] | ResponseError<undefined>> => {
   Log.get().info(`Called callback of onFoldingRanges. File ${_foldingRangeRequestParam.textDocument.uri}`);
   sendRequestToShowFoldStatusBar("Applying Folding from: " + _foldingRangeRequestParam.textDocument.uri);
   return new Promise((resolve, reject) => {
@@ -390,11 +390,11 @@ connection.onFoldingRanges((_foldingRangeRequestParam: FoldingRangeRequestParam)
       } else {
         Log.get().warning(`Error on folding. File ${uri}`);
         sendRequestToHideFoldStatusBar();
-        return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error on folding"));
+        return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error on folding"));
       }
     }).catch(() => {
       sendRequestToHideFoldStatusBar();
-      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error on folding"));
+      return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error on folding"));
     })
   });
 });
@@ -414,10 +414,10 @@ connection.onDocumentHighlight((_textDocumentPosition: TextDocumentPositionParam
       if (result) {
         return resolve(result)
       } else {
-        reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to high ligth"))
+        reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to high ligth"))
       }
     } else {
-      reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to high ligth"))
+      reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to high ligth"))
     }
   })
 })
@@ -431,7 +431,7 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Then
       CompletionConfig.setVerboseSuggestion(verboseSuggestion);
     }).catch((err) => {
       Log.get().error(`Error setting verbose mode. Error to getConfig verboseSuggestion.  Err ${err}. File: ${textDocumentPosition.textDocument.uri}`);
-      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
+      return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
     });
     getSnippetsRepositories().then((repositories) => {
       const line = textDocumentPosition.position.line;
@@ -455,15 +455,15 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Then
             return resolve({isIncomplete: false, items: items});
           }).catch((err) => {
             Log.get().error(`Error loading Completion Items. CobolCompletionItemFactory.generateCompletionItems() is rejected ${err}. File: ${textDocumentPosition.textDocument.uri}`);
-            return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items"))
+            return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error loading Completion Items"))
           })
       } else {
         Log.get().error(`Error loading Completion Items. fullDocument is undefined. File: ${textDocumentPosition.textDocument.uri}`);
-        return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
-      };
+        return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
+      }
     }).catch((err) => {
       Log.get().error(`Error loading Completion Items. Error to getConfig snippetsRepositories.  Err ${err}. File: ${textDocumentPosition.textDocument.uri}`);
-      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
+      return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
     });
   });
 });
@@ -548,11 +548,11 @@ connection.onDocumentOnTypeFormatting((params: DocumentOnTypeFormattingParams) =
           return reolve(formatter.formatWhenYIsPressed());
         default:
           Log.get().error(`Error formatting file: ${params.textDocument.uri}`);
-          return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error formatting"))
+          return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error formatting"))
       }
     }
     Log.get().error(`Error formatting. fullDocument is undefined. File: ${params.textDocument.uri}`);
-    return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error formatting"))
+    return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error formatting"))
   });
 });
 
@@ -585,11 +585,11 @@ connection.onDefinition((params: TextDocumentPositionParams): Thenable<Location 
         return resolve(location);
       }).catch((e) => {
         Log.get().warning("Could not find declaration for " + word + ". Key pressed in " + params.textDocument.uri + " Error: " + e);
-        return resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration1"));
+        return resolve(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to find declaration1"));
       });
     } else {
       Log.get().error("Error to get the fullDocument within onDefinition");
-      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find declaration2"));
+      return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to find declaration2"));
     }
   })
 });
@@ -614,11 +614,11 @@ connection.onReferences((params: ReferenceParams): Thenable<Location[] | Respons
         })
         return resolve(locations);
       }).catch(() => {
-        return resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references1"));
+        return resolve(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to find references1"));
         });
     } else {
       Log.get().error("Error to get the fullDocument within onReferences");
-      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to find references2"));
+      return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to find references2"));
     }
   });
 });
@@ -634,11 +634,11 @@ connection.onRenameRequest((params: RenameParams): Thenable<WorkspaceEdit | Resp
         return resolve({ changes: { [params.textDocument.uri]: textEdits } });
       })
         .catch(() => {
-          return resolve(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename1"));
+          return resolve(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to rename1"));
         });
     } else {
       Log.get().error("Error to get the fullDocument within onRenameRequest");
-      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to rename2"));
+      return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to rename2"));
     }
   });
 
@@ -657,11 +657,11 @@ connection.onCodeAction((params: CodeActionParams): Thenable<CodeAction[] | Resp
         .then((actions) => {
           return resolve(actions);
         }).catch(() => {
-          return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction inside CobolActionFactory"));
+          return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to provide onCodeAction inside CobolActionFactory"));
         });
     } else {
       Log.get().error("Error to get the fullDocument within onCodeAction");
-      return reject(new ResponseError<undefined>(ErrorCodes.RequestCancelled, "Error to provide onCodeAction because some information is undefined"));
+      return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error to provide onCodeAction because some information is undefined"));
     }
   });
 });

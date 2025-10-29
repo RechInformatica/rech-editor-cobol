@@ -51,7 +51,7 @@ export class CustomDecorator {
         }, null, context.subscriptions);
 
         // This timer waits 50ms before updating decorations, avoiding calling update too often
-        var timeout: NodeJS.Timer;
+        let timeout: NodeJS.Timer;
         function triggerUpdateDecorations() {
             if (timeout) {
                 clearTimeout(timeout);

@@ -299,7 +299,7 @@ export class MethodCompletion implements CompletionInterface {
   private extractMethodCompletionsFromBuffer(buffer: string, filterPrivateMethods?: boolean): Promise<CompletionItem[]> {
     return new Promise((resolve, reject) => {
       const methodsCompletions: CompletionItem[] = [];
-      const methodsPromise = new Array();
+      const methodsPromise = [];
       new Scan(buffer).scan(/^ +METHOD-ID\.\s+([\w]+)[\s\,\.]+.*/gim, (iterator: any) => {
         methodsPromise.push(CobolMethod.parseLines(iterator.row, iterator.column, BufferSplitter.split(buffer)));
       })
