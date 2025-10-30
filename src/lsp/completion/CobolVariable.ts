@@ -667,7 +667,7 @@ export class CobolVariable {
      * Returns true if the variable is a object reference
      */
     public getObjectReferenceOf(): string | undefined {
-        const match = this.raw.match(/.*\sobject\sreference\s+(.*)\./);
+        const match = this.raw.match(/.*\sobject\sreference\s+(.*)\./) || this.raw.match(/\s+declare\s+.*\s+as\s+([A-Z][a-zA-Z0-9]*)[\s.,]/);
         return match ? match[1] : undefined;
     }
 

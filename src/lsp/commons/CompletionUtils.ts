@@ -128,10 +128,11 @@ export class CompletionUtils {
         foundWordChar = true;
       } else {
         const lastChar = currentLineText.charAt(initialWordColumn - 1);
-        if (lastChar !== " ") {
+        if (lastChar === " ") {
+          foundWordChar = true;
+        } else {
           initialWordColumn--;
         }
-        foundWordChar = true;
       }
     }
     initialWordColumn++;
@@ -152,10 +153,11 @@ export class CompletionUtils {
         foundWordChar = true;
       } else {
         const lastChar = currentLineText.charAt(finalWordColumn + 1);
-        if (lastChar !== " ") {
+        if (lastChar === " ") {
+          foundWordChar = true;
+        } else {
           finalWordColumn++;
         }
-        foundWordChar = true;
       }
     }
     finalWordColumn++;

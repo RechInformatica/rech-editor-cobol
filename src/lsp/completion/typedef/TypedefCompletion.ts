@@ -1,7 +1,7 @@
-import { CompletionItemKind, CompletionItem, InsertTextFormat, MarkupKind } from "vscode-languageserver";
+import { CompletionItemKind, CompletionItem, InsertTextFormat, } from "vscode-languageserver";
 import { CompletionInterface } from "../CompletionInterface";
 import { ExpandedSourceManager } from "../../../cobol/ExpandedSourceManager";
-import { CobolVariable, Type } from "../CobolVariable";
+import { CobolVariable } from "../CobolVariable";
 import { BufferSplitter, Scan } from "rech-ts-commons";
 
 /**

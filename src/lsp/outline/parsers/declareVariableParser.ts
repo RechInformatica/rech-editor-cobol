@@ -11,7 +11,7 @@ import { ContextType } from '../context/parentContext';
  */
 export class DeclareVariableParser implements SymbolParser {
 
-  private regex = /^\s*declare\s+([\w-]+)\s+as\s+(\S+)?\./i;
+  private regex = /^\s*declare\s+(\w+[\d-]*)\s+as\s+(\S+)?\./i;
   private match: RegExpExecArray | null = null;
 
   /**

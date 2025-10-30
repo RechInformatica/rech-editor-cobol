@@ -7,10 +7,10 @@ import { CompletionUtils } from "../commons/CompletionUtils";
  */
 export class DeclareCompletion implements CompletionInterface {
 
-    public generate(_line: number, column: number, _lines: string[]): Promise<CompletionItem[]> {
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            const startColumn = CompletionUtils.findWordStartWithinLine(column, _lines[_line]);
-            const text = "declare" + CompletionUtils.fillSpacesFromWordReplacementEnd(35, column, _lines[_line], "declare") + "${1} as ${2}" + CompletionUtils.separatorForColumn(startColumn);
+            const startColumn = CompletionUtils.findWordStartWithinLine(column, lines[line]);
+            const text = "declare ${1} as ${2}" + CompletionUtils.separatorForColumn(startColumn);
             resolve(
                 [{
                     label: 'DECLARE command',

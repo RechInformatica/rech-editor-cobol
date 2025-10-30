@@ -1,4 +1,3 @@
-import { CompletionItemKind } from "vscode-languageserver";
 import { VariableInsertTextBuilder } from "./VariableInsertTextBuilder";
 import { CompletionUtils } from "../../commons/CompletionUtils";
 

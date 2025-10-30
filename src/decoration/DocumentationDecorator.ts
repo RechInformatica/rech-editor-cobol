@@ -34,6 +34,9 @@ export class DocumentationDecorator {
             }
         };
 
+        // Timer used to debounce decoration updates. Declare before any caller to avoid TDZ when triggerUpdateDecorations
+        let timeout: NodeJS.Timer | undefined;
+
         // Get the active editor for the first time and initialize the regex
         if (window.activeTextEditor) {
             activeEditor = window.activeTextEditor;
@@ -57,8 +60,7 @@ export class DocumentationDecorator {
             }
         }, null, context.subscriptions);
 
-        // This timer waits 50ms before updating decorations, avoiding calling update too often
-        let timeout: NodeJS.Timer;
+        // This timer waits before updating decorations, avoiding calling update too often
         function triggerUpdateDecorations() {
             if (timeout) {
                 clearTimeout(timeout);

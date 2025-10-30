@@ -255,6 +255,15 @@ export class CobolCompletionItemFactory {
         case this.isParagraphPerform(): {
           return await this.generate(this.paragraphCompletion);
         }
+        case this.isDeclareAs(): {
+          let items: Promise<CompletionItem[]>[] = [];
+          if (this.isDeclareVariableCamelCase()) {
+            items = items.concat(this.generate(this.classCompletion));
+          } else {
+            items = items.concat(this.generate(this.typedefCompletion));
+          }
+          return this.createWrappingPromise(items);
+        }
         case this.isUnhandledCommand(): {
           return [];
         }
@@ -262,7 +271,7 @@ export class CobolCompletionItemFactory {
           return await this.createDefaultCompletions();
         }
       }
-    } catch(e) {
+    } catch (e) {
       return [];
     }
   }
@@ -403,7 +412,7 @@ export class CobolCompletionItemFactory {
         if (!this.isValueDeclared()) {
           let items: Promise<CompletionItem[]>[] = [];
           items = items.concat(this.generate(this.valueCompletion));
-          if (!this.isUsageDeclared()){
+          if (!this.isUsageDeclared()) {
             items = items.concat(this.generate(new TypedefClauseCompletion()));
           }
           if (this.isInPictureXDeclaration()) {
@@ -415,7 +424,6 @@ export class CobolCompletionItemFactory {
       if (this.isFlagParent()) {
         return resolve(this.generate(new FlagCompletion()));
       }
-      return resolve([]);
     })
   }
 
@@ -451,8 +459,8 @@ export class CobolCompletionItemFactory {
   /**
    * Returns true if the var Picture is declared on the current line
   */
- private isPictureOrUsageOrObjectReferenceDeclared(): boolean {
-   return this.lineText.toUpperCase().includes(" PIC ") || this.isUsageDeclared() || this.isObjectReferenceDeclared();
+  private isPictureOrUsageOrObjectReferenceDeclared(): boolean {
+    return this.lineText.toUpperCase().includes(" PIC ") || this.isUsageDeclared() || this.isObjectReferenceDeclared();
   }
 
   /**
@@ -646,6 +654,27 @@ export class CobolCompletionItemFactory {
    */
   private isParagraphPerform(): boolean {
     if (/\s+(PERFORM|perform).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line is a variable from 'declare' clause in camel case
+   */
+  private isDeclareVariableCamelCase(): boolean {
+    const matches = this.lineText.substring(0, this.column).match(/\s+declare\s+(.*)\s+as\s+/i);
+    if (matches && matches.length > 1 && /^[a-z][a-zA-Z0-9]*$/.exec(matches[1])) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line is a 'declare as' clause
+   */
+  private isDeclareAs(): boolean {
+    if (/\s+declare\s+.*\s+as\s+/i.exec(this.lineText.substring(0, this.column))) {
       return true;
     }
     return false;
