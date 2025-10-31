@@ -35,7 +35,7 @@ export class MethodCompletionUtils {
         }
         currentColumn = 120;
       }
-      const partsFromLine = currentLine.match(/[\w\:\>\-\_]+/g);
+      const partsFromLine = currentLine.match(/[\w:>\-_]+/g);
       if (!partsFromLine) {
         return reject();
       }
@@ -54,7 +54,7 @@ export class MethodCompletionUtils {
     normalizedLine = line;
     normalizedLine = normalizedLine.substr(0, currentColumn);
     normalizedLine = normalizedLine.trim();
-    normalizedLine = normalizedLine.replace(/\([^\(]+\)/g, "");
+    normalizedLine = normalizedLine.replace(/\([^(]+\)/g, "");
     return normalizedLine;
   }
 

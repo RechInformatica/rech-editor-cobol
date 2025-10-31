@@ -50,7 +50,7 @@ export class Editor {
    * Returns the selected text
    */
   getSelectionBuffer() {
-    const buffer: string[] = new Array();
+    const buffer: string[] = [];
     this.editor.selections.forEach(element => {
       buffer.push(this.getRangeBuffer(new Range(element.start, element.end)));
     });
@@ -61,7 +61,7 @@ export class Editor {
    * Returns the range of the current selection
    */
   private getSelectionRange() {
-    const range: Range[] = new Array();
+    const range: Range[] = [];
     this.editor.selections.forEach(element => {
       range.push(new Range(element.start, element.end));
     });
@@ -72,7 +72,7 @@ export class Editor {
    * Defines and editor multi selections
    */
   private setSelectionsRange(ranges: Range[]) {
-    const selects: Selection[] = new Array();
+    const selects: Selection[] = [];
     ranges.forEach(range => {
       selects.push(new Selection(range.start, range.end))
     });
@@ -133,7 +133,7 @@ export class Editor {
    * Adjusts selection to select the whole line
    */
   selectWholeLines() {
-    const ranges: Range[] = new Array();
+    const ranges: Range[] = [];
     // Adjusts each range to fill whole line with selection
     this.getSelectionRange().forEach(range => {
       if (range.isEmpty || range.end.character != 0) {
@@ -151,7 +151,7 @@ export class Editor {
    * Returns the current word
    */
   getCurrentWord() {
-    const range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-9ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÞÂÀãÃÊËÈÞÞÞÌÓÔÒõÕÚÛÙüÉì_\-])+/g);
+    const range = this.editor.document.getWordRangeAtPosition(this.editor.selection.start, /([a-zA-Z0-9ÇéâäàçêëèïîÄôöòûùÖÜáíóúñÑÞÂÀãÃÊËÈÞÞÞÌÓÔÒõÕÚÛÙüÉì_-])+/g);
     if (range === undefined) {
       return '';
     }
@@ -212,7 +212,7 @@ export class Editor {
   /**
    * Replaces current line with a string
    */
-  setCurrentLine(text: String) {
+  setCurrentLine(text: string) {
     return this.editor.edit(editBuilder => {
       editBuilder.replace(new Range(new Position(this.editor.selection.start.line, 0), new Position(this.editor.selection.end.line + 1, 0)), text + "\n");
     });
@@ -266,7 +266,7 @@ export class Editor {
    * @param Positions
    */
   setCursors(positions: RechPosition[]) {
-    const ranges: Range[] = new Array();
+    const ranges: Range[] = [];
     positions.forEach(position => {
       const p = new Position(position.line, position.column);
       ranges.push(new Range(p, p));
@@ -301,7 +301,7 @@ export class Editor {
    * PS: works with multiple cursors
    */
   getCursors() {
-    const cursors: RechPosition[] = new Array();
+    const cursors: RechPosition[] = [];
     this.editor.selections.forEach(cursor => {
       cursors.push(new RechPosition(cursor.active.line, cursor.active.character));
     });
@@ -588,7 +588,7 @@ export class Editor {
    * Go to the next paragraph
    */
   findNextParagraph() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
     if (positionsToReturn) {
       this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
@@ -600,7 +600,7 @@ export class Editor {
    * Go to the previous paragraph
    */
   findPreviousParagraph() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
     if (positionsToReturn) {
       this.setCursorPosition(new RechPosition(positionsToReturn[0].line, 7));
     } else {
@@ -612,7 +612,7 @@ export class Editor {
    * Get next paragraph position
    */
   getNextParagraphPosition() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindNext, this.getCurrentLineNumber(1), true);
     if (positionsToReturn) {
       return new RechPosition(positionsToReturn[0].line, 7);
     } else {
@@ -624,7 +624,7 @@ export class Editor {
    * Go to the previous paragraph
    */
   getPreviousParagraphPosition() {
-    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
+    const positionsToReturn = new PositionFinder(this.editor).findPositions(/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g, PositionFinder.FindPrevious, this.getCurrentLineNumber(-1), true);
     if (positionsToReturn) {
       return new RechPosition(positionsToReturn[0].line, 7);
     } else {
@@ -715,7 +715,7 @@ export class Editor {
               await this.replaceSelection(buffer.toString());
               newSelections.push(this.editor.selection);
               // Adjusts the selection to the new buffer size
-              this.adjustSelectionAndResolve(buffer, selectionBuffer, selections, cursors, i, resolve);
+              this.adjustSelectionAndResolve(buffer, selectionBuffer, cursors, i, resolve);
             });
         });
         continue;
@@ -734,7 +734,7 @@ export class Editor {
               await this.replaceSelection(buffer.toString());
               newSelections.push(this.editor.selection);
               // Adjusts the selection to the new buffer size
-              this.adjustSelectionAndResolve(buffer, selectionBuffer, selections, cursors, i, resolve);
+              this.adjustSelectionAndResolve(buffer, selectionBuffer, cursors, i, resolve);
             } catch (error) {
               reject(error);
             }
@@ -755,17 +755,11 @@ export class Editor {
   /**
    * Adjusts the selection and cursor positions to the new buffer size and resolves the promise.
    */
-  private adjustSelectionAndResolve(buffer: string[], selectionBuffer: string[], selections: Selection[], cursors: RechPosition[], position: number, resolve: () => void) {
+  private adjustSelectionAndResolve(buffer: string[], selectionBuffer: string[], cursors: RechPosition[], position: number, resolve: () => void) {
     const linesDiff = buffer.join().split(/\n/).length - selectionBuffer.join().split(/\n/).length;
 
-    for (let j = position; j < selections.length; j++) {
-      const newStartLine = selections[j].start.line + linesDiff;
-      const newEndLine = selections[j].end.line + linesDiff;
-      selections[j] = new Selection(
-        new Position(newStartLine, selections[j].start.character),
-        new Position(newEndLine, selections[j].end.character)
-      );
-    }
+    // Note: selections array is readonly and not modified here
+    // The actual selections are managed through newSelections in the calling function
 
     // Adjust cursor positions
     for (let j = position; j < cursors.length; j++) {

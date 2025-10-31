@@ -89,7 +89,7 @@ export class Executor {
    */
   runAsyncOutputChannel(name: string, command: string, onFinish: (errorLevel: number) => void) {
     const channel = this.getOutputChannel(name);
-    channel.clear;
+    channel.clear();
     channel.show(true);
     this.runOnChannel(channel, command, onFinish).catch(err => {
       if (err.stderr) {

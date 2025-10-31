@@ -1,13 +1,15 @@
 'use babel';
+import * as path from 'path';
+import * as os from 'os';
 
 export class Path {
   path: string;
 
-  constructor(path: any) {
-    if (typeof path === "string") {
-      this.path = path;
+  constructor(pathArg: any) {
+    if (typeof pathArg === "string") {
+      this.path = pathArg;
     } else {
-      this.path = path.toString();
+      this.path = pathArg.toString();
     }
     this.path = this.path.replace(/\//g, "\\");
   }
@@ -16,14 +18,14 @@ export class Path {
    * Returns the default path separator
    */
   public static sep(): string {
-    return require('path').sep;
+    return path.sep;
   }
 
   /**
    * Returns the current user temp directory
    */
   public static tmpdir(): string {
-    return require("os").tmpdir();
+    return os.tmpdir();
   }
 
   /**
@@ -66,7 +68,7 @@ export class Path {
    * Return the fullPath in Vscode format
    */
   fullPathVscode() {
-    return "file:///" + this.path.replace(/\\/g, "\/").replace(/:/g, "%3A").replace("%3A", ":").replace(/\\/gi, "%5C");
+    return "file:///" + this.path.replace(/\\/g, "/").replace(/:/g, "%3A").replace("%3A", ":").replace(/\\/gi, "%5C");
   }
 
   /**

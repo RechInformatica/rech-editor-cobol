@@ -68,7 +68,7 @@ export class CobolMethod {
 	 */
 	public static parseLines(lineNumber: number, column: number, buffer: string[]): Promise<CobolMethod> {
 		return new Promise((resolve, reject) => {
-			const classMatch = /\s+class-id.\s+([\w\-]+)/.exec(buffer.join("\n"))
+			const classMatch = /\s+class-id.\s+([\w-]+)/.exec(buffer.join("\n"))
 			let classs = "";
 			if (classMatch) {
 				classs = classMatch[1];
@@ -115,7 +115,7 @@ export class CobolMethod {
 		return new Promise((resolve, reject) => {
 			let noMatch = true;
 			for (let i = lineNumber; i < buffer.length; i++) {
-				const match = /.*returning\s+([\w\-]+)[\.\,\s]*.*/gi.exec(buffer[i]);
+				const match = /.*returning\s+([\w-]+)[.,\s]*.*/gi.exec(buffer[i]);
 				if (CobolMethod.isEndMethodLine(buffer[i])) {
 					break;
 				}
@@ -147,7 +147,7 @@ export class CobolMethod {
 			let terms = [];
 			let noMatch = true;
 			for (let i = lineNumber; i < buffer.length; i++) {
-				const match = /.*raising\s+([\w\-\s]+)[\.\,\s]*.*/gi.exec(buffer[i]);
+				const match = /.*raising\s+([\w\-\s]+)[.,\s]*.*/gi.exec(buffer[i]);
 				if (CobolMethod.isEndMethodLine(buffer[i])) {
 					break;
 				}
@@ -213,7 +213,7 @@ export class CobolMethod {
 				break;
 			}
 			if (!isLinkage) {
-				if (buffer[i].match(/\s+linkage\s+section[\s\.\,]*/)) {
+				if (buffer[i].match(/\s+linkage\s+section[\s.,]*/)) {
 					isLinkage = true;
 				}
 			}
@@ -263,7 +263,7 @@ export class CobolMethod {
 	 * @param line
 	 */
 	private static isEndMethodLine(line: string): boolean {
-		return /\s+end\s+method[\s\.\,]*/.test(line);
+		return /\s+end\s+method[\s.,]*/.test(line);
 	}
 
 	/**

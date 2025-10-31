@@ -16,13 +16,13 @@ export class MethodModifyersCompletion implements CompletionInterface {
     public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
             let text = lines[line].trimRight();
-            const match = /(\s*method-id\.\s+)([^\s\.]+)\.?(.*)\.?/.exec(text)
+            const match = /(\s*method-id\.\s+)([^\s.]+)\.?(.*)\.?/.exec(text)
             if (match == null || match.length < 2) {
                 return [];
             }
             text = match[1] + match[2]
             if (match.length > 3) {
-                const modifyers = match[3].split(/[\s\.]/g);
+                const modifyers = match[3].split(/[\s.]/g);
                 for (let index = 0; index < modifyers.length; index++) {
                     const modify = modifyers[index].replace(".", "");
                     if (!this.modification.toUpperCase().startsWith(modify.trim().toUpperCase())) {

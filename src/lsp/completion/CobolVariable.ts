@@ -107,7 +107,7 @@ export class CobolVariable {
         }
         const picture = CobolVariable.extractPicture(splitted, buffer);
         const name = splitted[1].replace(".", "");
-        let children = new Array();
+        let children: CobolVariable[] = [];
         if (!special || !special.noChildren) {
             children = CobolVariable.parseAndGetChildren(level, lineNumber, buffer);
         }
@@ -115,7 +115,7 @@ export class CobolVariable {
         if (!special || !special.noComment) {
            comment = CobolVariable.parserAndGetComment(lineNumber, buffer);
         }
-        const startDeclarationColumn = line.length - line.trimLeft().length
+        const startDeclarationColumn = line.length - line.trimStart().length
         const declarationPosition = new RechPosition(lineNumber, startDeclarationColumn);
         let section: "working-storage" | "linkage" | "file" | undefined;
         if (!special || !special.noSection) {
@@ -146,16 +146,16 @@ export class CobolVariable {
      * @param line
      * @param lines
      */
-    private static parseAndGetChildren(level: Number, line: number, lines: string[]) {
+    private static parseAndGetChildren(level: number, line: number, lines: string[]) {
         const allChildren: CobolVariable[] = [];
         let firstChildrenLevel = 0;
         for (let index = line + 1; index < lines.length; index++) {
             const currentLine = lines[index];
-            const match = /^ +\d\d\s+(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/g.exec(currentLine);
+            const match = /^ +\d\d\s+(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*/g.exec(currentLine);
             if (match) {
                 const splitted = CobolVariable.splitVariableInfo(currentLine);
                 const currentLevel = Number.parseInt(splitted[0]);
-                if (currentLevel > level &&
+                if (currentLevel > level.valueOf() &&
                     !CobolVariable.isEspecialVariableType(splitted[0])) {
                     const children = CobolVariable.parseLines(index, lines);
                     if (firstChildrenLevel == 0) {
@@ -169,7 +169,7 @@ export class CobolVariable {
                 } else {
                     break;
                 }
-                if (/^.*(section|division)[\.\,]?\s*$/i.test(currentLine)) {
+                if (/^.*(section|division)[.,]?\s*$/i.test(currentLine)) {
                     break;
                 }
             }
@@ -295,7 +295,7 @@ export class CobolVariable {
      */
     private static extractPictureFromTypedef(typedef: string, buffer: string[]): string {
         // Escape special regex characters in typedef to avoid breaking the regex
-        typedef = typedef.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        typedef = typedef.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
         const regexString =  "^ +\\d\\d +" +typedef + " +(?:pic(?: is)?)(.*) +typedef.*";
         const regex = new RegExp(regexString, "gim");
         const match = regex.exec(buffer.join("\n"));
@@ -340,7 +340,7 @@ export class CobolVariable {
     * @param picture variable picture
     */
    private static isDecimal(picture: string): boolean {
-        const decRegExp: RegExp = /^[9s\-z][z9\-\.]*(\(\d+\))*[,v][z9\-\.]*(\(\d+\))*$/i;
+        const decRegExp: RegExp = /^[9sz-][z9.-]*(\(\d+\))*[,v][z9.-]*(\(\d+\))*$/i;
         return decRegExp.test(picture);
     }
 
@@ -484,7 +484,7 @@ export class CobolVariable {
                 if (picture.charAt(i + 1) == "(") {
                     const fim = picture.indexOf(")", i + 1)
                     const firstChar = picture.charAt(i);
-                    const sSize = picture.substr(i + 2, fim - i - 2);
+                    const sSize = picture.substring(i + 2, fim);
                     let size = 0;
                     if (!Number.isNaN(Number(sSize))) {
                         size = Number.parseInt(sSize);
@@ -667,7 +667,7 @@ export class CobolVariable {
      * Returns true if the variable is a object reference
      */
     public getObjectReferenceOf(): string | undefined {
-        const match = this.raw.match(/.*\sobject\sreference\s+(.*)\./);
+        const match = this.raw.match(/.*\sobject\sreference\s+(.*)\./) || this.raw.match(/\s+declare\s+.*\s+as\s+([A-Z][a-zA-Z0-9]*)[\s.,]/);
         return match ? match[1] : undefined;
     }
 

@@ -8,7 +8,7 @@ describe("File Functions", () => {
   // Try create a new file
   it("Create a new file", (done) => {
     const fileName = "C:\\tmp\\teste_file_vscode.txt";
-    const result = new File(fileName).saveBuffer(Buffer.from(["Teste", "123"]));
+    const result = new File(fileName).saveBuffer(Buffer.from("Teste\n123"));
     result.then(() => {
       assert.isTrue(new File(fileName).exists());
       done();
@@ -21,7 +21,7 @@ describe("File Functions", () => {
   // Try write and read a file in latin1
   it("Write and read a file in latin1", (done) => {
     const fileName = "C:\\tmp\\teste_file_vscode.txt";
-    const buffer = Buffer.from(["Teste", "123", "àáÍíÉÓôÔãâÃ", "-_?=[]{}()/\\|.;,"]);
+    const buffer = Buffer.from("Teste\n123\nàáÍíÉÓôÔãâÃ\n-_?=[]{}()/\\|.;,");
     const result = new File(fileName).saveBuffer(buffer, "latin1");
     result.then(() => {
       FileUtils.read(fileName, "latin1").then((b) => {
@@ -37,10 +37,10 @@ describe("File Functions", () => {
   // Try write and read a file in UTF-8
   it("Write and read a file in UTF-8", (done) => {
     const fileName = "C:\\tmp\\teste_file_vscode.txt";
-    const buffer = Buffer.from(["Teste", "123", "àáÍíÉÓôÔãâÃ", "-_?=[]{}()/\\|.;,"]);
-    const result = new File(fileName).saveBuffer(buffer, "UTF-8");
+    const buffer = Buffer.from("Teste\n123\nàáÍíÉÓôÔãâÃ\n-_?=[]{}()/\\|.;,");
+    const result = new File(fileName).saveBuffer(buffer, "utf8");
     result.then(() => {
-      FileUtils.read(fileName, "UTF-8").then((b) => {
+      FileUtils.read(fileName, "utf8").then((b) => {
         assert.equal(buffer.toString(), b);
         done();
       }).catch();
@@ -81,8 +81,8 @@ describe("File Functions", () => {
   // Try delete a file
   it("Delete a file", (done) => {
     const file = new File("C:\\tmp\\teste_file_vscode.txt");
-    const buffer = Buffer.from(["Teste", "123", "àáÍíÉÓôÔãâÃ", "-_?=[]{}()/\\|.;,"]);
-    const result = file.saveBuffer(buffer, "UTF-8");
+    const buffer = Buffer.from("Teste\n123\nàáÍíÉÓôÔãâÃ\n-_?=[]{}()/\\|.;,");
+    const result = file.saveBuffer(buffer, "utf8");
     result.then(() => {
       file.delete();
       assert.isFalse(new File(file.fileName).exists());

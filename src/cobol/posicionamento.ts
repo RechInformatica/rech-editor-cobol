@@ -56,4 +56,4 @@ export class Posicionamento {
     editor.setColumn(coluna - 1).then().catch();
   }
 
-};
+}

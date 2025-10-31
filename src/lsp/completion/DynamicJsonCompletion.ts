@@ -118,7 +118,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
         const parsedJson = JSON.parse(this.loadJsonBuffer(jsonFile));
         if (parsedJson && this.shouldCreateItems(parsedJson.conditions)) {
             return this.createItemsFromJson(parsedJson.snippets);
-        };
+        }
         return [];
     }
 
@@ -147,7 +147,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
         if (buffer) {
             return buffer;
         }
-        buffer = new File(jsonFile).loadBufferSync("UTF-8");
+        buffer = new File(jsonFile).loadBufferSync("utf8");
         CACHED_JSONS.set(jsonFile, buffer);
         return buffer;
     }
