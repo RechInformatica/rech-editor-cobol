@@ -10,7 +10,7 @@ export class DeclareCompletion implements CompletionInterface {
     public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
             const startColumn = CompletionUtils.findWordStartWithinLine(column, lines[line]);
-            const text = "declare ${1} as ${2}" + CompletionUtils.separatorForColumn(startColumn);
+            const text = "declare ${1} as ${2} = ${3}" + CompletionUtils.separatorForColumn(startColumn);
             resolve(
                 [{
                     label: 'DECLARE command',
