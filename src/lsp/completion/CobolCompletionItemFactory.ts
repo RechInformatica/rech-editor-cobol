@@ -36,13 +36,14 @@ import { AssignerCommandParser } from "./parser/AssignerCommandParser";
 import { ObjectReferenceCompletion } from "./ObjectReferenceCompletion";
 import { AnyLengthCompletion } from "./AnyLengthCompletion";
 import { MethodIdCompletion } from "./MethodIdCompletion";
-import { MethodModifyersCompletion } from "./MethodModifyersCompletion";
+import { MethodModifyersCompletion, MethodModifier } from "./MethodModifyersCompletion";
 import { WorkingStorageCompletion } from "./WorkingStorageCompletion";
 import { LinkageCompletion } from "./LinkageCompletion";
 import { ProcedureCompletion } from "./ProcedureCompletion";
 import { TryCompletion } from "./TryCompletion";
 import { FinallyCompletion } from "./FinallyCompletion";
 import { CatchCompletion } from "./CatchCompletion";
+import { MethodArgsCompletion } from "./MethodArgsCompletion";
 
 
 /**
@@ -228,10 +229,27 @@ export class CobolCompletionItemFactory {
         }
         case this.isMethodDeclaration(): {
           let result: CompletionItem[] = [];
-          result = result.concat(await this.generate(new MethodModifyersCompletion("public")));
-          result = result.concat(await this.generate(new MethodModifyersCompletion("protected")));
-          result = result.concat(await this.generate(new MethodModifyersCompletion("static")));
-          result = result.concat(await this.generate(new MethodModifyersCompletion("override")));
+          if (!this.isMethodReturningDeclared()) {
+            result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.RETURNING)));
+          }
+          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.PUBLIC}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.PUBLIC)));
+          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.PROTECTED}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.PROTECTED)));
+          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.STATIC}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.STATIC)));
+          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.OVERRIDE}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.OVERRIDE)));
+          if (this.isMethodArgsDeclared()) {
+            if (this.isTypeSugestionForMethodArgsEnabled()) {
+              if (this.isMethodArgsVariableCamelCase()) {
+                result = result.concat(await this.generate(this.classCompletion));
+              } else {
+                result = result.concat(await this.generate(this.typedefCompletion));
+              }
+            }
+            if (this.isNextAsArgsForMethod()) {
+              result = result.concat(await this.generate(new MethodArgsCompletion(true)));
+            }
+          } else {
+            result = result.concat(await this.generate(new MethodArgsCompletion(false)));
+          }
           return result;
         }
         case this.isInitialize(): {
@@ -572,6 +590,38 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if the current line is a method declaration with returning clause
+  */
+  private isMethodReturningDeclared(): boolean {
+    return (/\s+(method-id.).*returning.*\./gim.exec(this.lineText) != null)
+  }
+
+  /**
+   * Returns true if the current line is a method declaration with arguments
+  */
+  private isMethodArgsDeclared(): boolean {
+    return (/\s+(method-id.).*\(.*as.*\).*\./gim.exec(this.lineText) != null)
+  }
+
+  /**
+   * Returns true if the cursos is imediately after an 'as' clause in method args declaration
+  */
+  private isTypeSugestionForMethodArgsEnabled(): boolean {
+    const text = this.lineText.substring(0, this.column).toLowerCase();
+    const withoutLastWord = text.replace(/\s*\S+$/u, "");
+    return withoutLastWord.trimEnd().endsWith(" as");
+  }
+
+  /**
+   * Returns true if the cursos is imediately after an 'as' clause in method args declaration
+  */
+  private isNextAsArgsForMethod(): boolean {
+    const text = this.lineText.substring(0, this.column).toLowerCase();
+    const withoutLastWord = text.replace(/\s*\S+$/u, "");
+    return withoutLastWord.trimEnd().endsWith(",");
+  }
+
+  /**
    * Returns true if the current line is a method declaration
    */
   private isMethodDeclaration(): boolean {
@@ -664,7 +714,25 @@ export class CobolCompletionItemFactory {
    */
   private isDeclareVariableCamelCase(): boolean {
     const matches = this.lineText.substring(0, this.column).match(/\s+declare\s+(.*)\s+as\s+/i);
-    if (matches && matches.length > 1 && /^[a-z][a-zA-Z0-9]*$/.exec(matches[1])) {
+    return this.isCamelCase(matches);
+  }
+
+  /**
+   * Returns true if the current line is a variable from 'declare' clause in camel case
+   */
+  private isMethodArgsVariableCamelCase(): boolean {
+    const text = this.lineText.substring(0, this.column).toLowerCase();
+    const withoutLastWord = text.replace(/\s*\S+$/u, "");
+    const matches = /.*[(\s](\S+)\s+as$/i.exec(withoutLastWord);
+    return this.isCamelCase(matches);
+  }
+
+  /**   * Returns true if the given matches represent a camel case variable
+   *
+   * @param matches RegExp matches
+   */
+  private isCamelCase(matches: RegExpMatchArray | null): boolean {
+    if (matches && matches.length > 1 && /^[a-z][a-zA-Z0-9]*$/.exec(matches[1].trim())) {
       return true;
     }
     return false;

@@ -157,7 +157,7 @@ export class VariableCompletion implements CompletionInterface {
         new Scan(buffer).reverseScan(/^ \s\s\s\s\s\s([\w-]+)\.(?:\s*\*>.*)?/gm, this.lineNumber, (iteratorLimit: any) => {
             const limitLine = iteratorLimit.row;
             iteratorLimit.stop();
-            new Scan(buffer).reverseScan(/^\s+declare\s+(?:\w+[\d-]*)\s+as\s+(?:[\w-]+).*/gim, this.lineNumber, (iterator: any) => {
+            new Scan(buffer).reverseScan(/^\s+declare\s+([\w-]+)\s+as\s+(?:[\w-]+).*/gim, this.lineNumber, (iterator: any) => {
                 if (iterator.row < limitLine) {
                     iterator.stop();
                     return;
