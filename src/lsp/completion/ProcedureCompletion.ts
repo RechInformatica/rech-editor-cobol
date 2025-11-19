@@ -2,6 +2,7 @@ import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-lan
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { CobolVariable } from "./CobolVariable";
+import { Log } from "../../commons/Log";
 
 
 // Cobol column for a procedure declaration
@@ -76,6 +77,7 @@ export class ProcedureCompletion implements CompletionInterface {
                         return variable;
                     }
                 } catch(e) {
+                    Log.get().error(`Error parsing working variable at line ${index + 1}: ${e}`);
                 }
             }
         }
@@ -104,6 +106,7 @@ export class ProcedureCompletion implements CompletionInterface {
                     const variable = CobolVariable.parseLines(index, lines, {noChildren: true, noComment: true, noScope:true, ignoreMethodReturn:true, noSection:true})
                     result.push(variable)
                 } catch(e) {
+                    Log.get().error(`Error parsing linkage variable at line ${index + 1}: ${e}`);
                 }
             }
         }

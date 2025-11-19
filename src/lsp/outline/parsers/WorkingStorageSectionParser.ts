@@ -31,18 +31,21 @@ export class WorkingStorageSectionParser implements SymbolParser {
    * @param context - The parse context.
    */
   closeParents(line: string, lineIndex: number, context: ParseContext): void {
-    while (true) {
+    let shouldCloseParents = true;
+    while (shouldCloseParents) {
       const parentType = context.getParentType();
-      if (
-        parentType === undefined ||
+      if (parentType === undefined ||
         parentType === ContextType.Method ||
         parentType === ContextType.Object ||
         parentType === ContextType.Factory
-      ) break;
+      ) {
+        shouldCloseParents = false;
+      } else {
+        // Exit the current parent context if it is not valid for this section.
+        const position = new Position(lineIndex - 1, line.length);
+        context.exitParent(position);
+      }
 
-      // Exit the current parent context if it is not valid for this section.
-      const position = new Position(lineIndex - 1, line.length);
-      context.exitParent(position);
     }
   }
 

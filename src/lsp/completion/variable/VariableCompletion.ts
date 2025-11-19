@@ -146,7 +146,7 @@ export class VariableCompletion implements CompletionInterface {
     private generateItemsFromCurrentBuffer(lines: string[], useCache: boolean): Map<string, CompletionItem> {
         const itemsMap: Map<string, CompletionItem> = new Map;
         const buffer = lines.join("\n");
-        new Scan(buffer).scan(/^ +\d\d +(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*/gim, (iterator: any) => {
+        new Scan(buffer).scan(/^ +\d\d +(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*/gim, (iterator: any) => {
             const variable = CobolVariable.parseLines(iterator.row, lines, {noChildren: true, noScope: true, noSection: true, ignoreMethodReturn: true});
             if (!this.shouldIgnoreVariable(variable)) {
                 const variableItem = this.createVariableCompletion(variable);
@@ -154,10 +154,10 @@ export class VariableCompletion implements CompletionInterface {
             }
         });
 
-        new Scan(buffer).reverseScan(/^ \s\s\s\s\s\s([\w\-]+)\.(?:\s*\*\>.*)?/gm, this.lineNumber, (iteratorLimit: any) => {
+        new Scan(buffer).reverseScan(/^ \s\s\s\s\s\s([\w-]+)\.(?:\s*\*>.*)?/gm, this.lineNumber, (iteratorLimit: any) => {
             const limitLine = iteratorLimit.row;
             iteratorLimit.stop();
-            new Scan(buffer).reverseScan(/^ +declare +(?:[\w\-]+) +as +(?:[\w\-]+).*/gim, this.lineNumber, (iterator: any) => {
+            new Scan(buffer).reverseScan(/^\s+declare\s+([\w-]+)\s+as\s+(?:[\w-]+).*/gim, this.lineNumber, (iterator: any) => {
                 if (iterator.row < limitLine) {
                     iterator.stop();
                     return;

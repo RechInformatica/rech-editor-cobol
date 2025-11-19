@@ -1,7 +1,7 @@
-import { CompletionItemKind, CompletionItem, InsertTextFormat, MarkupKind } from "vscode-languageserver";
+import { CompletionItemKind, CompletionItem, InsertTextFormat, } from "vscode-languageserver";
 import { CompletionInterface } from "../CompletionInterface";
 import { ExpandedSourceManager } from "../../../cobol/ExpandedSourceManager";
-import { CobolVariable, Type } from "../CobolVariable";
+import { CobolVariable } from "../CobolVariable";
 import { BufferSplitter, Scan } from "rech-ts-commons";
 
 /**
@@ -87,7 +87,7 @@ export class TypedefCompletion implements CompletionInterface {
     private generateItemsFromCurrentBuffer(lines: string[], _useCache: boolean): Map<string, CompletionItem> {
         const itemsMap: Map<string, CompletionItem> = new Map;
         const buffer = lines.join("\n");
-        new Scan(buffer).scan(/^ +\d\d +(?:[\w\-]+)?(?:\(.*\))?([\w\-]+)(\s+|\.).*typedef.*/gim, (iterator: any) => {
+        new Scan(buffer).scan(/^ +\d\d +(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*typedef.*/gim, (iterator: any) => {
             const typedefVariable = CobolVariable.parseLines(iterator.row, lines, { noChildren: true, noScope: true, noSection: true, ignoreMethodReturn: true });
             const typedefItem = this.createTypedefCompletion(typedefVariable);
             itemsMap.set(typedefVariable.getName(), typedefItem);

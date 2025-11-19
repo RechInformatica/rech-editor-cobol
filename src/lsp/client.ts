@@ -1,5 +1,5 @@
 import { commands, ExtensionContext, window } from 'vscode';
-import { LanguageClient, LanguageClientOptions, ResponseError, ServerOptions, TransportKind } from 'vscode-languageclient';
+import { LanguageClient, LanguageClientOptions, ResponseError, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { Editor } from '../editor/editor';
 import * as path from 'path';
 import { configuration } from '../helpers/configuration';
@@ -24,8 +24,8 @@ export class Client {
 	private static client: LanguageClient | undefined;
 
 	/**
-     * Starts the LSP server and establishes communication between them
-     */
+	 * Starts the LSP server and establishes communication between them
+	 */
 	public static startServerAndEstablishCommunication(context: ExtensionContext) {
 		// The server is implemented in node
 		const serverModule = context.asAbsolutePath(
@@ -57,8 +57,8 @@ export class Client {
 			clientOptions
 		);
 		// Start the client. This will also launch the server
-		Client.client.start();
-		Client.client.onReady().then(() => {
+		const disposable = Client.client.start();
+		Client.client.start().then(() => {
 			Client.configureClientWhenReady();
 			// Injects the dependencies
 			dj.defineSourceExpander();
@@ -133,7 +133,7 @@ export class Client {
 				});
 			});
 			Client.client.onRequest("custom/diagnosticFilter", (diagnosticMessage: string) => {
-				return new Promise<Boolean>((resolve, reject) => {
+				return new Promise<boolean>((resolve, reject) => {
 					const result = cobolDiagnosticFilter.isDiagnosticValid(diagnosticMessage);
 					if (result !== undefined) {
 						return resolve(result);
@@ -143,7 +143,7 @@ export class Client {
 				})
 			});
 			Client.client.onRequest("custom/deprecatedWarning", (diagnosticMessage: string) => {
-				return new Promise<Boolean>((resolve, reject) => {
+				return new Promise<boolean>((resolve, reject) => {
 					const result = cobolDiagnosticFilter.isDeprecatedWarning(diagnosticMessage);
 					if (result !== undefined) {
 						return resolve(result);
@@ -233,12 +233,12 @@ export class Client {
 	 *
 	 * @param files file array with necessary files
 	 */
-	 private static createExternalMethodCompletionPromise(param: any): Promise<any> {
+	private static createExternalMethodCompletionPromise(param: any): Promise<any> {
 		return new Promise<string>((resolve, reject) => {
 			const command = Editor.getExternalMethodCompletion();
 			if (command) {
 				commands.executeCommand(command, param).then((result) => {
-					return resolve(<string> result);
+					return resolve(<string>result);
 				}, ((err) => {
 					return reject(err);
 				}));
@@ -359,7 +359,7 @@ export class Client {
 		return new Promise((resolve, reject) => {
 			if (Client.client) {
 				const params = [word, referenceLine, referenceColumn, fullDocument, uri];
-				return Client.client.sendRequest<RechPosition | undefined>("custom/findDeclarationPosition", params).then((position) => {
+				return Client.client.sendRequest<RechPosition | undefined>("custom/findDeclarationPosition", params).then((position: any) => {
 					if (position) {
 						return resolve(position);
 					} else {

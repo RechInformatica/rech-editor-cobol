@@ -145,7 +145,6 @@ export class CobolDocParser {
         const docElementRegex = /\s+\*>\s+(@param|@return|@throws)\s+([\w-]+)\s?(.*)?/.exec(currentLine);
         if (docElementRegex) {
             if (docElementRegex[COMMENT_POSITION]) {
-                docElementRegex[COMMENT_POSITION]
                 return new DocElement(docElementRegex[NAME_POSITION], "", this.removeLineCommentIfNeed(docElementRegex[COMMENT_POSITION]));
             }
             if (docElementRegex[NAME_POSITION]) {
@@ -209,7 +208,7 @@ export class CobolDocParser {
      * @param currentLine current line text
      */
     private removeDots(currentLine: string): string {
-        const match = /(.*\.\.+)(?:.*\*\>.*)/.exec(currentLine);
+        const match = /(.*\.\.+)(?:.*\*>.*)/.exec(currentLine);
         if (match) {
             currentLine = match[1];
         }

@@ -29,7 +29,6 @@ export class ReplaceCommaByDotAction implements ActionInterface {
         const textEdits: TextEdit[] = [];
         const lineText = lines[line];
         const newText = this.insertStaticClause(lineText);
-        CompletionUtils
         textEdits.push({
             newText: newText,
             range: Range.create(

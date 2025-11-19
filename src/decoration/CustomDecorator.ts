@@ -1,4 +1,4 @@
-import { ExtensionContext, TextEditor, window, workspace, debug } from 'vscode';
+import { ExtensionContext, TextEditor, window, workspace } from 'vscode';
 import { Parser } from './Parser';
 import { SourceOfCompletions } from '../lsp/commons/SourceOfCompletions';
 
@@ -26,6 +26,9 @@ export class CustomDecorator {
             }
         };
 
+        // Timer used to debounce decoration updates. Declare before any caller to avoid TDZ when triggerUpdateDecorations
+        let timeout: NodeJS.Timer | undefined;
+
         // Get the active editor for the first time and initialize the regex
         if (window.activeTextEditor) {
             activeEditor = window.activeTextEditor;
@@ -51,7 +54,6 @@ export class CustomDecorator {
         }, null, context.subscriptions);
 
         // This timer waits 50ms before updating decorations, avoiding calling update too often
-        var timeout: NodeJS.Timer;
         function triggerUpdateDecorations() {
             if (timeout) {
                 clearTimeout(timeout);

@@ -162,7 +162,7 @@ describe('Cobol variable completion', () => {
         for (let i = 0; i < items.length; i++) {
             expect(expectedItems[i].label).to.equal(items[i].label);
             expect(expectedItems[i].detail).to.equal(items[i].detail);
-        };
+        }
     });
 
     it('Checks cobol variable completion ignoring enums', async () => {
@@ -201,7 +201,7 @@ describe('Cobol variable completion', () => {
         for (let i = 0; i < items.length; i++) {
             expect(expectedItems[i].label).to.equal(items[i].label);
             expect(expectedItems[i].detail).to.equal(items[i].detail);
-        };
+        }
     });
 
     it('Checks cobol variable completion ignoring displays and enums', async () => {
@@ -227,7 +227,7 @@ describe('Cobol variable completion', () => {
         for (let i = 0; i < items.length; i++) {
             expect(expectedItems[i].label).to.equal(items[i].label);
             expect(expectedItems[i].detail).to.equal(items[i].detail);
-        };
+        }
     });
 
     it('Checks cobol variable completion using specific VariableInsertTextBuilder', async () => {
@@ -254,7 +254,7 @@ describe('Cobol variable completion', () => {
             expect(expectedItems[i].label).to.equal(items[i].label);
             expect(expectedItems[i].insertText).to.equal(items[i].textEdit!.newText);
             expect(expectedItems[i].detail).to.equal(items[i].detail);
-        };
+        }
     });
 
 });

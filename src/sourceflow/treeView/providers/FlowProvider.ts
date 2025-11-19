@@ -2,7 +2,7 @@ import { TreeDataProvider, EventEmitter, TreeItem, commands, workspace } from "v
 import { Event } from "vscode-jsonrpc";
 import { Editor } from "../../../editor/editor";
 import { CobolFlowAnalyzer } from "../../utils/cobolFlowAnalyzer";
-import NodeInterface from "../nodes/nodeInterface";
+import NodeInterface from "../nodes/NodeInterface";
 import { ParagraphNode } from "../nodes/paragraphNode";
 import { MethodNode } from "../nodes/methodNode copy";
 import { CommandNode } from "../nodes/commandNode";
@@ -48,7 +48,7 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      */
     getChildren(element?: NodeInterface | undefined): Thenable<NodeInterface[]> {
         return new Promise((resolve, _reject) => {
-            let childrens = new Array();
+            let childrens = [];
             if (element) {
                 childrens = element.getChildren();
                 const showConditionalBlockCobolFlow = <string[]>workspace.getConfiguration("rech.editor.cobol").get("showConditionalBlockCobolFlow");
@@ -83,7 +83,7 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      * @returns {NodeInterface[]} A new list of nodes containing only ParagraphNode and MethodNode instances.
      */
     private removeConditionalChildrens(children: NodeInterface[]): NodeInterface[] {
-        const filteredChildren = new Array();
+        const filteredChildren: NodeInterface[] = [];
         children.forEach((node => {
             if (node instanceof ParagraphNode || node instanceof MethodNode || node instanceof CommandNode) {
                 filteredChildren.push(node);

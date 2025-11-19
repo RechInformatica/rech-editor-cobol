@@ -28,16 +28,19 @@ export class LinkageSectionParser implements SymbolParser {
    * @param context The parse context.
    */
   closeParents(line: string, lineIndex: number, context: ParseContext): void {
-    while (true) {
+    let shouldCloseParents = true;
+    while (shouldCloseParents) {
       const parentType = context.getParentType();
       if (parentType === undefined ||
         parentType === ContextType.Method ||
         parentType === ContextType.Object ||
-        parentType === ContextType.Factory) break;
-
-      // Exit the current parent context.
-      const position = new Position(lineIndex - 1, line.length);
-      context.exitParent(position);
+        parentType === ContextType.Factory) {
+        shouldCloseParents = false;
+      } else {
+        // Exit the current parent context.
+        const position = new Position(lineIndex - 1, line.length);
+        context.exitParent(position);
+      }
     }
   }
 

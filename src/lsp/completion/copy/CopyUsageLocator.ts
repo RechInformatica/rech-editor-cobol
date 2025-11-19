@@ -27,10 +27,10 @@ export class CopyUsageLocator {
 			if (!command) {
 				return reject("CopyUsageLocator is not defined");
 			}
-			commands.executeCommand(command, copy, true).then((result) => {
+			commands.executeCommand(command, copy, true).then((result: unknown) => {
 				if (result && isArray(result)) {
-                    this.cache.set(copy, new CopyUsageLocatorCached(new Date().getTime(), result));
-					return resolve(result);
+                    this.cache.set(copy, new CopyUsageLocatorCached(new Date().getTime(), result as string[]));
+					return resolve(result as string[]);
 				} else {
 					return reject("Unexpected result of CopyUsageLocator function");
 				}

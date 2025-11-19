@@ -39,26 +39,33 @@ export class VariableParser implements SymbolParser {
 
     // Special handling for level 78 (constants)
     if (level === 78) {
-      while (true) {
+      let isParentVariable = false;
+      while (!isParentVariable) {
         const parentType = context.getParentType();
-        if (parentType !== ContextType.Variable) break;
-        context.exitParent(new Position(lineIndex - 1, line.length));
+        if (parentType == ContextType.Variable) {
+          context.exitParent(new Position(lineIndex - 1, line.length));
+          continue;
+        }
+        isParentVariable = true;
       }
     }
 
     // Close parents with levels greater than or equal to the current level
-    while (true) {
+    let foundLevel = false;
+    while (!foundLevel) {
       const parent = context.getCurrentParent();
-      if (!parent) break;
-
-      const parentLine = parent.range.start.line;
-      const parentMatch = this.regex.exec(context.lines[parentLine]);
-      if (!parentMatch) break;
-
-      const parentLevel = parseInt(parentMatch[1], 10);
-      if (parentLevel < level) break;
-
-      context.exitParent(new Position(lineIndex - 1, line.length));
+      if (parent) {
+        const parentLine = parent.range.start.line;
+        const parentMatch = this.regex.exec(context.lines[parentLine]);
+        if (parentMatch) {
+          const parentLevel = parseInt(parentMatch[1], 10);
+          if (parentLevel >= level) {
+            context.exitParent(new Position(lineIndex - 1, line.length));
+            continue;
+          }
+        }
+      }
+      foundLevel = true;
     }
   }
 

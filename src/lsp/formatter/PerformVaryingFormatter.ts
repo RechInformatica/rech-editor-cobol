@@ -48,9 +48,9 @@ export class PerformVaryingFormatter implements FormatterInterface {
         if (/.*\s(?:or|and|=|>|<|=>|=<|<>)$/.test(currentLineText.toLowerCase())) {
             const condition = currentLineText.substring(untilStartColumn + 5);
             const conditionColumn = condition.length - condition.trimLeft().length + untilStartColumn + 8
-            return [this.createIndentofUntilTextEdit(line, conditionColumn, lines[line].trim())];;
+            return [this.createIndentofUntilTextEdit(line, conditionColumn, lines[line].trim())];
         }
-        return [this.createIndentofUntilTextEdit(line, untilStartColumn, lines[line].trim())];;
+        return [this.createIndentofUntilTextEdit(line, untilStartColumn, lines[line].trim())];
     }
 
     /**

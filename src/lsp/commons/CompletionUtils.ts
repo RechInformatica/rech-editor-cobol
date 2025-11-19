@@ -108,7 +108,7 @@ export class CompletionUtils {
   public static fillSpacesBetween(initialColumn: number, finalColumn: number): string {
     const spaceCount = finalColumn - initialColumn;
     let text = "";
-    for (var i = 0; i < spaceCount; i++) {
+    for (let i = 0; i < spaceCount; i++) {
       text = text.concat(" ");
     }
     return text;
@@ -122,15 +122,18 @@ export class CompletionUtils {
    */
   public static findWordStartWithinLine(currentCursorColumn: number, currentLineText: string): number {
     let initialWordColumn = currentCursorColumn;
-    while (true) {
+    let foundWordChar = false;
+    while (!foundWordChar) {
       if (initialWordColumn == 0) {
-        break;
+        foundWordChar = true;
+      } else {
+        const lastChar = currentLineText.charAt(initialWordColumn - 1);
+        if (lastChar === " ") {
+          foundWordChar = true;
+        } else {
+          initialWordColumn--;
+        }
       }
-      const lastChar = currentLineText.charAt(initialWordColumn - 1);
-      if (lastChar === " ") {
-        break;
-      }
-      initialWordColumn--;
     }
     initialWordColumn++;
     return initialWordColumn;
@@ -144,15 +147,18 @@ export class CompletionUtils {
    */
   private static findWordEndWithinLine(currentCursorColumn: number, currentLineText: string): number {
     let finalWordColumn = currentCursorColumn;
-    while (true) {
+    let foundWordChar = false;
+    while (!foundWordChar) {
       if (finalWordColumn >= currentLineText.length) {
-        break;
+        foundWordChar = true;
+      } else {
+        const lastChar = currentLineText.charAt(finalWordColumn + 1);
+        if (lastChar === " ") {
+          foundWordChar = true;
+        } else {
+          finalWordColumn++;
+        }
       }
-      const lastChar = currentLineText.charAt(finalWordColumn + 1);
-      if (lastChar === " ") {
-        break;
-      }
-      finalWordColumn++;
     }
     finalWordColumn++;
     return finalWordColumn;
@@ -215,7 +221,7 @@ export class CompletionUtils {
    * @param lineText
    */
   public static isTheParagraphOrMethodDeclaration(lineText: string): boolean {
-    if (/^ {7}[\w\-\(\)\@\#]+\.(?!.*[a-zA-Z])/g.exec(lineText)) {
+    if (/^ {7}[\w\-()@#]+\.(?!.*[a-zA-Z])/g.exec(lineText)) {
       return true;
     }
     if (/^ +method-id\..*/gi.exec(lineText)) {
@@ -274,7 +280,7 @@ export class CompletionUtils {
    * @param line line to clean
    */
   public static createCleanLineTextEdit(line: number): TextEdit {
-    const textEdit =  {
+    const textEdit = {
       range: {
         start: {
           line: line,

@@ -40,17 +40,19 @@ export class ElementsDisplayerFactory {
    */
   private buildDisplayer(position: RechPosition, lines: string[], currentLine: number, uri: string) {
     switch(true) {
-      case this.isVariable(lines[position.line]):
+      case this.isVariable(lines[position.line]): {
         const variable = CobolVariable.parseLines(position.line, lines)
         variable.setDeclarationPosition(position);
         new VariableDisplayer().show(uri, variable, lines)
         break;
-      case this.isClass(lines[position.line]):
+      }
+      case this.isClass(lines[position.line]): {
         const classs = CobolVariable.parseLines(position.line, lines)
         classs.setDeclarationPosition(position);
         new ClassDisplayer().show(classs)
         break;
-      case this.isCopy(lines[currentLine]):
+      }
+      case this.isCopy(lines[currentLine]): {
         CobolCopy.parseLine(currentLine, lines, uri).then((copy) => {
           if (copy) {
             new copyDisplayer().show(copy)
@@ -59,6 +61,7 @@ export class ElementsDisplayerFactory {
           window.showWarningMessage(`Fail to parser copy informations! Line: ${lines[currentLine]}`);
         });
         break;
+      }
     }
 
   }

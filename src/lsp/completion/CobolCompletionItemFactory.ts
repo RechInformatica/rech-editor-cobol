@@ -1,6 +1,7 @@
 import { CompletionItem } from "vscode-languageserver";
 import { ParserCobol } from "../../cobol/parsercobol";
 import { PerformCompletion } from "./PerformCompletion";
+import { DeclareCompletion } from "./DeclareCompletion";
 import { MoveCompletion } from "./MoveCompletion";
 import { ToCompletion } from "./ToCompletion";
 import { CompletionInterface } from "./CompletionInterface";
@@ -35,13 +36,14 @@ import { AssignerCommandParser } from "./parser/AssignerCommandParser";
 import { ObjectReferenceCompletion } from "./ObjectReferenceCompletion";
 import { AnyLengthCompletion } from "./AnyLengthCompletion";
 import { MethodIdCompletion } from "./MethodIdCompletion";
-import { MethodModifyersCompletion } from "./MethodModifyersCompletion";
+import { MethodModifyersCompletion, MethodModifier } from "./MethodModifyersCompletion";
 import { WorkingStorageCompletion } from "./WorkingStorageCompletion";
 import { LinkageCompletion } from "./LinkageCompletion";
 import { ProcedureCompletion } from "./ProcedureCompletion";
 import { TryCompletion } from "./TryCompletion";
 import { FinallyCompletion } from "./FinallyCompletion";
 import { CatchCompletion } from "./CatchCompletion";
+import { MethodArgsCompletion } from "./MethodArgsCompletion";
 
 
 /**
@@ -198,131 +200,151 @@ export class CobolCompletionItemFactory {
    *
    * @param lines Cobol source code lines
    */
-  public generateConditionalCompletionItems(): Promise<CompletionItem[]> {
-    return new Promise(async (resolve) => {
-      try {
-        switch (true) {
-          case this.isCommentLine(): {
-            return resolve([]);
-          }
-          case this.isMethod(): {
-            return resolve(await this.generate(this.methodCompletion));
-          }
-          case this.isDisplay() || this.isAccept(): {
-            let result = new Array();
-            result = result.concat(await this.generate(this.createVariableSuggestionWithoutEnum()));
-            result = result.concat(await this.generate(this.classCompletion))
-            return resolve(result);
-          }
-          case this.isIf(): {
-            let result = new Array();
-            result = result.concat(await this.generate(this.createVariableSuggestionWithEnum()));
-            result = result.concat(await this.generate(this.classCompletion))
-            return resolve(result);
-          }
-          case this.isCompute(): {
-            let result = new Array();
-            result = result.concat(await this.generate(this.createVariableSuggestionWithoutEnumAndDisplay()));
-            result = result.concat(await this.generate(this.classCompletion))
-            return resolve(result);
-          }
-          case this.isMethodDeclaration(): {
-            let result = new Array();
-            result = result.concat(await this.generate(new MethodModifyersCompletion("public")));
-            result = result.concat(await this.generate(new MethodModifyersCompletion("protected")));
-            result = result.concat(await this.generate(new MethodModifyersCompletion("static")));
-            result = result.concat(await this.generate(new MethodModifyersCompletion("override")));
-            return resolve(result);
-          }
-          case this.isInitialize(): {
-            return resolve(await this.generate(this.createVariableSuggestionWithEnum()));
-          }
-          case this.isWhen(): {
-            return resolve(await this.createWhenCompletions());
-          }
-          case this.isUsageClause(): {
-            return resolve(await this.generate(this.typedefCompletion));
-          }
-          case this.isVarDeclaration(): {
-            return resolve(await this.createVariableCompletions());
-          }
-          case this.isMove() || this.isAdd() || this.isSet(): {
-            return resolve(await this.createCompletionsForToCommands());
-          }
-          case this.isSubtract(): {
-            return resolve(await this.createCompletionsForSubtract());
-          }
-          case this.isParagraphPerform(): {
-            return resolve(await this.generate(this.paragraphCompletion));
-          }
-          case this.isUnhandledCommand(): {
-            return resolve([]);
-          }
-          default: {
-            return resolve(await this.createDefaultCompletions());
-          }
+  public async generateConditionalCompletionItems(): Promise<CompletionItem[]> {
+    try {
+      switch (true) {
+        case this.isCommentLine(): {
+          return [];
         }
-      } catch(e) {
-        return resolve([]);
+        case this.isMethod(): {
+          return await this.generate(this.methodCompletion);
+        }
+        case this.isDisplay() || this.isAccept(): {
+          let result: CompletionItem[] = [];
+          result = result.concat(await this.generate(this.createVariableSuggestionWithoutEnum()));
+          result = result.concat(await this.generate(this.classCompletion))
+          return result;
+        }
+        case this.isIf(): {
+          let result: CompletionItem[] = [];
+          result = result.concat(await this.generate(this.createVariableSuggestionWithEnum()));
+          result = result.concat(await this.generate(this.classCompletion))
+          return result;
+        }
+        case this.isCompute(): {
+          let result: CompletionItem[] = [];
+          result = result.concat(await this.generate(this.createVariableSuggestionWithoutEnumAndDisplay()));
+          result = result.concat(await this.generate(this.classCompletion))
+          return result;
+        }
+        case this.isMethodDeclaration(): {
+          let result: CompletionItem[] = [];
+          if (!this.isMethodReturningDeclared()) {
+            result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.RETURNING)));
+          }
+          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.PUBLIC}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.PUBLIC)));
+          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.PROTECTED}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.PROTECTED)));
+          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.STATIC}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.STATIC)));
+          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.OVERRIDE}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.OVERRIDE)));
+          if (this.isMethodArgsDeclared()) {
+            if (this.isTypeSugestionForMethodArgsEnabled()) {
+              if (this.isMethodArgsVariableCamelCase()) {
+                result = result.concat(await this.generate(this.classCompletion));
+              } else {
+                result = result.concat(await this.generate(this.typedefCompletion));
+              }
+            }
+            if (this.isNextAsArgsForMethod()) {
+              result = result.concat(await this.generate(new MethodArgsCompletion(true)));
+            }
+          } else {
+            result = result.concat(await this.generate(new MethodArgsCompletion(false)));
+          }
+          return result;
+        }
+        case this.isInitialize(): {
+          return await this.generate(this.createVariableSuggestionWithEnum());
+        }
+        case this.isWhen(): {
+          return await this.createWhenCompletions();
+        }
+        case this.isUsageClause(): {
+          return await this.generate(this.typedefCompletion);
+        }
+        case this.isVarDeclaration(): {
+          return await this.createVariableCompletions();
+        }
+        case this.isMove() || this.isAdd() || this.isSet(): {
+          return await this.createCompletionsForToCommands();
+        }
+        case this.isSubtract(): {
+          return await this.createCompletionsForSubtract();
+        }
+        case this.isParagraphPerform(): {
+          return await this.generate(this.paragraphCompletion);
+        }
+        case this.isDeclareAs(): {
+          let items: Promise<CompletionItem[]>[] = [];
+          if (this.isDeclareVariableCamelCase()) {
+            items = items.concat(this.generate(this.classCompletion));
+          } else {
+            items = items.concat(this.generate(this.typedefCompletion));
+          }
+          return this.createWrappingPromise(items);
+        }
+        case this.isUnhandledCommand(): {
+          return [];
+        }
+        default: {
+          return await this.createDefaultCompletions();
+        }
       }
-    });
+    } catch (e) {
+      return [];
+    }
   }
 
   /**
    * Generate completion items for commands that considers 'to' clause
    */
-  private createCompletionsForToCommands(): Promise<CompletionItem[]> {
-    return new Promise(async (resolve, _reject) => {
-      if (this.shouldSuggestClause("TO")) {
-        return resolve(await this.createToCompletions());
+  private async createCompletionsForToCommands(): Promise<CompletionItem[]> {
+    if (this.shouldSuggestClause("TO")) {
+      return await this.createToCompletions();
+    } else {
+      let result: CompletionItem[] = [];
+      let varCompletion: VariableCompletion;
+      if (this.isSet()) {
+        varCompletion = this.createVariableSuggestionWithEnum();
       } else {
-        let result = new Array();
-        let varCompletion: VariableCompletion;
-        if (this.isSet()) {
-          varCompletion = this.createVariableSuggestionWithEnum();
-        } else {
-          varCompletion = this.createVariableSuggestionWithoutEnum();
-        }
-        if (this.lineContainsTo()) {
-          varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
-        } else {
-          if (!this.cursorWordContainsParentheses()) {
-            if (this.isSet()) {
-              varCompletion.setInsertTextBuilder(new ToTrueInsertTextBuilder());
-            } else {
-              varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("to"));
-            }
+        varCompletion = this.createVariableSuggestionWithoutEnum();
+      }
+      if (this.lineContainsTo()) {
+        varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
+      } else {
+        if (!this.cursorWordContainsParentheses()) {
+          if (this.isSet()) {
+            varCompletion.setInsertTextBuilder(new ToTrueInsertTextBuilder());
+          } else {
+            varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("to"));
           }
         }
-        result = result.concat(await this.generate(varCompletion));
-        result = result.concat(await this.generate(this.classCompletion))
-        return resolve(result);
       }
-    });
+      result = result.concat(await this.generate(varCompletion));
+      result = result.concat(await this.generate(this.classCompletion))
+      return result;
+    }
   }
 
   /**
    * Generate completion items for subtract command
    */
-  private createCompletionsForSubtract(): Promise<CompletionItem[]> {
-    return new Promise(async (resolve, _reject) => {
-      if (this.shouldSuggestClause("FROM")) {
-        return resolve(await this.generate(new FromCompletion()));
+  private async createCompletionsForSubtract(): Promise<CompletionItem[]> {
+    if (this.shouldSuggestClause("FROM")) {
+      return await this.generate(new FromCompletion());
+    } else {
+      let result: CompletionItem[] = [];
+      const varCompletion: VariableCompletion = this.createVariableSuggestionWithoutEnum();
+      if (this.lineContainsFrom()) {
+        varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
       } else {
-        let result = new Array();
-        const varCompletion: VariableCompletion = this.createVariableSuggestionWithoutEnum();
-        if (this.lineContainsFrom()) {
-          varCompletion.setInsertTextBuilder(new CommaDotInsertTextBuilder());
-        } else {
-          if (!this.cursorWordContainsParentheses()) {
-            varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("from"));
-          }
+        if (!this.cursorWordContainsParentheses()) {
+          varCompletion.setInsertTextBuilder(new CommandSeparatorInsertTextBuilder("from"));
         }
-        result = result.concat(await this.generate(varCompletion));
-        result = result.concat(await this.generate(this.classCompletion))
-        return resolve(result);
       }
-    });
+      result = result.concat(await this.generate(varCompletion));
+      result = result.concat(await this.generate(this.classCompletion))
+      return result;
+    }
   }
 
   /**
@@ -408,7 +430,7 @@ export class CobolCompletionItemFactory {
         if (!this.isValueDeclared()) {
           let items: Promise<CompletionItem[]>[] = [];
           items = items.concat(this.generate(this.valueCompletion));
-          if (!this.isUsageDeclared()){
+          if (!this.isUsageDeclared()) {
             items = items.concat(this.generate(new TypedefClauseCompletion()));
           }
           if (this.isInPictureXDeclaration()) {
@@ -420,7 +442,6 @@ export class CobolCompletionItemFactory {
       if (this.isFlagParent()) {
         return resolve(this.generate(new FlagCompletion()));
       }
-      return resolve([]);
     })
   }
 
@@ -456,8 +477,8 @@ export class CobolCompletionItemFactory {
   /**
    * Returns true if the var Picture is declared on the current line
   */
- private isPictureOrUsageOrObjectReferenceDeclared(): boolean {
-   return this.lineText.toUpperCase().includes(" PIC ") || this.isUsageDeclared() || this.isObjectReferenceDeclared();
+  private isPictureOrUsageOrObjectReferenceDeclared(): boolean {
+    return this.lineText.toUpperCase().includes(" PIC ") || this.isUsageDeclared() || this.isObjectReferenceDeclared();
   }
 
   /**
@@ -483,10 +504,10 @@ export class CobolCompletionItemFactory {
   }
 
   /**
-   * Returns true if the cursor is in Picture X declaration
+   * Returns true if the cursor is in a picture X declaration
    */
   private isInPictureXDeclaration(): boolean {
-    const text = this.lineText.substr(0, this.column);
+    const text = this.lineText.substring(0, this.column);
     const match = text.match(/^.*\sPIC(?:\sIS)?\sX(?:\(\w*\)?)?\s?$/gi);
     return match != null;
   }
@@ -509,10 +530,10 @@ export class CobolCompletionItemFactory {
   }
 
   /**
-   * Returns true if the current line represents a method invocation
+   * Returns true if the current line represents a 'method call'
    */
   private isMethod(): boolean {
-    if (/.*\:\>[^\s]*/.exec(this.lineText.substr(0, this.column))) {
+    if (/.*:>[^\s]*/.exec(this.lineText.substring(0, this.column))) {
       return true;
     }
     return false;
@@ -566,6 +587,38 @@ export class CobolCompletionItemFactory {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Returns true if the current line is a method declaration with returning clause
+  */
+  private isMethodReturningDeclared(): boolean {
+    return (/\s+(method-id.).*returning.*\./gim.exec(this.lineText) != null)
+  }
+
+  /**
+   * Returns true if the current line is a method declaration with arguments
+  */
+  private isMethodArgsDeclared(): boolean {
+    return (/\s+(method-id.).*\(.*as.*\).*\./gim.exec(this.lineText) != null)
+  }
+
+  /**
+   * Returns true if the cursos is imediately after an 'as' clause in method args declaration
+  */
+  private isTypeSugestionForMethodArgsEnabled(): boolean {
+    const text = this.lineText.substring(0, this.column).toLowerCase();
+    const withoutLastWord = text.replace(/\s*\S+$/u, "");
+    return withoutLastWord.trimEnd().endsWith(" as");
+  }
+
+  /**
+   * Returns true if the cursos is imediately after an 'as' clause in method args declaration
+  */
+  private isNextAsArgsForMethod(): boolean {
+    const text = this.lineText.substring(0, this.column).toLowerCase();
+    const withoutLastWord = text.replace(/\s*\S+$/u, "");
+    return withoutLastWord.trimEnd().endsWith(",");
   }
 
   /**
@@ -651,6 +704,45 @@ export class CobolCompletionItemFactory {
    */
   private isParagraphPerform(): boolean {
     if (/\s+(PERFORM|perform).*/.exec(this.lineText)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line is a variable from 'declare' clause in camel case
+   */
+  private isDeclareVariableCamelCase(): boolean {
+    const matches = this.lineText.substring(0, this.column).match(/\s+declare\s+(.*)\s+as\s+/i);
+    return this.isCamelCase(matches);
+  }
+
+  /**
+   * Returns true if the current line is a variable from 'declare' clause in camel case
+   */
+  private isMethodArgsVariableCamelCase(): boolean {
+    const text = this.lineText.substring(0, this.column).toLowerCase();
+    const withoutLastWord = text.replace(/\s*\S+$/u, "");
+    const matches = /.*[(\s](\S+)\s+as$/i.exec(withoutLastWord);
+    return this.isCamelCase(matches);
+  }
+
+  /**   * Returns true if the given matches represent a camel case variable
+   *
+   * @param matches RegExp matches
+   */
+  private isCamelCase(matches: RegExpMatchArray | null): boolean {
+    if (matches && matches.length > 1 && /^[a-z][a-zA-Z0-9]*$/.exec(matches[1].trim())) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the current line is a 'declare as' clause
+   */
+  private isDeclareAs(): boolean {
+    if (/\s+declare\s+.*\s+as\s+/i.exec(this.lineText.substring(0, this.column))) {
       return true;
     }
     return false;
@@ -757,6 +849,7 @@ export class CobolCompletionItemFactory {
   private createDefaultCompletions(): Promise<CompletionItem[]> {
     let items: Promise<CompletionItem[]>[] = [];
     items = items.concat(this.generate(new PerformCompletion()));
+    items = items.concat(this.generate(new DeclareCompletion()));
     items = items.concat(this.generate(new MoveCompletion()));
     items = items.concat(this.generate(new SetCompletion()));
     items = items.concat(this.generate(new AddCompletion()));
@@ -815,8 +908,8 @@ export class CobolCompletionItemFactory {
   private toUpperCase(result: CompletionItem[]): CompletionItem[] {
     result.forEach(completionItem => {
       if (completionItem.commitCharacters) {
-        completionItem.commitCharacters.forEach((commitCharacter) => {
-          commitCharacter = commitCharacter.toUpperCase();
+        completionItem.commitCharacters.forEach((_commitCharacter) => {
+          // Commit characters are already strings, nothing to modify
         })
       }
       if (completionItem.filterText) {
