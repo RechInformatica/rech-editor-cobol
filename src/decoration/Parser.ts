@@ -6,14 +6,15 @@ import { Configuration } from "../helpers/configuration";
 import Q from "q";
 import { CobolRegexUtils } from "../cobol/CobolRegexUtils";
 import { CobolCopy } from "../cobol/CobolCopy";
+import { RechPosition } from "../commons/rechposition";
 
 export class Parser {
   private static lastLocalVariableDecorator: TextEditorDecorationType
   private static lastRechDocTypeDecorator: TextEditorDecorationType
   private static lastRechDocVariableDecorator: TextEditorDecorationType
-  private rechDocTypeRangeList: Range[] = [];
-  private rechDocVariableRangeList: Range[] = [];
-  private localVariableRangeList: Range[] = [];
+  private readonly rechDocTypeRangeList: Range[] = [];
+  private readonly rechDocVariableRangeList: Range[] = [];
+  private readonly localVariableRangeList: Range[] = [];
 
   /**
    * Find all local variables
@@ -41,10 +42,179 @@ export class Parser {
    * @param text
    */
   private getAllLocalVariables(text: string): Promise<undefined>[] {
-    const PromiseArray:Promise<undefined>[] = []
-    // Regexp to find variables declarations in source
+    const PromiseArray: Promise<undefined>[] = []
     const textLF = text.replace(/\r/g, "");
-    const regex = /^ +\d\d\s+(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*/gm
+    // Regexp to find variables declarations in source, using default declaration syntax
+    const defaultRegex = /^ +\d\d\s+(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*/gm
+    PromiseArray.push(...this.getDefaultLocalVariables(textLF, defaultRegex));
+    // Regexp to find method declaration
+    const inlineRegex = /^\s*method-id\..*/gim
+    PromiseArray.push(...this.getInlineMethodsLocalVariables(textLF, inlineRegex));
+    return PromiseArray;
+  }
+
+  /**
+   * Returns all variables and your uses in a promise array
+   *
+   * @param textLF
+   * @param regex
+   * @returns
+   */
+  private getInlineMethodsLocalVariables(textLF: string, regex: RegExp): Promise<undefined>[] {
+    const PromiseArray: Promise<undefined>[] = [];
+    const lines = textLF.split("\n");
+    // Scan for method-id occurrences
+    new Scan(textLF).scan(regex, (iterator: any) => {
+      const startLine = iterator.row;
+      const headerEndLine = this.findHeaderEndLine(startLine, lines);
+
+      const headerLines = lines.slice(startLine, headerEndLine + 1);
+      const headerText = headerLines.join(" ");
+
+      // Handle parameters
+      const paramsMatch = /\(([^)]*)\)/m.exec(headerText);
+      if (paramsMatch && paramsMatch[1].trim().length > 0) {
+        const paramsText = paramsMatch[1];
+        const paramsArray = paramsText.split(",");
+        for (const rawParam of paramsArray) {
+          this.handleMethodParameter(rawParam.trim(), startLine, headerLines, textLF, PromiseArray);
+        }
+      }
+
+      // Handle returning clause
+      const returningRegex = /returning\s+([\w-]+)/i;
+      const retMatch = returningRegex.exec(headerText);
+      if (retMatch) {
+        const retName = retMatch[1];
+        this.handleMethodReturning(retName, startLine, headerLines, textLF, PromiseArray);
+      }
+    });
+    return PromiseArray;
+  }
+
+  /**
+   * Find header end line
+   * Obs.: first line after start that contains a period terminating the declaration
+   *
+   * @param startLine
+   * @param lines
+   * @returns
+   */
+  private findHeaderEndLine(startLine: number, lines: string[]): number {
+    let headerEndLine = startLine;
+    for (let i = startLine; i < lines.length; i++) {
+      headerEndLine = i;
+      if (lines[i].trim().endsWith(".")) {
+        break;
+      }
+      // stop if reach end method (shouldn't happen before header ends)
+      if (/^\s*end\s+method\./i.test(lines[i])) {
+        break;
+      }
+    }
+    return headerEndLine;
+  }
+
+  /**
+   *  Process a single parameter declaration and push usage promise if local
+   *
+   * @param rawParam
+   * @param startLine
+   * @param headerLines
+   * @param textLF
+   * @param PromiseArray
+   */
+  private handleMethodParameter(rawParam: string, startLine: number, headerLines: string[], textLF: string, PromiseArray: Promise<undefined>[]) {
+    const param = rawParam;
+    const paramRegex = /([\w-]+)\s+as\s+([\w-]+)/i;
+    const m = paramRegex.exec(param);
+    if (!m) {
+      return;
+    }
+    const paramName = m[1];
+
+    // locate parameter occurrence in header lines
+    const located = this.locateInHeaderLines(headerLines, startLine, param.toLowerCase(), 0);
+    const variable = CobolVariable.dummyCobolVariable(paramName);
+    variable.setDeclarationPosition(new RechPosition(located.foundLine, located.foundColumn));
+
+    this.pushUsesPromiseIfLocal(variable, textLF, PromiseArray);
+  }
+
+  /**
+   * Process returning variable and push usage promise if local
+   *
+   * @param retName
+   * @param startLine
+   * @param headerLines
+   * @param textLF
+   * @param PromiseArray
+   */
+  private handleMethodReturning(retName: string, startLine: number, headerLines: string[], textLF: string, PromiseArray: Promise<undefined>[]) {
+    const search = ("returning " + retName).toLowerCase();
+    const located = this.locateInHeaderLines(headerLines, startLine, search, "returning ".length);
+    const variable = CobolVariable.dummyCobolVariable(retName);
+    variable.setDeclarationPosition(new RechPosition(located.foundLine, located.foundColumn));
+    this.pushUsesPromiseIfLocal(variable, textLF, PromiseArray);
+  }
+
+  /**
+   * locate a search string inside header lines and return a document position (line and column)
+   *
+   * @param headerLines
+   * @param startLine
+   * @param searchLower
+   * @param extraOffset
+   * @returns
+   */
+  private locateInHeaderLines(headerLines: string[], startLine: number, searchLower: string, extraOffset: number): { foundLine: number, foundColumn: number } {
+    for (let li = 0; li < headerLines.length; li++) {
+      const idx = headerLines[li].toLowerCase().indexOf(searchLower);
+      if (idx >= 0) {
+        const foundLine = startLine + li;
+        const leadingSpaces = headerLines[li].length - headerLines[li].trimStart().length;
+        const foundColumn = idx + leadingSpaces + (typeof extraOffset === "number" ? extraOffset : 0);
+        return { foundLine, foundColumn };
+      }
+    }
+    return { foundLine: startLine, foundColumn: 0 };
+  }
+
+  /**
+   * If variable is local scope, push a promise that resolves when its uses are gathered
+   *
+   * @param variable
+   * @param textLF
+   * @param PromiseArray
+   */
+  private pushUsesPromiseIfLocal(variable: CobolVariable, textLF: string, PromiseArray: Promise<undefined>[]) {
+    if (!VariableUtils.isLocalScope(variable)) {
+      return;
+    }
+    PromiseArray.push(
+      new Promise((resolve, reject) => {
+        this.getUsesFromVariable(textLF, variable).then((usesFromVariable) => {
+          Q.all(usesFromVariable).then(() => {
+            return resolve(undefined);
+          }).catch((e) => {
+            return reject(e);
+          });
+        }).catch((e) => {
+          return reject(e);
+        });
+      })
+    );
+  }
+
+  /**
+   * Returns all variables and your uses in a promise array
+   *
+   * @param textLF
+   * @param regex
+   * @returns
+   */
+  private getDefaultLocalVariables(textLF: string, regex: RegExp): Promise<undefined>[] {
+    const PromiseArray: Promise<undefined>[] = []
     new Scan(textLF).scan(regex, (iterator: any) => {
       PromiseArray.push(
         new Promise((resolve, reject) => {
@@ -52,7 +222,7 @@ export class Parser {
           if (buffer[iterator.row].trim().length == 0) {
             return resolve(undefined);
           }
-          const variable = CobolVariable.parseLines(iterator.row, buffer, {noChildren: true, noSection: true, ignoreMethodReturn: true, noComment: true});
+          const variable = CobolVariable.parseLines(iterator.row, buffer, { noChildren: true, noSection: true, ignoreMethodReturn: true, noComment: true });
           if (VariableUtils.isLocalScope(variable)) {
             this.getUsesFromVariable(textLF, variable).then((usesFromVariable) => {
               Q.all(usesFromVariable).then(() => {
@@ -82,7 +252,7 @@ export class Parser {
    */
   private getUsesFromVariable(text: string, variable: CobolVariable): Promise<Promise<undefined>[]> {
     return new Promise((resolve, reject) => {
-      const PromiseArray:Promise<undefined>[] = []
+      const PromiseArray: Promise<undefined>[] = []
       const variableDeclarationPosition = variable.getDeclarationPosition()
       if (!variableDeclarationPosition) {
         return reject();
@@ -134,7 +304,7 @@ export class Parser {
    *
    * @param activeEditor
    */
-   public findCopys(activeEditor: TextEditor): Promise<CobolCopy[]> {
+  public findCopys(activeEditor: TextEditor): Promise<CobolCopy[]> {
     return new Promise((resolve, reject) => {
       const text = activeEditor.document.getText();
       Q.allSettled(this.getAllCopys(text, activeEditor.document.fileName)).then((results) => {
@@ -157,8 +327,8 @@ export class Parser {
    * @param text
    * @param fileName
    */
-   private getAllCopys(text: string, fileName: string): Promise<CobolCopy>[] {
-    const PromiseArray:Promise<CobolCopy>[] = []
+  private getAllCopys(text: string, fileName: string): Promise<CobolCopy>[] {
+    const PromiseArray: Promise<CobolCopy>[] = []
     // Regexp to find variables declarations in source
     const regex = /^ +copy\s+(.+.cp.+)[.,]/gm
     new Scan(text).scan(regex, (iterator: any) => {
@@ -178,10 +348,10 @@ export class Parser {
 
 
 
-	/**
-	 * Finds documentation comment blocks with Rech documentation starting with "*> @"
-	 * @param activeEditor The active text editor containing the code document
-	 */
+  /**
+   * Finds documentation comment blocks with Rech documentation starting with "*> @"
+   * @param activeEditor The active text editor containing the code document
+   */
   public findRechDocComments(activeEditor: TextEditor): Promise<undefined> {
     return new Promise((resolve, _reject) => {
       const text = activeEditor.document.getText();
@@ -218,16 +388,18 @@ export class Parser {
     });
   }
 
-	/**
-	 * Applies decorations previously found
-	 * @param activeEditor The active text editor containing the code document
-	 */
+  /**
+   * Applies decorations previously found
+   * @param activeEditor The active text editor containing the code document
+   */
   public applyDecorations(activeEditor: TextEditor): void {
     const colors = new Configuration("rech.editor.cobol").get<any>("especialColors");
     // Create decorator to RechDoc type of documentation and aply on Ranges
     let color: DecorationRenderOptions;
-    color = {dark: { color: colors.rechdocToken, backgroundColor: "transparent" },
-            light: { color: this.invertHex(colors.rechdocToken), backgroundColor: "transparent" }};
+    color = {
+      dark: { color: colors.rechdocToken, backgroundColor: "transparent" },
+      light: { color: this.invertHex(colors.rechdocToken), backgroundColor: "transparent" }
+    };
     let decorator = window.createTextEditorDecorationType(color);
     activeEditor.setDecorations(decorator, this.rechDocTypeRangeList);
     if (Parser.lastRechDocTypeDecorator) {
@@ -236,8 +408,10 @@ export class Parser {
     Parser.lastRechDocTypeDecorator = decorator;
     this.rechDocTypeRangeList.length = 0;
     // Create decorator to RechDoc variable documentation and aply on Ranges
-    color = { dark: { color: colors.rechdocVariable, backgroundColor: "transparent" },
-             light: { color: this.invertHex(colors.rechdocVariable), backgroundColor: "transparent" }};
+    color = {
+      dark: { color: colors.rechdocVariable, backgroundColor: "transparent" },
+      light: { color: this.invertHex(colors.rechdocVariable), backgroundColor: "transparent" }
+    };
     decorator = window.createTextEditorDecorationType(color);
     activeEditor.setDecorations(decorator, this.rechDocVariableRangeList);
     if (Parser.lastRechDocVariableDecorator) {
@@ -246,8 +420,10 @@ export class Parser {
     Parser.lastRechDocVariableDecorator = decorator;
     this.rechDocVariableRangeList.length = 0;
     // Create decorator to local variable and aply on Ranges
-    color = { dark: {color: colors.localScopeVariable, backgroundColor: "transparent"},
-             light: {color: this.invertHex(colors.localScopeVariable), backgroundColor: "transparent"} };
+    color = {
+      dark: { color: colors.localScopeVariable, backgroundColor: "transparent" },
+      light: { color: this.invertHex(colors.localScopeVariable), backgroundColor: "transparent" }
+    };
     decorator = window.createTextEditorDecorationType(color);
     activeEditor.setDecorations(decorator, this.localVariableRangeList);
     if (Parser.lastLocalVariableDecorator) {

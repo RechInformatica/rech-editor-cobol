@@ -9,71 +9,88 @@
     "wks",
     "pco"
   ],
-  "name": "COBOL",
   "patterns": [
     {
-      "comment": "Reserved words which are not paragraph declaration",
-      "match": "\\s+(special-names\\.|repository\\.|file-control\\.)",
-      "name": "keyword.identifiers.cobol"
-    },
-    {
-      "comment": "Start and end of class scopes",
-      "match": "\\s+(factory\\.|object\\.|end\\s+factory|end\\s+object)",
-      "name": "keyword.identifiers.cobol"
-    },
-    {
-      "comment": "Color method name",
-      "match": "(\\s*method-id\\.\\s*)(\\w+\\.*)(.*)$",
-      "captures": {
+      "comment": "Color method name and parameters",
+      "begin": "(\\s*method-id\\.\\s*)([\\w-]+)",
+      "beginCaptures": {
         "1": {
           "name": "keyword.identifiers.cobol"
         },
         "2": {
           "name": "support.function.cobol"
-        },
-        "3": {
-          "name": "keyword.identifiers.cobol"
-        },
-        "4": {
-          "name": "keyword.identifiers.cobol"
         }
-      }
+      },
+      "end": "(\\.|$)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.terminator.cobol"
+        }
+      },
+      "name": "meta.method-id.cobol",
+      "patterns": [
+        {
+          "begin": "\\(",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.parameters.begin.cobol"
+            }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.parameters.end.cobol"
+            }
+          },
+          "name": "meta.parameters.method-id.cobol",
+          "patterns": [
+            {
+              "match": "([A-Za-z0-9\\-]+)(\\s+as\\s+)([A-Za-z0-9\\-]+)",
+              "captures": {
+                "1": {
+                  "name": "variable.parameter.cobol"
+                },
+                "2": {
+                  "name": "keyword.other.cobol"
+                },
+                "3": {
+                  "name": "variable.parameter.cobol"
+                }
+              }
+            },
+            {
+              "match": ",",
+              "name": "punctuation.separator.parameter.cobol"
+            }
+          ]
+        },
+        {
+          "match": "\\b(returning)\\b\\s+([A-Za-z0-9\\-]+)\\s+(as)\\s+([A-Za-z0-9\\-]+)",
+          "captures": {
+            "1": {
+              "name": "keyword.otherverbs.cobol"
+            },
+            "2": {
+              "name": "variable.parameter.cobol"
+            },
+            "3": {
+              "name": "keyword.other.cobol"
+            },
+            "4": {
+              "name": "variable.parameter.cobol"
+            }
+          }
+        },
+        {
+          "match": "\\b(public|protected|private|static|override)\\b",
+          "name": "storage.modifier.cobol"
+        }
+      ]
     },
     {
       "comment": "Color paragraph declaration",
       "match": "(^       (\\w|\\-|\\(([\\w!@#])+\\))+\\.$)",
       "name": "support.function.cobol"
-    },
-    {
-      "comment": "Color paragraph name on PERFORM THRU",
-      "match": "(?i:perform)\\s+([\\w]+\\-?[\\w\\-]*)\\s(?i:thru)\\s([\\w]+\\-?[\\w\\-]*)",
-      "captures": {
-        "0": {
-          "name": "keyword.verb.cobol"
-        },
-        "1": {
-          "name": "support.function.cobol"
-        },
-        "2": {
-          "name": "support.function.cobol"
-        }
-      }
-    },
-    {
-      "comment": "Color paragraph name on GO TO or PERFORM",
-      "match": "(?i:perform|go\\s+to)\\s+([\\w]+\\-?(\\w|\\-|\\(([a-z!@#])+\\))+)",
-      "captures": {
-        "0": {
-          "name": "keyword.verb.cobol"
-        },
-        "1": {
-          "name": "support.function.cobol"
-        }
-      }
-    },
-    {
-      "match": "(^[ \\*][ \\*][ \\*][ \\*][ \\*][ \\*])(\\*.*$)",
-      "name": "comment.line.cobol.fixed"
     },
     {
       "match": "(^[0-9\\s][0-9\\s][0-9\\s][0-9\\s][0-9\\s][0-9\\s])(\\*.*$)",
@@ -487,13 +504,16 @@
       "comment": "operator-id ssss "
     },
     {
-      "match": "(?i:self)(\\:\\:|\\:>)([0-9a-zA-Z_\\-\\.]*)(?=\\.$)",
+      "match": "(\\s+self)(\\:\\:|\\:>)([0-9a-zA-Z_\\-\\.]*)",
       "captures": {
         "1": {
-          "name": "punctuation.accessor.cobol.b3"
+          "name": "keyword.other.self.cobol"
         },
         "2": {
-          "name": "entity.name.function.b3"
+          "name": "punctuation.accessor.cobol"
+        },
+        "3": {
+          "name": "entity.name.function.cobol"
         }
       },
       "comment": " ::.. "
