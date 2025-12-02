@@ -31,7 +31,7 @@ export class MethodModifyersCompletion implements CompletionInterface {
             let text = "";
             let terminateText = "";
             if (match.length > 3) {
-                const finalDotPos = match[3].lastIndexOf(".");
+                const finalDotPos = match[3].includes(".") ? match[3].lastIndexOf(".") : match[3].length;
                 const modifyers = match[3].substring(0, finalDotPos).split(/[\s.]/g);
                 for (let index = 0; index < modifyers.length; index++) {
                     const modify = modifyers[index].replace(".", "");

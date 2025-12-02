@@ -68,7 +68,7 @@ export class MethodArgsCompletion implements CompletionInterface {
      */
     private getNewArgumentsText(match: RegExpExecArray): string {
         const newArgs = ", $1 as $2)";
-        return match[0].replace(/,.*\)/, newArgs);
+        return match[0].replace(/,\s+[as]*\s*\)/, newArgs);
     }
 
 }

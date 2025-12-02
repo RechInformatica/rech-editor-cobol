@@ -93,6 +93,37 @@
       "name": "support.function.cobol"
     },
     {
+      "comment": "Color paragraph name on PERFORM THRU",
+      "match": "(?i:perform)\\s+([\\w]+\\-?[\\w\\-]*)\\s(?i:thru)\\s([\\w]+\\-?[\\w\\-]*)",
+      "captures": {
+        "0": {
+          "name": "keyword.verb.cobol"
+        },
+        "1": {
+          "name": "support.function.cobol"
+        },
+        "2": {
+          "name": "support.function.cobol"
+        }
+      }
+    },
+    {
+      "comment": "Color paragraph name on GO TO or PERFORM",
+      "match": "(?i:perform|go\\s+to)\\s+([\\w]+\\-?(\\w|\\-|\\(([a-z!@#])+\\))+)",
+      "captures": {
+        "0": {
+          "name": "keyword.verb.cobol"
+        },
+        "1": {
+          "name": "support.function.cobol"
+        }
+      }
+    },
+    {
+      "match": "(^[ \\*][ \\*][ \\*][ \\*][ \\*][ \\*])(\\*.*$)",
+      "name": "comment.line.cobol.fixed"
+    },
+    {
       "match": "(^[0-9\\s][0-9\\s][0-9\\s][0-9\\s][0-9\\s][0-9\\s])(\\*.*$)",
       "captures": {
         "1": {
