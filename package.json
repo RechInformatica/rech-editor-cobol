@@ -524,7 +524,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"package": "@vscode/vsce package --out F:/DIV/VSCode/extension/market/rech-editor-cobol/rech-editor-cobol.vsix",
+		"package": "vsce package --out F:/DIV/VSCode/extension/market/rech-editor-cobol/rech-editor-cobol.vsix",
 		"compile": "npm run lint && tsc --build --force ./tsconfig.json",
 		"watch": "tsc -watch -p ./",
 		"test": "npm run compile && mocha -r ts-node/register ./src/test/**/*.test.ts",
@@ -547,7 +547,7 @@
 	"devDependencies": {
 		"@types/mocha": "^10.0.0",
 		"@types/node": "^16.18.0",
-		"@types/vscode": "^1.105.0",
+		"@types/vscode": "^1.47.0",
 		"@typescript-eslint/eslint-plugin": "^8.46.2",
 		"@typescript-eslint/parser": "^8.46.2",
 		"@vscode/test-electron": "^2.5.2",
