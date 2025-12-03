@@ -296,7 +296,7 @@ function configureExpandedSourceCache() {
  */
 export function sendExternalPreprocessExecution(uri: string, path: string) {
   const files = [uri, path];
-  return connection.sendRequest<string>("custom/runPreprocessor", [files]);
+  return connection.sendRequest<string>("custom/runPreprocessor", files);
 }
 
 /**
