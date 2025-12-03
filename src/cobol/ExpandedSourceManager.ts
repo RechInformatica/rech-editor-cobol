@@ -12,10 +12,10 @@ export class ExpandedSourceManager {
   private static maxCacheTime = 30000;
   /** Indicates whether to return the last cache when reaching the maximum time */
   private static returnsLastCache = false;
-  /** Expanded sources */
+/** Expanded sources */
   private static expandedSourceCache: Map<string, {time: number, expandedSource: string}> = new Map();
   /** callback to expander the source */
-  private static callbackSourceExpander: ((uri: string, cacheFileName: string) => Thenable<{unknown: any}>) | undefined;
+  private static callbackSourceExpander: ((uri: string, cacheFileName: string) => Thenable<unknown>) | undefined;
   /** callback to show SatusBar from SourceExpander */
   private static callbackShowStatusBarFromSourceExpander: ((file?: string) => void) | undefined;
   /** callback to hide SatusBar from SourceExpander */
@@ -105,7 +105,7 @@ export class ExpandedSourceManager {
    *
    * @param callbackSourceExpander
    */
-  public static setSourceExpander(callbackSourceExpander: (uri: string, cacheFileName: string) => Thenable<any>) {
+  public static setSourceExpander(callbackSourceExpander: (uri: string, cacheFileName: string) => Thenable<unknown>) {
     ExpandedSourceManager.callbackSourceExpander = callbackSourceExpander;
   }
 
