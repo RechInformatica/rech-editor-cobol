@@ -1,5 +1,5 @@
 import { commands, ExtensionContext, window } from 'vscode';
-import { LanguageClient, LanguageClientOptions, ResponseError, ServerOptions, TransportKind } from 'vscode-languageclient/node';
+import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { Editor } from '../editor/editor';
 import * as path from 'path';
 import { configuration } from '../helpers/configuration';
@@ -11,7 +11,6 @@ import { Log } from '../commons/Log';
 import { FoldStatusBar } from './fold/FoldStatusBar';
 import { ExpandedSourceStatusBar } from '../cobol/ExpandedSourceStatusBar';
 import * as dj from '../dependencieInjection';
-import { isArray } from 'util';
 import { CopyUsageLocator } from './completion/copy/CopyUsageLocator';
 import { ExpandedSourceCacheStatusBar } from '../cobol/ExpandedSourceCacheStatusBar';
 
@@ -57,7 +56,6 @@ export class Client {
 			clientOptions
 		);
 		// Start the client. This will also launch the server
-		const disposable = Client.client.start();
 		Client.client.start().then(() => {
 			Client.configureClientWhenReady();
 			// Injects the dependencies

@@ -790,7 +790,7 @@ export function sendExternalPreprocExpanderExecution(
   cacheFileName: string
 ) {
   const files = [uri, cacheFileName];
-  return connection.sendRequest("custom/runPreprocExpander", [files]);
+  return connection.sendRequest("custom/runPreprocExpander", files);
 }
 
 /**
