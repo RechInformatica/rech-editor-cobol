@@ -113,14 +113,14 @@ async function _activate(context: any) {
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos51', () => {
         new Editor().setColumn(COLUNA_VALUE - 1).then().catch();
     }));
-    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.showElementProperties', () => {
+    context.subscriptions.push(commands.registerCommand('rech.editor.cobol.showElementProperties', async () => {
         const editor = new Editor();
         const word = editor.getCurrentWord();
         const buffer = editor.getEditorBuffer();
         const uri = editor.getPath().fullPathVscode();
         const line = editor.getCurrentRow();
         const column = editor.getCurrentColumn();
-        new ElementsDisplayerFactory().show(word, buffer, uri, line, column);
+        await new ElementsDisplayerFactory().show(word, buffer, uri, line, column);
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cursorPos12', () => {
         new Editor().setColumn(AREA_B - 1).then().catch();

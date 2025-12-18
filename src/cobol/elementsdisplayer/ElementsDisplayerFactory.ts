@@ -1,6 +1,5 @@
 import { Client } from "../../lsp/client";
 import { RechPosition } from "../../commons/rechposition";
-import { File } from "../../commons/file";
 import { ParserCobol } from "../parsercobol";
 import { CobolVariable } from "../../lsp/completion/CobolVariable";
 import { VariableDisplayer } from "./variable/VariableDisplayer";
@@ -19,9 +18,9 @@ export class ElementsDisplayerFactory {
   /**
    * Create and show the elements in ElementsDisplayer
    */
-  public show(word: string, fullDocument: string, uri: string, currentLine: number, currentColumn: number) {
+  public async show(word: string, fullDocument: string, uri: string, currentLine: number, currentColumn: number) {
     window.showInformationMessage(`Analyzing element: ${word}...`);
-    Client.getDeclararion(word, currentLine, currentColumn, fullDocument, uri).then((position) => {
+    await Client.getDeclararion(word, currentLine, currentColumn, fullDocument, uri).then((position) => {
       this.bufferOfDeclaration(position, uri, fullDocument).then((buffer) => {
         const lines = BufferSplitter.split(buffer);
         this.buildDisplayer(position, lines, currentLine, uri);

@@ -113,7 +113,12 @@ ExpandedSourceManager.setStatusBarFromSourceExpander((file?: string) => {
 });
 
 /** When requesto to return the declaration position of term */
-connection.onRequest("custom/findDeclarationPosition", (word: string, referenceLine: number, referenceColumn: number, fullDocument: string, uri: string) => {
+connection.onRequest("custom/findDeclarationPosition", (params: any) => {
+  const word: string = params[0];
+  const referenceLine: number = params[1];
+  const referenceColumn: number = params[2];
+  const fullDocument: string = params[3];
+  const uri: string = params[4];
   return new Promise((resolve, reject) => {
     Log.get().info("Found declaration position request for " + word + " starting");
     callCobolDeclarationFinder(word, referenceLine, referenceColumn, fullDocument, uri).then((position) => {
