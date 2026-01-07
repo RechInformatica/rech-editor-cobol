@@ -423,12 +423,12 @@
 			{
 				"command": "rech.editor.cobol.tab",
 				"key": "tab",
-				"when": "editorLangId == COBOL && !inSnippetMode && !inlineSuggestionVisible"
+				"when": "editorLangId == COBOL && !inSnippetMode && !inlineSuggestionVisible && !inlineEditIsVisible"
 			},
 			{
 				"command": "rech.editor.cobol.revtab",
 				"key": "shift+tab",
-				"when": "editorLangId == COBOL && !inSnippetMode && !inlineSuggestionVisible"
+				"when": "editorLangId == COBOL && !inSnippetMode && !inlineSuggestionVisible && !inlineEditIsVisible"
 			},
 			{
 				"command": "rech.editor.cobol.findNextParagraph",
