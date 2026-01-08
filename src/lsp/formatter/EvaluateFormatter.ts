@@ -23,29 +23,13 @@ export class EvaluateFormatter implements FormatterInterface {
     public generate(line: number, _column: number, lines: string[]): TextEdit[] {
         const evaluateLineText = lines[line - 1];
         const evaluateStartColumn = CompletionUtils.countSpacesAtBeginning(evaluateLineText);
-        const edits: TextEdit[] = this.completeTextEditWithComma(line, lines);
+        const edits: TextEdit[] = [];
         edits.push(this.createWhenTextEdit(line, evaluateStartColumn + 3));
         const endEvaluateClause = "end-evaluate";
         if (FormatterUtils.isClauseMissing(line + 1, evaluateStartColumn, lines, endEvaluateClause, [endEvaluateClause, "when"])) {
             edits.push(this.createEndEvaluateTextEdit(line + 1, evaluateStartColumn + 1));
         }
         return edits;
-    }
-
-    /**
-     * Complete the TextEdit with comma if need
-     *
-     * @param line
-     * @param lines
-     */
-    private completeTextEditWithComma(line: number, lines: string[]): TextEdit[] {
-        const currentLineText = lines[line];
-        const previousLineText = lines[line - 1];
-        const previousLineNumber = line - 1;
-        if (previousLineText.endsWith(",")) {
-            return [];
-        }
-        return [new CommandSeparatorFormatter().createKeepDotOrCommaTextEdit(previousLineText, previousLineNumber, currentLineText)];
     }
 
     /**
