@@ -146,6 +146,7 @@ export class VariableCompletion implements CompletionInterface {
     private generateItemsFromCurrentBuffer(lines: string[], useCache: boolean): Map<string, CompletionItem> {
         const itemsMap: Map<string, CompletionItem> = new Map;
         const buffer = lines.join("\n");
+        // Scan for variable declarations
         new Scan(buffer).scan(/^ +\d\d +(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*/gim, (iterator: any) => {
             const variable = CobolVariable.parseLines(iterator.row, lines, {noChildren: true, noScope: true, noSection: true, ignoreMethodReturn: true});
             if (!this.shouldIgnoreVariable(variable)) {
@@ -154,6 +155,7 @@ export class VariableCompletion implements CompletionInterface {
             }
         });
 
+        // Scan for local variable declarations
         new Scan(buffer).reverseScan(/^ \s\s\s\s\s\s([\w-]+)\.(?:\s*\*>.*)?/gm, this.lineNumber, (iteratorLimit: any) => {
             const limitLine = iteratorLimit.row;
             iteratorLimit.stop();
@@ -168,7 +170,18 @@ export class VariableCompletion implements CompletionInterface {
                     itemsMap.set(variable.getName(), variableItem);
                 }
             });
+        });
 
+        // Scan for method parameters (only from the current method)
+        new Scan(buffer).reverseScan(/^\s+method-id\.\s+[\w-]+/gim, this.lineNumber, (iterator: any) => {
+            const methodParams = CobolVariable.parseFromMethod(lines[iterator.row], iterator.row);
+            for (const variable of methodParams) {
+                if (!itemsMap.has(variable.getName())) {
+                    const variableItem = this.createVariableCompletion(variable);
+                    itemsMap.set(variable.getName(), variableItem);
+                }
+            }
+            iterator.stop();
         });
 
         // Merge the cache with the local variables

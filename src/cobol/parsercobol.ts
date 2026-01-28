@@ -27,6 +27,9 @@ export class ParserCobol {
     if (this.equalsIgnoreReplacing(element, this.getCopyDeclaration(line))) {
       return true;
     }
+    if (this.getMethodParametersDeclaration(line).includes(element.toLowerCase())) {
+      return true;
+    }
     return false;
   }
 
@@ -154,6 +157,33 @@ export class ParserCobol {
       return undefined;
     }
     return match[1];
+  }
+
+  /**
+   * Returns an array of method parameter and returning names declared in the line
+   *
+   * Example: method-id. testeVar(myVar as JInt, myVar2 as JString) returning woutVar as JString public.
+   *
+   * @param line
+   */
+  public getMethodParametersDeclaration(line: string): string[] {
+    const params: string[] = [];
+    // Parse method parameters
+    const methodMatch = /method-id\.\s+[\w-]+\s*\(([^)]+)\)/i.exec(line);
+    if (methodMatch) {
+      const paramsString = methodMatch[1];
+      const paramRegex = /([\w-]+)\s+as\s+[\w-]+/gi;
+      let paramMatch;
+      while ((paramMatch = paramRegex.exec(paramsString)) !== null) {
+        params.push(paramMatch[1].toLowerCase());
+      }
+    }
+    // Parse returning variable
+    const returningMatch = /returning\s+([\w-]+)\s+as\s+[\w-]+/i.exec(line);
+    if (returningMatch) {
+      params.push(returningMatch[1].toLowerCase());
+    }
+    return params;
   }
 
   /**
