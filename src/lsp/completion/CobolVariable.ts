@@ -687,6 +687,73 @@ export class CobolVariable {
         return this.dummy ? true : false;
     }
 
+    /**
+     * Parses method parameters and returning from a method-id line and returns an array of CobolVariable
+     *
+     * Example: method-id. testeVar(myVar as JInt, myVar2 as JString) returning woutVar as JString public.
+     *
+     * @param line the method-id line text
+     * @param lineNumber the line number in the buffer
+     */
+    public static parseFromMethod(line: string, lineNumber: number): CobolVariable[] {
+        const variables: CobolVariable[] = [];
+        const startDeclarationColumn = line.length - line.trimStart().length;
+        const declarationPosition = new RechPosition(lineNumber, startDeclarationColumn);
+
+        // Parse method parameters
+        const methodMatch = /method-id\.\s+[\w-]+\s*\(([^)]+)\)/i.exec(line);
+        if (methodMatch) {
+            const paramsString = methodMatch[1];
+            const paramRegex = /([\w-]+)\s+as\s+([\w-]+)/gi;
+            let paramMatch;
+            while ((paramMatch = paramRegex.exec(paramsString)) !== null) {
+                const paramName = paramMatch[1];
+                const paramType = paramMatch[2];
+                const raw = `${paramName} as ${paramType}`;
+                const variable = new CobolVariable(
+                    0,
+                    paramName,
+                    paramType,
+                    Type.Typedef,
+                    false,
+                    false,
+                    raw,
+                    false,
+                    [paramType],
+                    [],
+                    declarationPosition,
+                    false
+                );
+                variables.push(variable);
+            }
+        }
+
+        // Parse returning variable
+        const returningMatch = /returning\s+([\w-]+)\s+as\s+([\w-]+)/i.exec(line);
+        if (returningMatch) {
+            const returnName = returningMatch[1];
+            const returnType = returningMatch[2];
+            const raw = `${returnName} as ${returnType}`;
+            const variable = new CobolVariable(
+                0,
+                returnName,
+                returnType,
+                Type.Typedef,
+                false,
+                false,
+                raw,
+                false,
+                [returnType],
+                [],
+                declarationPosition,
+                false
+            );
+            variables.push(variable);
+        }
+
+        return variables;
+    }
+
 }
 
 export enum Type {
