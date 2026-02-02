@@ -30,22 +30,50 @@ export class Indenta {
    * @param targetSourceCode target source code to be indented
    */
   public indentCommentary(targetSourceCode: string[], callback: (buffer: string[]) => any): void {
-    const buffer = this.buildBufferOfCommentary(targetSourceCode);
-    callback([this.buildCommentaryLines(buffer)]);
+    const commentaryType = this.detectCommentaryType(targetSourceCode);
+    const buffer = this.buildBufferOfCommentary(targetSourceCode, commentaryType);
+    callback([this.buildCommentaryLines(buffer, commentaryType)]);
+  }
+
+  /**
+   * Detects the type of commentary (*> or *>->)
+   *
+   * @param targetSourceCode
+   */
+  private detectCommentaryType(targetSourceCode: string[]): string {
+    for (const occurs of targetSourceCode) {
+      const lines = BufferSplitter.split(occurs);
+      for (const line of lines) {
+        const trimmedLine = line.trimStart();
+        if (trimmedLine.startsWith("*>->")) {
+          return "*>->";
+        } else if (trimmedLine.startsWith("*>")) {
+          return "*>";
+        }
+      }
+    }
+    return "*>->";
   }
 
   /**
    * Build buffer of commentary
    *
    * @param targetSourceCode
+   * @param commentaryType
    */
-  private buildBufferOfCommentary(targetSourceCode: string[]): string[] {
+  private buildBufferOfCommentary(targetSourceCode: string[], commentaryType: string): string[] {
     const buffer: string[] = [];
     targetSourceCode.forEach((occurs) => {
       BufferSplitter.split(occurs).forEach((line) => {
-        line = line.replace(/\*>->/g, "").replace(/\n/g, " ").trim();
-        if (line.startsWith("...")) {
-          line = line.replace("...", "");
+        // Remove the commentary prefix based on type
+        if (commentaryType === "*>->") {
+          line = line.replace(/\*>->/g, "").replace(/\n/g, " ").trim();
+        } else {
+          line = line.replace(/\n/g, " ").trim().replace(/\*>/g, "");
+        }
+        const tabChar = commentaryType === "*>->" ? "..." : "   ";
+        if (line.startsWith(tabChar)) {
+          line = line.substring(tabChar.length).trim();
           buffer[buffer.length - 1] += line + " ";
         } else {
           if (buffer.length > 0) {
@@ -64,12 +92,13 @@ export class Indenta {
    * Build Commentary lines
    *
    * @param buffer
+   * @param commentaryType
    */
-  private buildCommentaryLines(buffer: string[]): string {
+  private buildCommentaryLines(buffer: string[], commentaryType: string): string {
     let result = "";
     buffer.forEach((commentary) => {
       const words = commentary.trim().split(" ");
-      result += this.buildCommentBlock(words)
+      result += this.buildCommentBlock(words, commentaryType)
     })
     return result;
   }
@@ -78,17 +107,18 @@ export class Indenta {
    * Build comment block
    *
    * @param words
+   * @param commentaryType
    */
-  private buildCommentBlock(words: string[]): string {
+  private buildCommentBlock(words: string[], commentaryType: string): string {
     let result: string[] = [];
     for (let i = 0; i < words.length; i++) {
       if (result.length == 0) {
-        result = this.startCommentary(result, false);
+        result = this.startCommentary(result, false, commentaryType);
       }
       const word = words[i];
       if (result[result.length - 1].length + word.length > INDENT_LIMIT_COLUMN) {
         result[result.length - 1] = result[result.length - 1].trimEnd() + "\n"
-        result = this.startCommentary(result, true);
+        result = this.startCommentary(result, true, commentaryType);
       }
       result[result.length - 1] += word + " "
     }
@@ -100,17 +130,20 @@ export class Indenta {
    * Start new commentary line in the buffer
    *
    * @param buffer
+   * @param withReticences
+   * @param commentaryType
    */
-  private startCommentary(buffer: string[], withReticences: boolean): string[] {
-    const commentaryToken = "*>->";
+  private startCommentary(buffer: string[], withReticences: boolean, commentaryType: string): string[] {
     let commentary = ""
     for (let i = 1; i < START_COMMENTARY_COLUMN; i++) {
       commentary = commentary.concat(" ");
     }
-    commentary = commentary.concat(commentaryToken);
+    commentary = commentary.concat(commentaryType);
     commentary = commentary.concat(" ");
+    // Only add "..." for *>-> commentary type
     if (withReticences) {
-      commentary = commentary.concat("...");
+      const tabChar = commentaryType === "*>->" ? "..." : "   ";
+      commentary = commentary.concat(tabChar);
     }
     buffer.push(commentary);
     return buffer;
@@ -125,7 +158,8 @@ export class Indenta {
     let result = true;
     buffer.forEach((occurs) => {
       BufferSplitter.split(occurs).forEach((line) => {
-        if (!line.trimStart().startsWith("*>->") && line !== "") {
+        const trimmedLine = line.trimStart();
+        if (!trimmedLine.startsWith("*>->") && !trimmedLine.startsWith("*>") && line !== "") {
           result = false;
         }
       });
