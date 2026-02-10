@@ -12,12 +12,10 @@ import { FileUtils } from "../../commons/FileUtils";
  */
 export class PackageFinder {
 
-  private parser: ParserCobol;
   private joinedLines: string;
 
   constructor(private splittedLines: string[]) {
     this.joinedLines = this.splittedLines.join("\n");
-    this.parser = new ParserCobol();
   }
 
   public findClassFileUri(variable: CobolVariable, line: number, column: number, uri: string): Promise<string> {
@@ -25,7 +23,7 @@ export class PackageFinder {
       if (variable.isDummy()) {
         return resolve(MethodPathUtils.getFullPath(variable.getName(), uri));
       }
-      let clazz = this.parser.getDeclaracaoClasse(variable.getRaw());
+      let clazz = ParserCobol.getDeclaracaoClasse(variable.getRaw());
       let classPackage = "";
       if (clazz) {
         const raw = variable.getRaw();

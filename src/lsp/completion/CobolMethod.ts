@@ -74,7 +74,7 @@ export class CobolMethod {
 				classs = classMatch[1];
 			}
 			const line = buffer[lineNumber];
-			const methodName = new ParserCobol().getDeclaracaoMethod(line);
+			const methodName = ParserCobol.getDeclaracaoMethod(line);
 			if (!methodName) {
 				return reject();
 			}
@@ -221,7 +221,7 @@ export class CobolMethod {
 				if (buffer[i].match(/\s+[\w]+\s+section\s.*/) || buffer[i].match(/\s+[\w]+\s+division\s.*/)) {
 					break;
 				}
-				if (new ParserCobol().getDeclaracaoVariavel(buffer[i])) {
+				if (ParserCobol.getDeclaracaoVariavel(buffer[i])) {
 					params.push(CobolVariable.parseLines(i, buffer, { ignoreMethodReturn: true, noChildren: true, noScope: true, noSection: true }));
 				}
 			}

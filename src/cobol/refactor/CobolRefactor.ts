@@ -3,7 +3,7 @@ import { commands, Position, Uri } from "vscode";
 import { CompletionUtils } from "../../lsp/commons/CompletionUtils";
 import { COLUNA_C } from "../colunas";
 import { ParserCobol } from "../parsercobol";
-import { IndentUtils } from "../../indent/indentUtils";
+import { IndentCommands } from '../../indent/indentCommands';
 import { BufferSplitter } from "rech-ts-commons";
 
 /**
@@ -51,7 +51,7 @@ export class CobolRefactor {
         // Declares the paragraph itself with it's content and indents it
         //
         await this.editor.insertText(declaration);
-        await IndentUtils.indentWholeParagraph();
+        await IndentCommands.indentWholeParagraph();
         //
         // Fires rename action on the paragraph name of 'perform' command
         //
@@ -66,14 +66,14 @@ export class CobolRefactor {
     /**
      * Returns the column of first character given the specified lines.
      * This method ignores comment and empty lines.
-     * 
+     *
      * @param selectedLines lines to find the column of first command
      */
     private findFirstCommandColumn(selectedLines: string[]): number {
         let firstCharacterColumn = 0;
         for (let i = 0; i < selectedLines.length; i++) {
             const lineText = selectedLines[i];
-            if (!this.parser.isCommentOrEmptyLine(lineText)) {
+            if (!ParserCobol.isCommentOrEmptyLine(lineText)) {
                 firstCharacterColumn = CompletionUtils.getFirstCharacterColumn(lineText);
                 break;
             }
@@ -96,7 +96,7 @@ export class CobolRefactor {
         while (!foundLastLine && currentLineNumber >= 0) {
             currentLineNumber--;
             const lineText = this.editor.getLine(currentLineNumber);
-            if (!this.parser.isCommentOrEmptyLine(lineText)) {
+            if (!ParserCobol.isCommentOrEmptyLine(lineText)) {
                 foundLastLine = true;
             }
         }
@@ -105,7 +105,7 @@ export class CobolRefactor {
 
     /**
      * Builds the 'perform' command to the new paragraph
-     * 
+     *
      * @param name paragraph name
      * @param initialColumn initial column where 'perform' command will be inserted
      */
@@ -117,7 +117,7 @@ export class CobolRefactor {
 
     /**
      * Builds the paragraph declaration itself with it's content
-     * 
+     *
      * @param name paragraph name
      * @param sourceLines lines representing the paragraph body
      */

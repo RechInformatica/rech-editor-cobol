@@ -44,7 +44,7 @@ export class FormatterUtils {
      * @param identClauses clauses to be ignored
      */
     public static isClauseMissing(line: number, column: number, lines: string[], clause:string, identClauses: string[]): boolean {
-        const parser = new ParserCobol();
+        const parser = ParserCobol;
         const indentedClauses: string[] = [];
         identClauses.forEach(currentClause => {
             indentedClauses.push(CompletionUtils.fillSpacesBetween(0, column) + currentClause.toLowerCase());

@@ -163,9 +163,8 @@ export class MethodCompletionUtils {
         noScope: true,
         noSection: true
       };
-      const parser = new ParserCobol();
       const currentLine = buffer[line];
-      if (parser.getDeclaracaoMethod(currentLine)) {
+      if (ParserCobol.getDeclaracaoMethod(currentLine)) {
         CobolMethod.parseLines(line, column, buffer).then((method) => {
           if (method && method.getVariableReturn()) {
             return resolve(method.getVariableReturn()!);
@@ -173,7 +172,7 @@ export class MethodCompletionUtils {
             return reject();
           }
         }).catch((e) => reject(e));
-      } else if (parser.getDeclaracaoVariavel(currentLine)) {
+      } else if (ParserCobol.getDeclaracaoVariavel(currentLine)) {
         const variable = CobolVariable.parseLines(line, buffer, variableParsingParams);
         const reference = variable.getObjectReferenceOf();
         if (!reference) {
@@ -197,7 +196,7 @@ export class MethodCompletionUtils {
               }
             }).catch((e) => reject(e));
         }
-      } else if (parser.getDeclaracaoClasse(currentLine)) {
+      } else if (ParserCobol.getDeclaracaoClasse(currentLine)) {
         const variable = CobolVariable.parseLines(line, buffer, variableParsingParams);
         return resolve(variable);
       } else {

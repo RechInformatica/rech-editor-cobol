@@ -18,8 +18,7 @@ export class ParagraphCompletion implements CompletionInterface {
     private static cache: Map<string, CompletionItem> | undefined;
     /** File name of the source in cahce */
     private static cacheSourceFileName: string;
-    /** Cobol parser */
-    private parserCobol: ParserCobol;
+
     /** Cobol documentation parser */
     private cobolDocParser: CobolDocParser;
     /** Current lines in the source */
@@ -30,7 +29,6 @@ export class ParagraphCompletion implements CompletionInterface {
     private rangeColumn: number = 0;
 
     constructor(private cacheFileName: string, private uri: string, private sourceOfCompletions: () => Thenable<string>) {
-        this.parserCobol = new ParserCobol();
         this.cobolDocParser = new CobolDocParser();
     }
 
@@ -87,7 +85,7 @@ export class ParagraphCompletion implements CompletionInterface {
         const items: Map<string, CompletionItem> = new Map;
         const buffer = lines.join("\n");
         new Scan(buffer).scan(/^ \s\s\s\s\s\s([\w-]+)\.(?:\s*\*>.*)?/gm, (iterator: any) => {
-            const paragraphName = this.parserCobol.getDeclaracaoParagrafo(iterator.lineContent.toString());
+            const paragraphName = ParserCobol.getDeclaracaoParagrafo(iterator.lineContent.toString());
             if (paragraphName && paragraphName != "" && !this.isReservedWord(paragraphName)) {
                 const docArray = this.getElementDocumentation(lines, iterator.row);
                 const paragraphItem = this.createParagraphCompletion(paragraphName, docArray);

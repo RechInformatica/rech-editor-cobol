@@ -92,7 +92,7 @@ export class ElementsDisplayerFactory {
    * @param line
    */
   private isVariable(line: string) {
-    if (new ParserCobol().getDeclaracaoVariavelIgnoreReplace(line)) {
+    if (ParserCobol.getDeclaracaoVariavelIgnoreReplace(line)) {
       return true;
     }
     return false;
@@ -104,7 +104,7 @@ export class ElementsDisplayerFactory {
    * @param line
    */
   private isClass(line: string) {
-    if (new ParserCobol().getDeclaracaoClasse(line)) {
+    if (ParserCobol.getDeclaracaoClasse(line)) {
       return true;
     }
     return false;
@@ -116,7 +116,7 @@ export class ElementsDisplayerFactory {
    * @param line
    */
   private isCopy(line: string) {
-    if (new ParserCobol().getCopyDeclaration(line)) {
+    if (ParserCobol.getCopyDeclaration(line)) {
       return true;
     }
     return false;

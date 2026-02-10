@@ -296,4 +296,44 @@ export class CompletionUtils {
     return textEdit;
   }
 
+  /**
+   * Creates text edits to clean up multi-line method headers, removing all lines except the current one.
+   * Used for method completions where the header spans multiple lines.
+   *
+   * @param startLine the first line of the method header
+   * @param endLine the last line of the method header
+   * @param currentLine the line where the cursor is currently positioned
+   * @returns array of text edits to clean lines before and after the current line
+   */
+  public static createMultiLineHeaderCleanupEdits(startLine: number, endLine: number, currentLine: number): TextEdit[] {
+    const edits: TextEdit[] = [];
+
+    // If multi-line header, clean all lines except the current one
+    if (startLine !== endLine) {
+      // Clean lines before the current line
+      for (let i = startLine; i < currentLine; i++) {
+        edits.push({
+          range: {
+            start: { line: i, character: 0 },
+            end: { line: i + 1, character: 0 }
+          },
+          newText: ""
+        });
+      }
+
+      // Clean lines after the current line
+      for (let i = currentLine + 1; i <= endLine; i++) {
+        edits.push({
+          range: {
+            start: { line: i, character: 0 },
+            end: { line: i + 1, character: 0 }
+          },
+          newText: ""
+        });
+      }
+    }
+
+    return edits;
+  }
+
 }
