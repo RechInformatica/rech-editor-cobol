@@ -125,21 +125,10 @@ export class MethodModifyersCompletion implements CompletionInterface {
             // Build additional text edits to clean all lines except the current one
             const additionalEdits = CompletionUtils.createMultiLineHeaderCleanupEdits(startLine, endLine, line);
 
-            // If formatted into multiple lines, add them as additional edits
-            if (formattedLines.length > 1) {
-                // Add subsequent lines after the current line
-                for (let i = 1; i < formattedLines.length; i++) {
-                    additionalEdits.push({
-                        range: {
-                            start: { line: line + 1, character: 0 },
-                            end: { line: line + 1, character: 0 }
-                        },
-                        newText: formattedLines[i] + '\n'
-                    });
-                }
-            }
+            // Build the final text to insert (all lines joined with \n for snippet placeholders to work)
+            const finalNewText = formattedLines.join('\n');
 
-            // Use textEdit on current line and additionalTextEdits for other lines
+            // Use textEdit on current line with all formatted content
             resolve(
                 [{
                     label: 'Complete ' + this.modification.toUpperCase() + ' to method declaration',
@@ -155,7 +144,7 @@ export class MethodModifyersCompletion implements CompletionInterface {
                                 character: lines[line].length
                             }
                         },
-                        newText: formattedLines[0]
+                        newText: finalNewText
                     },
                     additionalTextEdits: additionalEdits,
                     insertTextFormat: InsertTextFormat.Snippet,

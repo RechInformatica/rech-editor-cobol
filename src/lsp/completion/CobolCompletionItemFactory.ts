@@ -232,8 +232,8 @@ export class CobolCompletionItemFactory {
 
           let result: CompletionItem[] = [];
           if (this.isMethodArgsDeclared(methodInfo.headerText)) {
-            if (this.isTypeSugestionForMethodArgsEnabled(methodInfo.headerText, this.column)) {
-              if (this.isMethodArgsVariableCamelCase(methodInfo.headerText, this.column)) {
+            if (this.isTypeSugestionForMethodArgsEnabled(methodInfo.headerText, methodInfo.cursorPositionColumn)) {
+              if (this.isMethodArgsVariableCamelCase(methodInfo.headerText, methodInfo.cursorPositionColumn)) {
                 result = result.concat(await this.generate(this.classCompletion));
               } else {
                 result = result.concat(await this.generate(this.typedefCompletion));
@@ -736,7 +736,7 @@ export class CobolCompletionItemFactory {
    */
   private isMethodArgsVariableCamelCase(line: string, column: number): boolean {
     const text = line.substring(0, column).toLowerCase();
-    const withoutLastWord = text.replace(/\s*\S+$/u, "");
+    const withoutLastWord = text.trimEnd().replace(/\s*\S+$/u, "");
     const matches = /.*[(\s](\S+)\s+as$/i.exec(withoutLastWord);
     return this.isCamelCase(matches);
   }

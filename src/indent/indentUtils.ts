@@ -77,7 +77,7 @@ export class IndentUtils {
                         const isLast = i === args.length - 1;
 
                         // Find "as" position in this argument
-                        const asMatch = /^([^a]+?)\s+(as)\s+/i.exec(arg);
+                        const asMatch = /^(\S+)\s+(as)\s+/i.exec(arg);
                         let argLine = '';
 
                         if (asMatch && firstAsPosition > 0) {
@@ -137,13 +137,13 @@ export class IndentUtils {
                     const returningClause = returningParts.join(' ');
 
                     // Try to add to current line
-                    const testLine = (currentLine ? currentLine + ' ' : originalIndentation) + returningClause;
+                    const testLine = (currentLine ? currentLine + ' ' : ' '.repeat(alignmentColumn)) + returningClause;
 
                     if (testLine.length <= MAX_COLUMN) {
                         if (currentLine) {
                             currentLine += ' ' + returningClause;
                         } else {
-                            currentLine = originalIndentation + returningClause;
+                            currentLine = ' '.repeat(alignmentColumn) + returningClause;
                         }
                     } else {
                         // Doesn't fit, break to new line
@@ -157,13 +157,13 @@ export class IndentUtils {
                     const modifier = tokens[i];
 
                     // Try to add to current line
-                    const testLine = (currentLine ? currentLine + ' ' : originalIndentation) + modifier;
+                    const testLine = (currentLine ? currentLine + ' ' : ' '.repeat(alignmentColumn)) + modifier;
 
                     if (testLine.length <= MAX_COLUMN) {
                         if (currentLine) {
                             currentLine += ' ' + modifier;
                         } else {
-                            currentLine = originalIndentation + modifier;
+                            currentLine = ' '.repeat(alignmentColumn) + modifier;
                         }
                     } else {
                         // Doesn't fit, break to new line

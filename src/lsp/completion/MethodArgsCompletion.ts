@@ -74,19 +74,8 @@ export class MethodArgsCompletion implements CompletionInterface {
             // Create additional edits to clean multi-line headers
             const additionalEdits = CompletionUtils.createMultiLineHeaderCleanupEdits(startLine, endLine, line);
 
-            // If formatted into multiple lines, add them as additional edits
-            if (formattedLines.length > 1) {
-                // Add subsequent lines after the current line
-                for (let i = 1; i < formattedLines.length; i++) {
-                    additionalEdits.push({
-                        range: {
-                            start: { line: line + 1, character: 0 },
-                            end: { line: line + 1, character: 0 }
-                        },
-                        newText: formattedLines[i] + '\n'
-                    });
-                }
-            }
+            // Build the final text to insert (all lines joined with \n for snippet placeholders to work)
+            const finalNewText = formattedLines.join('\n');
 
             resolve(
                 [{
@@ -103,7 +92,7 @@ export class MethodArgsCompletion implements CompletionInterface {
                                 character: lines[line].length
                             }
                         },
-                        newText: formattedLines[0]
+                        newText: finalNewText
                     },
                     additionalTextEdits: additionalEdits,
                     insertTextFormat: InsertTextFormat.Snippet,
