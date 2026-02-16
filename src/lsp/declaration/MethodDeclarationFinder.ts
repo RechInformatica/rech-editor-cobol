@@ -13,11 +13,9 @@ import { MethodCallUtils } from "./MethodCallUtils";
 export class MethodDeclarationFinder implements FindInterface {
 
   private cachedSources: Map<string, string>;
-  private parser: ParserCobol;
 
   constructor(private splittedLines: string[]) {
     this.cachedSources = new Map();
-    this.parser = new ParserCobol();
   }
 
   public isMethodCall(lineText: string, column: number): boolean {
@@ -181,7 +179,7 @@ export class MethodDeclarationFinder implements FindInterface {
     return new Promise((resolve, reject) => {
       let foundAny = false;
       new Scan(buffer).scan(new RegExp(`\\s${methodName}[\\.\\,\\s]`, "g"), (iterator: any) => {
-        if (this.parser.getDeclaracaoMethod(iterator.lineContent)) {
+        if (ParserCobol.getDeclaracaoMethod(iterator.lineContent)) {
           foundAny = true;
           CobolMethod.parseLines(iterator.row, iterator.column + 1, BufferSplitter.split(buffer))
             .then((method) => resolve(method))

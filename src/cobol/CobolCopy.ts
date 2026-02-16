@@ -43,7 +43,7 @@ export class CobolCopy {
      */
     public static parseLine(line: number, lines: string[], uri: string): Promise<CobolCopy | undefined> {
         return new Promise((resolve, reject) => {
-            const name = new ParserCobol().getCopyDeclaration(lines[line]);
+            const name = ParserCobol.getCopyDeclaration(lines[line]);
             if (!name) {
                 return reject();
             }

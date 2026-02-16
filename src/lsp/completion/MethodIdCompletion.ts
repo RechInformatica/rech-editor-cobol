@@ -11,7 +11,7 @@ export class MethodIdCompletion implements CompletionInterface {
 
     public generate(line: number, _column: number, _lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            const text = CompletionUtils.fillSpacesFromWordStart(METHOD_COLUMN_DECLARATION, 0, "") + "method-id. $1.";
+            const text = CompletionUtils.fillSpacesFromWordStart(METHOD_COLUMN_DECLARATION, 0, "") + "method-id. $1$0.";
             resolve(
                 [{
                     label: 'METHOD-ID declaration',

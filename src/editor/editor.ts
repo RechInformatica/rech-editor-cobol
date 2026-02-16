@@ -2,10 +2,12 @@ import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn, workspace } from 'vscode';
 import { RechPosition } from '../commons/rechposition';
 import { Indenta } from '../indent/indent';
+import { IndentUtils } from '../indent/indentUtils';
 import { GenericExecutor } from '../commons/genericexecutor';
 import * as path from 'path';
 import * as fs from 'fs';
 import { PositionFinder } from './PositionFinder';
+import { ParserCobol } from '../extension';
 
 /**
  * Class to manipulate vscode editor
@@ -718,6 +720,33 @@ export class Editor {
               this.adjustSelectionAndResolve(buffer, selectionBuffer, cursors, i, resolve);
             });
         });
+        continue;
+      }
+
+      // Check if cursor is in a method header
+      const methodInfo = ParserCobol.getMethodHeaderInfo(this.getEditorBuffer().split('\n'), selection.start.line, selection.start.character);
+      if (methodInfo) {
+        // Select the entire method header from startLine to endLine
+        const methodHeaderRange = new Range(
+          new Position(methodInfo.startLine, 0),
+          new Position(methodInfo.endLine + 1, 0)
+        );
+        this.setSelectionRange(methodHeaderRange);
+
+        // Get the header text and format it
+        const formattedLines = IndentUtils.formatMethodDeclarationLine(methodInfo.headerText);
+        const formattedText = formattedLines.join('\n');
+
+        // Replace the selected text with formatted version
+        await this.replaceSelection(formattedText + '\n');
+        newSelections.push(this.editor.selection);
+
+        // Adjust cursor positions for subsequent selections
+        const linesDiff = formattedLines.length - (methodInfo.endLine - methodInfo.startLine + 1);
+        for (let j = i; j < cursors.length; j++) {
+          cursors[j].line += linesDiff;
+        }
+
         continue;
       }
 

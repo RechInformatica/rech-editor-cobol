@@ -227,29 +227,35 @@ export class CobolCompletionItemFactory {
           result = result.concat(await this.generate(this.classCompletion))
           return result;
         }
-        case this.isMethodDeclaration(): {
+        case ParserCobol.isInMethodHeader(this.lines, this.line, this.column): {
+          const methodInfo = ParserCobol.getMethodHeaderInfo(this.lines, this.line, this.column)!;
+
           let result: CompletionItem[] = [];
-          if (!this.isMethodReturningDeclared()) {
-            result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.RETURNING)));
-          }
-          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.PUBLIC}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.PUBLIC)));
-          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.PROTECTED}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.PROTECTED)));
-          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.STATIC}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.STATIC)));
-          if (!this.lineText.toLocaleLowerCase().includes(` ${MethodModifier.OVERRIDE}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.OVERRIDE)));
-          if (this.isMethodArgsDeclared()) {
-            if (this.isTypeSugestionForMethodArgsEnabled()) {
-              if (this.isMethodArgsVariableCamelCase()) {
+          if (this.isMethodArgsDeclared(methodInfo.headerText)) {
+            if (this.isTypeSugestionForMethodArgsEnabled(methodInfo.headerText, methodInfo.cursorPositionColumn)) {
+              if (this.isMethodArgsVariableCamelCase(methodInfo.headerText, methodInfo.cursorPositionColumn)) {
                 result = result.concat(await this.generate(this.classCompletion));
               } else {
                 result = result.concat(await this.generate(this.typedefCompletion));
               }
             }
-            if (this.isNextAsArgsForMethod()) {
+            if (this.isNextAsArgsForMethod(methodInfo.headerText, methodInfo.cursorPositionColumn)) {
               result = result.concat(await this.generate(new MethodArgsCompletion(true)));
             }
           } else {
             result = result.concat(await this.generate(new MethodArgsCompletion(false)));
           }
+          // if previos char is space and it's not inside parameters parentheses, suggest method modifiers
+          if (methodInfo.headerText.substring(0, methodInfo.cursorPositionColumn).endsWith(" ") && !this.isCursorInsideParenthesesInMethodId(methodInfo.headerText, methodInfo.cursorPositionColumn)) {
+            if (!this.isMethodReturningDeclared(methodInfo.headerText)) {
+              result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.RETURNING)));
+            }
+            if (!methodInfo.headerText.toLocaleLowerCase().includes(` ${MethodModifier.PUBLIC}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.PUBLIC)));
+            if (!methodInfo.headerText.toLocaleLowerCase().includes(` ${MethodModifier.PROTECTED}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.PROTECTED)));
+            if (!methodInfo.headerText.toLocaleLowerCase().includes(` ${MethodModifier.STATIC}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.STATIC)));
+            if (!methodInfo.headerText.toLocaleLowerCase().includes(` ${MethodModifier.OVERRIDE}`)) result = result.concat(await this.generate(new MethodModifyersCompletion(MethodModifier.OVERRIDE)));
+          }
+
           return result;
         }
         case this.isInitialize(): {
@@ -468,7 +474,7 @@ export class CobolCompletionItemFactory {
    * Returns true if the current line is a variable declaration
    */
   private isVarDeclaration(): boolean {
-    if (new ParserCobol().getDeclaracaoVariavel(this.lineText)) {
+    if (ParserCobol.getDeclaracaoVariavel(this.lineText)) {
       return this.isVariableLevelAndNameDeclared();
     }
     return false;
@@ -592,40 +598,48 @@ export class CobolCompletionItemFactory {
   /**
    * Returns true if the current line is a method declaration with returning clause
   */
-  private isMethodReturningDeclared(): boolean {
-    return (/\s+(method-id.).*returning.*\./gim.exec(this.lineText) != null)
+  private isMethodReturningDeclared(line: string): boolean {
+    return (/(method-id.).*returning.*\./gim.exec(line) != null)
+  }
+
+  /**
+   * Returns true if the cursor is inside empty parentheses in method-id declaration
+   * e.g., method-id. methodName({cursor}) .
+  */
+  private isCursorInsideParenthesesInMethodId(line: string, column: number): boolean {
+    const openParenthesesIndex = line.lastIndexOf("(");
+    const closeParenthesesIndex = line.indexOf(")");
+
+    return openParenthesesIndex !== -1 && closeParenthesesIndex !== -1 && openParenthesesIndex <= column && closeParenthesesIndex >= column;
+
   }
 
   /**
    * Returns true if the current line is a method declaration with arguments
   */
-  private isMethodArgsDeclared(): boolean {
-    return (/\s+(method-id.).*\(.*as.*\).*\./gim.exec(this.lineText) != null)
+  private isMethodArgsDeclared(line: string): boolean {
+    return (/(method-id.).*\(.*as.*\).*\./gim.exec(line) != null)
   }
 
   /**
    * Returns true if the cursos is imediately after an 'as' clause in method args declaration
   */
-  private isTypeSugestionForMethodArgsEnabled(): boolean {
-    const text = this.lineText.substring(0, this.column).toLowerCase();
-    const withoutLastWord = text.replace(/\s*\S+$/u, "");
+  private isTypeSugestionForMethodArgsEnabled(line: string, column: number): boolean {
+    const textBeforeCursor = line.substring(0, column).toLowerCase();
+    const withoutLastWord = textBeforeCursor.replace(/\s*\w+$/u, "");
     return withoutLastWord.trimEnd().endsWith(" as");
   }
 
   /**
    * Returns true if the cursos is imediately after an 'as' clause in method args declaration
   */
-  private isNextAsArgsForMethod(): boolean {
-    const text = this.lineText.substring(0, this.column).toLowerCase();
-    const withoutLastWord = text.replace(/\s*\S+$/u, "");
-    return withoutLastWord.trimEnd().endsWith(",");
-  }
-
-  /**
-   * Returns true if the current line is a method declaration
-   */
-  private isMethodDeclaration(): boolean {
-    return this.lineText.toUpperCase().includes(" METHOD-ID. ");
+  private isNextAsArgsForMethod(line: string, column: number): boolean {
+    const textBeforeCursor = line.substring(0, column).toLowerCase();
+    const textAfterCursor = line.substring(column, line.length).toLowerCase();
+    const withoutLastWord = textBeforeCursor.replace(/\s*\w+$/u, "");
+    const afterComma = withoutLastWord.trimEnd().endsWith(",");
+    const beforeAs = textAfterCursor.startsWith(" as");
+    return afterComma && !beforeAs;
   }
 
   /**
@@ -720,9 +734,9 @@ export class CobolCompletionItemFactory {
   /**
    * Returns true if the current line is a variable from 'declare' clause in camel case
    */
-  private isMethodArgsVariableCamelCase(): boolean {
-    const text = this.lineText.substring(0, this.column).toLowerCase();
-    const withoutLastWord = text.replace(/\s*\S+$/u, "");
+  private isMethodArgsVariableCamelCase(line: string, column: number): boolean {
+    const text = line.substring(0, column).toLowerCase();
+    const withoutLastWord = text.trimEnd().replace(/\s*\S+$/u, "");
     const matches = /.*[(\s](\S+)\s+as$/i.exec(withoutLastWord);
     return this.isCamelCase(matches);
   }

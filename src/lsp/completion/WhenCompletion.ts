@@ -216,8 +216,7 @@ export class WhenCompletion implements CompletionInterface {
             const variableParts = new RegExp(regex, "gi").exec(variable);
             lineText = lineText.replace(replacingToken, variableParts![1]);
         }
-        const parser = new ParserCobol();
-        return parser.getDeclaracaoVariavel(lineText)!
+        return ParserCobol.getDeclaracaoVariavel(lineText)!
     }
 
     /**
@@ -246,7 +245,7 @@ export class WhenCompletion implements CompletionInterface {
                 const declarationLine = parentFileLines[position.line];
                 for (let i = position.line; i > 0; i--) {
                     const currentLine = parentFileLines[i];
-                    if (new ParserCobol().getDeclaracaoVariavelIgnoreReplace(currentLine)) {
+                    if (ParserCobol.getDeclaracaoVariavelIgnoreReplace(currentLine)) {
                         if (!this.is88LevelDeclaration(currentLine)) {
                             return resolve([new RechPosition(i, 0, position.file), parentFileLines, declarationLine]);
                         }

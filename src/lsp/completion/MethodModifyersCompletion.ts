@@ -1,6 +1,8 @@
 import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-languageserver";
 import { CompletionInterface } from "./CompletionInterface";
+import { ParserCobol } from "../../cobol/parsercobol";
 import { CompletionUtils } from "../commons/CompletionUtils";
+import { IndentUtils } from "../../indent/indentUtils";
 
 /**
  * Class to generate LSP Completion Items for Cobol methods modifications
@@ -21,53 +23,132 @@ export class MethodModifyersCompletion implements CompletionInterface {
         this.modification = modification;
     }
 
-    public generate(line: number, _column: number, lines: string[]): Promise<CompletionItem[]> {
+    public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
         return new Promise((resolve) => {
-            const match = /(\s*method-id\.\s+)([^\s.()]+)\.?(.*)\.?/.exec(lines[line].trimEnd())
-            if (match == null || match.length < 2) {
-                return [];
+            // Get method header info (handles multi-line headers)
+            const headerInfo = ParserCobol.getMethodHeaderInfo(lines, line, column);
+            if (!headerInfo) {
+                return resolve([]);
             }
-            const initialText = match[1] + match[2]
-            let text = "";
-            let terminateText = "";
-            if (match.length > 3) {
-                const finalDotPos = match[3].includes(".") ? match[3].lastIndexOf(".") : match[3].length;
-                const modifyers = match[3].substring(0, finalDotPos).split(/[\s.]/g);
-                for (let index = 0; index < modifyers.length; index++) {
-                    const modify = modifyers[index].replace(".", "");
-                    if (!this.modification.toUpperCase().startsWith(modify.trim().toUpperCase())) {
-                        if (this.verifyTerminatedModifier(modify)) {
-                            terminateText = terminateText + " " + modify;
-                        } else {
-                            if (modify.trim().toLowerCase() == MethodModifier.RETURNING) {
-                                let indexReturning = index;
-                                while (indexReturning < modifyers.length) {
-                                    const returningModifyer = modifyers[indexReturning].replace(".", "");
-                                    text = text + " " + returningModifyer;
-                                    indexReturning++;
-                                }
-                                break;
-                            }
-                            if (text.length > 0) {
-                                text = text + " " + modify;
-                            } else {
-                                text = modify;
-                            }
-                        }
+
+            const { startLine, endLine, headerText } = headerInfo;
+
+            // Extract the original indentation from the first line
+            const firstLineText = lines[startLine];
+            const indentation = firstLineText.match(/^\s*/)?.[0] || '';
+
+            // Use the concatenated header text from getMethodHeaderInfo
+            // Regex to capture (without indentation):
+            // Group 1: method-id. + name
+            // Group 2: parameters (including parentheses) - optional
+            // Group 3: rest (modifiers and returning)
+            const match = /^\s*(method-id\.\s+[\w-]+)(\([^)]*\))?\s*(.*)\.?\s*$/.exec(headerText);
+            if (match == null) {
+                return resolve([]);
+            }
+
+            const methodName = match[1]; // method-id. nextYear (without indentation)
+            const parameters = match[2] || ''; // (inYear as INumericVar) or empty
+            const restOfLine = match[3] || ''; // modifiers and returning
+
+            // Separate existing modifiers into two groups:
+            // 1. Returning clause (returning + variable + as + type)
+            // 2. Simple modifiers (static, protected, public, override) - come AFTER returning
+            const simpleModifiers: string[] = [];
+            let returningClause = "";
+
+            if (restOfLine.length > 0) {
+                // Remove trailing period if it exists
+                const cleanRest = restOfLine.replace(/\.\s*$/, '').trim();
+                const tokens = cleanRest.split(/\s+/);
+
+                let i = 0;
+                while (i < tokens.length) {
+                    const token = tokens[i].toLowerCase();
+
+                    // If it's the modifier we're adding, skip it (avoid duplication)
+                    if (this.modification.toLowerCase() === token) {
+                        i++;
+                        continue;
                     }
+
+                    // If found returning, capture the entire returning clause
+                    if (token === MethodModifier.RETURNING) {
+                        const returningParts = [tokens[i]]; // returning
+                        i++;
+                        // Capture: variable + as + type
+                        // Continue until finding a simple modifier or end of line
+                        while (i < tokens.length && !this.verifyTerminatedModifier(tokens[i].toLowerCase())) {
+                            returningParts.push(tokens[i]);
+                            i++;
+                        }
+                        returningClause = returningParts.join(" ");
+                        // Don't break here, continue processing modifiers that come after
+                        continue;
+                    }
+
+                    // If it's a simple modifier (comes after returning)
+                    if (this.verifyTerminatedModifier(token)) {
+                        simpleModifiers.push(token);
+                    }
+
+                    i++;
                 }
             }
-            text = text + " " + this.modification + (this.modification == MethodModifier.RETURNING ? " $1" : "") + terminateText + ".";
-            text = text.replace(/\s+/g, ' ');
-            text = initialText + text;
+
+            // Add the new modifier in the correct position
+            if (this.modification === MethodModifier.RETURNING) {
+                // If it's returning, overwrite the existing one
+                returningClause = this.modification + " $1 as $2";
+            } else if (!simpleModifiers.includes(this.modification.toLowerCase())) {
+                // If it's a simple modifier, add to the list (if not already there)
+                simpleModifiers.push(this.modification.toLowerCase());
+            }
+
+            // Build the final text in the correct order:
+            // method-id. name(params) [returning clause] [simple modifiers].
+            let finalText = methodName + parameters;
+            if (returningClause.length > 0) {
+                finalText += " " + returningClause;
+            }
+            if (simpleModifiers.length > 0) {
+                finalText += " " + simpleModifiers.join(" ");
+            }
+            finalText += ".";
+
+            // Normalize spaces and add original indentation
+            finalText = indentation + finalText.replace(/\s+/g, ' ').trim();
+
+            // Format the method declaration line (may break into multiple lines)
+            const formattedLines = IndentUtils.formatMethodDeclarationLine(finalText, indentation);
+
+            // Build additional text edits to clean all lines except the current one
+            const additionalEdits = CompletionUtils.createMultiLineHeaderCleanupEdits(startLine, endLine, line);
+
+            // Build the final text to insert (all lines joined with \n for snippet placeholders to work)
+            const finalNewText = formattedLines.join('\n');
+
+            // Use textEdit on current line with all formatted content
             resolve(
                 [{
                     label: 'Complete ' + this.modification.toUpperCase() + ' to method declaration',
                     detail: 'Generates the ' + this.modification.toUpperCase() + ' declaration to current method.',
-                    insertText: text,
+                    textEdit: {
+                        range: {
+                            start: {
+                                line: line,
+                                character: 0
+                            },
+                            end: {
+                                line: line,
+                                character: lines[line].length
+                            }
+                        },
+                        newText: finalNewText
+                    },
+                    additionalTextEdits: additionalEdits,
                     insertTextFormat: InsertTextFormat.Snippet,
-                    filterText: this.modification,
-                    additionalTextEdits: [CompletionUtils.createCleanLineTextEdit(line)],
+                    filterText: lines[line],
                     preselect: true,
                     kind: CompletionItemKind.Keyword
                 }]

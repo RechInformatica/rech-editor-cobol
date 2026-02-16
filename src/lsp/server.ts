@@ -88,7 +88,8 @@ connection.onInitialize(async (params: InitializeParams) => {
       documentHighlightProvider: true,
       // Tell the client that the server supports code completion
       completionProvider: {
-        resolveProvider: true
+        resolveProvider: true,
+        triggerCharacters: ['(', ',']
       },
       codeActionProvider: true,
       foldingRangeProvider: false,

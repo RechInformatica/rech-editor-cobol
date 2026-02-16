@@ -20,8 +20,6 @@ import { FinallyFormatter } from "./FinallyFormatter";
  * Class to format Cobol source code
  */
 export class CobolFormatter {
-  /** Cobol parser */
-  private parser: ParserCobol;
   /** Line where the cursor is positioned */
   private line: number;
   /** Column where the cursor is positioned */
@@ -37,7 +35,6 @@ export class CobolFormatter {
    * @param fullDocument full document information
    */
   constructor(line: number, column: number, fullDocument: TextDocument) {
-    this.parser = new ParserCobol();
     this.line = line;
     this.column = column;
     this.lines = BufferSplitter.split(fullDocument.getText());
@@ -78,7 +75,7 @@ export class CobolFormatter {
     if (this.isWhenCondition(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0)];
     }
-    if (this.parser.getDeclaracaoParagrafo(currentText)) {
+    if (ParserCobol.getDeclaracaoParagrafo(currentText)) {
       return [FormatterUtils.createIndentTextEdit(this.line, 0, 4)];
     }
     if (this.shouldKeepDotOrComma(this.lines[this.line], this.column)) {

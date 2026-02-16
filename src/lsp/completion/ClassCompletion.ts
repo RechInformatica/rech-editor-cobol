@@ -15,8 +15,6 @@ export class ClassCompletion implements CompletionInterface {
   private static cache: Map<string, CompletionItem> | undefined;
   /** File name of the source in cahce */
   private static cacheSourceFileName: string;
-  /** Cobol parser */
-  private parserCobol: ParserCobol;
   /** Cobol documentation parser */
   private cobolDocParser: CobolDocParser;
   /** Cache file name */
@@ -30,7 +28,6 @@ export class ClassCompletion implements CompletionInterface {
 
 
   constructor(cacheFileName: string, uri: string, specialClassPuller: () => Thenable<string>) {
-    this.parserCobol = new ParserCobol();
     this.cobolDocParser = new CobolDocParser();
     this.cacheFileName = cacheFileName;
     this.uri = uri;
@@ -123,7 +120,7 @@ export class ClassCompletion implements CompletionInterface {
     const items: Map<string, CompletionItem> = new Map;
     const buffer = lines.join("\n");
     new Scan(buffer).scan(/(?:^\s+CLASS\s+([\w]+)\s+AS.*|^\s+([\w]+)\s+IS\s+CLASS.*)/gim, (iterator: any) => {
-      if (this.parserCobol.getDeclaracaoClasse(iterator.lineContent.toString())) {
+      if (ParserCobol.getDeclaracaoClasse(iterator.lineContent.toString())) {
         const classs = CobolVariable.parseLines(iterator.row, lines, {ignoreMethodReturn: true, noChildren: true, noScope: true, noSection: true});
         const classItem = this.createClassCompletion(classs.getName(), classs.getComment(), undefined);
         items.set(classs.getName(), classItem);

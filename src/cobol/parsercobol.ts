@@ -8,26 +8,26 @@ export class ParserCobol {
    * @param element
    * @param line
    */
-  public isDeclaration(element: string, line: string): boolean {
-    if (this.isCommentOrEmptyLine(line)) {
+  public static isDeclaration(element: string, line: string): boolean {
+    if (ParserCobol.isCommentOrEmptyLine(line)) {
       return false;
     }
-    if (this.equalsIgnoreReplacing(element, this.getDeclaracaoParagrafo(line))) {
+    if (ParserCobol.equalsIgnoreReplacing(element, ParserCobol.getDeclaracaoParagrafo(line))) {
       return true;
     }
-    if (this.equalsIgnoreReplacing(element, this.getDeclaracaoVariavel(line))) {
+    if (ParserCobol.equalsIgnoreReplacing(element, ParserCobol.getDeclaracaoVariavel(line))) {
       return true;
     }
-    if (this.equalsIgnoreReplacing(element, this.getDeclaracaoSelect(line))) {
+    if (ParserCobol.equalsIgnoreReplacing(element, ParserCobol.getDeclaracaoSelect(line))) {
       return true;
     }
-    if (this.equalsIgnoreReplacing(element, this.getDeclaracaoClasse(line))) {
+    if (ParserCobol.equalsIgnoreReplacing(element, ParserCobol.getDeclaracaoClasse(line))) {
       return true;
     }
-    if (this.equalsIgnoreReplacing(element, this.getCopyDeclaration(line))) {
+    if (ParserCobol.equalsIgnoreReplacing(element, ParserCobol.getCopyDeclaration(line))) {
       return true;
     }
-    if (this.getMethodParametersDeclaration(line).includes(element.toLowerCase())) {
+    if (ParserCobol.getMethodParametersDeclaration(line).includes(element.toLowerCase())) {
       return true;
     }
     return false;
@@ -38,7 +38,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  public isCommentOrEmptyLine(line: string): boolean {
+  public static isCommentOrEmptyLine(line: string): boolean {
     const trimmed = line.trim();
     return trimmed.startsWith("*>") || trimmed === "";
   }
@@ -48,7 +48,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  public getDeclaracaoParagrafo(line: string): string | undefined {
+  public static getDeclaracaoParagrafo(line: string): string | undefined {
     let match = /^ \s\s\s\s\s\s([\w-]+)\.(\s*\*>.*)?/g.exec(line);
     if (match == null) {
       match = /\s+procedure\s+division.+/gi.exec(line);
@@ -66,7 +66,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  public getDeclaracaoVariavel(line: string): string | undefined {
+  public static getDeclaracaoVariavel(line: string): string | undefined {
     // variable
     let match = /^ +\d\d\s+(?:\([^\s]+\))?([\w-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
@@ -88,7 +88,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  public getDeclaracaoVariavelIgnoreReplace(line: string): string | undefined {
+  public static getDeclaracaoVariavelIgnoreReplace(line: string): string | undefined {
     // variable
     let match = /^ +\d\d\s+(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*/i.exec(line);
     if (match == null) {
@@ -106,7 +106,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  public getCopyDeclaration(line: string): string | undefined {
+  public static getCopyDeclaration(line: string): string | undefined {
     const match = /^ +COPY\s+([A-Za-z0-9-_]+).(?:CPY|CPB).*/i.exec(line);
     if (match == null) {
       return undefined;
@@ -119,7 +119,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  private getDeclaracaoSelect(line: string): string | undefined {
+  private static getDeclaracaoSelect(line: string): string | undefined {
     const match = /^ +SELECT ([\w-]+)\s+ASSIGN.*/i.exec(line);
     if (match == null) {
       return undefined;
@@ -132,7 +132,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  public getDeclaracaoClasse(line: string): string | undefined {
+  public static getDeclaracaoClasse(line: string): string | undefined {
     // IS Format
     let match = /^ +CLASS\s+([\w]+)\s+AS.*/i.exec(line);
     if (match == null) {
@@ -150,7 +150,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  public getDeclaracaoMethod(line: string): string | undefined {
+  public static getDeclaracaoMethod(line: string): string | undefined {
     // IS Format
     const match = /^ +METHOD-ID\.\s+([\w]+)[\s,.]+.*/i.exec(line);
     if (match == null) {
@@ -166,7 +166,7 @@ export class ParserCobol {
    *
    * @param line
    */
-  public getMethodParametersDeclaration(line: string): string[] {
+  public static getMethodParametersDeclaration(line: string): string[] {
     const params: string[] = [];
     // Parse method parameters
     const methodMatch = /method-id\.\s+[\w-]+\s*\(([^)]+)\)/i.exec(line);
@@ -187,12 +187,123 @@ export class ParserCobol {
   }
 
   /**
+   * Verifica se uma determinada linha está dentro do contexto de um header de método
+   * (entre method-id. e o próximo ponto final)
+   *
+   * @param lines Linhas do documento
+   * @param currentLine Linha atual a verificar (0-based)
+   * @returns Objeto com informações sobre o contexto do método ou null se não estiver em um header
+   */
+  public static isInMethodHeader(lines: string[], currentLine: number, column: number): boolean {
+    const context = this.getMethodHeaderInfo(lines, currentLine, column);
+    return context != null;
+  }
+
+  /**
+   * Verifica se uma determinada linha está dentro do contexto de um header de método
+   * (entre method-id. e o próximo ponto final)
+   *
+   * @param lines Linhas do documento
+   * @param currentLine Linha atual a verificar (0-based)
+   * @returns Objeto com informações sobre o contexto do método ou null se não estiver em um header
+   */
+  public static getMethodHeaderInfo(lines: string[], currentLine: number, column: number): {
+    startLine: number,
+    endLine: number,
+    headerText: string
+    cursorPositionLine: number
+    cursorPositionColumn: number
+  } | null {
+    if (currentLine < 0 || currentLine >= lines.length) {
+      return null;
+    }
+
+    // Armazena o texto da linha atual e a coluna do cursor
+    const currentLineText = lines[currentLine];
+
+    // Busca para trás até encontrar method-id. ou até sair do contexto válido
+    let methodIdLine = -1;
+    for (let i = currentLine; i >= 0; i--) {
+      const line = lines[i];
+
+      // Se encontrou o method-id, marca a linha
+      if (/method-id\./i.test(line)) {
+        methodIdLine = i;
+        break;
+      }
+
+      // Se encontrou fim de método, parágrafo, ou outra declaração, não está em header
+      if (/end\s+method/i.test(line) ||
+        /^[^\s].*\.\s*$/i.test(line) ||  // Linha começando na coluna A terminando com ponto
+        /^\s{7}[\w-]+\s+section\./i.test(line) ||
+        /^\s{7}[\w-]+\s+division\./i.test(line)) {
+        return null;
+      }
+    }
+
+    if (methodIdLine === -1) {
+      return null;
+    }
+
+    // A partir do method-id, busca para frente até encontrar o ponto final
+    let endLine = -1;
+    const headerLines: string[] = [];
+
+    for (let i = methodIdLine; i < lines.length; i++) {
+      const line = lines[i];
+      headerLines.push(line);
+
+      // Verifica se a linha termina com ponto (fim do header)
+      if (/\.\s*$/.test(line.trim())) {
+        endLine = i;
+        break;
+      }
+
+      // Se encontrou end method antes do ponto, algo está errado
+      if (/end\s+method/i.test(line)) {
+        return null;
+      }
+    }
+
+    if (endLine === -1) {
+      return null;
+    }
+
+    // Verifica se a linha atual está entre methodIdLine e endLine
+    if (currentLine >= methodIdLine && currentLine <= endLine) {
+      const headerText = headerLines.join("");
+
+      // Calcula a posição do cursor na string concatenada
+      // Procura pela linha atual (trimmed) na string final
+      const indexOfCurrentLine = headerText.indexOf(currentLineText);
+
+      let cursorPosition = 0;
+
+      if (indexOfCurrentLine == -1) {
+        cursorPosition = column;
+      } else {
+        cursorPosition = column + indexOfCurrentLine;
+      }
+
+      return {
+        startLine: methodIdLine,
+        endLine: endLine,
+        headerText: headerText,
+        cursorPositionLine: currentLine - methodIdLine,
+        cursorPositionColumn: cursorPosition
+      };
+    }
+
+    return null;
+  }
+
+  /**
    * Compare two terms ignoring replacing
    *
    * @param termo1
    * @param termo2
    */
-  private equalsIgnoreReplacing(termo1: string, termo2?: string): boolean {
+  private static equalsIgnoreReplacing(termo1: string, termo2?: string): boolean {
     if (termo1 == undefined || termo2 == undefined) {
       return false;
     }

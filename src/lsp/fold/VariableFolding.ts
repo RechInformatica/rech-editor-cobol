@@ -9,7 +9,7 @@ import { CobolVariable } from "../completion/CobolVariable";
 export class VariableFolding implements CobolFoldInterface {
 
     mustFolding(line: string): boolean {
-        const match = new ParserCobol().getDeclaracaoVariavelIgnoreReplace(line)
+        const match = ParserCobol.getDeclaracaoVariavelIgnoreReplace(line)
         if (match) {
             return true;
         }

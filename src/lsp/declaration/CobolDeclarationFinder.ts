@@ -13,11 +13,9 @@ const MIN_WORD_SIZE = 3;
  */
 export class CobolDeclarationFinder implements FindInterface {
 
-  private parser: ParserCobol;
   private splittedBuffer: string[];
 
   constructor(private text: string) {
-    this.parser = new ParserCobol();
     this.splittedBuffer = BufferSplitter.split(this.text);
   }
 
@@ -57,7 +55,7 @@ export class CobolDeclarationFinder implements FindInterface {
 
   private shouldIgnore(currentLine: string, params: FindParameters): boolean {
     const empty = params.term === "";
-    const smallWord = params.term.length < MIN_WORD_SIZE && this.parser.isCommentOrEmptyLine(currentLine);
+    const smallWord = params.term.length < MIN_WORD_SIZE && ParserCobol.isCommentOrEmptyLine(currentLine);
     return empty || smallWord;
   }
 
@@ -67,7 +65,7 @@ export class CobolDeclarationFinder implements FindInterface {
     const line = params.lineIndex;
     const termRegExp = new RegExp(term, 'gi');
     new Scan(this.text).reverseScan(termRegExp, line, (iterator: any) => {
-      if (this.parser.isDeclaration(term, iterator.lineContent)) {
+      if (ParserCobol.isDeclaration(term, iterator.lineContent)) {
         result = new RechPosition(iterator.row, iterator.column);
         iterator.stop();
       }

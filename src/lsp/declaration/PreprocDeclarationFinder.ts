@@ -11,10 +11,7 @@ import { FindInterface, FindParameters } from "./FindInterface";
  */
 export class PreprocDeclarationFinder implements FindInterface {
 
-  private parser: ParserCobol;
-
   constructor(private lines: string[]) {
-    this.parser = new ParserCobol();
   }
 
   findDeclaration(findParams: FindParameters): Promise<RechPosition> {
@@ -62,7 +59,7 @@ export class PreprocDeclarationFinder implements FindInterface {
       });
       referenceLineForScan = this.lines.length;
       new Scan(buffer).reverseScan(new RegExp(term, 'gi'), referenceLineForScan, (iterator: any) => {
-        if (this.parser.isDeclaration(term, iterator.lineContent)) {
+        if (ParserCobol.isDeclaration(term, iterator.lineContent)) {
           result = this.buildPositionFromPreprocessedLine(file, path, iterator.lineContent, iterator.column);
           iterator.stop();
         }
