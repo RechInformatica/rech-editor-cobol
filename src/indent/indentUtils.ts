@@ -180,11 +180,11 @@ export class IndentUtils {
 
         // Add final period and push last line
         if (currentLine) {
-            currentLine += '.';
+            currentLine = currentLine.trimEnd() + '.';
             lines.push(currentLine);
         } else if (lines.length > 0) {
             // Add period to last line if currentLine is empty
-            lines[lines.length - 1] += '.';
+            lines[lines.length - 1] = lines[lines.length - 1].trimEnd() + '.';
         }
 
         return lines.length > 0 ? lines : [line];
