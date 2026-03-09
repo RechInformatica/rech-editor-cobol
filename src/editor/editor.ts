@@ -723,9 +723,9 @@ export class Editor {
         continue;
       }
 
-      // Check if cursor is in a method header
+      // Check if cursor is in a method header, only use method header indentation when the entire header is selected, otherwise use normal indentation
       const methodInfo = ParserCobol.getMethodHeaderInfo(this.getEditorBuffer().split('\n'), selection.start.line, selection.start.character);
-      if (methodInfo) {
+      if (methodInfo && methodInfo.startLine <= selection.start.line && methodInfo.endLine >= selection.end.line) {
         // Select the entire method header from startLine to endLine
         const methodHeaderRange = new Range(
           new Position(methodInfo.startLine, 0),
