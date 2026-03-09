@@ -237,7 +237,8 @@
 			"cobolflow": [
 				{
 					"id": "cobolflowview",
-					"name": "COBOL Flow View"
+					"name": "COBOL Flow View",
+					"icon": "images/sourceflow/flow.svg"
 				}
 			]
 		},
@@ -245,6 +246,16 @@
 			"view/title": [
 				{
 					"command": "rech.editor.cobol.flowparser",
+					"when": "view == cobolflowview",
+					"group": "navigation"
+				},
+				{
+					"command": "rech.editor.cobol.toggleFlowOrder",
+					"when": "view == cobolflowview",
+					"group": "navigation"
+				},
+				{
+					"command": "rech.editor.cobol.toggleExpandCollapseFlow",
 					"when": "view == cobolflowview",
 					"group": "navigation"
 				}
@@ -281,6 +292,16 @@
 					"dark": "images/sourceflow/flow-parser-dark.svg",
 					"light": "images/sourceflow/flow-parser-light.svg"
 				}
+			},
+			{
+				"command": "rech.editor.cobol.toggleFlowOrder",
+				"title": "Rech COBOL: Toggle flow order (ascending/descending)",
+				"icon": "$(arrow-both)"
+			},
+			{
+				"command": "rech.editor.cobol.toggleExpandCollapseFlow",
+				"title": "Rech COBOL: Toggle expand/collapse all flow nodes",
+				"icon": "$(unfold)"
 			},
 			{
 				"command": "rech.editor.cobol.cobolInsertStartComment",

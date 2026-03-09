@@ -9,14 +9,16 @@ export class MethodNode implements NodeInterface {
 
     private rowNumber: number;
     private treeItem: TreeItem;
+    private parentsRows: number[] = [];
 
     /**
      * Creates an instance of MethodNode.
      * @param {number} rowNumber - The line number of the method in the COBOL source code.
      * @param {string} name - The name of the method.
      */
-    constructor(rowNumber: number, name: string) {
+    constructor(rowNumber: number, name: string, parentsRows: number[] = []) {
         this.rowNumber = rowNumber;
+        this.parentsRows = parentsRows;
         this.treeItem = new TreeItem(`${this.rowNumber + 1}:${name}`, TreeItemCollapsibleState.Collapsed);
         this.treeItem.iconPath = new ThemeIcon('symbol-method');
     }
@@ -26,7 +28,8 @@ export class MethodNode implements NodeInterface {
      * @returns {NodeInterface[]} An array of child nodes.
      */
     getChildren(): NodeInterface[] {
-        const children = CobolFlowAnalyzer.getInstance().getMethodCalls(this.rowNumber);
+        const parents = [...this.parentsRows, this.rowNumber];
+        const children = CobolFlowAnalyzer.getInstance().getMethodCalls(this.rowNumber, parents);
         return children;
     }
 

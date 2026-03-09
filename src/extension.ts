@@ -58,7 +58,9 @@ async function _activate(context: any) {
 
     // This register the provider from the Flow list view
     const flowProvider = new FlowProvider(context);
-    window.registerTreeDataProvider("cobolflowview", flowProvider);
+    const flowTreeView = window.createTreeView("cobolflowview", { treeDataProvider: flowProvider });
+    flowProvider.setTreeView(flowTreeView);
+    context.subscriptions.push(flowTreeView);
 
     context.subscriptions.push(
         languages.registerDocumentSymbolProvider(
