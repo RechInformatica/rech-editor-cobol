@@ -1,4 +1,4 @@
-import { TreeDataProvider, EventEmitter, TreeItem, TreeItemCollapsibleState, commands, workspace, TreeView } from "vscode";
+import { TreeDataProvider, EventEmitter, TreeItem, TreeItemCollapsibleState, commands, workspace, TreeView, window } from "vscode";
 import { Event } from "vscode-jsonrpc";
 import { Editor } from "../../../editor/editor";
 import { CobolFlowAnalyzer } from "../../utils/cobolFlowAnalyzer";
@@ -22,12 +22,18 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
     private _expandAll: boolean = false;
     private _treeView: TreeView<NodeInterface> | null = null;
     private parentMap: Map<NodeInterface, NodeInterface | undefined> = new Map();
+    private isCancelled: boolean = false;
+    private isAnalysisRunning: boolean = false;
+    private analysisStartTime: number = 0;
+    private context: any;
 
     /**
      * Initializes a new instance of the FlowProvider class and registers commands.
      * @param {any} context - The extension context provided by VS Code.
      */
     constructor(context: any) {
+        this.context = context;
+
         context.subscriptions.push(commands.registerCommand('rech.editor.cobol.flowparser', () => {
             this.refresh();
         }));
@@ -45,6 +51,40 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
         context.subscriptions.push(commands.registerCommand('rech.editor.cobol.toggleExpandCollapseFlow', () => {
             this.toggleExpandCollapse();
         }));
+
+        context.subscriptions.push(commands.registerCommand('rech.editor.cobol.cancelFlowAnalysis', () => {
+            this.cancelAnalysis();
+        }));
+    }
+
+    /**
+     * Cancels the current flow analysis.
+     */
+    private cancelAnalysis(): void {
+
+        if (!this.isAnalysisRunning && !this._expandAll) {
+            window.showInformationMessage('No COBOL flow analysis is currently running.');
+            return;
+        }
+
+        this.isCancelled = true;
+        this._expandAll = false;
+        this.setAnalysisRunning(false);
+
+        // Force refresh to stop any ongoing tree building
+        this.invertedTreeCache = null;
+        this.lastOriginalNode = null;
+
+        window.showInformationMessage('COBOL flow analysis cancelled.');
+    }
+
+    /**
+     * Sets the analysis running state and updates the context.
+     * @param {boolean} running - Whether analysis is running.
+     */
+    private setAnalysisRunning(running: boolean): void {
+        this.isAnalysisRunning = running;
+        commands.executeCommand('setContext', 'rech.editor.cobol.flowAnalysisRunning', running);
     }
 
     /**
@@ -69,6 +109,12 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      */
     getChildren(element?: NodeInterface | undefined): Thenable<NodeInterface[]> {
         return new Promise((resolve, _reject) => {
+            // Check for cancellation
+            if (this.isCancelled) {
+                resolve([]);
+                return;
+            }
+
             let childrens = [];
             if (element) {
                 childrens = element.getChildren();
@@ -97,20 +143,24 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
                     this.invertedTreeCache = null;
                     this.lastOriginalNode = null;
                 } else {
-                    console.log(`[FlowProvider] Descending mode - checking cache for node at line ${node.getRow() + 1}`);
 
                     // Check if we need to rebuild the inverted tree
                     const needsRebuild = !this.invertedTreeCache ||
                                         this.lastOriginalNode?.getRow() !== node.getRow();
 
                     if (needsRebuild) {
-                        console.log(`[FlowProvider] Cache miss or node changed - rebuilding inverted tree`);
                         // Build inverted tree only when needed
                         this.invertedTreeCache = this.buildInvertedTree(node);
+
+                        // Check if cancelled during build
+                        if (this.isCancelled) {
+                            resolve([]);
+                            return;
+                        }
+
                         this.lastOriginalNode = node;
                     } else {
                         const cacheSize = this.invertedTreeCache?.length || 0;
-                        console.log(`[FlowProvider] Using cached inverted tree with ${cacheSize} root(s)`);
                     }
 
                     childrens = this.invertedTreeCache || [];
@@ -139,7 +189,10 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      * Refreshes the tree view, causing it to be re-rendered.
      */
     public refresh(): void {
-        console.log(`[FlowProvider] Refresh called - clearing cache`);
+        // Reset cancellation state
+        this.isCancelled = false;
+        this.analysisStartTime = Date.now();
+
         // Clear cache on refresh to rebuild the tree
         this.invertedTreeCache = null;
         this.lastOriginalNode = null;
@@ -152,7 +205,6 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      */
     public toggleSortOrder(): void {
         const newMode = this.isAscending ? 'descending' : 'ascending';
-        console.log(`[FlowProvider] Toggle sort order - switching to ${newMode} mode`);
         this.isAscending = !this.isAscending;
         this.refresh();
     }
@@ -171,22 +223,18 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      * This ensures that both existing and new items in the tree are properly expanded.
      */
     public toggleExpandCollapse(): void {
-        console.log(`[FlowProvider] toggleExpandCollapse called. Current _expandAll: ${this._expandAll}`);
 
         if (this._expandAll) {
             // Currently expanded, so collapse all
-            console.log('[FlowProvider] Collapsing all nodes');
             this._expandAll = false;
             commands.executeCommand('workbench.actions.treeView.cobolflowview.collapseAll');
         } else {
             // Currently collapsed, so expand all
-            console.log('[FlowProvider] Expanding all nodes - setting _expandAll to true');
             this._expandAll = true;
             this._onDidChangeTreeData.fire(undefined);
 
             // After refresh, recursively expand all existing nodes
             if (this._treeView) {
-                console.log('[FlowProvider] TreeView available, scheduling recursive expansion in 100ms');
                 setTimeout(() => {
                     this.expandAllNodesRecursively();
                 }, 100); // Small delay to let the refresh complete
@@ -201,7 +249,6 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      * Gets root nodes and expands them and all their descendants.
      */
     private async expandAllNodesRecursively(): Promise<void> {
-        console.log('[FlowProvider] expandAllNodesRecursively started');
 
         if (!this._treeView) {
             console.warn('[FlowProvider] TreeView is null in expandAllNodesRecursively');
@@ -210,18 +257,23 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
 
         try {
             // Get root nodes
-            console.log('[FlowProvider] Getting root nodes...');
             const rootNodes = await this.getChildren();
-            console.log(`[FlowProvider] Found ${rootNodes.length} root node(s)`);
+
+            if (this.isCancelled) {
+                return;
+            }
+
 
             // Recursively expand each root node and its children
             for (let i = 0; i < rootNodes.length; i++) {
+                if (this.isCancelled) {
+                    return;
+                }
+
                 const node = rootNodes[i];
-                console.log(`[FlowProvider] Expanding root node ${i + 1}/${rootNodes.length} at line ${node.getRow() + 1}`);
                 await this.expandNodeAndChildren(node, 0);
             }
 
-            console.log('[FlowProvider] expandAllNodesRecursively completed');
         } catch (error) {
             console.error('[FlowProvider] Error expanding nodes:', error);
         }
@@ -233,6 +285,10 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      * @param {number} depth - Current depth in the tree (for logging).
      */
     private async expandNodeAndChildren(node: NodeInterface, depth: number): Promise<void> {
+        if (this.isCancelled) {
+            return;
+        }
+
         if (!this._treeView) {
             console.warn('[FlowProvider] TreeView is null in expandNodeAndChildren');
             return;
@@ -245,28 +301,35 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
             const nodeName = treeItem.label?.toString() || 'unknown';
             const collapsibleState = treeItem.collapsibleState;
 
-            console.log(`${indent}[FlowProvider] Node: ${nodeName}, collapsibleState: ${collapsibleState}`);
 
             // Only expand if the node is collapsible
             if (collapsibleState !== TreeItemCollapsibleState.None) {
-                console.log(`${indent}[FlowProvider] Revealing and expanding node: ${nodeName}`);
 
                 // Reveal with expand to force expansion
                 await this._treeView.reveal(node, { expand: true, select: false, focus: false });
 
-                console.log(`${indent}[FlowProvider] Node revealed, getting children...`);
+                if (this.isCancelled) {
+                    return;
+                }
+
 
                 // Get children and recursively expand them
                 const children = await this.getChildren(node);
-                console.log(`${indent}[FlowProvider] Found ${children.length} children for ${nodeName}`);
+
+                if (this.isCancelled) {
+                    return;
+                }
+
 
                 for (let i = 0; i < children.length; i++) {
+                    if (this.isCancelled) {
+                        return;
+                    }
+
                     const child = children[i];
-                    console.log(`${indent}[FlowProvider] Processing child ${i + 1}/${children.length}`);
                     await this.expandNodeAndChildren(child, depth + 1);
                 }
             } else {
-                console.log(`${indent}[FlowProvider] Node ${nodeName} is not collapsible (state: None)`);
             }
         } catch (error) {
             // Ignore errors from reveal (e.g., if node is not visible)
@@ -284,22 +347,38 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      * @returns {NodeInterface[]} Array of leaf nodes (now roots in inverted tree).
      */
     private buildInvertedTree(root: NodeInterface): NodeInterface[] {
-        console.log(`[FlowProvider] Starting buildInvertedTree for root at line ${root.getRow() + 1}`);
         const startTime = Date.now();
+        this.analysisStartTime = startTime;
+        this.setAnalysisRunning(true);
+        this.isCancelled = false;
 
         const showConditionalBlockCobolFlow = <string[]>workspace.getConfiguration("rech.editor.cobol").get("showConditionalBlockCobolFlow");
-        console.log(`[FlowProvider] Show conditionals: ${!!showConditionalBlockCobolFlow}`);
 
         // Step 1: Single traversal — collect all root-to-leaf paths
         const allPaths: NodeInterface[][] = [];
-        this.collectPaths(root, [], allPaths, showConditionalBlockCobolFlow);
-        console.log(`[FlowProvider] Collected ${allPaths.length} path(s)`);
+        try {
+            this.collectPaths(root, [], allPaths, showConditionalBlockCobolFlow);
+
+            if (this.isCancelled) {
+                this.setAnalysisRunning(false);
+                return [];
+            }
+
+        } catch (error) {
+            this.setAnalysisRunning(false);
+            throw error;
+        }
 
         // Step 2: Build inverted adjacency list and node reference map
         const nodeByRow = new Map<number, NodeInterface>();
         const invertedAdj = new Map<number, Set<number>>();
 
         for (const path of allPaths) {
+            if (this.isCancelled) {
+                this.setAnalysisRunning(false);
+                return [];
+            }
+
             for (const node of path) {
                 if (!nodeByRow.has(node.getRow())) {
                     nodeByRow.set(node.getRow(), node);
@@ -321,19 +400,29 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
         const invertedRoots: NodeInterface[] = [];
         const addedRootRows = new Set<number>();
 
-        for (const path of allPaths) {
-            const leafRow = path[path.length - 1].getRow();
-            if (!addedRootRows.has(leafRow)) {
-                addedRootRows.add(leafRow);
-                invertedRoots.push(this.buildInvertedSubtree(leafRow, nodeByRow, invertedAdj, new Set()));
+        try {
+            for (const path of allPaths) {
+                if (this.isCancelled) {
+                    this.setAnalysisRunning(false);
+                    return [];
+                }
+
+                const leafRow = path[path.length - 1].getRow();
+                if (!addedRootRows.has(leafRow)) {
+                    addedRootRows.add(leafRow);
+                    invertedRoots.push(this.buildInvertedSubtree(leafRow, nodeByRow, invertedAdj, new Set()));
+                }
             }
+
+            const endTime = Date.now();
+
+            this.setAnalysisRunning(false);
+            return invertedRoots;
+        } catch (error) {
+            console.error('[FlowProvider] Error during inverted tree building:', error);
+            this.setAnalysisRunning(false);
+            return [];
         }
-
-        const endTime = Date.now();
-        console.log(`[FlowProvider] Returning ${invertedRoots.length} inverted root(s) at lines: ${invertedRoots.map(r => r.getRow() + 1).join(', ')}`);
-        console.log(`[FlowProvider] buildInvertedTree completed in ${endTime - startTime}ms`);
-
-        return invertedRoots;
     }
 
     /**
@@ -381,6 +470,21 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
      * @param {string[] | undefined} showConditionals - Configuration for showing conditional blocks.
      */
     private collectPaths(node: NodeInterface, currentPath: NodeInterface[], allPaths: NodeInterface[][], showConditionals: string[] | undefined): void {
+        // Check for cancellation
+        if (this.isCancelled) {
+            throw new Error('Analysis cancelled');
+        }
+
+        // Check for timeout
+        const timeoutSeconds = workspace.getConfiguration("rech.editor.cobol").get<number>("flowAnalysisTimeout", 10);
+        if (timeoutSeconds > 0) {
+            const elapsedSeconds = (Date.now() - this.analysisStartTime) / 1000;
+            if (elapsedSeconds > timeoutSeconds) {
+                this.handleTimeout();
+                throw new Error('Analysis timeout');
+            }
+        }
+
         const path = [...currentPath, node];
 
         // LoopNodes are recursion markers — terminate the path at the previous node
@@ -403,6 +507,28 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
 
         for (const child of children) {
             this.collectPaths(child, path, allPaths, showConditionals);
+        }
+    }
+
+    /**
+     * Handles timeout by showing a dialog to the user.
+     */
+    private async handleTimeout(): Promise<void> {
+        this.setAnalysisRunning(false);
+
+        const choice = await window.showWarningMessage(
+            'COBOL flow analysis is taking longer than expected. The program might be very large or have complex recursion. Do you want to continue?',
+            { modal: true },
+            'Continue',
+            'Cancel'
+        );
+
+        if (choice === 'Continue') {
+            // Reset the start time to give more time
+            this.analysisStartTime = Date.now();
+            this.setAnalysisRunning(true);
+        } else {
+            this.isCancelled = true;
         }
     }
 

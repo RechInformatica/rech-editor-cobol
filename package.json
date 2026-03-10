@@ -97,6 +97,12 @@
 					"description": "Show conditional blocks on COBOL Flow Tree View.",
 					"default": true
 				},
+				"rech.editor.cobol.flowAnalysisTimeout": {
+					"type": "number",
+					"description": "Timeout in seconds for COBOL flow analysis. After this time, a warning will be shown. Set to 0 to disable timeout.",
+					"default": 10,
+					"minimum": 0
+				},
 				"rech.editor.cobol.formatter.location": {
 					"type": "string",
 					"description": "External COBOL formatter location."
@@ -258,6 +264,11 @@
 					"command": "rech.editor.cobol.toggleExpandCollapseFlow",
 					"when": "view == cobolflowview",
 					"group": "navigation"
+				},
+				{
+					"command": "rech.editor.cobol.cancelFlowAnalysis",
+					"when": "view == cobolflowview",
+					"group": "navigation"
 				}
 			],
 			"view/item/context": [
@@ -302,6 +313,11 @@
 				"command": "rech.editor.cobol.toggleExpandCollapseFlow",
 				"title": "Rech COBOL: Toggle expand/collapse all flow nodes",
 				"icon": "$(unfold)"
+			},
+			{
+				"command": "rech.editor.cobol.cancelFlowAnalysis",
+				"title": "Rech COBOL: Cancel flow analysis",
+				"icon": "$(close)"
 			},
 			{
 				"command": "rech.editor.cobol.cobolInsertStartComment",
