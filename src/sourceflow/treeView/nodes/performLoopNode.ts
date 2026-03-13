@@ -10,14 +10,16 @@ export class PerformLoopNode implements NodeInterface {
 
     private rowNumber: number;
     private treeItem: TreeItem;
+    private parentsRows: number[] = [];
 
     /**
      * Creates an instance of PerformLoopNode.
      * @param {number} rowNumber - The line number of the node in the COBOL source code.
      * @param {string} name - The name of the node.
      */
-    constructor(rowNumber: number, name: string) {
+    constructor(rowNumber: number, name: string, parentsRows: number[] = []) {
         this.rowNumber = rowNumber;
+        this.parentsRows = parentsRows;
         this.treeItem = new TreeItem(`${this.rowNumber + 1}:${name}`, TreeItemCollapsibleState.Collapsed);
         this.treeItem.iconPath = new ThemeIcon('sync');
     }
@@ -28,7 +30,8 @@ export class PerformLoopNode implements NodeInterface {
      */
     getChildren(): NodeInterface[] {
         const children = [];
-        children.push(CobolFlowAnalyzer.getInstance().getBlockAt(this.rowNumber - 1, NodeType.PerformLoop));
+        const parents = [...this.parentsRows, this.rowNumber];
+        children.push(CobolFlowAnalyzer.getInstance().getBlockAt(this.rowNumber - 1, NodeType.PerformLoop, parents));
         return children;
     }
 

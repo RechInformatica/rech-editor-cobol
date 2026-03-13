@@ -10,14 +10,16 @@ export class IfNode implements NodeInterface {
 
     private rowNumber: number;
     private treeItem: TreeItem;
+    private parentsRows: number[] = [];
 
     /**
      * Creates an instance of IfNode.
      * @param {number} rowNumber - The line number of the "IF" statement in the COBOL source code.
      * @param {string} name - The name of the "IF" statement.
      */
-    constructor(rowNumber: number, name: string) {
+    constructor(rowNumber: number, name: string, parentsRows: number[] = []) {
         this.rowNumber = rowNumber;
+        this.parentsRows = parentsRows;
         this.treeItem = new TreeItem(`${this.rowNumber + 1}:${name}`, TreeItemCollapsibleState.Collapsed);
         this.treeItem.iconPath = new ThemeIcon('symbol-boolean');
     }
@@ -28,7 +30,8 @@ export class IfNode implements NodeInterface {
      */
     getChildren(): NodeInterface[] {
         const children = [];
-        children.push(CobolFlowAnalyzer.getInstance().getBlockAt(this.rowNumber - 1, NodeType.If));
+        const parents = [...this.parentsRows, this.rowNumber];
+        children.push(CobolFlowAnalyzer.getInstance().getBlockAt(this.rowNumber - 1, NodeType.If, parents));
         return children;
     }
 

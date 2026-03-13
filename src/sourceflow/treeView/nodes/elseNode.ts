@@ -10,14 +10,16 @@ export class ElseNode implements NodeInterface {
 
     private rowNumber: number;
     private treeItem: TreeItem;
+    private parentsRows: number[] = [];
 
     /**
      * Creates an instance of ElseNode.
      * @param {number} rowNumber - The line number of the "ELSE" statement in the COBOL source code.
      * @param {string} name - The name of the "ELSE" statement.
      */
-    constructor(rowNumber: number, name: string) {
+    constructor(rowNumber: number, name: string, parentsRows: number[] = []) {
         this.rowNumber = rowNumber;
+        this.parentsRows = parentsRows;
         this.treeItem = new TreeItem(`${this.rowNumber + 1}:${name}`, TreeItemCollapsibleState.Collapsed);
         this.treeItem.iconPath = new ThemeIcon('symbol-boolean');
     }
@@ -28,7 +30,8 @@ export class ElseNode implements NodeInterface {
      */
     getChildren(): NodeInterface[] {
         const children = [];
-        children.push(CobolFlowAnalyzer.getInstance().getBlockAt(this.rowNumber - 1, NodeType.Else));
+        const parents = [...this.parentsRows, this.rowNumber];
+        children.push(CobolFlowAnalyzer.getInstance().getBlockAt(this.rowNumber - 1, NodeType.Else, parents));
         return children;
     }
 
