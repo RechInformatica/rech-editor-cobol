@@ -1,5 +1,18 @@
 # Documentação do Pacote `sourceflow`
 
+## Regras de Manutenção do Pacote
+
+Quando realizar alterações no pacote sourceflow, siga estas diretrizes:
+
+1. Preserve o comportamento de detecção de recursão via LoopNode.
+2. Ao alterar a construção da árvore invertida no FlowProvider, valide cenários com programas grandes.
+3. Mantenha consistência entre comandos registrados no FlowProvider e contribuições no package.json.
+4. Se alterar controle de execução longa, mantenha compatibilidade com:
+    - configuração rech.editor.cobol.flowAnalysisTimeout
+    - comando rech.editor.cobol.cancelFlowAnalysis
+    - botão de cancelamento na view cobolflowview
+5. Evite mudanças que removam a navegação por linha (gotoFlowLine) ou quebra de expansão/colapso global.
+
 ## Índice
 
 1. [Visão Geral](#visão-geral)
@@ -23,6 +36,7 @@
    - [FlowProvider (TreeDataProvider)](#flowprovider-treedataprovider)
 7. [Fluxo de Execução Completo](#fluxo-de-execução-completo)
 8. [Funcionalidades Especiais](#funcionalidades-especiais)
+    - [Botões da Tree View](#botões-da-tree-view)
    - [Detecção de Loops (parentsRows)](#detecção-de-loops-parentsrows)
    - [Árvore Invertida (Modo Descendente)](#árvore-invertida-modo-descendente)
    - [Filtro de Blocos Condicionais](#filtro-de-blocos-condicionais)
@@ -491,6 +505,24 @@ Cursor no comando "move x to y" (linha 50)
 ---
 
 ## Funcionalidades Especiais
+
+### Botões da Tree View
+
+Os principais controles da view `cobolflowview` são:
+
+1. **Inverter fluxo** (`rech.editor.cobol.toggleFlowOrder`)
+    - Alterna entre modo ascendente e descendente.
+    - Em modo descendente, o `FlowProvider` utiliza a árvore invertida.
+
+2. **Expandir/Contrair** (`rech.editor.cobol.toggleExpandCollapseFlow`)
+    - Botão único que alterna entre expandir todos os nodos e colapsar todos os nodos.
+    - Usa o estado interno `_expandAll` para decidir a ação.
+
+3. **Cancelar processamento** (`rech.editor.cobol.cancelFlowAnalysis`)
+    - Interrompe análises longas em execução.
+    - Sinaliza cancelamento via `isCancelled`, encerra estado de execução e evita continuação de expansão/construção da árvore.
+
+Observação: os comandos acima devem permanecer sincronizados entre registro em `FlowProvider` e contribuições de menu/comando no `package.json`.
 
 ### Detecção de Loops (parentsRows)
 
