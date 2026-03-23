@@ -8,7 +8,7 @@ export default interface NodeInterface {
   /**
    * Returns the children
    */
-  getChildren(): NodeInterface[];
+  getChildren(parentsRows?: number[]): NodeInterface[];
 
   /**
    * Returns this tree item

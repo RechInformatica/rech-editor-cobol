@@ -10,16 +10,14 @@ export class WhenNode implements NodeInterface {
 
     private rowNumber: number;
     private treeItem: TreeItem;
-    private parentsRows: number[] = [];
 
     /**
      * Creates an instance of WhenNode.
      * @param {number} rowNumber - The line number of the node in the COBOL source code.
      * @param {string} name - The name of the node.
      */
-    constructor(rowNumber: number, name: string, parentsRows: number[] = []) {
+    constructor(rowNumber: number, name: string) {
         this.rowNumber = rowNumber;
-        this.parentsRows = parentsRows;
         this.treeItem = new TreeItem(`${this.rowNumber + 1}:${name}`, TreeItemCollapsibleState.Collapsed);
         this.treeItem.iconPath = new ThemeIcon('question');
     }
@@ -28,9 +26,9 @@ export class WhenNode implements NodeInterface {
      * Retrieves the child nodes of this "When" node.
      * @returns {NodeInterface[]} An array of child nodes.
      */
-    getChildren(): NodeInterface[] {
+    getChildren(parentsRows: number[] = []): NodeInterface[] {
         const children = [];
-        const parents = [...this.parentsRows, this.rowNumber];
+        const parents = [...parentsRows, this.rowNumber];
         children.push(CobolFlowAnalyzer.getInstance().getBlockAt(this.rowNumber - 1, NodeType.When, parents));
         return children;
     }
