@@ -720,7 +720,7 @@
       "name": "constant.numeric.integer"
     },
     {
-      "match": "(?i:([a-z0-9]|\\(([a-z!@#])+\\))([a-z\\-0-9]|\\(([a-z!@#])+\\))+)",
+      "match": "(?i:[a-z0-9][a-z\\-0-9]*)",
       "name": "variable.cobol"
     }
   ],
