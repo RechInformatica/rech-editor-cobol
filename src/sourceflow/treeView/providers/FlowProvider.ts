@@ -329,7 +329,6 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
                     const child = children[i];
                     await this.expandNodeAndChildren(child, depth + 1);
                 }
-            } else {
             }
         } catch (error) {
             // Ignore errors from reveal (e.g., if node is not visible)
