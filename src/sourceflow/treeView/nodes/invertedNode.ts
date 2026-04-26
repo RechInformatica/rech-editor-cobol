@@ -9,15 +9,13 @@ export class InvertedNode implements NodeInterface {
 
     private readonly node: NodeInterface;
     private readonly invertedChildren: NodeInterface[] = [];
-    private parentsRows: number[] = [];
 
     /**
      * Creates an instance of InvertedNode.
      * @param {NodeInterface} node - The original node being wrapped.
      */
-    constructor(node: NodeInterface, parentsRows: number[] = []) {
+    constructor(node: NodeInterface) {
         this.node = node;
-        this.parentsRows = parentsRows;
     }
 
     /**
@@ -32,7 +30,7 @@ export class InvertedNode implements NodeInterface {
      * Retrieves the child nodes of this inverted node.
      * @returns {NodeInterface[]} An array of inverted child nodes.
      */
-    getChildren(): NodeInterface[] {
+    getChildren(_parentsRows: number[] = []): NodeInterface[] {
         return this.invertedChildren;
     }
 

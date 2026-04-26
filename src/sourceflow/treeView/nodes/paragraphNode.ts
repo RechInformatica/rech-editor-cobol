@@ -9,16 +9,14 @@ export class ParagraphNode implements NodeInterface {
 
     private rowNumber: number;
     private treeItem: TreeItem;
-    private parentsRows: number[] = [];
 
     /**
      * Creates an instance of ParagraphNode.
      * @param {number} rowNumber - The line number of the paragraph in the COBOL source code.
      * @param {string} name - The name of the paragraph.
      */
-    constructor(rowNumber: number, name: string, parentsRows: number[] = []) {
+    constructor(rowNumber: number, name: string) {
         this.rowNumber = rowNumber;
-        this.parentsRows = parentsRows;
         this.treeItem = new TreeItem(`${this.rowNumber + 1}:${name}`, TreeItemCollapsibleState.Collapsed);
         this.treeItem.iconPath = new ThemeIcon('symbol-class');
     }
@@ -27,8 +25,8 @@ export class ParagraphNode implements NodeInterface {
      * Retrieves the child nodes of this paragraph node.
      * @returns {NodeInterface[]} An array of child nodes.
      */
-    getChildren(): NodeInterface[] {
-        const parents = [...this.parentsRows, this.rowNumber];
+    getChildren(parentsRows: number[] = []): NodeInterface[] {
+        const parents = [...parentsRows, this.rowNumber];
         const children = CobolFlowAnalyzer.getInstance().getPerformGotoParagraphList(this.rowNumber, parents);
         const parentMethod = CobolFlowAnalyzer.getInstance().getNextMethodDeclaration(this.rowNumber - 1, parents);
         if (parentMethod) {

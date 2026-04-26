@@ -14,7 +14,7 @@ export class LoopNode implements NodeInterface {
         this.treeItem.iconPath = new ThemeIcon('sync');
     }
 
-    getChildren(): NodeInterface[] {
+    getChildren(_parentsRows: number[] = []): NodeInterface[] {
         return [];
     }
 

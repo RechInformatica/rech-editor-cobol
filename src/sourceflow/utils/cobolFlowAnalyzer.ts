@@ -18,6 +18,7 @@ export class CobolFlowAnalyzer {
 
     private static instance: CobolFlowAnalyzer;
     private buffer: string[];
+    private nodeCache: Map<number, NodeInterface>;
 
     /**
     * Returns the singleton instance of the CobolFlowAnalyzer class.
@@ -33,6 +34,25 @@ export class CobolFlowAnalyzer {
 
     constructor() {
         this.buffer = [];
+        this.nodeCache = new Map();
+    }
+
+    /**
+     * Builds a loop label including the duplicated item name when possible.
+     * @param {string} prefix - Base label for the loop.
+     * @param {number} rowNumber - Row where the duplicated item was found.
+     * @returns {string} Formatted label for loop node.
+     */
+    private getLoopLabel(prefix: string, rowNumber: number): string {
+        const line = this.buffer[rowNumber] || '';
+        const nodeInfo = CobolFlowAnalyzer.getInfoFromLine(line);
+        const duplicatedName = nodeInfo.nodeName?.trim();
+
+        if (!duplicatedName) {
+            return prefix;
+        }
+
+        return `${prefix} (${duplicatedName})`;
     }
 
     /**
@@ -44,12 +64,19 @@ export class CobolFlowAnalyzer {
     }
 
     /**
+     * Clears the node cache.
+     */
+    public clearCache() {
+        this.nodeCache.clear();
+    }
+
+    /**
      * Retrieves a a node representing command for perform thru call for the given row.
      * @param {number} currentRow - The current row in the buffer.
      * @returns {NodeInterface} A node representing paragraph perform thru statement.
      */
-    public getPerformThruParents(currentRow: number, parentsRows: number[] = []): NodeInterface | undefined {
-        const performThruDeclarationList: Array<{row: number, begin: string, end: string}> = [];
+    public getPerformThruParents(currentRow: number, _parentsRows: number[] = []): NodeInterface | undefined {
+        const performThruDeclarationList: Array<{ row: number, begin: string, end: string }> = [];
         const regex = new RegExp(`\\s+perform\\s+([\\w-]+)\\s+thru\\s+([\\w-]+).*$`, 'gm');
         new Scan(this.buffer.join('\n')).scan(regex, (iterator: any) => {
             const beginParagraph = iterator.match[1];
@@ -87,7 +114,7 @@ export class CobolFlowAnalyzer {
 
         for (const [declarationRow, paragraphInsideRows] of performInsideThruList.entries()) {
             if (paragraphInsideRows.includes(currentRow)) {
-                return new CommandNode(declarationRow, this.buffer[declarationRow].trim(), parentsRows);
+                return new CommandNode(declarationRow, this.buffer[declarationRow].trim());
             }
         }
         return undefined;
@@ -121,7 +148,7 @@ export class CobolFlowAnalyzer {
         const regex = new RegExp(`^\\s*(perform|go to)\\s+${paragraphName}[.,\\s$]`, 'gm');
         new Scan(this.buffer.join('\n')).scan(regex, (iterator: any) => {
             if (parentsRows.includes(iterator.row)) {
-                performList.push(new LoopNode(iterator.row, 'Loop Call'));
+                performList.push(new LoopNode(iterator.row, this.getLoopLabel('Loop Call', iterator.row)));
             } else {
                 performList.push(this.getNodeFromLine(iterator.row, parentsRows));
             }
@@ -134,13 +161,13 @@ export class CobolFlowAnalyzer {
      * @param {number} currentRow - The current row in the buffer.
      * @returns {NodeInterface | undefined} The next method declaration node or undefined if not found.
      */
-    public getNextMethodDeclaration(currentRow: number, parentsRows: number[] = []): NodeInterface | undefined {
+    public getNextMethodDeclaration(currentRow: number, _parentsRows: number[] = []): NodeInterface | undefined {
         let nextMethodDeclaration;
         for (let i = currentRow; i >= 0; i--) {
             const currentLine = this.buffer[i]
             const nodeInfo = CobolFlowAnalyzer.getInfoFromLine(currentLine);
-                if (nodeInfo.nodeType == NodeType.Method) {
-                    nextMethodDeclaration = new MethodNode(i, nodeInfo.nodeName, parentsRows);
+            if (nodeInfo.nodeType == NodeType.Method) {
+                nextMethodDeclaration = new MethodNode(i, nodeInfo.nodeName);
                 break;
             }
             if (nodeInfo.nodeType == NodeType.Paragraph) {
@@ -158,7 +185,7 @@ export class CobolFlowAnalyzer {
      */
     public getBlockAt(currentRow: number, nodeTypeCommand: NodeType, parentsRows: number[] = []): NodeInterface {
         let openBlocks = 0;
-        for (let i = currentRow; i >= 0; i--) {
+        for (let i = currentRow - 1; i >= 0; i--) {
             const currentLine = this.buffer[i]
             const nodeInfo = CobolFlowAnalyzer.getInfoFromLine(currentLine)
             if (CobolFlowAnalyzer.isEndBlock(currentLine)) {
@@ -172,26 +199,29 @@ export class CobolFlowAnalyzer {
                 continue;
             }
             if (openBlocks == 0) {
+                if (parentsRows.includes(i)) {
+                    return new LoopNode(currentRow, this.getLoopLabel('Loop Call', i));
+                }
                 if (nodeTypeCommand == nodeInfo.nodeType) {
                     continue;
                 }
                 switch (nodeInfo.nodeType) {
                     case NodeType.Paragraph:
-                        return new ParagraphNode(i, nodeInfo.nodeName, parentsRows);
+                        return new ParagraphNode(i, nodeInfo.nodeName);
                     case NodeType.Method:
-                        return new MethodNode(i, nodeInfo.nodeName, parentsRows);
+                        return new MethodNode(i, nodeInfo.nodeName);
                     case NodeType.If:
-                        return new IfNode(i, nodeInfo.nodeName, parentsRows);
+                        return new IfNode(i, nodeInfo.nodeName);
                     case NodeType.Else:
-                        return new ElseNode(i, nodeInfo.nodeName, parentsRows);
+                        return new ElseNode(i, nodeInfo.nodeName);
                     case NodeType.PerformLoop:
-                        return new PerformLoopNode(i, nodeInfo.nodeName, parentsRows);
+                        return new PerformLoopNode(i, nodeInfo.nodeName);
                     case NodeType.When:
-                        return new WhenNode(i, nodeInfo.nodeName, parentsRows);
+                        return new WhenNode(i, nodeInfo.nodeName);
                 }
             }
         }
-        return this.getNodeFromLine(0, parentsRows);
+        return this.getNodeFromLine(currentRow, parentsRows);
     }
 
     /**
@@ -203,24 +233,41 @@ export class CobolFlowAnalyzer {
         const currentLine = this.buffer[rowNumber];
         const nodeInfo = CobolFlowAnalyzer.getInfoFromLine(currentLine);
         if (parentsRows.includes(rowNumber)) {
-            return new LoopNode(rowNumber, 'Loop Call');
+            return new LoopNode(rowNumber, this.getLoopLabel('Loop Call', rowNumber));
         }
+
+        // Check if node is already cached
+        if (this.nodeCache.has(rowNumber)) {
+            return this.nodeCache.get(rowNumber)!;
+        }
+
+        // Create node based on type and cache it
+        let node: NodeInterface;
         switch (nodeInfo.nodeType) {
             case NodeType.Paragraph:
-                return new ParagraphNode(rowNumber, nodeInfo.nodeName, parentsRows);
+                node = new ParagraphNode(rowNumber, nodeInfo.nodeName);
+                break;
             case NodeType.Method:
-                return new MethodNode(rowNumber, nodeInfo.nodeName, parentsRows);
+                node = new MethodNode(rowNumber, nodeInfo.nodeName);
+                break;
             case NodeType.If:
-                return new IfNode(rowNumber, nodeInfo.nodeName, parentsRows);
+                node = new IfNode(rowNumber, nodeInfo.nodeName);
+                break;
             case NodeType.Else:
-                return new ElseNode(rowNumber, nodeInfo.nodeName, parentsRows);
+                node = new ElseNode(rowNumber, nodeInfo.nodeName);
+                break;
             case NodeType.When:
-                return new WhenNode(rowNumber, nodeInfo.nodeName, parentsRows);
+                node = new WhenNode(rowNumber, nodeInfo.nodeName);
+                break;
             case NodeType.PerformLoop:
-                return new PerformLoopNode(rowNumber, nodeInfo.nodeName, parentsRows);
+                node = new PerformLoopNode(rowNumber, nodeInfo.nodeName);
+                break;
             default:
-                return new CommandNode(rowNumber, nodeInfo.nodeName, parentsRows);
+                node = new CommandNode(rowNumber, nodeInfo.nodeName);
         }
+
+        this.nodeCache.set(rowNumber, node);
+        return node;
     }
 
     private static getInfoFromLine(currentLine: string): { nodeType: NodeType, nodeName: string } {

@@ -97,11 +97,11 @@
 					"description": "Show conditional blocks on COBOL Flow Tree View.",
 					"default": true
 				},
-				"rech.editor.cobol.flowAnalysisTimeout": {
+				"rech.editor.cobol.flowAnalysisMaxNodes": {
 					"type": "number",
-					"description": "Timeout in seconds for COBOL flow analysis. After this time, a warning will be shown. Set to 0 to disable timeout.",
-					"default": 10,
-					"minimum": 0
+					"description": "Maximum number of nodes to analyze in COBOL flow analysis. When this limit is reached, analysis will stop and show a warning.",
+					"default": 500,
+					"minimum": 1
 				},
 				"rech.editor.cobol.formatter.location": {
 					"type": "string",
