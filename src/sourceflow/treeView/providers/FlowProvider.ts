@@ -367,6 +367,13 @@ export default class FlowProvider implements TreeDataProvider<NodeInterface> {
     private ensureAnalyzerBuffer(): void {
         if (!this.analyzedSourceCode) {
             return;
+                    const child = children[i];
+                    await this.expandNodeAndChildren(child, depth + 1);
+                }
+            }
+        } catch (error) {
+            // Ignore errors from reveal (e.g., if node is not visible)
+            console.warn(`${indent}[FlowProvider] Could not expand node:`, error);
         }
         CobolFlowAnalyzer.getInstance().setBuffer(this.analyzedSourceCode);
     }
