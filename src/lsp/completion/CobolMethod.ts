@@ -335,4 +335,11 @@ export class CobolMethod {
 		return this.visibility == "private";
 	}
 
+	/**
+	 * Returns true if the method visibility is protected
+	 */
+	public isProtected(): boolean {
+		return this.visibility == "protected";
+	}
+
 }

@@ -8,6 +8,7 @@ import { FindParameters } from "../../declaration/FindInterface";
 import { CobolMethod } from "../CobolMethod";
 import { CobolVariable } from "../CobolVariable";
 import { CompletionTarget } from "./CompletionTarget";
+import { ExpandedSourceManager } from "../../../cobol/ExpandedSourceManager";
 
 /**
  * Method completion utility
@@ -87,6 +88,8 @@ export class MethodCompletionUtils {
 
   /**
    * Breaks the chain and returns the target class declaration.
+   * First tries to find in local source, then falls back to expanded source
+   * (needed when variable declaration comes from a COPY with REPLACING).
    *
    * @param target
    * @param line
@@ -94,6 +97,49 @@ export class MethodCompletionUtils {
    * @returns
    */
   public static findTargetClassDeclaration(uri: string, target: CompletionTarget, line: number, lines: string[]): Promise<CobolVariable> {
+    return new Promise((resolve, reject) => {
+      this.findTargetClassDeclarationInBuffer(uri, target, line, lines)
+        .then((clazz) => resolve(clazz))
+        .catch(() => {
+          // Fallback: try with expanded source (handles COPY with REPLACING)
+          ExpandedSourceManager.getExpandedSource(uri).then((expandedBuffer) => {
+            const expandedLines = BufferSplitter.split(expandedBuffer);
+            this.findTargetClassDeclarationInExpandedBuffer(uri, target, expandedLines)
+              .then((clazz) => resolve(clazz))
+              .catch((e) => reject(e));
+          }).catch((e) => reject(e));
+        });
+    })
+  }
+
+  /**
+   * Finds the target class declaration in the expanded source buffer.
+   * Since expanded source has different line positions (due to COPY expansion),
+   * we search for the variable declaration by name in the entire buffer
+   * instead of using the original line position.
+   */
+  private static findTargetClassDeclarationInExpandedBuffer(uri: string, target: CompletionTarget, lines: string[]): Promise<CobolVariable> {
+    return new Promise((resolve, reject) => {
+      const joinedLines = lines.join("\n");
+      //
+      // Search for the declaration using the full buffer, starting from the end
+      // so the reverse scan covers the entire expanded source
+      //
+      const findParams: FindParameters = { term: target.elementName, uri: uri, lineIndex: lines.length - 1, columnIndex: 0 }
+      new CobolDeclarationFinder(joinedLines)
+        .findDeclaration(findParams)
+        .then((position) => {
+          this.extractClassFromPosition(position, lines, uri)
+            .then((clazz) => resolve(clazz))
+            .catch((e) => reject(e));
+        }).catch((e) => reject(e));
+    })
+  }
+
+  /**
+   * Finds the target class declaration in the given buffer lines.
+   */
+  private static findTargetClassDeclarationInBuffer(uri: string, target: CompletionTarget, line: number, lines: string[]): Promise<CobolVariable> {
     return new Promise((resolve, reject) => {
       const referencePosition: RechPosition = this.extractTargetPositionFromBuffer(target, line);
       if (referencePosition.column == 0 || referencePosition.line == 0) {
@@ -110,26 +156,9 @@ export class MethodCompletionUtils {
       new CobolDeclarationFinder(joinedLines)
         .findDeclaration(findParams)
         .then((position) => {
-          if (!position.file) {
-            //
-            // The definition is on current file, so extract class/method information from current file
-            //
-            this.extractClass(position.line, position.column, lines, uri)
-              .then((clazz) => resolve(clazz))
-              .catch((e) => reject(e));
-            return;
-          }
-          //
-          // The definition is on a different file, so we need to load the file content and
-          // extract class/method from the buffer read
-          //
-          FileUtils.read(new Path(position.file).fullPathWin()).then((buffer) => {
-            const splitted = BufferSplitter.split(buffer);
-            const fullPath = new Path(position.file).fullPathWin();
-            this.extractClass(position.line, position.column, splitted, fullPath)
-              .then((clazz) => resolve(clazz))
-              .catch((e) => reject(e));
-          }).catch((e) => reject(e));
+          this.extractClassFromPosition(position, lines, uri)
+            .then((clazz) => resolve(clazz))
+            .catch((e) => reject(e));
         }).catch((e) => reject(e));
     })
   }
@@ -152,6 +181,29 @@ export class MethodCompletionUtils {
   }
 
   /**
+   * Extracts the class from a declaration position.
+   * If the position points to a file, reads it and extracts from there.
+   * Otherwise extracts from the current buffer.
+   */
+  private static extractClassFromPosition(position: RechPosition, currentLines: string[], uri: string): Promise<CobolVariable> {
+    return new Promise((resolve, reject) => {
+      if (!position.file) {
+        this.extractClass(position.line, position.column, currentLines, uri)
+          .then((clazz) => resolve(clazz))
+          .catch((e) => reject(e));
+        return;
+      }
+      FileUtils.read(new Path(position.file).fullPathWin()).then((buffer) => {
+        const splitted = BufferSplitter.split(buffer);
+        const fullPath = new Path(position.file).fullPathWin();
+        this.extractClass(position.line, position.column, splitted, fullPath)
+          .then((clazz) => resolve(clazz))
+          .catch((e) => reject(e));
+      }).catch((e) => reject(e));
+    });
+  }
+
+  /**
    * Extracts the CobolVariable object which represents the target class, from the buffer
    */
    private static extractClass(line: number, column: number, buffer: string[], uri: string): Promise<CobolVariable> {
@@ -163,7 +215,7 @@ export class MethodCompletionUtils {
         noScope: true,
         noSection: true
       };
-      const currentLine = buffer[line];
+      const currentLine = buffer[line].substring(0, 120);
       if (ParserCobol.getDeclaracaoMethod(currentLine)) {
         CobolMethod.parseLines(line, column, buffer).then((method) => {
           if (method && method.getVariableReturn()) {

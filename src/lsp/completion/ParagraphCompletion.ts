@@ -50,9 +50,6 @@ export class ParagraphCompletion implements CompletionInterface {
 
     /**
      * Load the cache
-     *
-     * @param _line
-     * @param _column
      */
     private loadCache(): Promise<void> {
         return new Promise((resolve, reject) => {

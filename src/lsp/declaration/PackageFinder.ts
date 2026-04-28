@@ -32,7 +32,7 @@ export class PackageFinder {
           return reject();
         }
         classPackage = pack[1] ? pack[1] : pack[2];
-        const fullPath = MethodPathUtils.getFullPath(classPackage.replace(/"/g, ""), uri);
+        const fullPath = MethodPathUtils.getFullPath(classPackage.trim().replace(/"/g, ""), uri);
         return resolve(fullPath);
       } else {
         //
