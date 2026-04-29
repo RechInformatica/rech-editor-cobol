@@ -13,11 +13,18 @@ import { FileUtils } from "../../../commons/FileUtils";
 import { RechPosition } from "../../../commons/rechposition";
 import { CompletionTarget } from "./CompletionTarget";
 import { MethodCompletionUtils } from "./MethodCompletionUtils";
+import { ExpandedSourceManager } from "../../../cobol/ExpandedSourceManager";
 
 /**
  * Class to generate LSP Completion Items for Cobol 'add' clause
  */
 export class MethodCompletion implements CompletionInterface {
+
+  /** Cache of method completion items keyed by element name (variable/class name) */
+  private static cache: Map<string, CompletionItem[]> = new Map();
+
+  /** Whether to filter out protected methods from completion */
+  private static filterProtectedMethods: boolean = true;
 
   private uri: string;
   private externalMethodCompletion: ((args: any) => Thenable<any>) | undefined;
@@ -25,6 +32,13 @@ export class MethodCompletion implements CompletionInterface {
   constructor(uri: string, externalMethodCompletion?: (args: any) => Thenable<any>) {
     this.uri = uri;
     this.externalMethodCompletion = externalMethodCompletion;
+  }
+
+  /**
+   * Sets whether protected methods should be filtered out from completion
+   */
+  public static setFilterProtectedMethods(filter: boolean) {
+    MethodCompletion.filterProtectedMethods = filter;
   }
 
   public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
@@ -44,42 +58,107 @@ export class MethodCompletion implements CompletionInterface {
               .catch((e) => reject(e));
           } else {
             //
-            // On this situation we're not suggesting methods of the current instance.
+            // Check cache first: if we have cached items for this element, return them
+            // immediately and trigger a background refresh.
             //
-            // So, we need to discover the class name, load the class content and finally suggest it`s methods
-            //
-            MethodCompletionUtils.findTargetClassDeclaration(this.uri, completionTarget, line, lines).then((clazz) => {
-              new PackageFinder(lines).findClassFileUri(clazz, 0, 0, this.uri).then((classFileUri: string) => {
-                this.extractMethodCompletionsFromClassUri(classFileUri)
-                  .then((methodsCompletions) => {
-                    return resolve(methodsCompletions);
-                  }).catch((e) => {
-                    this.createExternalMethodCompletionPromise(e).then((result) => {
-                      return resolve(result);
-                    }).catch((e) => {
-                      return reject(e);
-                    });
-                  });
-              }).catch((e) => {
-                this.createExternalMethodCompletionPromise(e).then((result) => {
-                  return resolve(result);
-                }).catch((e) => {
-                  return reject(e);
-                });
-                if (this.externalMethodCompletion) {
-                  this.externalMethodCompletion("").then((result) => {
-                    return resolve(<CompletionItem[]>result.items);
-                  }, (e) => reject(e))
-                } else {
-                  return reject(e);
-                }
-              }
-              );
-            }).catch((e) => reject(e));
+            const cached = MethodCompletion.cache.get(completionTarget.elementName);
+            if (cached) {
+              resolve(cached);
+              // Background refresh to update cache for next time
+              this.loadMethodCompletions(completionTarget, line, column, lines).then((items) => {
+                MethodCompletion.cache.set(completionTarget.elementName, items);
+              }).catch(() => {});
+            } else {
+              // Load methods for this element and cache them
+              this.loadMethodCompletions(completionTarget, line, column, lines).then((items) => {
+                MethodCompletion.cache.set(completionTarget.elementName, items);
+                resolve(items);
+              }).catch((e) => reject(e));
+            }
           }
         })
         .catch((e) => reject(e));
     });
+  }
+
+  /**
+   * Loads method completions for the target. Tries local source first, then expanded source.
+   */
+  private loadMethodCompletions(completionTarget: CompletionTarget, line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
+    return new Promise((resolve, reject) => {
+      this.resolveMethodCompletionsForTarget(completionTarget, line, lines)
+        .then((items) => resolve(items))
+        .catch(() => {
+          this.retryWithExpandedSource(line, column, lines)
+            .then((items) => resolve(items))
+            .catch((e) => reject(e));
+        });
+    });
+  }
+
+  /**
+   * Resolves method completions for a given target (finds class declaration, then extracts methods).
+   */
+  private resolveMethodCompletionsForTarget(completionTarget: CompletionTarget, line: number, lines: string[]): Promise<CompletionItem[]> {
+    return new Promise((resolve, reject) => {
+      MethodCompletionUtils.findTargetClassDeclaration(this.uri, completionTarget, line, lines).then((clazz) => {
+        new PackageFinder(lines).findClassFileUri(clazz, 0, 0, this.uri).then((classFileUri: string) => {
+          this.extractMethodCompletionsFromClassUri(classFileUri)
+            .then((methodsCompletions) => resolve(methodsCompletions))
+            .catch((e) => {
+              this.createExternalMethodCompletionPromise(e)
+                .then((result) => resolve(result))
+                .catch((e) => reject(e));
+            });
+        }).catch((e) => {
+          this.createExternalMethodCompletionPromise(e)
+            .then((result) => resolve(result))
+            .catch((e) => reject(e));
+        });
+      }).catch((e) => reject(e));
+    });
+  }
+
+  /**
+   * Retries the entire method completion flow using expanded source.
+   * Finds the equivalent cursor line in the expanded source and restarts
+   * from findTargetElement.
+   */
+  private retryWithExpandedSource(line: number, column: number, localLines: string[]): Promise<CompletionItem[]> {
+    return new Promise((resolve, reject) => {
+      ExpandedSourceManager.getExpandedSource(this.uri).then((expandedBuffer) => {
+        const expandedLines = BufferSplitter.split(expandedBuffer).map(l => l.substring(0, 120));
+        const expandedLine = this.findEquivalentLine(localLines[line], expandedLines);
+        if (expandedLine < 0) {
+          return reject("Could not find equivalent line in expanded source");
+        }
+        MethodCompletionUtils.findTargetElement(expandedLine, column, expandedLines)
+          .then((completionTarget) => {
+            MethodCompletionUtils.findTargetClassDeclaration(this.uri, completionTarget, expandedLine, expandedLines).then((clazz) => {
+              new PackageFinder(expandedLines).findClassFileUri(clazz, 0, 0, this.uri).then((classFileUri: string) => {
+                this.extractMethodCompletionsFromClassUri(classFileUri)
+                  .then((methodsCompletions) => resolve(methodsCompletions))
+                  .catch((e) => reject(e));
+              }).catch((e) => reject(e));
+            }).catch((e) => reject(e));
+          })
+          .catch((e) => reject(e));
+      }).catch((e) => reject(e));
+    });
+  }
+
+  /**
+   * Finds the equivalent line number in the expanded source by matching line content.
+   * Returns -1 if not found.
+   */
+  private findEquivalentLine(lineContent: string, expandedLines: string[]): number {
+    const trimmed = lineContent.trimEnd();
+    for (let i = 0; i < expandedLines.length; i++) {
+      if (expandedLines[i].trimEnd() === trimmed) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   /**
@@ -109,173 +188,37 @@ export class MethodCompletion implements CompletionInterface {
     return element === CobolMethod.SELF_INSTANCE_NAME;
   }
 
-
-  /**
-   * Breaks the chain and returns the target class declaration.
-   */
-  private findTargetClassDeclaration(target: CompletionTarget, line: number, lines: string[]): Promise<CobolVariable> {
-    return new Promise((resolve, reject) => {
-      const referencePosition: RechPosition = this.extractTargetPositionFromBuffer(target, line);
-      if (referencePosition.column == 0 || referencePosition.line == 0) {
-        return reject();
-      }
-      //
-      // Constructs objects to find definition
-      //
-      const findParams: FindParameters = { term: target.elementName, uri: this.uri, lineIndex: referencePosition.line, columnIndex: referencePosition.column }
-      const joinedLines = lines.join("\n");
-      //
-      // Looks for the definition itself
-      //
-      new CobolDeclarationFinder(joinedLines)
-        .findDeclaration(findParams)
-        .then((position) => {
-          if (!position.file) {
-            //
-            // The definition is on current file, so extract class/method information from current file
-            //
-            this.extractClass(position.line, position.column, lines, this.uri)
-              .then((clazz) => resolve(clazz))
-              .catch((e) => reject(e));
-            return;
-          }
-          //
-          // The definition is on a different file, so we need to load the file content and
-          // extract class/method from the buffer read
-          //
-          FileUtils.read(new Path(position.file).fullPathWin()).then((buffer) => {
-            const splitted = BufferSplitter.split(buffer);
-            const fullPath = new Path(position.file).fullPathWin();
-            this.extractClass(position.line, position.column, splitted, fullPath)
-              .then((clazz) => resolve(clazz))
-              .catch((e) => reject(e));
-          }).catch((e) => reject(e));
-        }).catch((e) => reject(e));
-    })
-  }
-
-  private normalizeLine(line: string, currentColumn: number): string {
-    let normalizedLine: string = "";
-    normalizedLine = line;
-    normalizedLine = normalizedLine.substr(0, currentColumn);
-    normalizedLine = normalizedLine.trim()
-    normalizedLine = normalizedLine.replace(/\(.*?\)/g, "");
-    return normalizedLine;
-  }
-
-  private extractTargetFromCommand(currentCommand: string): string {
-    const chain: string[] = this.extractCallChainFromCommand(currentCommand);
-    const target = chain[chain.length - 1];
-    return target;
-  }
-
-  private extractCallChainFromCommand(currentCommand: string): string[] {
-    //
-    // Splits the command by ':>' which is COBOL token
-    // for method call.
-    //
-    let chain = currentCommand.split(CobolMethod.TOKEN_INVOKE_METHOD);
-    //
-    // Removes the last element of this array because it's is invalid.
-    // The last element of this array is always empty and needs to be removed.
-    //
-    // For example:
-    // ["<class-name>", "method-a", ""]
-    //
-    chain = chain.slice(0, chain.length - 1);
-    // Removes constructor because not all classes have explicit constructor
-    if (chain[chain.length - 1] === "new") {
-      chain = chain.slice(0, chain.length - 1);
-    }
-    return chain;
-  }
-
-  private extractTargetPositionFromBuffer(target: CompletionTarget, line: number): RechPosition {
-    let referenceColumn = 0;
-    let referenceLine = 0;
-    for (let i = 0; i < target.containingBuffer.length; i++) {
-      const analisedLine = target.containingBuffer[i];
-      const pattern = new RegExp(`[\\s\\,\\.\\(\\)\\:\\>]${target.elementName}[\\s\\,\\.\\(\\)\\:]`);
-      const match = analisedLine.match(pattern);
-      if (!match) {
-        continue;
-      }
-      referenceColumn = match.index! + 1 + target.elementName.length;
-      referenceLine = line - i;
-      break;
-    }
-    return new RechPosition(referenceLine, referenceColumn);
-  }
-
-  /**
-   * Extracts the CobolVariable object which represents the target class, from the buffer
-   */
-  private extractClass(line: number, column: number, buffer: string[], uri: string): Promise<CobolVariable> {
-    return new Promise((resolve, reject) => {
-      const variableParsingParams = {
-        ignoreMethodReturn: true,
-        noChildren: true,
-        noComment: true,
-        noScope: true,
-        noSection: true
-      };
-      const currentLine = buffer[line];
-      if (ParserCobol.getDeclaracaoMethod(currentLine)) {
-        CobolMethod.parseLines(line, column, buffer).then((method) => {
-          if (method && method.getVariableReturn()) {
-            return resolve(method.getVariableReturn()!);
-          } else {
-            return reject();
-          }
-        }).catch((e) => reject(e));
-      } else if (ParserCobol.getDeclaracaoVariavel(currentLine)) {
-        const variable = CobolVariable.parseLines(line, buffer, variableParsingParams);
-        const reference = variable.getObjectReferenceOf();
-        if (!reference) {
-          return variable;
-        } else {
-          const findParams: FindParameters = {
-            term: reference,
-            uri: uri,
-            lineIndex: 0,
-            columnIndex: 0
-          };
-          new CobolDeclarationFinder(buffer.join("\n"))
-            .findDeclaration(findParams)
-            .then((position) => {
-              if (!position.file) {
-                return resolve(CobolVariable.parseLines(position.line, buffer, variableParsingParams));
-              } else {
-                FileUtils.read(position.file)
-                  .then((classFileBuf) => resolve(CobolVariable.parseLines(position.line, BufferSplitter.split(classFileBuf), variableParsingParams)))
-                  .catch((e) => reject(e));
-              }
-            }).catch((e) => reject(e));
-        }
-      } else if (ParserCobol.getDeclaracaoClasse(currentLine)) {
-        const variable = CobolVariable.parseLines(line, buffer, variableParsingParams);
-        return resolve(variable);
-      } else {
-        return reject();
-      }
-    });
-  }
-
   /**
    * Extracts the methods from the class file.
    *
-   * Given the full file name of `classFileUri`, reads it's content and extracts every
-   * method declaration with a regular expression.
+   * Given the class file URI, reads its content (using expanded source to handle COPY with REPLACING)
+   * and extracts every method declaration with a regular expression.
    */
   private extractMethodCompletionsFromClassUri(classFileUri: string): Promise<CompletionItem[]> {
     return new Promise((resolve, reject) => {
-      FileUtils.read(classFileUri)
-        .then((buffer) => {
-          this.extractMethodCompletionsFromBuffer(buffer, true)
-            .then((results) => resolve(results))
-            .catch((e) => reject(e));
-        })
-        .catch((e) => reject(e));
+      ExpandedSourceManager.getExpandedSource(classFileUri).then((buffer) => {
+        this.extractMethodCompletionsFromBuffer(buffer.toString(), true)
+          .then((results) => resolve(results))
+          .catch((_e) => {
+            // Fallback to direct file read if expanded source fails
+            FileUtils.read(classFileUri)
+              .then((buffer) => {
+                this.extractMethodCompletionsFromBuffer(buffer, true)
+                  .then((results) => resolve(results))
+                  .catch((e) => reject(e));
+              })
+              .catch((e) => reject(e));
+          });
+      }).catch((_e) => {
+        // Fallback to direct file read if expanded source is not available
+        FileUtils.read(classFileUri)
+          .then((buffer) => {
+            this.extractMethodCompletionsFromBuffer(buffer, true)
+              .then((results) => resolve(results))
+              .catch((e) => reject(e));
+          })
+          .catch((e) => reject(e));
+      });
     });
   }
 
@@ -307,9 +250,13 @@ export class MethodCompletion implements CompletionInterface {
         results.forEach((result) => {
           if (result.state === "fulfilled" && result.value) {
             const method = <CobolMethod>result.value;
-            if (!filterPrivateMethods || (filterPrivateMethods && !method.isPrivate())) {
-              methods.push(method);
+            if (filterPrivateMethods && method.isPrivate()) {
+              return;
             }
+            if (MethodCompletion.filterProtectedMethods && method.isProtected()) {
+              return;
+            }
+            methods.push(method);
           }
         });
         methods.forEach((method) => {
@@ -366,6 +313,13 @@ export class MethodCompletion implements CompletionInterface {
       text += ")"
     }
     return text;
+  }
+
+  /**
+   * Clear the method completions cache
+   */
+  public static clearCache() {
+    MethodCompletion.cache = new Map();
   }
 
 }

@@ -151,6 +151,11 @@
 					"description": "Uses verbose suggestion as cluase 'is' in 'pic' or 'value'.",
 					"default": true
 				},
+				"rech.editor.cobol.filterProtectedMethods": {
+					"type": "boolean",
+					"description": "Controls whether protected methods are filtered out from method completion suggestions.",
+					"default": true
+				},
 				"rech.editor.cobol.especialColors": {
 					"type": "object",
 					"description": "Special color settings for terms interpreted by the Rech COBOL extension.",
