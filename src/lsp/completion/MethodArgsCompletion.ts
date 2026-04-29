@@ -2,7 +2,6 @@ import { CompletionItemKind, CompletionItem, InsertTextFormat } from "vscode-lan
 import { CompletionInterface } from "./CompletionInterface";
 import { CompletionUtils } from "../commons/CompletionUtils";
 import { ParserCobol } from "../../cobol/parsercobol";
-import { IndentUtils } from "../../indent/indentUtils";
 
 /**
  * Class to generate LSP Completion Items for Cobol methods modifications
@@ -68,14 +67,8 @@ export class MethodArgsCompletion implements CompletionInterface {
             // Normalize spaces and add original indentation
             text = indentation + text.replace(/\s+/g, ' ').trim();
 
-            // Format the method declaration line (may break into multiple lines)
-            const formattedLines = IndentUtils.formatMethodDeclarationLine(text, indentation);
-
             // Create additional edits to clean multi-line headers
             const additionalEdits = CompletionUtils.createMultiLineHeaderCleanupEdits(startLine, endLine, line);
-
-            // Build the final text to insert (all lines joined with \n for snippet placeholders to work)
-            const finalNewText = formattedLines.join('\n');
 
             resolve(
                 [{
@@ -92,7 +85,7 @@ export class MethodArgsCompletion implements CompletionInterface {
                                 character: lines[line].length
                             }
                         },
-                        newText: finalNewText
+                        newText: text
                     },
                     additionalTextEdits: additionalEdits,
                     insertTextFormat: InsertTextFormat.Snippet,
