@@ -2,7 +2,6 @@ import { Path } from '../commons/path';
 import { TextEditor, window, Range, Selection, Position, OpenDialogOptions, Uri, commands, TextDocumentShowOptions, ViewColumn, workspace } from 'vscode';
 import { RechPosition } from '../commons/rechposition';
 import { Indenta } from '../indent/indent';
-import { IndentUtils } from '../indent/indentUtils';
 import { GenericExecutor } from '../commons/genericexecutor';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -700,9 +699,15 @@ export class Editor {
     const selections = this.editor.selections;
     const cursors = this.getCursors();
     const newSelections: Selection[] = [];
+    let lineOffset = 0;
 
     for (let i = 0; i < selections.length; i++) {
-      const selection = selections[i];
+      // Adjust the selection by the accumulated offset from previous indentations
+      const originalSelection = selections[i];
+      const selection = new Selection(
+        new Position(originalSelection.start.line + lineOffset, originalSelection.start.character),
+        new Position(originalSelection.end.line + lineOffset, originalSelection.end.character)
+      );
 
       this.selectWholeLineFromSelection(selection);
 
@@ -710,16 +715,11 @@ export class Editor {
       const selectionBuffer = this.getSelectionBuffer();
 
       if (indenter.isAllCommentaryLines(selectionBuffer)) {
-        // Asynchronous process for comment indentation
-        await new Promise<void>((resolve) => {
-          indenter.indentCommentary(selectionBuffer,
-            async (buffer) => {
-              await this.replaceSelection(buffer.toString());
-              newSelections.push(this.editor.selection);
-              // Adjusts the selection to the new buffer size
-              this.adjustSelectionAndResolve(buffer, selectionBuffer, cursors, i, resolve);
-            });
+        let commentaryResult: string[] = [];
+        indenter.indentCommentary(selectionBuffer, (buffer) => {
+          commentaryResult = buffer;
         });
+        lineOffset += await this.applyIndentResult(commentaryResult, selectionBuffer, newSelections, cursors, i);
         continue;
       }
 
@@ -733,47 +733,14 @@ export class Editor {
         );
         this.setSelectionRange(methodHeaderRange);
 
-        // Get the header text and format it
-        const formattedLines = IndentUtils.formatMethodDeclarationLine(methodInfo.headerText);
-        const formattedText = formattedLines.join('\n');
-
-        // Replace the selected text with formatted version
-        await this.replaceSelection(formattedText + '\n');
-        newSelections.push(this.editor.selection);
-
-        // Adjust cursor positions for subsequent selections
-        const linesDiff = formattedLines.length - (methodInfo.endLine - methodInfo.startLine + 1);
-        for (let j = i; j < cursors.length; j++) {
-          cursors[j].line += linesDiff;
-        }
-
+        // Use the external indenter for method header formatting
+        const methodSelectionBuffer = this.getSelectionBuffer();
+        lineOffset += await this.indentWithExternalIndenter(indenter, alignment, methodSelectionBuffer, methodInfo.startLine, isSpecialIndent, newSelections, cursors, i);
         continue;
       }
 
       // Asynchronous process for normal indentation
-      await new Promise<void>((resolve, reject) => {
-        indenter.indenta(
-          alignment,
-          selectionBuffer,
-          this.getPath().toString(),
-          this.editor.selection.start.line,
-          isSpecialIndent,
-          async (buffer) => {
-            try {
-              await this.replaceSelection(buffer.toString());
-              newSelections.push(this.editor.selection);
-              // Adjusts the selection to the new buffer size
-              this.adjustSelectionAndResolve(buffer, selectionBuffer, cursors, i, resolve);
-            } catch (error) {
-              reject(error);
-            }
-          },
-          (bufferErr) => {
-            this.showWarningMessage(bufferErr);
-            reject(bufferErr);
-          }
-        );
-      });
+      lineOffset += await this.indentWithExternalIndenter(indenter, alignment, selectionBuffer, this.editor.selection.start.line, isSpecialIndent, newSelections, cursors, i);
     }
 
     // Restore the cursor position and selections, considering the indentation lines added
@@ -782,20 +749,43 @@ export class Editor {
   }
 
   /**
-   * Adjusts the selection and cursor positions to the new buffer size and resolves the promise.
+   * Applies the indent result: replaces the selection, updates selections/cursors and returns the line difference.
    */
-  private adjustSelectionAndResolve(buffer: string[], selectionBuffer: string[], cursors: RechPosition[], position: number, resolve: () => void) {
+  private async applyIndentResult(buffer: string[], selectionBuffer: string[], newSelections: Selection[], cursors: RechPosition[], cursorIndex: number): Promise<number> {
+    await this.replaceSelection(buffer.toString());
+    newSelections.push(this.editor.selection);
     const linesDiff = buffer.join().split(/\n/).length - selectionBuffer.join().split(/\n/).length;
-
-    // Note: selections array is readonly and not modified here
-    // The actual selections are managed through newSelections in the calling function
-
-    // Adjust cursor positions
-    for (let j = position; j < cursors.length; j++) {
+    for (let j = cursorIndex; j < cursors.length; j++) {
       cursors[j].line += linesDiff;
     }
+    return linesDiff;
+  }
 
-    resolve();
+  /**
+   * Calls the external indenter and replaces the current selection with the result.
+   * Returns the line difference (lines added or removed).
+   */
+  private async indentWithExternalIndenter(indenter: Indenta, alignment: string, selectionBuffer: string[], referenceLine: number, isSpecialIndent: boolean, newSelections: Selection[], cursors: RechPosition[], cursorIndex: number): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+      indenter.indenta(
+        alignment,
+        selectionBuffer,
+        this.getPath().toString(),
+        referenceLine,
+        isSpecialIndent,
+        async (buffer) => {
+          try {
+            resolve(await this.applyIndentResult(buffer, selectionBuffer, newSelections, cursors, cursorIndex));
+          } catch (error) {
+            reject(error);
+          }
+        },
+        (bufferErr) => {
+          this.showWarningMessage(bufferErr);
+          reject(bufferErr);
+        }
+      );
+    });
   }
 
   /**
