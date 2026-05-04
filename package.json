@@ -163,8 +163,14 @@
 						"rechdocToken": "#b294bb",
 						"rechdocVariable": "#c5c8c6",
 						"localScopeVariable": "#a3e4c1",
+						"exitFlowCommand": "#FF6B6B",
 						"rechAutoDocumentation": "#6a9955"
 					}
+				},
+				"rech.editor.cobol.highlightExitFlowCommands": {
+					"type": "boolean",
+					"description": "Controls whether exit flow commands (goback, exit, stop run, next sentence, etc.) should be highlighted with a distinct color.",
+					"default": true
 				},
 				"rech.editor.cobol.specialAutoDocumentation": {
 					"type": "boolean",

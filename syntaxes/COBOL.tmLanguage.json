@@ -486,7 +486,8 @@
       "name": "keyword.identifers.cobol"
     },
     {
-      "match": "(?<![-_])(?i:function\\s|\\$)(?i:max|min|integer-of-date|integer-of-day|integer-part|integer|date-to-yyyymmdd|year-to-yyyy|day-to-yyyyddd|exp|exception-file|exception-location|exception-statement|exception-status|e|variance|rem|pi|factorial|sqrt|log10|fraction-part|mean|exp|log|char|day-of-integer|date-of-integer|exp10|atan|integer-part|tan|sin|cos|midrange|addr|acos|asin|annuity|present-value|integer-of-day|ord-max|ord-min|ord|random|sum|sign|standard-deviation|median|reverse|abs|upper-case|lower-case|char-national|numval|mod|range|length|locale-date|locale-time-from-seconds|locale-time|seconds-past-midnight|stored-char-length|substitute-case|substitute|seconds-from-formatted-time|seconds=past-midnight|trim|length-an|numval-c|current-date|national-of|display-of|when-compiled|integer-of-boolean|combined-datetime|concatenate|bin2dec|byte-length|capacity|dec2bin|dec2hex|dec2oct|handle-type|hex2dec|ltrim|oct2dec|triml|trimr|rtrim)(?=\\s|\\.|\\(|\\)|,|$)",
+      "comment": "Generic function colorization: 'function <word>' or '$<word>'. Preprocessor directives ($if, $else, $set, $end, etc.) are protected by the meta.preprocessor rule declared earlier in this file, which takes priority.",
+      "match": "(?<![-_])(?:(?i:function)\\s+[a-zA-Z][a-zA-Z0-9\\-_]*|\\$[a-zA-Z][a-zA-Z0-9\\-_]*)(?=\\s|\\.|\\(|\\)|,|$)",
       "name": "support.function.cobol"
     },
     {
@@ -573,15 +574,15 @@
       }
     },
     {
-      "match": "(?<![-_])(?i:exit)\\s+(?i:paragraph|perform(\\s+cycle)*)(?=\\s|\\.|,|$)",
-      "name": "keyword.control.flow.cobol"
+      "match": "(?<![-_])(?i:exit\\s+program|exit\\s+method|exit\\s+function|exit\\s+paragraph|exit\\s+perform(\\s+cycle)*|exit|next\\s+sentence|goback|stop\\s+run)(?=\\s|\\.|,|$)",
+      "name": "keyword.control.exit.cobol"
     },
     {
-      "match": "(?<![-_])(?i:if|else|end-if|exit\\s+program|exit\\s+method|evaluate|end-evaluate|perform|end-perform|when\\s+other|when|continue|call|end-call|invoke|go\\s+to|sort|merge|use|xml|parse|stop\\s+run|goback|raise|exit\\s+function)(?=\\s|\\.|,|$)",
+      "match": "(?<![-_])(?i:if|else|end-if|evaluate|end-evaluate|perform|end-perform|when\\s+other|when|continue|call|end-call|invoke|go\\s+to|sort|merge|use|xml|parse|raise)(?=\\s|\\.|,|$)",
       "name": "keyword.control.cobol"
     },
     {
-      "match": "(?<![-_])(?i:accept|add|address|allocate|call|cancel|chain|close|commit|compute|continue|delete|disable|display|bell|divide|eject|enable|enter|evaluate|exhibit|named|exit|free|generate|go\\s+to|initialize\\sonly|initialize|initiate|inspect|merge|end-set|set|end-invoke|invoke\\s+run|invoke|move|corresponding|corr|multiply|otherwise|open|sharing|sort-merge|purge|ready|read|receive|release|return|rewrite|rounded|rollback|search|send|sort|collating\\s+sequence|collating|start|service|subtract|suppress|terminate|then|unlock|string|unstring|validate|write|next|previous|statement|sentence)(?=\\s|\\.|,|$)",
+      "match": "(?<![-_])(?i:accept|add|address|allocate|call|cancel|chain|close|commit|compute|continue|delete|disable|display|bell|divide|eject|enable|enter|evaluate|exhibit|named|free|generate|go\\s+to|initialize\\sonly|initialize|initiate|inspect|merge|end-set|set|end-invoke|invoke\\s+run|invoke|move|corresponding|corr|multiply|otherwise|open|sharing|sort-merge|purge|ready|read|receive|release|return|rewrite|rounded|rollback|search|send|sort|collating\\s+sequence|collating|start|service|subtract|suppress|terminate|then|unlock|string|unstring|validate|write|previous|statement)(?=\\s|\\.|,|$)",
       "name": "keyword.verbs.cobol"
     },
     {
