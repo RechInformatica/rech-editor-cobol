@@ -573,15 +573,15 @@
       }
     },
     {
-      "match": "(?<![-_])(?i:exit)\\s+(?i:paragraph|perform(\\s+cycle)*)(?=\\s|\\.|,|$)",
-      "name": "keyword.control.flow.cobol"
+      "match": "(?<![-_])(?i:exit\\s+program|exit\\s+method|exit\\s+function|exit\\s+paragraph|exit\\s+perform(\\s+cycle)*|exit|next\\s+sentence|goback|stop\\s+run)(?=\\s|\\.|,|$)",
+      "name": "keyword.control.exit.cobol"
     },
     {
-      "match": "(?<![-_])(?i:if|else|end-if|exit\\s+program|exit\\s+method|evaluate|end-evaluate|perform|end-perform|when\\s+other|when|continue|call|end-call|invoke|go\\s+to|sort|merge|use|xml|parse|stop\\s+run|goback|raise|exit\\s+function)(?=\\s|\\.|,|$)",
+      "match": "(?<![-_])(?i:if|else|end-if|evaluate|end-evaluate|perform|end-perform|when\\s+other|when|continue|call|end-call|invoke|go\\s+to|sort|merge|use|xml|parse|raise)(?=\\s|\\.|,|$)",
       "name": "keyword.control.cobol"
     },
     {
-      "match": "(?<![-_])(?i:accept|add|address|allocate|call|cancel|chain|close|commit|compute|continue|delete|disable|display|bell|divide|eject|enable|enter|evaluate|exhibit|named|exit|free|generate|go\\s+to|initialize\\sonly|initialize|initiate|inspect|merge|end-set|set|end-invoke|invoke\\s+run|invoke|move|corresponding|corr|multiply|otherwise|open|sharing|sort-merge|purge|ready|read|receive|release|return|rewrite|rounded|rollback|search|send|sort|collating\\s+sequence|collating|start|service|subtract|suppress|terminate|then|unlock|string|unstring|validate|write|next|previous|statement|sentence)(?=\\s|\\.|,|$)",
+      "match": "(?<![-_])(?i:accept|add|address|allocate|call|cancel|chain|close|commit|compute|continue|delete|disable|display|bell|divide|eject|enable|enter|evaluate|exhibit|named|free|generate|go\\s+to|initialize\\sonly|initialize|initiate|inspect|merge|end-set|set|end-invoke|invoke\\s+run|invoke|move|corresponding|corr|multiply|otherwise|open|sharing|sort-merge|purge|ready|read|receive|release|return|rewrite|rounded|rollback|search|send|sort|collating\\s+sequence|collating|start|service|subtract|suppress|terminate|then|unlock|string|unstring|validate|write|previous|statement)(?=\\s|\\.|,|$)",
       "name": "keyword.verbs.cobol"
     },
     {

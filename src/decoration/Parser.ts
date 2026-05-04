@@ -12,9 +12,11 @@ export class Parser {
   private static lastLocalVariableDecorator: TextEditorDecorationType
   private static lastRechDocTypeDecorator: TextEditorDecorationType
   private static lastRechDocVariableDecorator: TextEditorDecorationType
+  private static lastExitFlowDecorator: TextEditorDecorationType
   private readonly rechDocTypeRangeList: Range[] = [];
   private readonly rechDocVariableRangeList: Range[] = [];
   private readonly localVariableRangeList: Range[] = [];
+  private readonly exitFlowRangeList: Range[] = [];
 
   /**
    * Find all local variables
@@ -389,6 +391,36 @@ export class Parser {
   }
 
   /**
+   * Find exit flow commands (goback, exit program/method/function/paragraph/perform, stop run, next sentence)
+   * and collect their ranges for decoration.
+   *
+   * @param activeEditor
+   */
+  public findExitFlowCommands(activeEditor: TextEditor): void {
+    const enabled = new Configuration("rech.editor.cobol").get<boolean>("highlightExitFlowCommands", true);
+    if (!enabled) {
+      return;
+    }
+    const text = activeEditor.document.getText();
+    const lines = text.replace(/\r/g, "").split("\n");
+    const exitRegex = /(?<![-_])(?:exit\s+program|exit\s+method|exit\s+function|exit\s+paragraph|exit\s+perform(?:\s+cycle)*|exit|next\s+sentence|goback|stop\s+run)(?=\s|\.|,|$)/gim;
+    for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+      const line = lines[lineIndex];
+      // Skip comment lines
+      if (line.trim().startsWith("*>") || (line.length > 6 && line[6] === "*")) {
+        continue;
+      }
+      let match: RegExpExecArray | null;
+      const regex = new RegExp(exitRegex.source, exitRegex.flags);
+      while ((match = regex.exec(line)) !== null) {
+        const startPos = new Position(lineIndex, match.index);
+        const endPos = new Position(lineIndex, match.index + match[0].length);
+        this.exitFlowRangeList.push(new Range(startPos, endPos));
+      }
+    }
+  }
+
+  /**
    * Applies decorations previously found
    * @param activeEditor The active text editor containing the code document
    */
@@ -431,6 +463,21 @@ export class Parser {
     }
     Parser.lastLocalVariableDecorator = decorator;
     this.localVariableRangeList.length = 0;
+    // Create decorator to exit flow commands and aply on Ranges
+    if (this.exitFlowRangeList.length > 0) {
+      const exitColor = colors.exitFlowCommand || "#ff50f0";
+      color = {
+        dark: { color: exitColor, backgroundColor: "transparent" },
+        light: { color: this.invertHex(exitColor), backgroundColor: "transparent" }
+      };
+      decorator = window.createTextEditorDecorationType(color);
+      activeEditor.setDecorations(decorator, this.exitFlowRangeList);
+      if (Parser.lastExitFlowDecorator) {
+        Parser.lastExitFlowDecorator.dispose()
+      }
+      Parser.lastExitFlowDecorator = decorator;
+      this.exitFlowRangeList.length = 0;
+    }
   }
 
   /**

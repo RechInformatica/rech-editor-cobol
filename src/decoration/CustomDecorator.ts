@@ -18,6 +18,7 @@ export class CustomDecorator {
             }
             // If active window is open and language is supported
             if (activeEditor && activeEditor.document.languageId == "COBOL") {
+                parser.findExitFlowCommands(activeEditor);
                 parser.findLocalVariables(activeEditor).then(() => {
                     parser.findRechDocComments(activeEditor!).then(() => {
                         parser.applyDecorations(activeEditor!);
