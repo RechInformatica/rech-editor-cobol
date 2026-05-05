@@ -30,6 +30,9 @@ export class ParserCobol {
     if (ParserCobol.getMethodParametersDeclaration(line).includes(element.toLowerCase())) {
       return true;
     }
+    if (ParserCobol.equalsIgnoreReplacing(element, ParserCobol.getPerformVaryingDeclaration(line))) {
+      return true;
+    }
     return false;
   }
 
@@ -88,6 +91,19 @@ export class ParserCobol {
    *
    * @param line
    */
+
+  /**
+   * Returns the variable declared inline in a PERFORM VARYING loop
+   *
+   * Example: varying i as JInt from 1 by 1
+   *
+   * @param line
+   */
+  public static getPerformVaryingDeclaration(line: string): string | undefined {
+    const match = /\s+varying\s+([\w-]+)\s+as\s+[\w-]+/i.exec(line);
+    return match ? match[1] : undefined;
+  }
+
   public static getDeclaracaoVariavelIgnoreReplace(line: string): string | undefined {
     // variable
     let match = /^ +\d\d\s+(?:[\w-]+)?(?:\(.*\))?([\w-]+)(\s+|\.).*/i.exec(line);
