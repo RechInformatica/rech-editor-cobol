@@ -26,9 +26,6 @@ export class Parser {
   public findLocalVariables(activeEditor: TextEditor): Promise<undefined> {
     return new Promise((resolve, reject) => {
       const text = activeEditor.document.getText();
-      if (!this.needDifferentiateVariablesByScope(text)) {
-        return resolve(undefined);
-      }
       Q.allSettled(this.getAllLocalVariables(text)).then((_r) => {
         return resolve(undefined);
       }).catch((e) => {
@@ -52,6 +49,69 @@ export class Parser {
     // Regexp to find method declaration
     const inlineRegex = /^\s*method-id\..*/gim
     PromiseArray.push(...this.getInlineMethodsLocalVariables(textLF, inlineRegex));
+    // Regexp to find variables declared inline in PERFORM VARYING loops
+    PromiseArray.push(...this.getPerformVaryingLocalVariables(textLF));
+    // Find variables declared with the DECLARE clause
+    PromiseArray.push(...this.getDeclareLocalVariables(textLF));
+    return PromiseArray;
+  }
+
+  /**
+   * Returns all PERFORM VARYING inline variable declarations and their uses in a promise array.
+   *
+   * Handles patterns like: varying i as JInt from 1 by 1
+   *
+   * @param textLF
+   */
+  private getPerformVaryingLocalVariables(textLF: string): Promise<undefined>[] {
+    const PromiseArray: Promise<undefined>[] = [];
+    const lines = textLF.split("\n");
+    const varyingRegex = /^\s+varying\s+([\w-]+)\s+as\s+[\w-]+/gim;
+    new Scan(textLF).scan(varyingRegex, (iterator: any) => {
+      const line = lines[iterator.row];
+      const match = /\s+varying\s+([\w-]+)\s+as\s+[\w-]+/i.exec(line);
+      if (!match) {
+        return;
+      }
+      const varName = match[1];
+      // Find the column where the variable name starts
+      const varyingIdx = line.toLowerCase().indexOf("varying");
+      const afterVarying = line.substring(varyingIdx + "varying".length);
+      const varOffset = afterVarying.search(new RegExp(varName, "i"));
+      const column = varyingIdx + "varying".length + varOffset;
+      const variable = CobolVariable.dummyCobolVariable(varName);
+      variable.setDeclarationPosition(new RechPosition(iterator.row, column));
+      this.pushUsesPromiseIfLocal(variable, textLF, PromiseArray, true);
+    });
+    return PromiseArray;
+  }
+
+  /**
+   * Returns all DECLARE inline variable declarations and their uses in a promise array.
+   *
+   * Handles patterns like: declare i as JInt = 0
+   *
+   * @param textLF
+   */
+  private getDeclareLocalVariables(textLF: string): Promise<undefined>[] {
+    const PromiseArray: Promise<undefined>[] = [];
+    const lines = textLF.split("\n");
+    const declareRegex = /^\s+declare\s+([\w-]+)\s+as\s+[\w-]+/gim;
+    new Scan(textLF).scan(declareRegex, (iterator: any) => {
+      const line = lines[iterator.row];
+      const match = /\s+declare\s+([\w-]+)\s+as\s+[\w-]+/i.exec(line);
+      if (!match) {
+        return;
+      }
+      const varName = match[1];
+      const declareIdx = line.toLowerCase().indexOf("declare");
+      const afterDeclare = line.substring(declareIdx + "declare".length);
+      const varOffset = afterDeclare.search(new RegExp(varName, "i"));
+      const column = declareIdx + "declare".length + varOffset;
+      const variable = CobolVariable.dummyCobolVariable(varName);
+      variable.setDeclarationPosition(new RechPosition(iterator.row, column));
+      this.pushUsesPromiseIfLocal(variable, textLF, PromiseArray, true);
+    });
     return PromiseArray;
   }
 
@@ -189,13 +249,13 @@ export class Parser {
    * @param textLF
    * @param PromiseArray
    */
-  private pushUsesPromiseIfLocal(variable: CobolVariable, textLF: string, PromiseArray: Promise<undefined>[]) {
+  private pushUsesPromiseIfLocal(variable: CobolVariable, textLF: string, PromiseArray: Promise<undefined>[], allowParagraphScope = false) {
     if (!VariableUtils.isLocalScope(variable)) {
       return;
     }
     PromiseArray.push(
       new Promise((resolve, reject) => {
-        this.getUsesFromVariable(textLF, variable).then((usesFromVariable) => {
+        this.getUsesFromVariable(textLF, variable, allowParagraphScope).then((usesFromVariable) => {
           Q.all(usesFromVariable).then(() => {
             return resolve(undefined);
           }).catch((e) => {
@@ -252,7 +312,26 @@ export class Parser {
    * @param text
    * @param variable
    */
-  private getUsesFromVariable(text: string, variable: CobolVariable): Promise<Promise<undefined>[]> {
+
+  /**
+   * Returns the offset within shortText where the current scope ends.
+   * Uses the next paragraph declaration (7-space indent + word + period) as the boundary.
+   * Consistent with the paragraph regex used in editor.ts and cobolFlowAnalyzer.ts.
+   */
+  private findScopeEnd(shortText: string): number {
+    const paragraphRegex = /^ {7}[.\w-]+\.(?:\s*\*>.*)?$/gm;
+    const firstNewline = shortText.indexOf("\n");
+    if (firstNewline === -1) return shortText.length;
+    let match: RegExpExecArray | null;
+    while ((match = paragraphRegex.exec(shortText)) !== null) {
+      if (match.index > firstNewline) {
+        return match.index;
+      }
+    }
+    return shortText.length;
+  }
+
+  private getUsesFromVariable(text: string, variable: CobolVariable, allowParagraphScope = false): Promise<Promise<undefined>[]> {
     return new Promise((resolve, reject) => {
       const PromiseArray: Promise<undefined>[] = []
       const variableDeclarationPosition = variable.getDeclarationPosition()
@@ -263,10 +342,13 @@ export class Parser {
       const variableUseRegex = CobolRegexUtils.createRegexForVariableUsage(variable.getName());
       const endMethodRegex = new RegExp(`(\\s+end\\s+method\\.)`, "img")
       const endMethodLine = endMethodRegex.exec(shortText)
-      if (!endMethodLine) {
+      if (endMethodLine) {
+        shortText = shortText.substr(0, endMethodLine.index + endMethodLine[1].length).replace(/\r/g, "")
+      } else if (allowParagraphScope) {
+        shortText = shortText.substr(0, this.findScopeEnd(shortText)).replace(/\r/g, "")
+      } else {
         return reject();
       }
-      shortText = shortText.substr(0, endMethodLine.index + endMethodLine[1].length).replace(/\r/g, "")
       new Scan(shortText).scan(variableUseRegex, (iterator: any) => {
         PromiseArray.push(
           new Promise((resolve, _reject) => {
@@ -290,16 +372,6 @@ export class Parser {
       return resolve(PromiseArray);
     });
   }
-
-  /**
-   * Return if text represents a OO cobol source with methods
-   *
-   * @param text
-   */
-  private needDifferentiateVariablesByScope(text: string): boolean {
-    return /^ +method-id\./gmi.test(text);
-  }
-
 
   /**
    * Find copys used on current file

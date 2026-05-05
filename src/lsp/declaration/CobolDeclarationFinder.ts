@@ -66,11 +66,25 @@ export class CobolDeclarationFinder implements FindInterface {
     const termRegExp = new RegExp(term, 'gi');
     new Scan(this.text).reverseScan(termRegExp, line, (iterator: any) => {
       if (ParserCobol.isDeclaration(term, iterator.lineContent)) {
-        result = new RechPosition(iterator.row, iterator.column);
+        result = new RechPosition(iterator.row, this.computeDeclarationColumn(term, iterator.lineContent, iterator.column));
         iterator.stop();
       }
     });
     return result;
+  }
+
+  /**
+   * Computes the correct column for the declared variable name within the line.
+   * Handles cases where the regex may match the term inside a keyword (e.g., 'i' inside 'varying')
+   * before matching the actual variable name position.
+   */
+  private computeDeclarationColumn(term: string, lineContent: string, iteratorColumn: number): number {
+    // For inline PERFORM VARYING declarations: "varying <varName> as <type>"
+    const varyingMatch = /(\s+varying\s+)([\w-]+)\s+as\s+[\w-]+/i.exec(lineContent);
+    if (varyingMatch && varyingMatch[2].toLowerCase() === term.toLowerCase()) {
+      return varyingMatch.index + varyingMatch[1].length;
+    }
+    return iteratorColumn;
   }
 
 }
