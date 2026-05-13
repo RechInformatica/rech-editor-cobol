@@ -152,9 +152,14 @@
 					"default": true
 				},
 				"rech.editor.cobol.filterProtectedMethods": {
-					"type": "boolean",
-					"description": "Controls whether protected methods are filtered out from method completion suggestions.",
-					"default": true
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "List of program name masks (regex) that allow protected methods to appear in completion suggestions. Protected methods are always shown when completing in the same program. When editing a program whose name matches any mask, protected methods are also shown.",
+					"default": [
+						"TU.*"
+					]
 				},
 				"rech.editor.cobol.especialColors": {
 					"type": "object",

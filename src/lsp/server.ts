@@ -440,8 +440,8 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Then
       Log.get().error(`Error setting verbose mode. Error to getConfig verboseSuggestion.  Err ${err}. File: ${textDocumentPosition.textDocument.uri}`);
       return reject(new ResponseError<undefined>(LSPErrorCodes.RequestCancelled, "Error loading Completion Items. fullDocument is undefined"))
     });
-    getConfig<boolean>("filterProtectedMethods").then((filter) => {
-      MethodCompletion.setFilterProtectedMethods(filter);
+    getConfig<string[]>("filterProtectedMethods").then((masks) => {
+      MethodCompletion.setProtectedMethodsMasks(masks);
     }).catch(() => {});
     getSnippetsRepositories().then((repositories) => {
       const line = textDocumentPosition.position.line;
