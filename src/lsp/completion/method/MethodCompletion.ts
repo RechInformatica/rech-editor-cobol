@@ -23,8 +23,8 @@ export class MethodCompletion implements CompletionInterface {
   /** Cache of method completion items keyed by element name (variable/class name) */
   private static cache: Map<string, CompletionItem[]> = new Map();
 
-  /** Whether to filter out protected methods from completion */
-  private static filterProtectedMethods: boolean = true;
+  /** Program name masks (regex) that allow protected methods in completion; always shown on self */
+  private static protectedMethodsMasks: string[] = ["TU.*"];
 
   private uri: string;
   private externalMethodCompletion: ((args: any) => Thenable<any>) | undefined;
@@ -35,10 +35,19 @@ export class MethodCompletion implements CompletionInterface {
   }
 
   /**
-   * Sets whether protected methods should be filtered out from completion
+   * Sets the program name masks (regex) that allow protected methods in completion.
    */
-  public static setFilterProtectedMethods(filter: boolean) {
-    MethodCompletion.filterProtectedMethods = filter;
+  public static setProtectedMethodsMasks(masks: string[]) {
+    MethodCompletion.protectedMethodsMasks = masks;
+  }
+
+  /**
+   * Returns true when protected methods should be filtered out for the current uri.
+   * Protected methods are always shown when uri matches any of the configured masks.
+   */
+  private shouldFilterProtected(): boolean {
+    const baseName = new Path(this.uri).baseName().toUpperCase();
+    return !MethodCompletion.protectedMethodsMasks.some(mask => new RegExp(mask, "i").test(baseName));
   }
 
   public generate(line: number, column: number, lines: string[]): Promise<CompletionItem[]> {
@@ -53,7 +62,7 @@ export class MethodCompletion implements CompletionInterface {
           //
           if (this.isSelfInstance(completionTarget.elementName)) {
             const joinedLines: string = lines.join('\n');
-            this.extractMethodCompletionsFromBuffer(joinedLines)
+            this.extractMethodCompletionsFromBuffer(joinedLines, undefined, false)
               .then(items => resolve(items))
               .catch((e) => reject(e));
           } else {
@@ -196,14 +205,15 @@ export class MethodCompletion implements CompletionInterface {
    */
   private extractMethodCompletionsFromClassUri(classFileUri: string): Promise<CompletionItem[]> {
     return new Promise((resolve, reject) => {
+      const filterProtected = this.shouldFilterProtected();
       ExpandedSourceManager.getExpandedSource(classFileUri).then((buffer) => {
-        this.extractMethodCompletionsFromBuffer(buffer.toString(), true)
+        this.extractMethodCompletionsFromBuffer(buffer.toString(), true, filterProtected)
           .then((results) => resolve(results))
           .catch((_e) => {
             // Fallback to direct file read if expanded source fails
             FileUtils.read(classFileUri)
               .then((buffer) => {
-                this.extractMethodCompletionsFromBuffer(buffer, true)
+                this.extractMethodCompletionsFromBuffer(buffer, true, filterProtected)
                   .then((results) => resolve(results))
                   .catch((e) => reject(e));
               })
@@ -238,7 +248,7 @@ export class MethodCompletion implements CompletionInterface {
    *        ...
    *    end method.
    */
-  private extractMethodCompletionsFromBuffer(buffer: string, filterPrivateMethods?: boolean): Promise<CompletionItem[]> {
+  private extractMethodCompletionsFromBuffer(buffer: string, filterPrivateMethods?: boolean, filterProtectedMethods?: boolean): Promise<CompletionItem[]> {
     return new Promise((resolve, reject) => {
       const methodsCompletions: CompletionItem[] = [];
       const methodsPromise: Promise<CobolMethod>[] = [];
@@ -253,7 +263,7 @@ export class MethodCompletion implements CompletionInterface {
             if (filterPrivateMethods && method.isPrivate()) {
               return;
             }
-            if (MethodCompletion.filterProtectedMethods && method.isProtected()) {
+            if (filterProtectedMethods && method.isProtected()) {
               return;
             }
             methods.push(method);
