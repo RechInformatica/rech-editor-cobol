@@ -16,6 +16,7 @@ import { CompletionUtils } from "../commons/CompletionUtils";
 import { ExitParagraphCompletion } from "./ExitParagraphCompletion";
 import { ExitPerformCompletion } from "./ExitPerformCompletion";
 import { ExitCycleCompletion } from "./ExitCycleCompletion";
+import { GobackCompletion } from "./GobackCompletion";
 import { FlagCompletion } from "./FlagCompletion";
 import { ToTrueCompletion } from "./ToTrueCompletion";
 import { PictureCompletion } from "./PictureCompletion";
@@ -643,6 +644,22 @@ export class CobolCompletionItemFactory {
   }
 
   /**
+   * Returns true if the cursor is inside a method body (between method-id and end method)
+   */
+  private isInsideMethodBody(): boolean {
+    for (let i = this.line - 1; i >= 0; i--) {
+      const currentLine = this.lines[i].toUpperCase().trim();
+      if (/^METHOD-ID\./i.test(currentLine)) {
+        return true;
+      }
+      if (/^END\s+METHOD/i.test(currentLine)) {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Returns true if the current program is a COBOL class
    */
   private isCobolClass(): boolean {
@@ -884,6 +901,9 @@ export class CobolCompletionItemFactory {
         items = items.concat(this.generate(new MethodIdCompletion()));
       }
       items = items.concat(this.generate(new TryCompletion()));
+      if (this.isInsideMethodBody()) {
+        items = items.concat(this.generate(new GobackCompletion()));
+      }
     }
     if (this.isInIfBlock()) {
       items = items.concat(this.generate(new ElseCompletion()));
