@@ -168,6 +168,38 @@ export class Indenta {
   }
 
   /**
+   * Indents the specified source code and returns the result as a string.
+   * This method is designed to be used without an active editor (e.g., from AI chat tools).
+   *
+   * @param sourceCode the COBOL source code to indent
+   * @param sourceFileName name of the source file for context
+   * @param alignment indentation alignment (N=normal, E=left, D=right)
+   * @param referenceLine reference line number (default: 0)
+   * @param isSpecialIndent indicates if this is a special indentation
+   */
+  public async indentText(sourceCode: string, sourceFileName: string, alignment: string = "N", referenceLine: number = 0, isSpecialIndent: boolean = false): Promise<string> {
+    const targetSourceCode = [sourceCode];
+    if (this.isAllCommentaryLines(targetSourceCode)) {
+      return new Promise<string>((resolve) => {
+        this.indentCommentary(targetSourceCode, (buffer) => {
+          resolve(buffer.join(""));
+        });
+      });
+    }
+    return new Promise<string>((resolve, reject) => {
+      this.indenta(
+        alignment,
+        targetSourceCode,
+        sourceFileName,
+        referenceLine,
+        isSpecialIndent,
+        (buffer) => resolve(buffer.join("")),
+        (errMsg) => reject(new Error(errMsg))
+      );
+    });
+  }
+
+  /**
    * Indents the specified source code
    *
    * @param alignment indentation alignment

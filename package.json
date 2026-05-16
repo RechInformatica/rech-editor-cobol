@@ -5,7 +5,7 @@
 	"version": "1.1.17",
 	"publisher": "rechinformatica",
 	"engines": {
-		"vscode": "^1.47.0"
+		"vscode": "^1.96.0"
 	},
 	"icon": "images/cobol.png",
 	"license": "MIT",
@@ -573,6 +573,42 @@
 				"key": "ctrl+alt+j",
 				"title": "Rech COBOL: Muda fonte de análise do autocompletar para parágrafos/variáveis"
 			}
+		],
+		"languageModelTools": [
+			{
+				"name": "rech_cobol_indent",
+				"displayName": "Indent COBOL Code",
+				"toolReferenceName": "indentCobol",
+				"canBeReferencedInPrompt": true,
+				"icon": "$(indent)",
+				"description": "Indents COBOL source code using the Rech COBOL formatter. Use this when the user asks to indent, format, or fix indentation of COBOL code.",
+				"modelDescription": "Formats and indents COBOL source code using the configured external COBOL formatter. Accepts raw COBOL code and returns properly indented code. Supports normal, left, and right alignment modes.",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"code": {
+							"type": "string",
+							"description": "The COBOL source code to indent"
+						},
+						"alignment": {
+							"type": "string",
+							"enum": [
+								"N",
+								"E",
+								"D"
+							],
+							"description": "Alignment mode: N=normal (default), E=left, D=right"
+						},
+						"sourceFileName": {
+							"type": "string",
+							"description": "Optional source file name for context. If omitted, uses the active editor file name."
+						}
+					},
+					"required": [
+						"code"
+					]
+				}
+			}
 		]
 	},
 	"scripts": {
@@ -600,7 +636,7 @@
 	"devDependencies": {
 		"@types/mocha": "^10.0.0",
 		"@types/node": "^16.18.0",
-		"@types/vscode": "^1.47.0",
+		"@types/vscode": "^1.120.0",
 		"@typescript-eslint/eslint-plugin": "^8.46.2",
 		"@typescript-eslint/parser": "^8.46.2",
 		"@vscode/test-electron": "^2.5.2",
