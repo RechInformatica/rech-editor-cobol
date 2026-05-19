@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { commands, window, languages } from 'vscode';
+import { commands, window, languages, lm, LanguageModelToolResult, LanguageModelTextPart } from 'vscode';
 import { GeradorCobol } from './cobol/gerador-cobol';
 import { Editor } from './editor/editor';
 import { COLUNA_VALUE, AREA_B, COLUNA_B, COLUNA_A, COLUNA_C, AREA_A } from './cobol/colunas';
@@ -15,6 +15,7 @@ import { FoldStatusBar } from './lsp/fold/FoldStatusBar';
 import { ExpandedSourceStatusBar } from './cobol/ExpandedSourceStatusBar';
 import FlowProvider from './sourceflow/treeView/providers/FlowProvider';
 import { IndentCommands } from './indent/indentCommands';
+import { Indenta } from './indent/indent';
 import { CobolRefactor } from './cobol/refactor/CobolRefactor';
 import { DocumentationDecorator } from './decoration/DocumentationDecorator';
 import { ExpandedSourceCacheStatusBar } from './cobol/ExpandedSourceCacheStatusBar';
@@ -186,6 +187,17 @@ async function _activate(context: any) {
     }));
     context.subscriptions.push(commands.registerCommand('rech.editor.cobol.extractParagraph', () => {
         new CobolRefactor().extractParagraph().then().catch();
+    }));
+    // Register Language Model Tool for AI Chat integration
+    context.subscriptions.push(lm.registerTool('rech_cobol_indent', {
+        async invoke(options, _token) {
+            const input = options.input as { code: string; alignment?: string; sourceFileName?: string };
+            const indenter = new Indenta();
+            const sourceFileName = input.sourceFileName ?? window.activeTextEditor?.document.fileName ?? 'temp.cbl';
+            const alignment = input.alignment ?? 'N';
+            const result = await indenter.indentText(input.code, sourceFileName, alignment);
+            return new LanguageModelToolResult([new LanguageModelTextPart(result)]);
+        }
     }));
 }
 
