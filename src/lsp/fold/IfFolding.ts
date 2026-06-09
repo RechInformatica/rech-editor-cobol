@@ -56,7 +56,7 @@ export class IfFolding implements CobolFoldInterface {
         const ifDeclarationColumn = CompletionUtils.countSpacesAtBeginning(ifDeclarationLine);
         for (let index = line; index < lines.length; index++) {
             const currentLine = lines[index];
-            const formatedCurrentLine = currentLine.trimLeft().toLowerCase();
+            const formatedCurrentLine = currentLine.trimStart().toLowerCase();
             if (formatedCurrentLine.startsWith("end-if") || formatedCurrentLine.startsWith("else")) {
                 const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == ifDeclarationColumn) {

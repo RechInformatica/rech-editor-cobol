@@ -95,7 +95,7 @@ export class DocumentationDecorator {
             const comment = copy.getComment() ? copy.getComment()!.join(" ") : "";
             if (header && header != "" && header.toUpperCase() != comment.toUpperCase()) {
                 const startPos = new Position(copy.getLineDeclaration(), 0);
-                const endPos = new Position(copy.getLineDeclaration(), lines[copy.getLineDeclaration()].trimRight().length);
+                const endPos = new Position(copy.getLineDeclaration(), lines[copy.getLineDeclaration()].trimEnd().length);
                 const contentText = ' *> ' + header;
                 const textDecoration = ";font-size:smaller;color:";
                 const decoration: DecorationOptions = {

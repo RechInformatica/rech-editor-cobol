@@ -26,7 +26,7 @@ export class TryHighlight implements HighlightInterface {
         const results: DocumentHighlight[] = []
         const buffer = BufferSplitter.split(text.getText());
         const currentLineContent = buffer[currentLine];
-        const commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
+        const commandColumn = currentLineContent.length - currentLineContent.trimStart().length
         const beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
         const endLine = this.findTheEndOfBlock(text, currentLine, commandColumn);
         if (beginLine && endLine) {
@@ -79,7 +79,7 @@ export class TryHighlight implements HighlightInterface {
         let index = currentLine;
         while ((forward && index < buffer.length) || (!forward && index > 0)) {
             const line = buffer[index];
-            if (line.trimLeft().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
+            if (line.trimStart().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
                 return index
             }
             if (forward) {

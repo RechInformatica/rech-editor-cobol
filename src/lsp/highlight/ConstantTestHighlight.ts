@@ -49,7 +49,7 @@ export class ConstantTestHighlight implements HighlightInterface {
     private findClauseIftOfTest(buffer: string[], currentLine: number): number | undefined {
         let numberOfEnds = 0;
         for (let i = currentLine; i > 0; i--) {
-            const line = buffer[i].trimLeft();
+            const line = buffer[i].trimStart();
             if (line.startsWith(CLAUSE_IF)) {
                 if (numberOfEnds == 0) {
                     return i;
@@ -73,7 +73,7 @@ export class ConstantTestHighlight implements HighlightInterface {
     private findClauseElsetOfTest(buffer: string[], ifPosition: number): number | undefined {
         let numberOfIfs = 0;
         for (let i = ifPosition + 1; i < buffer.length; i++) {
-            const line = buffer[i].trimLeft();
+            const line = buffer[i].trimStart();
             if (line.startsWith(CLAUSE_ELSE)) {
                 if (numberOfIfs == 0) {
                     return i;
@@ -102,7 +102,7 @@ export class ConstantTestHighlight implements HighlightInterface {
     private findClauseEndtOfTest(buffer: string[], ifPosition: number): number | undefined {
         let numberOfIfs = 0;
         for (let i = ifPosition + 1; i < buffer.length; i++) {
-            const line = buffer[i].trimLeft();
+            const line = buffer[i].trimStart();
             if (line.startsWith(CLAUSE_END)) {
                 if (numberOfIfs == 0) {
                     return i;

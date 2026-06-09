@@ -34,7 +34,7 @@ export class EvaluateFolding implements CobolFoldInterface {
         const ifDeclarationColumn = CompletionUtils.countSpacesAtBeginning(ifDeclarationLine);
         for (let index = line; index < lines.length; index++) {
             const currentLine = lines[index];
-            if (currentLine.trimLeft().toLowerCase().startsWith("end-evaluate")) {
+            if (currentLine.trimStart().toLowerCase().startsWith("end-evaluate")) {
                 const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == ifDeclarationColumn) {
                     return index - 1;

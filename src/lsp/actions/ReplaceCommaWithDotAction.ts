@@ -45,7 +45,7 @@ export class ReplaceCommaByDotAction implements ActionInterface {
      * @param lineText current line text with method declaration
      */
     private insertStaticClause(lineText: string): string {
-        let newText = lineText.trimRight();
+        let newText = lineText.trimEnd();
         newText = newText.slice(0, -1);
         newText = newText.concat(".");
         return newText;

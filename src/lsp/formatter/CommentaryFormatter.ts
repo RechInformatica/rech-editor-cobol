@@ -54,7 +54,7 @@ export class CommentaryFormatter implements FormatterInterface {
             if (element.trim() == "") {
                 continue;
             }
-            return element.length - element.trimLeft().length;
+            return element.length - element.trimStart().length;
         }
         return COMMENTARYCOLUMN;
     }

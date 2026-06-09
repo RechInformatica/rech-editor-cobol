@@ -31,7 +31,7 @@ export class CopyFolding implements CobolFoldInterface {
      */
     private findEndOfCopyDeclaration(line: number, lines: string[]): number {
         for (let index = line; index < lines.length; index++) {
-            const currentLine = lines[index].trimRight();
+            const currentLine = lines[index].trimEnd();
             if (currentLine.trim().startsWith("*>")) {
                 continue;
             }

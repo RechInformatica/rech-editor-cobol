@@ -45,11 +45,11 @@ export class InsertStaticClauseAction implements ActionInterface {
      * @param lineText current line text with method declaration
      */
     private insertStaticClause(lineText: string): string {
-        let newText = lineText.trimRight();
+        let newText = lineText.trimEnd();
         if (newText.endsWith(".")) {
             newText = newText.slice(0, -1);
         }
-        newText = newText.trimRight().concat(" static.");
+        newText = newText.trimEnd().concat(" static.");
         return newText;
     }
 

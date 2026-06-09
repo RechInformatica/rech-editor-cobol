@@ -3,7 +3,6 @@ import { Editor } from '../editor/editor';
 import { RechPosition } from '../commons/rechposition';
 import * as Colunas from './colunas';
 import * as os from 'os';
-import { isNull } from 'util';
 import { MoveInverter } from './MoveInverter';
 import { env } from 'vscode';
 
@@ -25,7 +24,7 @@ export class GeradorCobol {
     }
     // If line already ends with a terminator
     if (lastChar == '.' || lastChar == ',') {
-      line = line.substr(0, line.length - 1) + char;
+      line = line.substring(0, line.length - 1) + char;
     } else {
       line = line + char;
     }
@@ -144,12 +143,12 @@ export class GeradorCobol {
     let commentContent = lineText.match(regexComment);
     const regexCommentType = /\*>(->)*/;
     const startComment = lineText.match(regexCommentType);
-    if (isNull(commentContent) || isNull(startComment)) return;
+    if (commentContent === null || startComment === null) return;
     const startCommentDelimiter = startComment[0];
     const endCommentDelimiter = startCommentDelimiter.split("").reverse().join("").replace(/>/g, "<");
     const regexCommentContent = /[^>]*\b.*(\b|\B)/;
     commentContent = regexCommentContent.exec(commentContent[0].toString().replace(endCommentDelimiter, ""));
-    if (isNull(commentContent)) return;
+    if (commentContent === null) return;
     let comment = commentContent[0].toString().trim();
     const commentSizeMax = (Colunas.COLUNA_FIM - Colunas.AREA_A - startCommentDelimiter.length - endCommentDelimiter.length + 2);
 
@@ -183,7 +182,7 @@ export class GeradorCobol {
     */
   private removeHighlight(comment: string): string {
     const spaces = /\s+/.exec(comment);
-    if (isNull(spaces)) return comment;
+    if (spaces === null) return comment;
     const spaceLengthGreater = spaces.reduce((p, v) => (p.length > v.length ? v : p)).length;
     const spaceLengthLesser = spaces.reduce((p, v) => (p.length < v.length ? v : p)).length;
     if (spaceLengthGreater === 1) return comment;
@@ -198,7 +197,7 @@ export class GeradorCobol {
    */
   async updateLineDots() {
     const originalPosotion = this.editor.getCursors()[0];
-    const lineText = this.editor.getCurrentLine().trimRight();
+    const lineText = this.editor.getCurrentLine().trimEnd();
     switch (true) {
       case lineText.length > Colunas.COLUNA_FIM: {
         this.removeExceedingDots(lineText).then().catch();

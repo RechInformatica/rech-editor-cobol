@@ -387,7 +387,7 @@ export class CobolDiagnosticParser {
         copyFounded = true;
       }
       if (copyFounded) {
-        if (copy == copy.trimLeft()) {
+        if (copy == copy.trimStart()) {
           const match = /(?:.*\s)?(.+\.(?:cpy|cpb))/.exec(copy.trim());
           const copyName = match ? match[1] : "";
           return new Path(copyName).fileName();
