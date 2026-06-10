@@ -73,7 +73,7 @@ export class DynamicJsonCompletion implements CompletionInterface {
      * @param lines document lines
      */
     private shouldSuggestJsonCompletions(line: number, lines: string[]): boolean {
-        const currentLine = lines[line].trimLeft();
+        const currentLine = lines[line].trimStart();
         if (!currentLine.includes(" ")) {
             return true;
         }

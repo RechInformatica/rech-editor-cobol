@@ -56,7 +56,7 @@ export class WhenFolding implements CobolFoldInterface {
         const whenDeclarationColumn = CompletionUtils.countSpacesAtBeginning(whenDeclarationLine);
         for (let index = line + 1; index < lines.length; index++) {
             const currentLine = lines[index];
-            const formatedCurrentLine = currentLine.trimLeft().toLowerCase();
+            const formatedCurrentLine = currentLine.trimStart().toLowerCase();
             if (formatedCurrentLine.startsWith("when")) {
                 const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == whenDeclarationColumn) {
@@ -82,7 +82,7 @@ export class WhenFolding implements CobolFoldInterface {
     private findTheStartLineOfNextClause(currenLinePosition: number, lines: string[]): number {
         let hasDocumentation = false;
         for (let index = currenLinePosition - 1; index > 0; index--) {
-            const currentLine = lines[index].trimLeft();
+            const currentLine = lines[index].trimStart();
             if (hasDocumentation && !currentLine.startsWith("*>")) {
                 return index + 1;
             }

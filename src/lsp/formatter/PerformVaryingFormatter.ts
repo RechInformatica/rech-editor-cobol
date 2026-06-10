@@ -47,7 +47,7 @@ export class PerformVaryingFormatter implements FormatterInterface {
         const untilStartColumn = CompletionUtils.countSpacesAtBeginning(untilLineText);
         if (/.*\s(?:or|and|=|>|<|=>|=<|<>)$/.test(currentLineText.toLowerCase())) {
             const condition = currentLineText.substring(untilStartColumn + 5);
-            const conditionColumn = condition.length - condition.trimLeft().length + untilStartColumn + 8
+            const conditionColumn = condition.length - condition.trimStart().length + untilStartColumn + 8
             return [this.createIndentofUntilTextEdit(line, conditionColumn, lines[line].trim())];
         }
         return [this.createIndentofUntilTextEdit(line, untilStartColumn, lines[line].trim())];

@@ -34,7 +34,7 @@ export class ElseFolding implements CobolFoldInterface {
         const elseDeclarationColumn = CompletionUtils.countSpacesAtBeginning(elseDeclarationLine);
         for (let index = line; index < lines.length; index++) {
             const currentLine = lines[index];
-            if (currentLine.trimLeft().toLowerCase().startsWith("end-if")) {
+            if (currentLine.trimStart().toLowerCase().startsWith("end-if")) {
                 const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == elseDeclarationColumn) {
                     return index - 1;

@@ -343,9 +343,9 @@ export class Parser {
       const endMethodRegex = new RegExp(`(\\s+end\\s+method\\.)`, "img")
       const endMethodLine = endMethodRegex.exec(shortText)
       if (endMethodLine) {
-        shortText = shortText.substr(0, endMethodLine.index + endMethodLine[1].length).replace(/\r/g, "")
+        shortText = shortText.substring(0, endMethodLine.index + endMethodLine[1].length).replace(/\r/g, "")
       } else if (allowParagraphScope) {
-        shortText = shortText.substr(0, this.findScopeEnd(shortText)).replace(/\r/g, "")
+        shortText = shortText.substring(0, this.findScopeEnd(shortText)).replace(/\r/g, "")
       } else {
         return reject();
       }
@@ -562,8 +562,8 @@ export class Parser {
     if (!invertEspecialColorsInLightTheme) {
       return hex;
     }
-    const numberFromHex = Number(`0x1${hex.substr(1)}`);
-    return `#${(numberFromHex ^ 0xFFFFFF).toString(16).substr(1).toUpperCase()}`
+    const numberFromHex = Number(`0x1${hex.substring(1)}`);
+    return `#${(numberFromHex ^ 0xFFFFFF).toString(16).substring(1).toUpperCase()}`
   }
 
 }

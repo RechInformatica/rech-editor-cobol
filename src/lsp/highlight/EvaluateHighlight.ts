@@ -52,7 +52,7 @@ export class EvaluateHighlight implements HighlightInterface {
     private findTheCommandColumn(text: TextDocument, word: string, currentLine: number,) {
         const buffer = BufferSplitter.split(text.getText());
         const currentLineContent = buffer[currentLine];
-        let commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
+        let commandColumn = currentLineContent.length - currentLineContent.trimStart().length
         // Considers indentation of term
         if (word == WHENTERM) {
             commandColumn -= 3;
@@ -95,7 +95,7 @@ export class EvaluateHighlight implements HighlightInterface {
         let index = currentLine;
         while ((forward && index < buffer.length) || (!forward && index > 0)) {
             const line = buffer[index];
-            if (line.trimLeft().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
+            if (line.trimStart().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
                 return index
             }
             if (forward) {

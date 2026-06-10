@@ -50,7 +50,7 @@ export class CobolCopy {
             const commentArray: string[] = []
             for (let i = line - 1; i > 0; i--) {
                 const docLine = lines[i];
-                if (docLine.trimLeft().startsWith("*>")) {
+                if (docLine.trimStart().startsWith("*>")) {
                     commentArray.push(docLine)
                 } else {
                     break;

@@ -7,7 +7,7 @@ export class MethodChainResolver {
 
     public resolveFullChain(line: number, column: number): string[] {
         let chain = [];
-        const currentLine = this.splittedLines[line].substr(0, column).trim().replace(/\(.*?\)/g, "");
+        const currentLine = this.splittedLines[line].substring(0, column).trim().replace(/\(.*?\)/g, "");
         const partsFromLine = currentLine.match(/[\w:>\-_]+/g);
         if (!partsFromLine) {
             return [];

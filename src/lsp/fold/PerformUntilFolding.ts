@@ -34,7 +34,7 @@ export class PerformUntilFolding implements CobolFoldInterface {
         const performDeclarationColumn = CompletionUtils.countSpacesAtBeginning(performDeclarationLine);
         for (let index = line; index < lines.length; index++) {
             const currentLine = lines[index];
-            if (currentLine.trimLeft().toLowerCase().startsWith("end-perform")) {
+            if (currentLine.trimStart().toLowerCase().startsWith("end-perform")) {
                 const currentColumn = CompletionUtils.countSpacesAtBeginning(currentLine)
                 if (currentColumn == performDeclarationColumn) {
                     return index - 1;

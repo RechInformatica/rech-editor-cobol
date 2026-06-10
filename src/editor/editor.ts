@@ -829,7 +829,7 @@ export class Editor {
    */
   getCurrentFileBaseNameWithoutExtension() {
     const fileName = this.getCurrentFileBaseName();
-    return fileName.substr(0, fileName.length - 4);
+    return fileName.substring(0, fileName.length - 4);
   }
 
   /**
@@ -837,7 +837,7 @@ export class Editor {
    */
   getCurrentFileBaseNameExtension() {
     const fileName = this.getCurrentFileBaseName();
-    return fileName.substr(fileName.length - 3, fileName.length);
+    return fileName.substring(fileName.length - 3);
   }
 
 

@@ -57,7 +57,7 @@ export class ParagraphFolding implements CobolFoldInterface {
         }
         let hasDocumentation = false;
         for (let i = line; i > 0; i--) {
-            const currentLine = lines[i].trimLeft();
+            const currentLine = lines[i].trimStart();
             if (hasDocumentation && !currentLine.startsWith("*>")) {
                 return i;
             }

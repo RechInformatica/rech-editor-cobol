@@ -29,7 +29,7 @@ export class PerformHighlight implements HighlightInterface {
         if (/\s*perform.+\s*([\w-]*)((?:\sthru\s.*)|(?:.+\stimes))?[.|,]/.exec(currentLineContent.toLowerCase())) {
             return new DefaultHighlight().positions(text, word, currentLine, currentCharacter)
         }
-        const commandColumn = currentLineContent.length - currentLineContent.trimLeft().length
+        const commandColumn = currentLineContent.length - currentLineContent.trimStart().length
         const beginLine = this.findTheBeginOfBlock(text, currentLine, commandColumn);
         const endLine = this.findTheEndOfBlock(text, currentLine, commandColumn);
         if (beginLine && endLine) {
@@ -74,7 +74,7 @@ export class PerformHighlight implements HighlightInterface {
         let index = currentLine;
         while ((forward && index < buffer.length) || (!forward && index > 0)) {
             const line = buffer[index];
-            if (line.trimLeft().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
+            if (line.trimStart().startsWith(term) && line.substring(commandColumn, commandColumn + term.length).toLowerCase() == term) {
                 return index
             }
             if (forward) {

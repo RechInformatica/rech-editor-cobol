@@ -53,7 +53,7 @@ export class MethodCompletionUtils {
   private static normalizeLine(line: string, currentColumn: number): string {
     let normalizedLine: string = "";
     normalizedLine = line;
-    normalizedLine = normalizedLine.substr(0, currentColumn);
+    normalizedLine = normalizedLine.substring(0, currentColumn);
     normalizedLine = normalizedLine.trim();
     normalizedLine = normalizedLine.replace(/\([^(]+\)/g, "");
     return normalizedLine;

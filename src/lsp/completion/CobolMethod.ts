@@ -239,7 +239,7 @@ export class CobolMethod {
 	private static extractDocumentation(lineNumber: number, buffer: string[], params: CobolVariable[], variableReturn: CobolVariable | undefined, throws: CobolVariable[]): CobolDoc {
 		let documentation: string[] = [];
 		for (let i = lineNumber - 1; i > 0; i--) {
-			if (buffer[i].trimLeft().startsWith("*>")) {
+			if (buffer[i].trimStart().startsWith("*>")) {
 				documentation.push(buffer[i]);
 			} else {
 				break;
