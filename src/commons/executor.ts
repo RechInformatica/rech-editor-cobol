@@ -8,6 +8,14 @@ import * as iconv_lite from 'iconv-lite';
 const channels = new Map<string, vscode.OutputChannel>();
 const terminals = new Map<string, vscode.Terminal>();
 
+// Global execution semaphore shared across all Executor instances
+let globalRunning = 0;
+const globalPending: Array<() => void> = [];
+
+function getMaxConcurrent(): number {
+  return vscode.workspace.getConfiguration('rech.editor.cobol').get<number>('maxConcurrentExecutors', 5);
+}
+
 /**
  * Class to run external processes
  */
@@ -115,36 +123,60 @@ export class Executor {
   }
 
   /**
-   * Executes asynchronously a new process using the specified command-line
+   * Executes asynchronously a new process using the specified command-line.
+   * Respects the global concurrency limit configured via rech.editor.cobol.maxConcurrentExecutors.
    *
    * @param command command-line to be executed
    * @param callback optional callback executed after the process execution is completed
+   * @param encoding optional encoding used to decode stdout/stderr
    */
   runAsync(command: string, callback?: (process: Process) => any, encoding?: string) {
+    const maxConcurrent = getMaxConcurrent();
+    if (maxConcurrent === 0) {
+      this.execCommand(command, callback, encoding);
+      return;
+    }
+    const run = () => {
+      globalRunning++;
+      this.execCommand(command, callback, encoding, () => {
+        globalRunning--;
+        if (globalPending.length > 0 && globalRunning < getMaxConcurrent()) {
+          globalPending.shift()!();
+        }
+      });
+    };
+    if (globalRunning < maxConcurrent) {
+      run();
+    } else {
+      globalPending.push(run);
+    }
+  }
+
+  /**
+   * Executes a command via child_process, decoding output when an encoding is provided.
+   * Calls onDone after the process exits so the concurrency semaphore can be released.
+   *
+   * @param command command-line to be executed
+   * @param callback optional callback executed after the process execution is completed
+   * @param encoding optional encoding used to decode stdout/stderr
+   * @param onDone optional callback invoked once the process finishes
+   */
+  private execCommand(command: string, callback?: (process: Process) => any, encoding?: string, onDone?: () => void) {
     if (encoding) {
-      this.runAsyncAndReturnFormattedProcess(command, encoding, callback);
+      cp.exec(command, { encoding: "buffer" }, (err, stdout, stderr) => {
+        onDone?.();
+        if (callback) {
+          callback(new Process(iconv_lite.decode(stdout, encoding), iconv_lite.decode(stderr, encoding), err));
+        }
+      });
     } else {
       cp.exec(command, (err, stdout, stderr) => {
+        onDone?.();
         if (callback) {
           callback(new Process(stdout, stderr, err));
         }
       });
     }
-  }
-
-  /**
-   * Executes asynchronously a new process using the specified command-line and return the Process result formatted as encoding
-   *
-   * @param command
-   * @param encoding
-   * @param callback
-   */
-  private runAsyncAndReturnFormattedProcess(command: string, encoding: string, callback?: (process: Process) => any) {
-    cp.exec(command, {encoding: "buffer"}, (err, stdout, stderr) => {
-      if (callback) {
-        callback(new Process(iconv_lite.decode(stdout, encoding), iconv_lite.decode(stderr, encoding), err));
-      }
-    });
   }
 
   /**

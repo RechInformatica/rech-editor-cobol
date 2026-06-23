@@ -196,6 +196,12 @@
 					"type": "string",
 					"default": "{file};{source};{line};{alignment};F;N -joinWorkLiterals",
 					"description": "Command line template for COBOL special indent formatting. Use placeholders: {file}, {source}, {line}, {alignment}"
+				},
+				"rech.editor.cobol.maxConcurrentExecutors": {
+					"type": "number",
+					"default": 5,
+					"minimum": 0,
+					"description": "Maximum number of simultaneous external processes spawned by the Executor. Use 0 for no limit (original behavior)."
 				}
 			}
 		},
