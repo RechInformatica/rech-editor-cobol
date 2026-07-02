@@ -74,15 +74,40 @@ export class Client {
 							copyDirs: config.get<string[]>("cobolLsp.copyDirs", []),
 							preprocessorOptions: config.get<string[]>("cobolLsp.preprocessorOptions", defaultPreprocOptions),
 							// Repassa os filtros do rech-editor-internal para o servidor Java
-							noShowWarnings:   internalConfig.get<string[]>("diagnosticfilter", []),
+							noShowWarnings: internalConfig.get<string[]>("diagnosticfilter", []),
 							deprecatedWarning: internalConfig.get<string[]>("deprecatedWarning", [])
 						}
 					}
 				}
 			);
-			Client.javaClient.start().catch();
+			Client.javaClient.start().then(() => {
+				Client.configureJavaClientWhenReady();
+			}).catch();
+
 		}
 	}
+
+    /**
+     * Configura o cliente Java quando pronto.
+     * Registra o handler custom/showQuickPick para exibir picklist ao usuário
+     * quando o servidor Java solicita seleção de métodos a implementar (W190).
+     */
+    private static configureJavaClientWhenReady() {
+        if (!Client.javaClient) return;
+        Client.javaClient.onRequest("custom/showQuickPick", async (params: { titulo: string, itens: string[], multipla: boolean }) => {
+            const items = params.itens.map(item => ({ label: item, picked: true }));
+            const resultado = await window.showQuickPick(items, {
+                title: params.titulo,
+                canPickMany: params.multipla,
+                placeHolder: "Selecione os métodos a implementar"
+            });
+            if (!resultado) return [];
+            if (Array.isArray(resultado)) {
+                return resultado.map((i: { label: string }) => i.label);
+            }
+            return [(resultado as { label: string }).label];
+        });
+    }
 
 	/**
 	 * Monta as ServerOptions para o servidor Java via stdio.
@@ -92,7 +117,7 @@ export class Client {
 	private static buildJavaServerOptions(classPath: string): ServerOptions {
 		const config = workspace.getConfiguration("rech.editor.cobol");
 		const javaPath = config.get<string>("cobolLsp.javaPath", "java");
-		const jvmArgs  = config.get<string[]>("cobolLsp.jvmArgs", []);
+		const jvmArgs = config.get<string[]>("cobolLsp.jvmArgs", []);
 		const mainClass = config.get<string>("cobolLsp.mainClass",
 			"br.com.rech.preproc.principal.CobolPreProcessor");
 
@@ -429,7 +454,7 @@ export class Client {
 	 */
 	public static stopClient() {
 		const stops: Promise<void>[] = [];
-		if (Client.client)     stops.push(Client.client.stop());
+		if (Client.client) stops.push(Client.client.stop());
 		if (Client.javaClient) stops.push(Client.javaClient.stop());
 		return stops.length > 0 ? Promise.all(stops) : undefined;
 	}
