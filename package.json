@@ -2,7 +2,7 @@
 	"name": "rech-editor-cobol",
 	"displayName": "Rech COBOL",
 	"description": "Edit COBOL files with vscode.",
-	"version": "1.1.20",
+	"version": "1.1.21",
 	"publisher": "rechinformatica",
 	"engines": {
 		"vscode": "^1.120.0"
@@ -62,7 +62,9 @@
 				},
 				"rech.editor.cobol.cobolLsp.copyDirs": {
 					"type": "array",
-					"items": { "type": "string" },
+					"items": {
+						"type": "string"
+					},
 					"description": "Diretórios onde o servidor LSP COBOL deve buscar arquivos COPY.",
 					"default": []
 				},
@@ -73,13 +75,26 @@
 				},
 				"rech.editor.cobol.cobolLsp.preprocessorOptions": {
 					"type": "array",
-					"items": { "type": "string" },
+					"items": {
+						"type": "string"
+					},
 					"description": "Opções de linha de comando repassadas ao CobolPreProcessor pelo servidor LSP. Equivalente ao rech.editor.internal.PreprocessorOptions, mas para o servidor Java.",
-					"default": ["-cpn", "-spn", "-msi", "-vnp", "-war", "-wes", "-cem", "-wop=w077;w078;w079;w123;w154"]
+					"default": [
+						"-cpn",
+						"-spn",
+						"-msi",
+						"-vnp",
+						"-war",
+						"-wes",
+						"-cem",
+						"-wop=w077;w078;w079;w123;w154"
+					]
 				},
 				"rech.editor.cobol.cobolLsp.jvmArgs": {
 					"type": "array",
-					"items": { "type": "string" },
+					"items": {
+						"type": "string"
+					},
 					"description": "Argumentos extras passados à JVM (antes do -cp e da classe principal). Use para habilitar debug remoto: [\"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005\"]. Requer reload do VSCode após alterar.",
 					"default": []
 				},
