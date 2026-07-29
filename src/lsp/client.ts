@@ -62,7 +62,12 @@ export class Client {
 
 		// Servidor Java — opcional, exclusivamente diagnósticos
 		if (useJava) {
-			const defaultPreprocOptions = ["-cpn", "-spn", "-msi", "-vnp", "-war", "-wes", "-cem", "-wop=w077;w078;w079;w123;w154"];
+			const defaultPreprocOptions = ["-cpn", "-spn", "-msi", "-vnp", "-war", "-wes", "-cem", "-wop=ALL"];
+			// Inclui as pastas abertas na workspace na resolução de COPYs, antes do configurado —
+			// cobre o caso comum de o usuário ter a working-copy aberta como pasta da workspace.
+			const workspaceCopyDirs = (workspace.workspaceFolders ?? []).map(folder => folder.uri.fsPath);
+			const configuredCopyDirs = config.get<string[]>("cobolLsp.copyDirs", []);
+			const copyDirs = [...workspaceCopyDirs, ...configuredCopyDirs];
 			Client.javaClient = new LanguageClient(
 				'cobolJavaLsp',
 				'Cobol LSP (diagnósticos)',
@@ -71,7 +76,7 @@ export class Client {
 					documentSelector: [{ scheme: 'file', language: 'COBOL' }],
 					initializationOptions: {
 						cobol: {
-							copyDirs: config.get<string[]>("cobolLsp.copyDirs", []),
+							copyDirs: copyDirs,
 							preprocessorOptions: config.get<string[]>("cobolLsp.preprocessorOptions", defaultPreprocOptions),
 							// Repassa os filtros do rech-editor-internal para o servidor Java
 							noShowWarnings: internalConfig.get<string[]>("diagnosticfilter", []),
@@ -119,7 +124,7 @@ export class Client {
 		const javaPath = config.get<string>("cobolLsp.javaPath", "java");
 		const jvmArgs = config.get<string[]>("cobolLsp.jvmArgs", []);
 		const mainClass = config.get<string>("cobolLsp.mainClass",
-			"br.com.rech.preproc.principal.CobolPreProcessor");
+			"br.com.rech.preproc.lsp.Main");
 
 		return (): Promise<StreamInfo> => new Promise<StreamInfo>((resolve, reject) => {
 			const args = [...jvmArgs, '-cp', classPath, mainClass, '--lsp'];
