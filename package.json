@@ -53,12 +53,12 @@
 				"rech.editor.cobol.cobolLsp.classPath": {
 					"type": "string",
 					"description": "Classpath passado ao Java via -cp. Aceita wildcards e múltiplos caminhos separados por ponto-e-vírgula. Ex: C:\\rechint\\CobolPreprocessorLsp\\*",
-					"default": ""
+					"default": "C:\\rechint\\CobolPreprocessorLsp\\*"
 				},
 				"rech.editor.cobol.cobolLsp.mainClass": {
 					"type": "string",
 					"description": "Classe principal do servidor LSP Java.",
-					"default": "br.com.rech.preproc.principal.CobolPreProcessor"
+					"default": "br.com.rech.preproc.lsp.Main"
 				},
 				"rech.editor.cobol.cobolLsp.copyDirs": {
 					"type": "array",
@@ -66,12 +66,14 @@
 						"type": "string"
 					},
 					"description": "Diretórios onde o servidor LSP COBOL deve buscar arquivos COPY.",
-					"default": []
+					"default": [
+						"F:\\Fontes\\"
+					]
 				},
 				"rech.editor.cobol.cobolLsp.javaPath": {
 					"type": "string",
 					"description": "Caminho do executável Java. Use o caminho completo se 'java' não estiver no PATH do VSCode. Ex: C:\\rech\\zulu17.0.18\\x64\\bin\\java.exe",
-					"default": "java"
+					"default": "C:\\rech\\zulu17.0.18\\x64\\bin\\java.exe"
 				},
 				"rech.editor.cobol.cobolLsp.preprocessorOptions": {
 					"type": "array",
@@ -88,7 +90,7 @@
 						"-wes",
 						"-cem",
 						"-vmn",
-						"-wop=w077;w078;w079;w123;w154"
+						"-wop=ALL"
 					]
 				},
 				"rech.editor.cobol.cobolLsp.jvmArgs": {
