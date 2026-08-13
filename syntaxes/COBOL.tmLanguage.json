@@ -642,6 +642,11 @@
       "name": "keyword.operator.logical.cobol"
     },
     {
+      "comment": "Concatenation operator (&).",
+      "match": "&",
+      "name": "keyword.operator.logical.cobol"
+    },
+    {
       "match": "\\s+(?i:(is\\s)?(not\\s)?equal(\\sto)?)(?=\\s+|\\.|,|$)",
       "name": "keyword.operator.logical.cobol"
     },
