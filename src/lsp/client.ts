@@ -95,7 +95,10 @@ export class Client {
     /**
      * Configura o cliente Java quando pronto.
      * Registra o handler custom/showQuickPick para exibir picklist ao usuário
-     * quando o servidor Java solicita seleção de métodos a implementar (W190).
+     * quando o servidor Java solicita seleção de métodos a implementar (W190), e o
+     * custom/copyUsageLocator, usado quando o servidor abre um copy diretamente e precisa
+     * localizar o primeiro programa que o inclui para processá-lo e extrair os diagnósticos
+     * pertencentes ao copy.
      */
     private static configureJavaClientWhenReady() {
         if (!Client.javaClient) return;
@@ -111,6 +114,9 @@ export class Client {
                 return resultado.map((i: { label: string }) => i.label);
             }
             return [(resultado as { label: string }).label];
+        });
+        Client.javaClient.onRequest("custom/copyUsageLocator", (copy: string) => {
+            return Client.createCopyUsageLocatorExecutionPromise(copy);
         });
     }
 
