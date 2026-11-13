@@ -168,7 +168,7 @@ export class ParserCobol {
    */
   public static getDeclaracaoMethod(line: string): string | undefined {
     // IS Format
-    const match = /^ +METHOD-ID\.\s+([\w]+)[\s,.]+.*/i.exec(line);
+    const match = /^ +METHOD-ID\.\s+([\w]+)[\s,.(]+.*/i.exec(line);
     if (match == null) {
       return undefined;
     }

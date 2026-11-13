@@ -178,7 +178,7 @@ export class MethodDeclarationFinder implements FindInterface {
   private findMethodDeclaration(methodName: string, buffer: string): Promise<CobolMethod> {
     return new Promise((resolve, reject) => {
       let foundAny = false;
-      new Scan(buffer).scan(new RegExp(`\\s${methodName}[\\.\\,\\s]`, "g"), (iterator: any) => {
+      new Scan(buffer).scan(new RegExp(`\\s${methodName}[\\.\\,\\s\\(]`, "g"), (iterator: any) => {
         if (ParserCobol.getDeclaracaoMethod(iterator.lineContent)) {
           foundAny = true;
           CobolMethod.parseLines(iterator.row, iterator.column + 1, BufferSplitter.split(buffer))
