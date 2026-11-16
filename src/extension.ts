@@ -203,7 +203,7 @@ async function _activate(context: any) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    Client.stopClient();
+    return Client.stopClient();
 }
 
 export * from "./commons/executor";

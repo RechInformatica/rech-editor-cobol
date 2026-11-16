@@ -1,9 +1,7 @@
 import { commands, ExtensionContext, window, workspace } from 'vscode';
-import { LanguageClient, LanguageClientOptions, ServerOptions, StreamInfo, TransportKind } from 'vscode-languageclient/node';
+import { LanguageClient, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 import { Editor } from '../editor/editor';
 import * as path from 'path';
-import * as cp from 'child_process';
-import { PassThrough } from 'stream';
 import { configuration } from '../helpers/configuration';
 import { cobolDiagnosticFilter } from '../cobol/diagnostic/cobolDiagnosticFilter';
 import { SourceExpander } from '../editor/SourceExpander';
@@ -15,6 +13,7 @@ import { ExpandedSourceStatusBar } from '../cobol/ExpandedSourceStatusBar';
 import * as dj from '../dependencieInjection';
 import { CopyUsageLocator } from './completion/copy/CopyUsageLocator';
 import { ExpandedSourceCacheStatusBar } from '../cobol/ExpandedSourceCacheStatusBar';
+import { JavaLspManager } from './JavaLspManager';
 
 /**
  * Language Server Provider client
@@ -23,8 +22,8 @@ export class Client {
 
 	/** Cliente Node.js, o qual provê todos os recursos de linguagem (completion, definition, etc.) */
 	private static client: LanguageClient | undefined;
-	/** Cliente Java, o qual é exclusivo para diagnósticos do pré-processador */
-	private static javaClient: LanguageClient | undefined;
+	private static javaManager: JavaLspManager | undefined;
+	private static nodeStart: Promise<void> | undefined;
 
 	/**
 	 * Starts the LSP server and establishes communication between them.
@@ -36,7 +35,6 @@ export class Client {
 	 */
 	public static startServerAndEstablishCommunication(context: ExtensionContext) {
 		const config = workspace.getConfiguration("rech.editor.cobol");
-		const internalConfig = workspace.getConfiguration("rech.editor.internal");
 		const javaLspEnabled = config.get<boolean>("cobolLsp.enabled", false);
 		const classPath = config.get<string>("cobolLsp.classPath", "");
 		const useJava = javaLspEnabled && !!classPath;
@@ -48,8 +46,9 @@ export class Client {
 			Client.buildNodeServerOptions(context),
 			{ documentSelector: [{ scheme: 'file', language: 'COBOL' }] }
 		);
-		Client.client.start().then(() => {
-			Client.configureClientWhenReady(useJava);
+		Client.nodeStart = Client.client.start();
+		Client.nodeStart.then(() => {
+			Client.configureClientWhenReady();
 			dj.defineSourceExpander();
 			dj.definePreprocessor();
 			dj.defineDianosticConfigs();
@@ -58,114 +57,33 @@ export class Client {
 			dj.defineSpecialClassPullerFunction();
 			dj.defineCopyUsageLocatorFunction();
 			dj.defineExternalMethodCompletionFunction();
-		}).catch();
+		}).catch((error) => {
+			Log.get().error("Falha ao iniciar o Cobol Language Server: " + error);
+		});
 
 		// Servidor Java — opcional, exclusivamente diagnósticos
 		if (useJava) {
-			const defaultPreprocOptions = ["-cpn", "-spn", "-msi", "-vnp", "-war", "-wes", "-cem", "-wop=ALL"];
-			// Inclui as pastas abertas na workspace na resolução de COPYs, antes do configurado —
-			// cobre o caso comum de o usuário ter a working-copy aberta como pasta da workspace.
-			const workspaceCopyDirs = (workspace.workspaceFolders ?? []).map(folder => folder.uri.fsPath);
-			const configuredCopyDirs = config.get<string[]>("cobolLsp.copyDirs", []);
-			const copyDirs = [...workspaceCopyDirs, ...configuredCopyDirs];
-			Client.javaClient = new LanguageClient(
-				'cobolJavaLsp',
-				'Cobol LSP (diagnósticos)',
-				Client.buildJavaServerOptions(classPath),
-				{
-					documentSelector: [{ scheme: 'file', language: 'COBOL' }],
-					initializationOptions: {
-						cobol: {
-							copyDirs: copyDirs,
-							preprocessorOptions: config.get<string[]>("cobolLsp.preprocessorOptions", defaultPreprocOptions),
-							// Repassa os filtros do rech-editor-internal para o servidor Java
-							noShowWarnings: internalConfig.get<string[]>("diagnosticfilter", []),
-							deprecatedWarning: internalConfig.get<string[]>("deprecatedWarning", [])
-						}
-					}
-				}
-			);
-			Client.javaClient.start().then(() => {
-				Client.configureJavaClientWhenReady();
-			}).catch();
-
+			Client.javaManager = new JavaLspManager(() => Client.requestNodeRevalidation());
+			Client.javaManager.initialize(context);
+		} else {
+			Client.javaManager = undefined;
 		}
 	}
 
-    /**
-     * Configura o cliente Java quando pronto.
-     * Registra o handler custom/showQuickPick para exibir picklist ao usuário
-     * quando o servidor Java solicita seleção de métodos a implementar (W190), e o
-     * custom/copyUsageLocator, usado quando o servidor abre um copy diretamente e precisa
-     * localizar o primeiro programa que o inclui para processá-lo e extrair os diagnósticos
-     * pertencentes ao copy.
-     */
-    private static configureJavaClientWhenReady() {
-        if (!Client.javaClient) return;
-        Client.javaClient.onRequest("custom/showQuickPick", async (params: { titulo: string, itens: string[], multipla: boolean }) => {
-            const items = params.itens.map(item => ({ label: item, picked: true }));
-            const resultado = await window.showQuickPick(items, {
-                title: params.titulo,
-                canPickMany: params.multipla,
-                placeHolder: "Selecione os métodos a implementar"
-            });
-            if (!resultado) return [];
-            if (Array.isArray(resultado)) {
-                return resultado.map((i: { label: string }) => i.label);
-            }
-            return [(resultado as { label: string }).label];
-        });
-        Client.javaClient.onRequest("custom/copyUsageLocator", (copy: string) => {
-            return Client.createCopyUsageLocatorExecutionPromise(copy);
-        });
-    }
-
-	/**
-	 * Monta as ServerOptions para o servidor Java via stdio.
-	 * Usa -cp <classPath> <mainClass> --lsp.
-	 * jvmArgs é inserido antes do -cp, permitindo flags como -agentlib (debug remoto).
-	 */
-	private static buildJavaServerOptions(classPath: string): ServerOptions {
-		const config = workspace.getConfiguration("rech.editor.cobol");
-		const javaPath = config.get<string>("cobolLsp.javaPath", "java");
-		const jvmArgs = config.get<string[]>("cobolLsp.jvmArgs", []);
-		const mainClass = config.get<string>("cobolLsp.mainClass",
-			"br.com.rech.preproc.lsp.Main");
-
-		return (): Promise<StreamInfo> => new Promise<StreamInfo>((resolve, reject) => {
-			const args = [...jvmArgs, '-cp', classPath, mainClass, '--lsp'];
-			const proc = cp.spawn(javaPath, args, {
-				stdio: ['pipe', 'pipe', 'pipe']
-			});
-			proc.on('error', (err) => reject(err));
-
-			// Drena stderr para evitar backpressure (logs Java vão para stderr)
-			proc.stderr?.resume();
-
-			// Filtra saída pré-LSP (ex: mensagem de startup do JDWP) do stdout.
-			// Descarta tudo até encontrar "Content-Length:", que é o início do protocolo LSP.
-			const lspStream = new PassThrough();
-			let buffered = Buffer.alloc(0);
-			let forwarding = false;
-
-			proc.stdout!.on('data', (chunk: Buffer) => {
-				if (forwarding) {
-					lspStream.write(chunk);
-					return;
-				}
-				buffered = Buffer.concat([buffered, chunk]);
-				const idx = buffered.indexOf('Content-Length:');
-				if (idx >= 0) {
-					forwarding = true;
-					lspStream.write(buffered.slice(idx));
-					buffered = Buffer.alloc(0);
-				}
-			});
-			proc.stdout!.on('end', () => lspStream.end());
-			proc.stdout!.on('error', (e) => lspStream.destroy(e));
-
-			resolve({ reader: lspStream, writer: proc.stdin! });
+	private static requestNodeRevalidation() {
+		const nodeClient = Client.client;
+		const nodeStart = Client.nodeStart;
+		if (!nodeClient || !nodeStart) return;
+		void nodeStart.then(() => {
+			if (Client.client !== nodeClient) return;
+			return nodeClient.sendNotification('custom/revalidateOpenDocuments');
+		}).catch(error => {
+			Log.get().error("Falha ao solicitar revalidação dos documentos COBOL: " + error);
 		});
+	}
+
+	private static javaOwnsDiagnostics(): boolean {
+		return Client.javaManager?.ownsDiagnostics() ?? false;
 	}
 
 	/**
@@ -186,10 +104,10 @@ export class Client {
 
 	/**
 	 * Configures the LSP client when it's ready for execution.
-	 * Quando {@code javaActive} é true, custom/getAutoDiagnostic retorna false para
-	 * suprimir os diagnósticos do servidor Node.js (evita duplicação com o Java LSP).
+	 * Enquanto o Java está ativo ou em transição, custom/getAutoDiagnostic retorna false
+	 * para evitar duplicação com o Java LSP.
 	 */
-	private static configureClientWhenReady(javaActive: boolean = false) {
+	private static configureClientWhenReady() {
 		if (Client.client) {
 			Client.client.onRequest("custom/runExternalMethodCompletion", (params: any) => {
 				return new Promise<any>((resolve, reject) => {
@@ -237,7 +155,7 @@ export class Client {
 				})
 			});
 			Client.client.onRequest("custom/getAutoDiagnostic", () => {
-				if (javaActive) {
+				if (Client.javaOwnsDiagnostics()) {
 					// Java LSP cuida dos diagnósticos; Node.js não deve duplicá-los
 					return Promise.resolve(false);
 				}
@@ -465,8 +383,18 @@ export class Client {
 	 */
 	public static stopClient() {
 		const stops: Promise<void>[] = [];
-		if (Client.client) stops.push(Client.client.stop());
-		if (Client.javaClient) stops.push(Client.javaClient.stop());
+		if (Client.javaManager) stops.push(Client.javaManager.stop());
+		if (Client.client) {
+			const nodeClient = Client.client;
+			stops.push((async () => {
+				try {
+					if (Client.nodeStart) await Client.nodeStart;
+				} catch (error) {
+					Log.get().error("Falha ao iniciar o Cobol Language Server durante a desativação: " + error);
+				}
+				if (nodeClient.isRunning()) await nodeClient.stop();
+			})());
+		}
 		return stops.length > 0 ? Promise.all(stops) : undefined;
 	}
 
