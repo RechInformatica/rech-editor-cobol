@@ -70,6 +70,14 @@
             "problemMatcher": [
                 "$tsc-watch"
             ]
+        },
+        {
+            "type": "npm",
+            "script": "compile",
+            "group": "build",
+            "problemMatcher": [],
+            "label": "npm: compile",
+            "detail": "npm run lint && tsc --build --force ./tsconfig.json"
         }
     ]
 }

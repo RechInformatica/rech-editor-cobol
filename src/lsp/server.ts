@@ -132,6 +132,21 @@ connection.onRequest("custom/findDeclarationPosition", (params: any) => {
   })
 })
 
+connection.onNotification("custom/clearDiagnostics", () => {
+  documents.all().forEach(document => {
+    connection.sendDiagnostics({
+      uri: document.uri,
+      diagnostics: []
+    });
+  });
+});
+
+connection.onNotification("custom/revalidateOpenDocuments", () => {
+  documents.all().forEach(document => {
+    validateTextDocument(document, true).then().catch(() => {});
+  });
+});
+
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {

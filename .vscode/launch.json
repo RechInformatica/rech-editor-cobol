@@ -13,10 +13,10 @@
 			"outFiles": [
 				"${workspaceFolder}/out/**/*.js"
 			],
-			"preLaunchTask": "npm",
+			"preLaunchTask": "npm: compile",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
-			"type": "pwa-extensionHost"
+			"type": "extensionHost"
 		},
 		{
 			"type": "COBOL",
