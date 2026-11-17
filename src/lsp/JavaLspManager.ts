@@ -15,7 +15,10 @@ export class JavaLspManager {
 	private javaLifecycle: Promise<void> = Promise.resolve();
 	private disposed = false;
 
-	public constructor(private readonly requestNodeRevalidation: () => void) {}
+	public constructor(
+		private readonly clearNodeDiagnostics: () => Promise<void>,
+		private readonly requestNodeRevalidation: () => void
+	) {}
 
 	public initialize(context: ExtensionContext) {
 		this.disposed = false;
@@ -63,9 +66,15 @@ export class JavaLspManager {
 	}
 
 	private requestJavaStart() {
-		if (this.disposed || this.javaStatus === 'disabled' || this.javaStatus === 'failed') return;
+		if (this.disposed || this.javaStatus === 'disabled') return;
 		if (this.javaStatus === 'starting' || this.javaStatus === 'running') return;
-		this.enqueueJavaLifecycle(() => this.startJava());
+		this.enqueueJavaLifecycle(async () => {
+			if (this.javaStatus === 'failed') {
+				await this.clearNodeDiagnostics();
+				this.javaStatus = 'idle';
+			}
+			await this.startJava();
+		});
 	}
 
 	private async startJava(): Promise<void> {
@@ -179,6 +188,9 @@ export class JavaLspManager {
 			},
 			errorHandler: {
 				error: async (error, message, count) => {
+					if (!this.canDelegateErrorHandler(javaClient)) {
+						return { action: ErrorAction.Shutdown, handled: true };
+					}
 					const result = defaultErrorHandler
 						? await defaultErrorHandler.error(error, message, count)
 						: { action: ErrorAction.Shutdown };
@@ -186,6 +198,9 @@ export class JavaLspManager {
 					return result;
 				},
 				closed: async () => {
+					if (!this.canDelegateErrorHandler(javaClient)) {
+						return { action: CloseAction.DoNotRestart, handled: true };
+					}
 					const result = defaultErrorHandler
 						? await defaultErrorHandler.closed()
 						: { action: CloseAction.DoNotRestart };
@@ -209,6 +224,13 @@ export class JavaLspManager {
 		});
 		this.configureJavaClientWhenReady(javaClient);
 		return javaClient;
+	}
+
+	private canDelegateErrorHandler(javaClient: LanguageClient | undefined): javaClient is LanguageClient {
+		return javaClient !== undefined
+			&& this.javaClient === javaClient
+			&& !this.disposed
+			&& this.javaStatus === 'running';
 	}
 
 	private configureJavaClientWhenReady(javaClient: LanguageClient) {

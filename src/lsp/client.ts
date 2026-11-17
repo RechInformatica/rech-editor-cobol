@@ -63,7 +63,10 @@ export class Client {
 
 		// Servidor Java — opcional, exclusivamente diagnósticos
 		if (useJava) {
-			Client.javaManager = new JavaLspManager(() => Client.requestNodeRevalidation());
+			Client.javaManager = new JavaLspManager(
+				() => Client.clearNodeDiagnostics(),
+				() => Client.requestNodeRevalidation()
+			);
 			Client.javaManager.initialize(context);
 		} else {
 			Client.javaManager = undefined;
@@ -71,14 +74,22 @@ export class Client {
 	}
 
 	private static requestNodeRevalidation() {
+		void Client.requestNodeNotification('custom/revalidateOpenDocuments');
+	}
+
+	private static clearNodeDiagnostics(): Promise<void> {
+		return Client.requestNodeNotification('custom/clearDiagnostics');
+	}
+
+	private static requestNodeNotification(method: string): Promise<void> {
 		const nodeClient = Client.client;
 		const nodeStart = Client.nodeStart;
-		if (!nodeClient || !nodeStart) return;
-		void nodeStart.then(() => {
+		if (!nodeClient || !nodeStart) return Promise.resolve();
+		return nodeStart.then(() => {
 			if (Client.client !== nodeClient) return;
-			return nodeClient.sendNotification('custom/revalidateOpenDocuments');
+			return nodeClient.sendNotification(method);
 		}).catch(error => {
-			Log.get().error("Falha ao solicitar revalidação dos documentos COBOL: " + error);
+			Log.get().error("Falha ao solicitar notificação ao Cobol Language Server: " + error);
 		});
 	}
 
